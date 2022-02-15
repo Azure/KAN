@@ -1,0 +1,34 @@
+FROM amd64/python:3.8-slim-buster
+
+
+WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libffi-dev \
+    libgl1-mesa-glx \
+    libgtk2.0-dev \
+    libssl-dev \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+# libgl1-mesa-glx: opencv2 libGL.so error workaround
+
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+RUN apt-get install -y --no-install-recommends libglib2.0-0
+
+
+COPY main.py .
+COPY streams.py .
+COPY stream_manager.py .
+COPY utility.py .
+# COPY /videos/scenario1-counting-objects.mkv ./videos/
+# COPY /videos/scenario2-employ-safety.mkv ./videos/
+COPY ./videos/*  ./videos/
+
+EXPOSE 9000
+EXPOSE 5559
+
+CMD ["python", "main.py"]

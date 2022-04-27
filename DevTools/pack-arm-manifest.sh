@@ -7,7 +7,7 @@ cd ${SCRIPT_PATH}
 GIT_ROOT=$(git rev-parse --show-toplevel)
 echo ${GIT_ROOT}
 
-PROJECT_PATH="${GIT_ROOT}/factory-ai-vision"
+PROJECT_PATH="${GIT_ROOT}"
 SOLUTION_PATH="${PROJECT_PATH}/EdgeSolution"
 
 cd ${SOLUTION_PATH}

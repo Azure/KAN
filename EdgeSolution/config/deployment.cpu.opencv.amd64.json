@@ -42,7 +42,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "factoryairegistry.azurecr.io/intelligentedge/nginxmodule:0.35.0-amd64",
+              "image": "factoryairegistry.azurecr.io/intelligentedge/nginxmodule:0.36.0-amd64",
               "createOptions": "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"PortBindings\":{\"8181/tcp\":[{\"HostPort\":\"8181\"}]}}}"
             }
           },
@@ -78,7 +78,7 @@
               }
             },
             "settings": {
-              "image": "factoryairegistry.azurecr.io/intelligentedge/webmodule:0.35.0-amd64",
+              "image": "factoryairegistry.azurecr.io/intelligentedge/webmodule:0.36.0-amd64",
               "createOptions": "{\"HostConfig\":{\"Mounts\":[{\"Target\":\"/workspace\",\"Source\":\"ovmsworkspace\",\"Type\":\"volume\"}],\"LogConfig\":{\"Type\":\"\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"PortBindings\":{\"8000/tcp\":[{\"HostPort\":\"8000\"}]}}}"
             }
           },
@@ -99,7 +99,7 @@
               }
             },
             "settings": {
-              "image": "factoryairegistry.azurecr.io/intelligentedge/inferencemodule:0.35.0-amd64",
+              "image": "factoryairegistry.azurecr.io/intelligentedge/inferencemodule:0.36.0-amd64",
               "createOptions": "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"PortBindings\":{\"5000/tcp\":[{\"HostPort\":\"5000\"}],\"5558/tcp\":[{\"HostPort\":\"5558\"}]},\"runtime\":\"runc\"}}"
             }
           },
@@ -117,7 +117,7 @@
               }
             },
             "settings": {
-              "image": "factoryairegistry.azurecr.io/intelligentedge/predictmodule:0.35.5-cpuamd64",
+              "image": "factoryairegistry.azurecr.io/intelligentedge/predictmodule:0.36.0-cpuamd64",
               "createOptions": "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"PortBindings\":{\"7777/tcp\":[{\"HostPort\":\"7777\"}]},\"IpcMode\":\"host\",\"runtime\":\"runc\"}}"
             }
           },
@@ -132,7 +132,7 @@
               }
             },
             "settings": {
-              "image": "factoryairegistry.azurecr.io/intelligentedge/cameramodule:0.35.0-amd64",
+              "image": "factoryairegistry.azurecr.io/intelligentedge/cameramodule:0.36.0-amd64",
               "createOptions": "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"PortBindings\":{\"9000/tcp\":[{\"HostPort\":\"9000\"}],\"5559/tcp\":[{\"HostPort\":\"5559\"}]},\"runtime\":\"runc\"}}"
             }
           },
@@ -142,7 +142,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "factoryairegistry.azurecr.io/intelligentedge/rtspsimmodule:0.35.0-amd64",
+              "image": "factoryairegistry.azurecr.io/intelligentedge/rtspsimmodule:0.36.0-amd64",
               "createOptions": "{\"HostConfig\":{\"Mounts\":[{\"Target\":\"/live/mediaServer/media/upload\",\"Source\":\"upload_data\",\"Type\":\"volume\"}],\"LogConfig\":{\"Type\":\"\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"PortBindings\":{\"554/tcp\":[{\"HostPort\":\"554\"}]}}}"
             }
           },
@@ -152,7 +152,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "factoryairegistry.azurecr.io/intelligentedge/uploadmodule:0.35.0-amd64",
+              "image": "factoryairegistry.azurecr.io/intelligentedge/uploadmodule:0.36.0-amd64",
               "createOptions": "{\"HostConfig\":{\"Mounts\":[{\"Target\":\"/app/upload\",\"Source\":\"upload_data\",\"Type\":\"volume\"}],\"LogConfig\":{\"Type\":\"\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"PortBindings\":{\"7000/tcp\":[{\"HostPort\":\"7000\"}]}}}"
             }
           },
@@ -163,7 +163,7 @@
             "restartPolicy": "always",
             "startupOrder": 0,
             "settings": {
-              "image": "factoryairegistry.azurecr.io/intelligentedge/modelmanagermodule:0.35.0-amd64",
+              "image": "factoryairegistry.azurecr.io/intelligentedge/modelmanagermodule:0.36.0-amd64",
               "createOptions": "{\"HostConfig\":{\"Mounts\":[{\"Target\":\"/workspace\",\"Source\":\"ovmsworkspace\",\"Type\":\"volume\"}],\"PortBindings\":{\"8585/tcp\":[{\"HostPort\":\"8585\"}]},\"LogConfig\":{\"Type\":\"\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}"
             }
           },

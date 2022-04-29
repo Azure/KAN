@@ -37,7 +37,7 @@ class CameraViewSet(FiltersMixin, viewsets.ModelViewSet):
     def bulk_delete(self, request):
         logger.warning(request)
         logger.warning(request.query_params)
-        ids = request.query_params.get('id', None)
+        ids = request.query_params.getlist('id', None)
         if not ids:
             raise ValidationError("Not providing ids data")
         # this would not trigger pre/post delete, get instance and delete if needed

@@ -41,5 +41,5 @@ class CameraViewSet(FiltersMixin, viewsets.ModelViewSet):
         if not ids:
             raise ValidationError("Not providing ids data")
         # this would not trigger pre/post delete, get instance and delete if needed
-        Camera.objects.filter(id__in=ids).delete()
+        Camera.objects.filter(id__in=ids).all()delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

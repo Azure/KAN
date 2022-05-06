@@ -72,9 +72,6 @@
               },
               "DF_PD_VIDEO_SOURCE": {
                 "value": "opencv"
-              },
-              "APPLICATIONINSIGHTS_INSTRUMENTATION_KEY": {
-                "value": "4c8b219e-5c92-4934-bd2c-62003fb061c4"
               }
             },
             "settings": {

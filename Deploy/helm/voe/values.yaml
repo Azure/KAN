@@ -7,8 +7,8 @@ installIngress: true
 image:
   pullPolicy: Always
   image: intelligentedge/webmodule
-  tag: "0.27.0-amd64"
+  tag: "0.36.0-amd64"
 webmodule:
   videoSource: opencv
 iothub:
-  connectionString: abcde
+  connectionString: 

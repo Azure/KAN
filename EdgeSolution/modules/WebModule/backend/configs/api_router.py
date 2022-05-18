@@ -20,6 +20,7 @@ from vision_on_edge.azure_training_status.api import (
 from vision_on_edge.camera_tasks.api import views as camera_task_views
 from vision_on_edge.cameras.api import views as camera_views
 from vision_on_edge.feedback.api import views as feedback_views
+from vision_on_edge.compute_devices.api import views as compute_device_views
 from vision_on_edge.images.api import views as image_views
 from vision_on_edge.inference_modules.api import views as inference_module_views
 from vision_on_edge.locations.api import views as location_views
@@ -46,6 +47,7 @@ router.register("projects", azure_projects_views.ProjectViewSet)
 router.register("cascades", azure_cascades_views.CascadeViewSet)
 router.register("settings", azure_setting_views.SettingViewSet)
 router.register("training_status", azure_training_status_views.TrainingStatusViewSet)
+router.register("compute_devices", compute_device_views.ComputeDeviceViewSet)
 
 urlpatterns = router.urls
 

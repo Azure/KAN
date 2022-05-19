@@ -18,6 +18,7 @@ spec:
       labels:
         app: webmodule
     spec:
+      serviceAccountName: symphony-user
       containers:
       - name: webmodule
         image: {{.Values.image.image}}:{{.Values.image.tag}}

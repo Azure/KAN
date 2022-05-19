@@ -60,19 +60,19 @@ class Camera(models.Model):
                         "parameters": {
                             "rtsp": self.rtsp,
                             "name": self.name, 
-                            "location": self.location}
+                            "location": self.location.name}
                     }
                 ]
             },
         }
         api_instance = self.get_client()
         if api_instance:
-            api.create_namespaced_custom_object( 
+            api_instance.create_namespaced_custom_object( 
                 group="fabric.symphony", 
                 version="v1", 
                 namespace="voe", 
                 plural="devices", 
-                body=test_resource, 
+                body=resource_json, 
             )
         else:
             logger.warning("not deployed")
@@ -80,7 +80,7 @@ class Camera(models.Model):
     def remove_config(self):
         api_instance = self.get_client()
         if api_instance:
-            api.delete_namespaced_custom_object( 
+            api_instance.delete_namespaced_custom_object( 
                 group="fabric.symphony", 
                 version="v1", 
                 namespace="voe", 

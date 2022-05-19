@@ -5,7 +5,9 @@ import logging
 import json
 
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_delete
+
+from kubernetes import client, config
 
 from ..locations.models import Location
 from .constants import gen_default_lines, gen_default_zones
@@ -35,6 +37,58 @@ class Camera(models.Model):
             return self.cameratasks.all()
         except Exception:
             return []
+    
+    def get_client(self):
+        try:
+            config.load_incluster_config()
+            api = client.CustomObjectsApi() 
+        except:
+            logger.warning("Cannot load k8s config")
+            api = None
+            
+        return api
+    def deploy_config(self):
+        resource_json = {
+            "apiVersion": "fabric.symphony/v1", 
+            "kind": "Device", 
+            "metadata": {"name": self.name}, 
+            "spec": {
+                "bindings": [
+                    {
+                        "role": "r1", 
+                        "type": "t1", 
+                        "parameters": {
+                            "rtsp": self.rtsp,
+                            "name": self.name, 
+                            "location": self.location}
+                    }
+                ]
+            },
+        }
+        api_instance = self.get_client()
+        if api_instance:
+            api.create_namespaced_custom_object( 
+                group="fabric.symphony", 
+                version="v1", 
+                namespace="voe", 
+                plural="devices", 
+                body=test_resource, 
+            )
+        else:
+            logger.warning("not deployed")
+    
+    def remove_config(self):
+        api_instance = self.get_client()
+        if api_instance:
+            api.delete_namespaced_custom_object( 
+                group="fabric.symphony", 
+                version="v1", 
+                namespace="voe", 
+                plural="devices", 
+                name=self.name, 
+            )
+        else:
+            logger.warning("not removed")
 
     def __str__(self):
         return self.name
@@ -64,10 +118,17 @@ class Camera(models.Model):
                 })
             }
         }
+        instance.deploy_config()
         az_logger.warning(
             "create_camera",
             extra=properties,
         )
 
+    @staticmethod
+    def post_delete(**kwargs):
+        instance = kwargs["instance"]
+        instance.remove_config()
+
 
 pre_save.connect(Camera.pre_save, Camera, dispatch_uid="Camera_pre")
+post_delete.connect(Camera.post_delete, Camera, dispatch_uid="Camera_post_delete")

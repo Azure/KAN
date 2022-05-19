@@ -17,9 +17,9 @@ logger = logging.getLogger(__name__)
 class ComputeDevice(models.Model):
     """ComputeDevice Model."""
 
-    name = models.CharField(max_length=1000)
-    iothub = models.CharField(max_length=1000)
-    iotedge_device = models.CharField(max_length=1000)
-    architecture = models.CharField(max_length=1000)
-    acceleration = models.CharField(max_length=1000)
-    tag_list = models.CharField(max_length=1000)
+    name = models.CharField(max_length=1000, null=True, blank=True, default="")
+    iothub = models.CharField(max_length=1000, null=True, blank=True, default="")
+    iotedge_device = models.CharField(max_length=1000, null=True, blank=True, default="")
+    architecture = models.CharField(max_length=1000, null=True, blank=True, default="")
+    acceleration = models.CharField(max_length=1000, null=True, blank=True, default="")
+    tag_list = models.CharField(max_length=1000, null=True, blank=True, default="")

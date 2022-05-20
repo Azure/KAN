@@ -1,14 +1,14 @@
-import { IPalette } from '@fluentui/react'
-import { PartialTheme } from '@fluentui/react-theme-provider'
+import { IPalette } from '@fluentui/react';
+import { PartialTheme } from '@fluentui/react-theme-provider';
 
 interface Color {
-  grayDark: string
-  grayLight: string
-  blue: string
-  orange: string
+  grayDark: string;
+  grayLight: string;
+  blue: string;
+  orange: string;
 }
 interface Theme extends PartialTheme {
-  palette: Partial<IPalette> & Partial<Color>
+  palette: Partial<IPalette> & Partial<Color>;
 }
 
 export const theme: Theme = {
@@ -17,7 +17,7 @@ export const theme: Theme = {
     themeDark: '#2C408A',
     themeDarkAlt: '#344CA3',
     themePrimary: '#3A54B4',
-    themeSecondary: '#4C65BE',
+    themeSecondary: '#0078D4',
     themeTertiary: '#7D8FD3',
     themeLight: '#B9C4E9',
     themeLighter: '#D9DEF3',
@@ -27,6 +27,7 @@ export const theme: Theme = {
     neutralPrimary: '#323130',
     neutralPrimaryAlt: '#3B3A39',
     neutralSecondary: '#605E5C',
+    neutralSecondaryAlt: '#605E5C',
     neutralTertiary: '#A19F9D',
     neutralQuaternary: '#2A2A2A',
     white: '#FFFFFF',
@@ -49,4 +50,4 @@ export const theme: Theme = {
   defaultFontStyle: {
     fontFamily: "'Open Sans', 'Noto Sans TC', sans-serif",
   },
-}
+};

@@ -3,6 +3,8 @@ import Axios from 'axios';
 import * as R from 'ramda';
 import { State } from 'RootStateType';
 import { schema, normalize } from 'normalizr';
+
+import { CreateCameraPayload, UpdateCameraPayload } from './types';
 import { BoxLabel, PolygonLabel, LineLabel } from './type';
 import { toggleShowAOI, toggleShowCountingLines, toggleShowDangerZones } from './actions';
 import {
@@ -25,6 +27,7 @@ type CameraFromServer = {
   danger_zones: string;
   is_demo: boolean;
   location: number;
+  media_type: string;
 };
 
 type CameraFromServerWithSerializeArea = Omit<CameraFromServer, 'area' | 'line' | 'danger_zones'> & {
@@ -70,6 +73,7 @@ export type Camera = {
   useCountingLine: boolean;
   useDangerZone: boolean;
   isDemo: boolean;
+  media_type: string;
 };
 
 const mapPurpose = (purpose: Purpose, annos) => annos.map((a) => ({ ...a, purpose }));
@@ -89,6 +93,7 @@ const normalizeCameraShape = (response: CameraFromServerWithSerializeArea) => {
     ],
     location: response.location,
     isDemo: response.is_demo,
+    media_type: response.media_type,
   };
 };
 
@@ -165,10 +170,13 @@ export const getCameras = createWrappedAsync<any, boolean, { state: State }>(
   },
 );
 
-export const postRTSPCamera = createWrappedAsync('cameras/rtsp/post', async (newCamera: any) => {
-  const response = await Axios.post(`/api/cameras/`, newCamera);
-  return response.data;
-});
+export const postRTSPCamera = createWrappedAsync(
+  'cameras/rtsp/post',
+  async (payload: CreateCameraPayload) => {
+    const response = await Axios.post(`/api/cameras/`, payload);
+    return response.data;
+  },
+);
 
 export const putRTSPCamera = createWrappedAsync('cameras/rtsp/put', async (newCamera: any) => {
   const response = await Axios.put(`/api/cameras/${newCamera.id}/`, newCamera);
@@ -177,12 +185,17 @@ export const putRTSPCamera = createWrappedAsync('cameras/rtsp/put', async (newCa
 
 export const postMediaSourceCamera = createWrappedAsync(
   'cameras/mediaSource/post',
-  async (newCamera: any) => {
+  async (payload: CreateCameraPayload) => {
     // Don't wait response, avoid timeout
 
-    Axios.post(`/api/cameras/`, newCamera);
+    Axios.post(`/api/cameras/`, payload);
   },
 );
+
+export const updateCamera = createWrappedAsync('cameras/update', async (payload: UpdateCameraPayload) => {
+  const response = await Axios.put(`/api/cameras/${payload.id}`, payload.body);
+  return response.data;
+});
 
 export const putMediaSourceCamera = createWrappedAsync('cameras/mediaSource/put', async (newCamera: any) => {
   // Don't wait response, avoid timeout
@@ -190,9 +203,11 @@ export const putMediaSourceCamera = createWrappedAsync('cameras/mediaSource/put'
   Axios.put(`/api/cameras/${newCamera.id}/`, newCamera);
 });
 
-export const deleteCamera = createWrappedAsync('cameras/delete', async (id: number) => {
-  await Axios.delete(`/api/cameras/${id}/`);
-  return id;
+export const deleteCameras = createWrappedAsync('cameras/delete', async (ids: number[]) => {
+  const url = `/api/cameras/bulk-delete?${ids.map((id) => `id=${id}`).join('&')}`;
+
+  await Axios.delete(url);
+  return ids;
 });
 
 const slice = createSlice({
@@ -206,7 +221,8 @@ const slice = createSlice({
       )
       .addCase(postRTSPCamera.fulfilled, entityAdapter.addOne)
       .addCase(putRTSPCamera.fulfilled, entityAdapter.upsertOne)
-      .addCase(deleteCamera.fulfilled, entityAdapter.removeOne)
+      .addCase(updateCamera.fulfilled, entityAdapter.upsertOne)
+      .addCase(deleteCameras.fulfilled, entityAdapter.removeMany)
       .addCase(toggleShowAOI.pending, (state, action) => {
         const { checked, cameraId } = action.meta.arg;
         state.entities[cameraId].useAOI = checked;

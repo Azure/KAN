@@ -1,16 +1,20 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useBoolean } from '@uifabric/react-hooks';
+import { useRouteMatch } from 'react-router-dom';
 
 import { State } from 'RootStateType';
 import { TopNav } from './TopNav';
 import { LeftNav } from './LeftNav';
 import { SettingPanel } from './SettingPanel';
+import { Url } from '../constant';
 
 export const MainLayout: React.FC = ({ children }) => {
   const appInsightHasInit = useSelector((state: State) => state.setting.appInsightHasInit);
   const isTrainerValid = useSelector((state: State) => state.setting.isTrainerValid);
   const userHasInitSetting = appInsightHasInit && isTrainerValid;
+
+  const match = useRouteMatch(Url.AZURE_LOGIN);
 
   const [settingOpen, { setFalse: closeSettingPanel, setTrue: openSettingPanel, toggle }] = useBoolean(false);
   const askUserToSetup = () => {
@@ -30,6 +34,9 @@ export const MainLayout: React.FC = ({ children }) => {
       openSettingPanel();
     }
   }, [openSettingPanel, userHasInitSetting]);
+
+  // Azure Login popup
+  if (!!match) return <>{children}</>;
 
   return (
     <main

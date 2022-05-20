@@ -180,79 +180,80 @@ const NEW_MODELS = [
 ];
 
 export default compose(
-  (BaseComponent: React.ComponentType<ModelsProps>): React.FC<PassingProps> => (props) => {
-    const { onOpenCustomVision, onOpenIntelOvms, onOpenOwnUpload, trainingProjectList } = props;
+  (BaseComponent: React.FunctionComponent<ModelsProps>): React.FC<PassingProps> =>
+    (props) => {
+      const { onOpenCustomVision, onOpenIntelOvms, onOpenOwnUpload, trainingProjectList } = props;
 
-    if (trainingProjectList.length === 0) {
-      return (
-        <Stack styles={{ root: { color: '#323130' } }}>
-          <Stack styles={{ root: { textAlign: 'center' } }} horizontalAlign="center">
-            <Label styles={{ root: { fontSize: '20px', lineHeight: '28px' } }}>
-              Manage your machine learning models
-            </Label>
-            <Text
-              styles={{
-                root: { fontSize: '13px', lineHeight: '18px', width: '560px' },
-              }}
-            >
-              Create a custom model with Microsoft Custom Vision, browse Intel’s library of models, or upload
-              your own. Manage them all in one place.{' '}
-              <Link
-                target="_blank"
-                href="https://github.com/Azure-Samples/azure-intelligent-edge-patterns/tree/master/factory-ai-vision"
+      if (trainingProjectList.length === 0) {
+        return (
+          <Stack styles={{ root: { color: '#323130' } }}>
+            <Stack styles={{ root: { textAlign: 'center' } }} horizontalAlign="center">
+              <Label styles={{ root: { fontSize: '20px', lineHeight: '28px' } }}>
+                Manage your machine learning models
+              </Label>
+              <Text
+                styles={{
+                  root: { fontSize: '13px', lineHeight: '18px', width: '560px' },
+                }}
               >
-                Learn more
-              </Link>
-            </Text>
-          </Stack>
-          <Stack
-            style={{ marginTop: '40px' }}
-            horizontal
-            tokens={{ childrenGap: 16 }}
-            horizontalAlign="center"
-          >
-            {NEW_MODELS.map((model, id) => (
-              <div key={id} style={{ width: '300px' }}>
-                <img style={{ height: '180px' }} src={model.imagePath} alt="icon" />
-                <Stack>
-                  <Label styles={{ root: { marginTop: '16px', fontSize: '16px', lineHeight: '22px' } }}>
-                    {model.title}
-                  </Label>
-                  <Text styles={{ root: { marginTop: '4px', fontSize: '13px', lineHeight: '18px' } }}>
-                    {model.subTitle}
-                  </Text>
-                </Stack>
-                <PrimaryButton
-                  styles={{ root: { marginTop: '12px' } }}
-                  allowDisabledFocus
-                  text={model.title}
-                  onClick={() => {
-                    model.type === 'custom' && onOpenCustomVision();
-                    model.type === 'ovms' && onOpenIntelOvms();
-                    model.type === 'own' && onOpenOwnUpload();
-                  }}
-                />
-
-                {model.type === 'ovms' && (
-                  <Stack styles={{ root: { marginTop: '7px' } }}>
-                    <Link
-                      target="_blank"
-                      href="https://docs.openvinotoolkit.org/latest/omz_models_group_intel.html"
-                    >
-                      <Stack horizontal verticalAlign="center" tokens={{ childrenGap: 5 }}>
-                        <Text>Intel</Text>
-                        <Icon styles={{ root: { color: '#0078D4' } }} iconName="OpenInNewWindow" />
-                      </Stack>
-                    </Link>
+                Create a custom model with Microsoft Custom Vision, browse Intel’s library of models, or
+                upload your own. Manage them all in one place.{' '}
+                <Link
+                  target="_blank"
+                  href="https://github.com/Azure-Samples/azure-intelligent-edge-patterns/tree/master/factory-ai-vision"
+                >
+                  Learn more
+                </Link>
+              </Text>
+            </Stack>
+            <Stack
+              style={{ marginTop: '40px' }}
+              horizontal
+              tokens={{ childrenGap: 16 }}
+              horizontalAlign="center"
+            >
+              {NEW_MODELS.map((model, id) => (
+                <div key={id} style={{ width: '300px' }}>
+                  <img style={{ height: '180px' }} src={model.imagePath} alt="icon" />
+                  <Stack>
+                    <Label styles={{ root: { marginTop: '16px', fontSize: '16px', lineHeight: '22px' } }}>
+                      {model.title}
+                    </Label>
+                    <Text styles={{ root: { marginTop: '4px', fontSize: '13px', lineHeight: '18px' } }}>
+                      {model.subTitle}
+                    </Text>
                   </Stack>
-                )}
-              </div>
-            ))}
-          </Stack>
-        </Stack>
-      );
-    }
+                  <PrimaryButton
+                    styles={{ root: { marginTop: '12px' } }}
+                    allowDisabledFocus
+                    text={model.title}
+                    onClick={() => {
+                      model.type === 'custom' && onOpenCustomVision();
+                      model.type === 'ovms' && onOpenIntelOvms();
+                      model.type === 'own' && onOpenOwnUpload();
+                    }}
+                  />
 
-    return <BaseComponent trainingProjectList={trainingProjectList} />;
-  },
+                  {model.type === 'ovms' && (
+                    <Stack styles={{ root: { marginTop: '7px' } }}>
+                      <Link
+                        target="_blank"
+                        href="https://docs.openvinotoolkit.org/latest/omz_models_group_intel.html"
+                      >
+                        <Stack horizontal verticalAlign="center" tokens={{ childrenGap: 5 }}>
+                          <Text>Intel</Text>
+                          <Icon styles={{ root: { color: '#0078D4' } }} iconName="OpenInNewWindow" />
+                        </Stack>
+                      </Link>
+                    </Stack>
+                  )}
+                </div>
+              ))}
+            </Stack>
+          </Stack>
+        );
+      }
+
+      return <BaseComponent trainingProjectList={trainingProjectList} />;
+    },
 )(BaseModel);

@@ -12,6 +12,13 @@ enum Url {
   PARTS_DETAIL = '/parts/detail',
 
   CAMERAS = '/cameras',
+  CAMERAS2 = '/cameras2',
+  CAMERAS2_CREATION = '/cameras2/create/:key',
+  CAMERAS2_CREATION_BASICS = '/cameras2/create/basics',
+  CAMERAS2_CREATION_TAG = '/cameras2/create/tag',
+  CAMERAS2_CREATION_PREVIEW = '/cameras2/create/preview',
+  CAMERAS2_LIVE_FEED = '/cameras2/detail/:id',
+
   CAMERAS_DETAIL = '/cameras/detail',
 
   MODELS = '/models',
@@ -26,6 +33,20 @@ enum Url {
   CASCADES_CREATE = '/cascades/create',
 
   DEPLOYMENT = '/deployment',
+  DEPLOYMENT2 = '/deployment2',
+  DEPLOYMENT2_CREATION = '/deployment2/create/:key',
+  DEPLOYMENT2_CREATION_BASIC = '/deployment2/create/basics',
+  DEPLOYMENT2_CREATION_CONFIGURE = '/deployment2/create/configure',
+  DEPLOYMENT2_CREATION_TAG = '/deployment2/create/tag',
+  DEPLOYMENT2_CREATION_PREVIEW = '/deployment2/create/preview',
+
+  AZURE_LOGIN = '/azureLogin',
+
+  COMPUTE_DEVICE = '/computeDevice',
+  COMPUTE_DEVICE_CREATION = '/computeDevice/create/:key',
+  COMPUTE_DEVICE_CREATION_BASIC = '/computeDevice/create/basics',
+  COMPUTE_DEVICE_CREATION_TAG = '/computeDevice/create/tag',
+  COMPUTE_DEVICE_CREATION_PREVIEW = '/computeDevice/create/preview',
 }
 
 export default Url;

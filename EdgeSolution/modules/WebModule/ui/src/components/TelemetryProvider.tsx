@@ -22,4 +22,5 @@ const TelemetryProvider: React.FC<any> = ({ instrumentationKey, isAppInsightOn, 
   return <>{children}</>;
 };
 
+// @ts-ignore
 export default withRouter(withAITracking(ai.reactPlugin, TelemetryProvider, 'TelemetryProvider'));

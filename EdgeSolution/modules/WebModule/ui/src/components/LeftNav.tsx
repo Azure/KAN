@@ -14,15 +14,15 @@ const navLinks: INavLink[] = [
       },
     },
   },
-  {
-    name: 'Compute Devices',
-    url: Url.COMPUTE_DEVICE,
-    iconProps: {
-      imageProps: {
-        src: '/icons/computeDevice.svg',
-      },
-    },
-  },
+  // {
+  //   name: 'Compute Devices',
+  //   url: Url.COMPUTE_DEVICE,
+  //   iconProps: {
+  //     imageProps: {
+  //       src: '/icons/computeDevice.svg',
+  //     },
+  //   },
+  // },
   // {
   //   name: 'Cameras',
   //   url: Url.CAMERAS,
@@ -86,15 +86,15 @@ const navLinks: INavLink[] = [
       },
     },
   },
-  {
-    name: 'Deployment',
-    url: Url.DEPLOYMENT2,
-    iconProps: {
-      imageProps: {
-        src: '/icons/deployment.svg',
-      },
-    },
-  },
+  // {
+  //   name: 'Deployment',
+  //   url: Url.DEPLOYMENT2,
+  //   iconProps: {
+  //     imageProps: {
+  //       src: '/icons/deployment.svg',
+  //     },
+  //   },
+  // },
 ];
 
 export const LeftNav: React.FC = () => {

@@ -160,7 +160,7 @@ const Basics = (props: Props) => {
               value={localFormData.password}
               onChange={(_, newValue) => onFromDataChange('password', newValue)}
             />
-            <Stack horizontal tokens={{ childrenGap: 20 }}>
+            {/* <Stack horizontal tokens={{ childrenGap: 20 }}>
               <Stack>
                 <HorizontalDropdown
                   label="Select compute devices"
@@ -206,7 +206,7 @@ const Basics = (props: Props) => {
                   />
                 ))}
               </Stack>
-            </Stack>
+            </Stack> */}
           </Stack>
         ) : (
           <>

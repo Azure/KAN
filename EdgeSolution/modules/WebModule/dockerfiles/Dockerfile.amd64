@@ -1,7 +1,7 @@
 # =========================================================
 # === Build Static UI                                   ===
 # =========================================================
-FROM node:12 as builder
+FROM node:16 as builder
 
 WORKDIR /app
 COPY ui/package.json .
@@ -10,6 +10,7 @@ RUN yarn install --production
 COPY ui/tsconfig.json .
 COPY ui/src/ ./src
 COPY ui/public/ ./public
+COPY ui/.env .
 RUN yarn build
 
 ARG GIT_LOG

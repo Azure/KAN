@@ -215,36 +215,38 @@ const BaseDeployment: React.FC<DeploymentProps> = (props) => {
 };
 
 export const Deployment = R.compose(
-  (BaseComponent: React.ComponentType<AdditionalProps>): React.FC => () => {
-    const [isEditPanelOpen, { setTrue: onOpenEditPanel, setFalse: onCloseEditPanel }] = useBoolean(false);
-    const [isCreatePanelOpen, { setTrue: onOpenCreatePanel, setFalse: closeCreatePanel }] = useBoolean(false);
+  (BaseComponent: React.FunctionComponent<AdditionalProps>): React.FC =>
+    () => {
+      const [isEditPanelOpen, { setTrue: onOpenEditPanel, setFalse: onCloseEditPanel }] = useBoolean(false);
+      const [isCreatePanelOpen, { setTrue: onOpenCreatePanel, setFalse: closeCreatePanel }] =
+        useBoolean(false);
 
-    const { data: projectData } = useSelector<State, Project>((state) => state.project);
+      const { data: projectData } = useSelector<State, Project>((state) => state.project);
 
-    const dispatch = useDispatch();
+      const dispatch = useDispatch();
 
-    useEffect(() => {
-      (async () => {
-        const hasConfigured = await dispatch(thunkGetProject());
-        if (!hasConfigured) onOpenCreatePanel();
-      })();
-    }, [dispatch, onOpenCreatePanel]);
+      useEffect(() => {
+        (async () => {
+          const hasConfigured = await dispatch(thunkGetProject());
+          if (!hasConfigured) onOpenCreatePanel();
+        })();
+      }, [dispatch, onOpenCreatePanel]);
 
-    return (
-      <>
-        <BaseComponent onOpenCreatePanel={onOpenCreatePanel} onOpenEditPanel={onOpenEditPanel} />
-        <ConfigTaskPanel
-          isOpen={isEditPanelOpen}
-          onDismiss={onCloseEditPanel}
-          projectData={projectData}
-          isEdit
-        />
-        <ConfigTaskPanel
-          isOpen={isCreatePanelOpen}
-          onDismiss={closeCreatePanel}
-          projectData={initialProjectData}
-        />
-      </>
-    );
-  },
+      return (
+        <>
+          <BaseComponent onOpenCreatePanel={onOpenCreatePanel} onOpenEditPanel={onOpenEditPanel} />
+          <ConfigTaskPanel
+            isOpen={isEditPanelOpen}
+            onDismiss={onCloseEditPanel}
+            projectData={projectData}
+            isEdit
+          />
+          <ConfigTaskPanel
+            isOpen={isCreatePanelOpen}
+            onDismiss={closeCreatePanel}
+            projectData={initialProjectData}
+          />
+        </>
+      );
+    },
 )(BaseDeployment);

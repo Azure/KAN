@@ -52,26 +52,27 @@ const BaseHome: React.FC = () => {
 };
 
 export const Home = R.compose(
-  (BaseComponent: React.ComponentType<{}>): React.FC => () => {
-    const location = useLocation();
-    const history = useHistory();
+  (BaseComponent: React.FunctionComponent<{}>): React.FC =>
+    () => {
+      const location = useLocation();
+      const history = useHistory();
 
-    const onPivotChange = (item: PivotItem) => {
-      history.push(`${Url.HOME}/${item.props.itemKey}`);
-    };
+      const onPivotChange = (item: PivotItem) => {
+        history.push(`${Url.HOME}/${item.props.itemKey}`);
+      };
 
-    return (
-      <>
-        <Stack styles={{ root: { height: '100%' } }}>
-          <Pivot selectedKey={location.pathname.split('/')[2]} onLinkClick={onPivotChange}>
-            <PivotItem itemKey="getStarted" headerText="Get started" />
-            <PivotItem itemKey="customize" headerText="Scenario library" />
-          </Pivot>
-          <Stack grow>
-            <BaseComponent />
+      return (
+        <>
+          <Stack styles={{ root: { height: '100%' } }}>
+            <Pivot selectedKey={location.pathname.split('/')[2]} onLinkClick={onPivotChange}>
+              <PivotItem itemKey="getStarted" headerText="Get started" />
+              <PivotItem itemKey="customize" headerText="Scenario library" />
+            </Pivot>
+            <Stack grow>
+              <BaseComponent />
+            </Stack>
           </Stack>
-        </Stack>
-      </>
-    );
-  },
+        </>
+      );
+    },
 )(BaseHome);

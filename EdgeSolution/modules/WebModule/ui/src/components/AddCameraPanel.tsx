@@ -113,6 +113,7 @@ export const Component: React.FC<AddEditCameraPanelProps> = ({
           name: formData.name.value,
           rtsp: formData.url.value,
           location: formData.location.value,
+          media_type: '',
         }),
       );
       setFormData(initialForm);
@@ -149,6 +150,7 @@ export const Component: React.FC<AddEditCameraPanelProps> = ({
           name: formData.name.value,
           media_source: formData.url.value,
           location: formData.location.value,
+          media_type: '',
         }),
       );
       setFormData(initialForm);

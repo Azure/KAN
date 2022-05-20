@@ -18,6 +18,7 @@ import cascadeReducer from './cascadeSlice';
 
 import intelProjectReducer from './IntelProjectSlice';
 import trainingProjectStatusReducer from './trainingProjectStatusSlice';
+import computeDeviceReducer from './computeDeviceSlice';
 
 export const rootReducer = combineReducers({
   project: projectReducer,
@@ -37,4 +38,5 @@ export const rootReducer = combineReducers({
   intelProject: intelProjectReducer,
   cascade: cascadeReducer,
   trainingProjectStatus: trainingProjectStatusReducer,
+  computeDevice: computeDeviceReducer,
 });

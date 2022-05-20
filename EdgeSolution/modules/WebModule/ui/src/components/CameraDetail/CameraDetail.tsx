@@ -19,7 +19,7 @@ import { useBoolean } from '@uifabric/react-hooks';
 
 import { State } from 'RootStateType';
 import { useQuery } from '../../hooks/useQuery';
-import { selectCameraById, getCameras, deleteCamera } from '../../store/cameraSlice';
+import { selectCameraById, getCameras, deleteCameras } from '../../store/cameraSlice';
 import { thunkGetProject } from '../../store/project/projectActions';
 import AddCameraPanel, { PanelMode } from '../../components/AddCameraPanel';
 import { selectLocationById } from '../../store/locationSlice';
@@ -66,7 +66,7 @@ export const CameraDetails: React.FC = () => {
           // eslint-disable-next-line no-restricted-globals
           if (!confirm('Sure you want to delete?')) return;
 
-          await dispatch(deleteCamera(cameraId));
+          await dispatch(deleteCameras([cameraId]));
           history.push('/cameras');
         })();
       },

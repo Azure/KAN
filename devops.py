@@ -102,6 +102,12 @@ def push_module(module_name):
 
     Docker.push(tag)
 
+def module_version(module_name):
+
+    module = IoTEdgeModule(module_name)
+    return module.version
+     
+
 
 MODULES = ['StreamingModule']
 
@@ -128,7 +134,7 @@ def push(name: str):
 
     if name not in MODULES:
         typer.echo(f'***')
-        typer.echo(f'*** Unown Module {name}')
+        typer.echo(f'*** Unknown Module {name}')
         typer.echo(f'***')
         raise typer.Exit()
 
@@ -141,6 +147,14 @@ def push_all():
         push_module(module_name)
 
 
+@app.command()
+def list_versions():
+    typer.echo(f'***')
+    typer.echo(f'*** Modules')
+    typer.echo(f'***')
+    for module_name in MODULES:
+        version = module_version(module_name)
+        typer.echo(f'{module_name}: {version}')
 
 
 

@@ -3,8 +3,8 @@ import cascade
 
 from sources import RtspSource
 from transforms import FilterTransform
-from exports import VideoSnippetExport, IothubExport, IotedgeExport
-from models import FakeModel
+from exports import VideoSnippetExport, IothubExport, IotedgeExport, Cv2ImshowExport
+from models import FakeModel, ObjectDetectionModel, ClassificationModel
 
 supported_sources = {
     'rtsp': RtspSource
@@ -18,11 +18,14 @@ supported_transforms = {
 supported_exports = {
     'video_snippet_export': VideoSnippetExport,
     'iothub_export': IothubExport,
-    'iotedge_export': IotedgeExport
+    'iotedge_export': IotedgeExport,
+    'cv2_imshow_export': Cv2ImshowExport
 }
 
 supported_models = {
-    'fake_model': FakeModel
+    'fake_model': FakeModel,
+    'object_detection_model': ObjectDetectionModel,
+    'classification_model': ClassificationModel
     
 }
 
@@ -38,7 +41,7 @@ class Stream:
 
             node_type = node['type']
             node_name = node['name']
-            node_parameters = node['parameters']
+            node_configurations = node['configurations']
 
 
             match node_type:
@@ -53,7 +56,7 @@ class Stream:
                 case 'transform':
                     if node_name not in supported_transforms:
                         raise Exception(f'Unknown Name {node_name} for Type {node_type}')
-                    element = supported_transforms[node_name](**node_parameters)
+                    element = supported_transforms[node_name](**node_configurations)
 
                     #for parent_node_id in nx.predecessors(self._g, node_id):
                     for parent_node_id in self._g.predecessors(node_id):
@@ -69,7 +72,7 @@ class Stream:
                 case 'export':
                     if node_name not in supported_exports:
                         raise Exception(f'Unknown Name {node_name} for Type {node_type}')
-                    element = supported_exports[node_name](**node_parameters)
+                    element = supported_exports[node_name](**node_configurations)
 
                     #for parent_node_id in nx.predecessors(self._g, node_id):
                     for parent_node_id in self._g.predecessors(node_id):
@@ -82,7 +85,7 @@ class Stream:
                 case 'model':
                     if node_name not in supported_models:
                         raise Exception(f'Unknown Name {node_name} for Type {node_type}')
-                    element = supported_models[node_name](**node_parameters)
+                    element = supported_models[node_name](**node_configurations)
 
                     #for parent_node_id in nx.predecessors(self._g, node_id):
                     for parent_node_id in self._g.predecessors(node_id):

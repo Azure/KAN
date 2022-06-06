@@ -3,10 +3,12 @@ import sys
 import subprocess
 import json
 from pathlib import Path
+from enum import Enum
 
 import typer
 import dotenv
 from pydantic import BaseModel, Field
+import semantic_version
 
 
 
@@ -16,6 +18,16 @@ CONTAINER_REGISTRY_NAME=os.environ['CONTAINER_REGISTRY_NAME']
 
 MODULE_ROOT = Path('EdgeSolution/modules')
 PLATFORM = 'amd64' #FIXME this shouldn't be fixed value
+
+MODULES = []
+for module_folder in os.listdir(MODULE_ROOT):
+    if module_folder == '.DS_Store': continue
+    if not os.path.exists(MODULE_ROOT/module_folder/'module.json'):
+        typer.echo(f'***')
+        typer.echo(f'*** module.json not found in {module_folder}')
+        typer.echo(f'***')
+        typer.Exit()
+    MODULES.append(module_folder)
 
 
 class IoTEdgeModule:
@@ -109,8 +121,6 @@ def module_version(module_name):
      
 
 
-MODULES = ['StreamingModule']
-
 @app.command()
 def build(name: str):
 
@@ -154,8 +164,56 @@ def list_versions():
     typer.echo(f'***')
     for module_name in MODULES:
         version = module_version(module_name)
-        typer.echo(f'{module_name}: {version}')
+        typer.echo(f'{module_name: <20}: {version}')
 
+
+class VersionType(str, Enum):
+    #MAJOR = 'major'
+    MINOR = 'minor'
+    PATCH = 'patch'
+    DEV = 'dev'
+
+@app.command()
+def update_versions(type: VersionType, y: bool=typer.Option(default=False)):
+    typer.echo(f'***')
+    typer.echo(f'*** Update Versions')
+    typer.echo(f'***')
+
+    semvers = []
+    for module_name in MODULES:
+        version = module_version(module_name) 
+        semvers.append(semantic_version.Version(version))
+
+    new_semver = semantic_version.Version(str(max(semvers)))
+    if type is VersionType.MINOR:
+        new_semver = new_semver.next_minor()
+    elif type is VersionType.PATCH:
+        new_semver = new_semver.next_patch()
+    elif type is VersionType.DEV:
+        if len(new_semver.prerelease) == 0:
+            new_semver.prerelease = ('dev', '1')
+        else:
+            new_semver.prerelease = ('dev', str(int(new_semver.prerelease[1])+1))
+
+    typer.echo ('---------------------------------')
+    for module_name, semver in zip(MODULES, semvers):
+        typer.echo(f'{module_name: <20}: {semver} => {new_semver}')
+    typer.echo ('---------------------------------')
+
+    if not y:
+        while True:
+            ok = typer.prompt('Is it ok? (y/n)')
+            if ok == 'y': 
+                y = True
+                break
+            elif ok == 'n': 
+                n = False
+                break
+
+    if y:
+        for module_name, semver in zip(MODULES, semvers):
+            command = f"sed -i -e s/{semver}/{new_semver}/g {MODULE_ROOT}/{module_name}/module.json"
+            subprocess.check_output(command.split())
 
 
 if __name__ == '__main__':

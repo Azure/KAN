@@ -1,5 +1,9 @@
-from core import Model
+from typing import List
 
+import requests
+from pydantic import BaseModel
+
+from core import Model
 from frame import Frame, Bbox, ObjectMeta
 
 class FakeModel(Model):
@@ -13,3 +17,39 @@ class FakeModel(Model):
 
         frame.insights_meta.objects_meta.append(object_meta1)
         frame.insights_meta.objects_meta.append(object_meta2)
+
+
+
+class ObjectDetectionModelObject(BaseModel):
+    bbox: Bbox
+    confidence: float
+    label: str
+
+
+class ObjectDetectionModelResult(BaseModel):
+    objects: List[ObjectDetectionModelObject]
+
+
+class ObjectDetectionModel(Model):
+
+    def __init__(self, model):
+        super().__init__()
+
+    def process(self, frame):
+
+        img = frame.image.image_pointer
+        width = frame.image.properties.width
+        height = frame.image.properties.height
+        #FIXME fix the url
+        res = requests.post('http://localhost:8000/predict', files={'file': img}, params={'width': width, 'height': height})
+
+        res = ObjectDetectionModelResult(**res.json())
+
+        for obj in res.objects:
+            object_meta = ObjectMeta(label=obj.label, bbox=obj.bbox, confidence=obj.confidence)
+            frame.insights_meta.objects_meta.append(object_meta)
+
+
+class ClassificationModel(Model):
+    def process(self, frame):
+        pass

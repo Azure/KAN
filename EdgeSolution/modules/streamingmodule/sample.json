@@ -4,22 +4,55 @@
     {
       "id": "1",
       "type": "source",
-	  "name": "rtsp"
+	  "name": "rtsp",
+	  "configurations": {
+	  }
     },
     {
       "id": "2",
       "type": "model",
-	  "name": "fake_model"
+	  "name": "object_detection_model",
+	  "configurations": {
+		  "model": "face-detection-0200"
+	  }
     },
     {
       "id": "3",
       "type": "transform",
-	  "name": "filter"
+	  "name": "filter_transform",
+	  "configurations": {
+		  "confidence_threshold": 0.3,
+		  "labels": ["face"]
+	  }
     },
     {
       "id": "4",
 	  "type": "export",
-      "name": "export_video_snippet"
+      "name": "video_snippet_export",
+	  "configurations": {
+		  "filename_prefix": "test",
+		  "recording_duration": 3,
+		  "insights_overlay": true,
+		  "delay_buffer": 1
+	  }
+    },
+    {
+      "id": "5",
+	  "type": "export",
+      "name": "iothub_export",
+	  "configurations": {
+		  "delay_buffer": 1.0
+	  }
+	  
+    },
+    {
+      "id": "6",
+	  "type": "export",
+      "name": "iotedge_export",
+	  "configurations": {
+		  "delay_buffer": 0.3,
+		  "module_name": "hi"
+	  }
     }
   ],
   "edges": [
@@ -29,7 +62,20 @@
     },
     {
       "source": "2",
+      "target": "3"
+    },
+    {
+      "source": "3",
       "target": "4"
+    },
+    {
+      "source": "3",
+      "target": "5"
+    },
+    {
+      "source": "3",
+      "target": "6"
     }
   ]
 }
+

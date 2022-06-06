@@ -1,6 +1,6 @@
 from enum import Enum
 
-from attrs import define, field
+from pydantic import BaseModel, Field
 import numpy as np
 
 class ColorFormat(Enum):
@@ -8,28 +8,27 @@ class ColorFormat(Enum):
     BGR = 'BGR'
 
 
-@define
-class ImageProperties:
+class ImageProperties(BaseModel):
     height: int
     width: int
     color_format: ColorFormat
 
 
-@define
-class Image:
-    image_pointer: np.ndarray
+class Image(BaseModel):
+    image_pointer: np.ndarray 
     properties: ImageProperties
+    class Config:
+        arbitrary_types_allowed = True
 
 
-@define
-class Bbox:
+class Bbox(BaseModel):
     l: float
     t: float
     w: float
     h: float
 
-@define
-class ObjectMeta:
+
+class ObjectMeta(BaseModel):
     #timestamp: float
     label: str
     confidence: float
@@ -37,12 +36,12 @@ class ObjectMeta:
     #attributes: list[str] #FIXME
     bbox: Bbox
 
-@define
-class InsightsMeta:
-    objects_meta: list[ObjectMeta] = field(default=[])
 
-@define
-class Frame:
+class InsightsMeta(BaseModel):
+    objects_meta: list[ObjectMeta] = []
+
+
+class Frame(BaseModel):
     image: Image
-    insights_meta: InsightsMeta = field(default=InsightsMeta())
+    insights_meta: InsightsMeta = InsightsMeta()
 

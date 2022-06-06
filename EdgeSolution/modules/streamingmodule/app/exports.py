@@ -46,7 +46,7 @@ class VideoSnippetExport(Export):
                 fps = 30.0
                 h, w, _ = self.imgs[0].shape
 
-                filename = f"{self.filename_prefix}-{datetime.datetime.fromtimestamp(time.time())}.avi"
+                filename = f"{self.filename_prefix}-{datetime.datetime.fromtimestamp(time.time()).isoformat()}.avi"
 
                 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
                 out = cv2.VideoWriter(filename, fourcc, fps, (w, h))
@@ -127,3 +127,19 @@ class IotedgeExport(Export):
 
             self.last_timestamp = cur_timestamp
 
+
+class Cv2ImshowExport(Export):
+
+    def __init__(self, insights_overlay=True):
+        super().__init__()
+
+        self.insights_overlay = insights_overlay
+    
+    def process(self, frame):
+
+        img = frame.image.image_pointer.copy()
+        if self.insights_overlay:
+            utils.insights_overlay(img, frame)
+
+        cv2.imshow('Frame', img)
+        cv2.waitKey(1)

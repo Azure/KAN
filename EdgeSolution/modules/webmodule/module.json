@@ -1,0 +1,16 @@
+{
+  "$schema-version": "0.0.1",
+  "description": "",
+  "image": {
+    "repository": "${CONTAINER_REGISTRY_NAME}/intelligentedge/webmodule",
+    "tag": {
+      "version": "0.36.4",
+      "platforms": {
+        "amd64": "./dockerfiles/Dockerfile.amd64"
+      }
+    },
+    "buildOptions": ["--build-arg GIT_LOG=$(git rev-parse HEAD) --build-arg APPLICATIONINSIGHTS_INSTRUMENTATION_KEY=$APPLICATIONINSIGHTS_INSTRUMENTATION_KEY"],
+    "contextPath": "./"
+  },
+  "language": "python"
+}

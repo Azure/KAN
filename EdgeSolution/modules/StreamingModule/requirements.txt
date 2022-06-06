@@ -3,3 +3,4 @@ pydantic
 uvicorn
 opencv-python
 attrs
+semantic_version

@@ -3,7 +3,7 @@ import cascade
 
 from sources import RtspSource
 from transforms import FilterTransform
-from exports import ExportVideoSnippet
+from exports import VideoSnippetExport, IothubExport, IotedgeExport
 from models import FakeModel
 
 supported_sources = {
@@ -11,12 +11,14 @@ supported_sources = {
 }
 
 supported_transforms = {
-    'filter': FilterTransform
+    'filter_transform': FilterTransform
      
 }
 
 supported_exports = {
-    'export_video_snippet': ExportVideoSnippet
+    'video_snippet_export': VideoSnippetExport,
+    'iothub_export': IothubExport,
+    'iotedge_export': IotedgeExport
 }
 
 supported_models = {
@@ -36,6 +38,7 @@ class Stream:
 
             node_type = node['type']
             node_name = node['name']
+            node_parameters = node['parameters']
 
 
             match node_type:
@@ -50,7 +53,7 @@ class Stream:
                 case 'transform':
                     if node_name not in supported_transforms:
                         raise Exception(f'Unknown Name {node_name} for Type {node_type}')
-                    element = supported_transforms[node_name]()
+                    element = supported_transforms[node_name](**node_parameters)
 
                     #for parent_node_id in nx.predecessors(self._g, node_id):
                     for parent_node_id in self._g.predecessors(node_id):
@@ -66,7 +69,7 @@ class Stream:
                 case 'export':
                     if node_name not in supported_exports:
                         raise Exception(f'Unknown Name {node_name} for Type {node_type}')
-                    element = supported_exports[node_name]()
+                    element = supported_exports[node_name](**node_parameters)
 
                     #for parent_node_id in nx.predecessors(self._g, node_id):
                     for parent_node_id in self._g.predecessors(node_id):
@@ -79,7 +82,7 @@ class Stream:
                 case 'model':
                     if node_name not in supported_models:
                         raise Exception(f'Unknown Name {node_name} for Type {node_type}')
-                    element = supported_models[node_name]()
+                    element = supported_models[node_name](**node_parameters)
 
                     #for parent_node_id in nx.predecessors(self._g, node_id):
                     for parent_node_id in self._g.predecessors(node_id):

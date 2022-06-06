@@ -32,7 +32,7 @@ class Bbox:
 class ObjectMeta:
     #timestamp: float
     label: str
-    #confidence: float
+    confidence: float
     #inference_id: str
     #attributes: list[str] #FIXME
     bbox: Bbox

@@ -10,6 +10,7 @@ class Node(BaseModel):
     id: NodeId
     type: Literal['source', 'transform', 'export', 'model']
     name: str
+    parameters: dict[str, object]
 
 
 class SourceNode(Node):

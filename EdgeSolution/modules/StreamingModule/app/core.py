@@ -45,7 +45,7 @@ class Source(Element):
         raise NotImplementedError    
 
 
-class Sink(Element):
+class Export(Element):
     def __init__(self):
         super().__init__()
         self._q = queue.Queue(maxsize=1)

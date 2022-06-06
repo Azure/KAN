@@ -12,7 +12,7 @@ if __name__ == '__main__':
     s = Stream.from_cascade_config(c)
     s.start()
     import time
-    time.sleep(1)
+    time.sleep(30)
     s.stop()
     s.join()
     

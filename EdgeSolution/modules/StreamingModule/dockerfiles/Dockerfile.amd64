@@ -9,7 +9,7 @@ RUN pip install -r /app/requirements.txt
 
 COPY app/*.py /app/
 
-COPY sample.json /
+COPY sample.json /  
 
 
 WORKDIR /app/

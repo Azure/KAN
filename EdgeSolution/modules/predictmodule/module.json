@@ -6,7 +6,7 @@
     "tag": {
       "version": "0.36.4",
       "platforms": {
-        "amd64": "./dockerfiles/Dockerfile.cpuamd64",
+        "amd64": "./dockerfiles/Dockerfile.amd64",
         "cpuamd64": "./dockerfiles/Dockerfile.cpuamd64",
         "gpuamd64": "./dockerfiles/Dockerfile.gpuamd64",
         "vpuamd64": "./dockerfiles/Dockerfile.vpuamd64"

@@ -1,0 +1,4 @@
+typer
+python-dotenv
+semantic_version
+pydantic

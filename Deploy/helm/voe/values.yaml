@@ -1,11 +1,20 @@
 # Default values for voe.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+tenantId: "<SP Tenant Id>"
+clientId: "<SP APP Id>"
+clientSecret: "<SP Secret>"
+symphonyUrl: "<Symphony URL>"
 image:
   pullPolicy: Always
   image: p4etest.azurecr.io/webmodule
-  tag: "0.36.5-amd64"
+  tag: "0.36.6-amd64"
 webmodule:
   videoSource: opencv
 iothub:
-  connectionString: 
+  connectionString: "<IotHub Connection String>"
+storage:
+  storageAccount: "<Storage Account>"
+  storageContainer: "<Storate Container>"
+  subscriptionId: "<Subscription Id>"
+

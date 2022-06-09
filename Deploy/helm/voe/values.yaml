@@ -8,7 +8,7 @@ symphonyUrl: "<Symphony URL>"
 image:
   pullPolicy: Always
   image: p4etest.azurecr.io/webmodule
-  tag: "0.36.6-amd64"
+  tag: "0.36.7-amd64"
 webmodule:
   videoSource: opencv
 iothub:

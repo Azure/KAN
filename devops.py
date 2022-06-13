@@ -22,6 +22,7 @@ PLATFORM = 'amd64' #FIXME this shouldn't be fixed value
 MODULES = []
 for module_folder in os.listdir(MODULE_ROOT):
     if module_folder == '.DS_Store': continue
+    if module_folder == 'common': continue
     if not os.path.exists(MODULE_ROOT/module_folder/'module.json'):
         typer.echo(f'***')
         typer.echo(f'*** module.json not found in {module_folder}')

@@ -1,5 +1,5 @@
 import networkx as nx
-import cascade
+from common import cascade
 
 from sources import RtspSource
 from transforms import FilterTransform

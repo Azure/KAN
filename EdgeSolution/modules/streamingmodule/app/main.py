@@ -1,7 +1,11 @@
+import importlib
+if not importlib.util.find_module('common'):
+    sys.path.append('../../common')
+
+
 from enum import Enum
 from stream import Stream
-from cascade import CascadeConfig
-
+from common.cascade import CascadeConfig
 
 
 if __name__ == '__main__':

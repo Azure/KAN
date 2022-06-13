@@ -4,12 +4,13 @@ RUN apt update
 RUN apt install ffmpeg libsm6 libxext6 -y
 
 
-COPY requirements.txt /app/
+COPY streamingmodule/requirements.txt /app/
 RUN pip install -r /app/requirements.txt
 
-COPY app/*.py /app/
+COPY streamingmodule/app/*.py /app/
+COPY common app/common
 
-COPY sample.json /  
+COPY streamingmodule/sample.json /  
 
 
 WORKDIR /app/

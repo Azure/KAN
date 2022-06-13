@@ -17,6 +17,7 @@ dotenv.load_dotenv('EdgeSolution/.env')
 CONTAINER_REGISTRY_NAME=os.environ['CONTAINER_REGISTRY_NAME']
 
 MODULE_ROOT = Path('EdgeSolution/modules')
+ABSOLUTE_MODULE_ROOT = Path(os.path.abspath(MODULE_ROOT))
 PLATFORM = 'amd64' #FIXME this shouldn't be fixed value
 
 MODULES = []
@@ -74,6 +75,7 @@ class Docker:
     @classmethod
     def build(cls, dockerfile_path, tag, folder):
         command = f'docker build --rm -f {dockerfile_path} -t {tag} {folder}'
+        print(command)
         cls._do(command)
 
     @classmethod
@@ -97,7 +99,8 @@ def build_module(module_name):
     dockerfile = module.get_dockerfile_by_platform(platform)
     tag = module.get_tag_by_platform(platform)
 
-    Docker.build(dockerfile, tag, module.path)
+    # use module root instead of module.path since we need to copy common folder
+    Docker.build(dockerfile, tag, ABSOLUTE_MODULE_ROOT)
 
 
 

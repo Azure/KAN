@@ -1,5 +1,5 @@
 import importlib
-if not importlib.util.find_module('common'):
+if not importlib.util.find_spec('common'):
     sys.path.append('../../common')
 
 

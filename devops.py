@@ -170,6 +170,21 @@ def list_versions():
         version = module_version(module_name)
         typer.echo(f'{module_name: <20}: {version}')
 
+@app.command()
+def list_modules():
+    typer.echo(f'***')
+    typer.echo(f'*** Modules')
+    typer.echo(f'***')
+    platform = PLATFORM
+    for module_name in MODULES:
+        module = IoTEdgeModule(module_name)
+        
+        tag = module.get_tag_by_platform(platform)
+        typer.echo(f'{module_name: <20}: {tag}')
+
+
+
+
 
 class VersionType(str, Enum):
     #MAJOR = 'major'

@@ -66,7 +66,7 @@ class Docker:
     @classmethod
     def _do(cls, command):
         try:
-            output = subprocess.check_output(command.split())
+            ret = subprocess.check_call(command.split())
         except:
             typer.echo(f'***')
             typer.echo(f'*** Unexpected error {sys.exc_info()[1]}')

@@ -28,12 +28,10 @@ spec:
         resources:
           requests:
             cpu: 200m
-        env:
-          - name: IOTHUB_CONNECTION_STRING
-            valueFrom:
-              secretKeyRef:
-                name: azure-env
-                key: IOTHUB_CONNECTION_STRING
+        envFrom:
+        - secretRef:
+            name: azure-env
+        env:          
           - name: DF_PD_VIDEO_SOURCE
             value: {{.Values.webmodule.videoSource}}
           - name: IS_K8S

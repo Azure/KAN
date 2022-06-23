@@ -1,5 +1,5 @@
 import networkx as nx
-import cascade
+from common.voe_cascade_config import CascadeConfig
 
 from sources import RtspSource
 from transforms import FilterTransform
@@ -44,8 +44,8 @@ class Stream:
             node_configurations = node['configurations']
 
 
-            match node_type:
-                case 'source':
+            if node_type == 'source':
+                    #case 'source':
                     if node_name not in supported_sources:
                         raise Exception(f'Unknown Name {node_name} for Type {node_type}')
                     element = supported_sources[node_name]()
@@ -53,7 +53,8 @@ class Stream:
                     node['element'] = element
                     self._elements.append(element)
 
-                case 'transform':
+                    #case 'transform':
+            elif node_type == 'transform':
                     if node_name not in supported_transforms:
                         raise Exception(f'Unknown Name {node_name} for Type {node_type}')
                     element = supported_transforms[node_name](**node_configurations)
@@ -68,8 +69,8 @@ class Stream:
 
                     
 
-
-                case 'export':
+            elif node_type == 'export':
+                #   case 'export':
                     if node_name not in supported_exports:
                         raise Exception(f'Unknown Name {node_name} for Type {node_type}')
                     element = supported_exports[node_name](**node_configurations)
@@ -82,7 +83,8 @@ class Stream:
                     node['element'] = element
                     self._elements.append(element)
 
-                case 'model':
+            elif node_type == 'model':
+                    #case 'model':
                     if node_name not in supported_models:
                         raise Exception(f'Unknown Name {node_name} for Type {node_type}')
                     element = supported_models[node_name](**node_configurations)
@@ -95,7 +97,8 @@ class Stream:
                     node['element'] = element
                     self._elements.append(element)
 
-                case _:
+            else:
+                    #case _:
                     raise Exception(f'Unknown Type {node_type}')
 
 

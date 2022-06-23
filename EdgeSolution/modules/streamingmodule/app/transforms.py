@@ -4,7 +4,10 @@ class FilterTransform(Transform):
     def __init__(self, labels=None, confidence_threshold=None):
         super().__init__()
 
-        self.labels = labels
+        if confidence_threshold is not None: 
+            confidence_threshold = float(confidence_threshold)
+
+        self.labels = [] #labels
         self.confidence_threshold = confidence_threshold
 
 

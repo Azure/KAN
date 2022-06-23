@@ -15,6 +15,10 @@ class Object(BaseModel):
     label: str
 
 
+class Result(BaseModel):
+    status: str = 'ok'
+    description: str = ''
+
 class ObjectDetectionResult(BaseModel):
     objects: List[Object]
 

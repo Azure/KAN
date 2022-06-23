@@ -1,4 +1,4 @@
-from typing import Union, Literal
+from typing import Union, Literal, Dict, List
 
 from pydantic import BaseModel
 
@@ -10,7 +10,7 @@ class Node(BaseModel):
     id: NodeId
     type: Literal['source', 'transform', 'export', 'model']
     name: str
-    configurations: dict[str, object]
+    configurations: Dict[str, str]
 
 
 class SourceNode(Node):
@@ -33,11 +33,9 @@ class Edge(BaseModel):
     source: NodeId
     target: NodeId
 
-
 class CascadeConfig(BaseModel):
-    name: str
-    nodes: list[Node]
-    edges: list[Edge]
+    edges: List[Edge]
+    nodes: List[Node]
 
 
 if __name__ == '__main__':

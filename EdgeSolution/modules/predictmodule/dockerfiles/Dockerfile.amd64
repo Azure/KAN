@@ -4,11 +4,11 @@ RUN apt update
 RUN apt install ffmpeg libsm6 libxext6 -y
 
 
-COPY requirements.txt /app/
+COPY predictmodule/requirements.txt /app/
 RUN pip install -r /app/requirements.txt
 
-COPY app/*.py /app/
-COPY app/models/*.py /app/models/
+COPY predictmodule/app/*.py /app/
+COPY predictmodule/app/models/*.py /app/models/
 
 
 WORKDIR /app/

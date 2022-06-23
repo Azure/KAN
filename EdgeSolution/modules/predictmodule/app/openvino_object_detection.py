@@ -20,7 +20,11 @@ class OpenVINOObjectDetectionModel(ObjectDetectionModel):
         model_xml = f'models/intel/{model_name}/FP32/{model_name}.xml'
 
         model = ie.read_model(model=model_xml)
-        self.model = ie.compile_model(model=model, device_name='CPU') #FIXME device_name from solution
+
+        device_name = 'CPU'
+        if 'GPU' in ie.available_devices: device_name = 'GPU'
+
+        self.model = ie.compile_model(model=model, device_name=device_name) #FIXME device_name from solution
         #FIXME do we need to release model while we re-deploy
 
         self.input = self.model.inputs[0]

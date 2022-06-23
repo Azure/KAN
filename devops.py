@@ -17,11 +17,13 @@ dotenv.load_dotenv('EdgeSolution/.env')
 CONTAINER_REGISTRY_NAME=os.environ['CONTAINER_REGISTRY_NAME']
 
 MODULE_ROOT = Path('EdgeSolution/modules')
+ABSOLUTE_MODULE_ROOT = Path(os.path.abspath(MODULE_ROOT))
 PLATFORM = 'amd64' #FIXME this shouldn't be fixed value
 
 MODULES = []
 for module_folder in os.listdir(MODULE_ROOT):
     if module_folder == '.DS_Store': continue
+    if module_folder == 'common': continue
     if not os.path.exists(MODULE_ROOT/module_folder/'module.json'):
         typer.echo(f'***')
         typer.echo(f'*** module.json not found in {module_folder}')
@@ -64,7 +66,7 @@ class Docker:
     @classmethod
     def _do(cls, command):
         try:
-            output = subprocess.check_output(command.split())
+            ret = subprocess.check_call(command.split())
         except:
             typer.echo(f'***')
             typer.echo(f'*** Unexpected error {sys.exc_info()[1]}')
@@ -73,6 +75,7 @@ class Docker:
     @classmethod
     def build(cls, dockerfile_path, tag, folder):
         command = f'docker build --rm -f {dockerfile_path} -t {tag} {folder}'
+        print(command)
         cls._do(command)
 
     @classmethod
@@ -96,7 +99,8 @@ def build_module(module_name):
     dockerfile = module.get_dockerfile_by_platform(platform)
     tag = module.get_tag_by_platform(platform)
 
-    Docker.build(dockerfile, tag, module.path)
+    # use module root instead of module.path since we need to copy common folder
+    Docker.build(dockerfile, tag, ABSOLUTE_MODULE_ROOT)
 
 
 
@@ -165,6 +169,21 @@ def list_versions():
     for module_name in MODULES:
         version = module_version(module_name)
         typer.echo(f'{module_name: <20}: {version}')
+
+@app.command()
+def list_modules():
+    typer.echo(f'***')
+    typer.echo(f'*** Modules')
+    typer.echo(f'***')
+    platform = PLATFORM
+    for module_name in MODULES:
+        module = IoTEdgeModule(module_name)
+        
+        tag = module.get_tag_by_platform(platform)
+        typer.echo(f'{module_name: <20}: {tag}')
+
+
+
 
 
 class VersionType(str, Enum):

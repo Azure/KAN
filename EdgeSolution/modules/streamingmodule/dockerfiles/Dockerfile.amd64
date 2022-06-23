@@ -8,12 +8,12 @@ COPY streamingmodule/requirements.txt /app/
 RUN pip install -r /app/requirements.txt
 
 COPY streamingmodule/app/*.py /app/
-COPY common app/common
+COPY common/common app/common
 
 COPY streamingmodule/sample.json /  
 
 
 WORKDIR /app/
 
-ENTRYPOINT ["python", "main.py"]
+CMD ["python", "main.py"]
 

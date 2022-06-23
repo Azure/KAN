@@ -1,26 +1,48 @@
 import importlib
 if not importlib.util.find_spec('common'):
+    import sys
     sys.path.append('../../common')
 
+from fastapi import FastAPI
+from pydantic import BaseModel
 
-from enum import Enum
 from stream import Stream
-from common.cascade import CascadeConfig
+
+from common.voe_status import ModuleStatus, StatusEnum
+from common.voe_ipc import StreamingModule
 
 
-if __name__ == '__main__':
-    import json
-    import cascade
-    j = json.load(open('../sample.json'))
-    c = cascade.CascadeConfig(**j)
-    s = Stream.from_cascade_config(c)
-    s.start()
-    import time
-    time.sleep(30)
-    s.stop()
-    s.join()
-    
-
-    #from IPython import embed; embed()
+app = FastAPI()
 
 
+
+status = ModuleStatus()
+status.set_waiting()
+
+
+@app.get('/status')
+async def get_status():
+    return StreamingModule.Status(status=status.get()) 
+
+streams = []
+
+
+@app.post('/set')
+def set_streams(setting: StreamingModule.Setting):
+
+
+    #while len(streams) > 0:
+    #    s = streams.pop()
+    #    s.stop()
+    #    s.join()
+
+    status.set_creating()
+
+    for cascade_config in setting.cascade_configs:
+        s = Stream.from_cascade_config(cascade_config)
+        s.start()
+        streams.append(s)
+        
+    status.set_running()
+
+    return StreamingModule.Status(status=status.get())

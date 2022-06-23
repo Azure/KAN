@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 from core import Model
 from frame import Frame, Bbox, ObjectMeta
+from common.voe_ipc import PredictModule
 
 class FakeModel(Model):
     def process(self, frame):
@@ -32,8 +33,9 @@ class ObjectDetectionModelResult(BaseModel):
 
 class ObjectDetectionModel(Model):
 
-    def __init__(self, model):
+    def __init__(self, model, confidence_lower=None, confidence_upper=None, max_images=None):
         super().__init__()
+        self.model = model
 
     def process(self, frame):
 
@@ -41,7 +43,7 @@ class ObjectDetectionModel(Model):
         width = frame.image.properties.width
         height = frame.image.properties.height
         #FIXME fix the url
-        res = requests.post('http://localhost:8000/predict', files={'file': img}, params={'width': width, 'height': height})
+        res = requests.post(PredictModule.Url + '/predict/'+self.model, files={'file': img}, params={'width': width, 'height': height})
 
         res = ObjectDetectionModelResult(**res.json())
 
@@ -51,5 +53,9 @@ class ObjectDetectionModel(Model):
 
 
 class ClassificationModel(Model):
+
+    def __init__(self, model, confidence_lower=None, confidence_upper=None, max_images=None):
+        super().__init__()
+
     def process(self, frame):
         pass

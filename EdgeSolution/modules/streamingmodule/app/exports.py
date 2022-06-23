@@ -18,10 +18,17 @@ class VideoSnippetExport(Export):
     def __init__(self, filename_prefix, recording_duration=1, insights_overlay=True, delay_buffer=1):
         super().__init__()
 
+        #FIXME
+        if insights_overlay == 'false':
+            insights_overlay = False
+        elif insights_overlay == 'true':
+            insights_overlay = True
+
+
         self.filename_prefix = filename_prefix
-        self.recording_duration = recording_duration
+        self.recording_duration = float(recording_duration)
         self.insights_overlay = insights_overlay
-        self.delay_buffer = delay_buffer # in minutes
+        self.delay_buffer = float(delay_buffer) # in minutes        
 
         self.last_timestamp = -1
 
@@ -91,9 +98,9 @@ class VideoSnippetExport(Export):
 
 
 class IothubExport(Export):
-    def __init__(self, delay_buffer):
+    def __init__(self, delay_buffer=6):
         super().__init__()
-        self.delay_buffer = delay_buffer
+        self.delay_buffer = float(delay_buffer)
         
         self.last_timestamp = -1
          
@@ -110,9 +117,9 @@ class IothubExport(Export):
 
 
 class IotedgeExport(Export):
-    def __init__(self, delay_buffer, module_name):
+    def __init__(self, module_name, delay_buffer=6):
         super().__init__()
-        self.delay_buffer = delay_buffer
+        self.delay_buffer = float(delay_buffer)
         self.module_name = module_name
 
         self.last_timestamp = -1
@@ -132,6 +139,12 @@ class Cv2ImshowExport(Export):
 
     def __init__(self, insights_overlay=True):
         super().__init__()
+
+        if insights_overlay == 'false':
+            insights_overlay = False
+        elif insights_overlay == 'true':
+            insights_overlay = True
+
 
         self.insights_overlay = insights_overlay
     

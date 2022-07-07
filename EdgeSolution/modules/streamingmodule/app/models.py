@@ -51,6 +51,8 @@ class ObjectDetectionModel(Model):
             object_meta = ObjectMeta(label=obj.label, bbox=obj.bbox, confidence=obj.confidence)
             frame.insights_meta.objects_meta.append(object_meta)
 
+            # FIXME send image to webmodule for train new models (according to confidence threshold)
+
 
 class ClassificationModel(Model):
 

@@ -1,10 +1,12 @@
 import requests
 import cv2
 
-cap = cv2.VideoCapture(0)
-_, img = cap.read()
+#cap = cv2.VideoCapture(0)
+#_, img = cap.read()
+img = cv2.imread('peyman.png')
 h, w, _ = img.shape
 
 print(img)
 
-requests.post('http://localhost:8000/predict', files={'file': img}, params={'width': w, 'height': h})
+r = requests.post(f'http://localhost:5004/predict/cv-model-od', files={'file': img}, params={'width': w, 'height': h})
+print(r.json())

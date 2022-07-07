@@ -3,7 +3,7 @@ from common.voe_cascade_config import CascadeConfig
 
 from sources import RtspSource
 from transforms import FilterTransform
-from exports import VideoSnippetExport, IothubExport, IotedgeExport, Cv2ImshowExport
+from exports import VideoSnippetExport, IothubExport, IotedgeExport, Cv2ImshowExport, HttpExport
 from models import FakeModel, ObjectDetectionModel, ClassificationModel
 
 supported_sources = {
@@ -19,7 +19,8 @@ supported_exports = {
     'video_snippet_export': VideoSnippetExport,
     'iothub_export': IothubExport,
     'iotedge_export': IotedgeExport,
-    'cv2_imshow_export': Cv2ImshowExport
+    'cv2_imshow_export': Cv2ImshowExport,
+    'http_export': HttpExport
 }
 
 supported_models = {
@@ -48,7 +49,7 @@ class Stream:
                     #case 'source':
                     if node_name not in supported_sources:
                         raise Exception(f'Unknown Name {node_name} for Type {node_type}')
-                    element = supported_sources[node_name]()
+                    element = supported_sources[node_name](**node_configurations)
 
                     node['element'] = element
                     self._elements.append(element)

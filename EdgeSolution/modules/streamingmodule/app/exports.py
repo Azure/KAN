@@ -100,7 +100,7 @@ class VideoSnippetExport(Export):
 
 
 class IothubExport(Export):
-    def __init__(self, delay_buffer=6):
+    def __init__(self, delay_buffer=6, **kwargs):
         super().__init__()
         self.delay_buffer = float(delay_buffer)
         
@@ -119,7 +119,7 @@ class IothubExport(Export):
 
 
 class IotedgeExport(Export):
-    def __init__(self, module_name, delay_buffer=6):
+    def __init__(self, module_name, delay_buffer=6, **kwargs):
         super().__init__()
         self.delay_buffer = float(delay_buffer)
         self.module_name = module_name

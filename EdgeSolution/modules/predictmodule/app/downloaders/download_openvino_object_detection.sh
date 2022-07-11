@@ -17,10 +17,10 @@ DOWNLOADER=`dirname "$0"`/openvino_model_zoo_tool/tools/model_tools/downloader.p
 UUID=`python -c "import uuid; print(uuid.uuid1())"`
 TMP_MODEL_FOLDER=/tmp/model-$UUID
 
-mkdir $TMP_MODEL_FOLDER
+mkdir -p $TMP_MODEL_FOLDER
 python $DOWNLOADER  --name $NAME --precisions $PRECISIONS -o $TMP_MODEL_FOLDER
 
-mkdir $FOLDER
+mkdir -p $FOLDER
 cp $TMP_MODEL_FOLDER/intel/$NAME/$PRECISIONS/* $FOLDER
 
 

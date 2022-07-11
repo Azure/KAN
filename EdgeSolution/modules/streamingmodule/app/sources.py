@@ -10,12 +10,13 @@ class RtspSource(Source):
         super().__init__()
         #self.cap = cv2.VideoCapture(0)
         self.cap = cv2.VideoCapture(ip)
+        print('->', ip)
 
     def next_frame(self):
         _, image_pointer = self.cap.read()
         #FIXME add some error handling
 
-        #print(img)
+        print(image_pointer.shape)
 
         h, w, c = image_pointer.shape
 

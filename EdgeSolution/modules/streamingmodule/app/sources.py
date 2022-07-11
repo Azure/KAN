@@ -6,15 +6,17 @@ from frame import Frame, Image, ImageProperties, ColorFormat
 
 
 class RtspSource(Source):
-    def __init__(self, url=None):
+    def __init__(self, ip):
         super().__init__()
-        self.cap = cv2.VideoCapture(0)
+        #self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(ip)
+        print('->', ip)
 
     def next_frame(self):
         _, image_pointer = self.cap.read()
         #FIXME add some error handling
 
-        #print(img)
+        print(image_pointer.shape)
 
         h, w, c = image_pointer.shape
 

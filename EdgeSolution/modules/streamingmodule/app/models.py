@@ -45,11 +45,16 @@ class ObjectDetectionModel(Model):
         #FIXME fix the url
         res = requests.post(PredictModule.Url + '/predict/'+self.model, files={'file': img}, params={'width': width, 'height': height})
 
+        print(res)
+        print(res.json())
+
         res = ObjectDetectionModelResult(**res.json())
 
         for obj in res.objects:
             object_meta = ObjectMeta(label=obj.label, bbox=obj.bbox, confidence=obj.confidence)
             frame.insights_meta.objects_meta.append(object_meta)
+
+            # FIXME send image to webmodule for train new models (according to confidence threshold)
 
 
 class ClassificationModel(Model):

@@ -19,6 +19,10 @@ def is_local():
     return True
 
 
+class SymphonyAgent:
+
+    Url = 'http://localhost:8088' if is_local() else 'http://target-runtime-symphony-agent:8088'
+    Url = 'http://target-runtime-symphony-agent:8088'
 
 class StreamingModule:
 

@@ -1,0 +1,37 @@
+# Copyright (c) 2022 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+description: >-
+  WaveRNN model for text to speech task. Part for mel-spectrogram upsampling by time
+  axis.
+task_type: text_to_speech
+files:
+  - name: wavernn-upsampler.zip
+    size: 1496559
+    checksum: 7d27cf5e68dd9e66a5a6cf800a4f6114819eb1cd8e103cea4b9cf15e1dd0b163ce382f76aaa19e24033fa09e347ba2ef
+    original_source: https://download.01.org/opencv/public_models/102020/wavernn/wavernn-upsampler.zip
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/public/2022.1/wavernn/wavernn-upsampler/wavernn-upsampler.zip
+postprocessing:
+  - $type: unpack_archive
+    format: zip
+    file: wavernn-upsampler.zip
+input_info:
+  - name: mels
+    shape: [1, 200, 80]
+    layout: NDC
+model_optimizer_args:
+  - --output=upsample_mels,aux
+  - --input_model=$dl_dir/wavernn-upsampler/wavernn_upsampler.onnx
+framework: onnx
+license: https://github.com/fatchord/WaveRNN/blob/master/LICENSE.txt

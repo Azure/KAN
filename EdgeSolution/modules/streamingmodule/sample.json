@@ -33,7 +33,7 @@
 		  "filename_prefix": "test",
 		  "recording_duration": 3,
 		  "insights_overlay": true,
-		  "delay_buffer": 1
+		  "delay_buffer": 0.1
 	  }
     },
     {

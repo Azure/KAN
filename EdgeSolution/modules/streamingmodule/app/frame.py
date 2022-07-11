@@ -15,7 +15,7 @@ class ImageProperties(BaseModel):
 
 
 class Image(BaseModel):
-    image_pointer: np.ndarray 
+    image_pointer: np.ndarray = Field(..., exclude=True)
     properties: ImageProperties
     class Config:
         arbitrary_types_allowed = True

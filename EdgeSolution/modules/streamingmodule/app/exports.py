@@ -7,6 +7,8 @@ import cv2
 from enum import Enum, auto
 import threading
 
+import httpx
+
 
 
 class VideoSnippetStatus(str, Enum):
@@ -15,7 +17,7 @@ class VideoSnippetStatus(str, Enum):
     EXPORTING = 'EXPORTING'    
 
 class VideoSnippetExport(Export):
-    def __init__(self, filename_prefix, recording_duration=1, insights_overlay=True, delay_buffer=1):
+    def __init__(self, filename_prefix, recording_duration=1, insights_overlay=True, delay_buffer=1, module_name=''):
         super().__init__()
 
         #FIXME
@@ -98,7 +100,7 @@ class VideoSnippetExport(Export):
 
 
 class IothubExport(Export):
-    def __init__(self, delay_buffer=6):
+    def __init__(self, delay_buffer=6, **kwargs):
         super().__init__()
         self.delay_buffer = float(delay_buffer)
         
@@ -117,7 +119,7 @@ class IothubExport(Export):
 
 
 class IotedgeExport(Export):
-    def __init__(self, module_name, delay_buffer=6):
+    def __init__(self, module_name, delay_buffer=6, **kwargs):
         super().__init__()
         self.delay_buffer = float(delay_buffer)
         self.module_name = module_name
@@ -132,6 +134,30 @@ class IotedgeExport(Export):
             #FIXME
             print('exporting to iotedge', self.module_name)
 
+            self.last_timestamp = cur_timestamp
+
+
+class HttpExport(Export):
+    
+    def __init__(self, url, delay_buffer=6):
+        super().__init__()
+        self.delay_buffer = float(delay_buffer)
+
+        self.last_timestamp = -1
+
+        self.url = url
+
+
+    def process(self, frame):
+        cur_timestamp = time.time()
+        if cur_timestamp > self.last_timestamp + self.delay_buffer:
+
+            #FIXME
+            print('send a request to ', self.url)
+            try:
+                httpx.post(self.url, json=frame.json())
+            except httpx.RequestError as exc:
+                print(f"An error occurred while requesting {exc.request.url!r}.")
             self.last_timestamp = cur_timestamp
 
 

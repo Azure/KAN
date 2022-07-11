@@ -17,8 +17,9 @@ class OpenVINOObjectDetectionModel(ObjectDetectionModel):
 
         #FIXME download model if needed
 
-        model_xml = f'models/intel/{model_name}/FP32/{model_name}.xml'
 
+        #model_xml = f'models/{model_name}/FP32/{model_name}.xml'
+        model_xml = f'models/{model_name}/{model_name}.xml'
         model = ie.read_model(model=model_xml)
 
         device_name = 'CPU'
@@ -30,7 +31,8 @@ class OpenVINOObjectDetectionModel(ObjectDetectionModel):
         self.input = self.model.inputs[0]
         self.output = self.model.outputs[0]
 
-        self.dsize = (256, 256)
+        #self.dsize = (256, 256)
+        self.dsize = self.input.shape[2], self.input.shape[3]
 
 
     def _preprocess(self, image):

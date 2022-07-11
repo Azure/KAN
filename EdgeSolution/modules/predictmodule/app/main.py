@@ -49,6 +49,19 @@ def get_customvision_object_detection_model(name, download_uri):
 
     return model
 
+def get_openvino_object_detection_model(name):
+
+    if os.path.isdir(f'models/{name}'):
+        print(f'model {name} already exists')
+    else:
+        print(f'Downloading {name} from openvino model zoo ...')
+        download_folder = f'models/{name}'
+        subprocess.check_output(f'bash downloaders/download_openvino_object_detection.sh {name} {download_folder}'.split())
+
+    model = OpenVINOObjectDetectionModel(name)
+
+    return model
+
 def _set(settings: PredictModule.Setting):
     status.set_creating()
     print('--> Start to download models')
@@ -59,6 +72,13 @@ def _set(settings: PredictModule.Setting):
             if model_config.type == 'ObjectDetection':
                 model = get_customvision_object_detection_model(model_config.name, model_config.download_uri)
                 models[model_config.name] = model
+
+        elif model_config.provider == 'modelzoo': 
+            if model_config.executor == 'openvino':
+                if model_config.type == 'ObjectDetection':
+                    model = get_openvino_object_detection_model(model_config.name)
+                    #print('adding model_config', model_config.name)
+                    models[model_config.name] = model
 
     print('--> Download finished')
     status.set_running()
@@ -89,6 +109,8 @@ async def predict(name: str, file: UploadFile, width: int, height: int):
     #raw_image = await file.read()
     raw_image = await file.read()
     img = np.frombuffer(raw_image, np.uint8).reshape((height, width, 3))
+    print('--> modes', models)
+    print('-->', name)
     r = models[name].predict(img)
     return r
     #return 'ok'

@@ -4,3 +4,4 @@ uvicorn
 opencv-python
 semantic_version
 requests
+httpx

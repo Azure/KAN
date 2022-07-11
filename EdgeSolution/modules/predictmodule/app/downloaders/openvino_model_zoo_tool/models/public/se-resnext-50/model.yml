@@ -1,0 +1,38 @@
+# Copyright (c) 2022 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+description: >-
+  ResNext-50 with Squeeze-and-Excitation blocks <https://arxiv.org/abs/1709.01507>
+task_type: classification
+files:
+  - name: se-resnext-50.prototxt
+    size: 49519
+    checksum: 5a87782d5f79f2b12df90bd6f61310a552aa4f2fa8df2573e7ab654f01dda44137620cebfc08717f57e76a17909a7844
+    source: https://raw.githubusercontent.com/hujie-frank/SENet/369374b0678907a0e45c6f267256c7c34203177e/models/SE-ResNeXt-50.prototxt
+  - name: se-resnext-50.caffemodel
+    size: 110550637
+    checksum: cbc0b1da5a2a21ba1398fa1e79b143f637c5dc0248262ab6cf936ef783a3a1cd23943bf5f19f03f19000d7e7d3baf700
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/public/2021.4/se-resnext-50/SE-ResNeXt-50.caffemodel
+input_info:
+  - name: data
+    shape: [1, 3, 224, 224]
+    layout: NCHW
+model_optimizer_args:
+  - --mean_values=data[104.0,117.0,123.0]
+  - --output=prob
+  - --input_model=$dl_dir/se-resnext-50.caffemodel
+  - --input_proto=$dl_dir/se-resnext-50.prototxt
+framework: caffe
+quantizable: true
+license: https://raw.githubusercontent.com/hujie-frank/SENet/master/LICENSE

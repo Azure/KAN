@@ -1,0 +1,20 @@
+models:
+  - name: forward-tacotron-regression
+    launchers:
+      - framework: openvino
+        adapter:
+          type: multi_output_regression
+          outputs:
+            - mel
+        inputs:
+          - name: 'data'
+            type: INPUT
+            layout: NHWC
+    datasets:
+      - name: tacotron-io-regression
+        metrics:
+          - type: mae
+            presenter: print_vector
+            reference:
+              mel@mean: 1.134815
+              mel@std: 0.048853

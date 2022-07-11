@@ -1,0 +1,46 @@
+# Copyright (c) 2022 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+description: >-
+  Decoder part of text recognition model.
+task_type: token_recognition
+files:
+  - name: FP32/text-recognition-0015-decoder.xml
+    size: 50430
+    checksum: e5daa5c31ecbf7ec1348533bc259e02be7718e7c08671fff69ba8b3a32b06dd9e128a01c0c390263908211c346c9295e
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-recognition-0015/text-recognition-0015-decoder/FP32/text-recognition-0015-decoder.xml
+  - name: FP32/text-recognition-0015-decoder.bin
+    size: 42516952
+    checksum: b02950a52d38504621d50015805970b010aeef560d238e7886d77314ac5179e5f105eecd21cd31bd894b0a0912be68bb
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-recognition-0015/text-recognition-0015-decoder/FP32/text-recognition-0015-decoder.bin
+  - name: FP16/text-recognition-0015-decoder.xml
+    size: 57025
+    checksum: 78cc31acbaa6738df32324cef2b6ed37791355470b8aec9b8aa5e11be9c2a35cb1772219d172ff6f126579a5d5586d9c
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-recognition-0015/text-recognition-0015-decoder/FP16/text-recognition-0015-decoder.xml
+  - name: FP16/text-recognition-0015-decoder.bin
+    size: 21258580
+    checksum: 73808e1f5536781d58b654b60eb21993e5f3828930a2164a05ac0f7dcf11f2e6a3ab1b9487c5b323ac685443b5092959
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-recognition-0015/text-recognition-0015-decoder/FP16/text-recognition-0015-decoder.bin
+input_info:
+  - name: hidden
+    shape: [1, 1, 1024]
+    layout: NCD
+  - name: features
+    shape: [1, 16, 1024]
+    layout: NCD
+  - name: decoder_input
+    shape: [1]
+    layout: N
+framework: dldt
+license: https://raw.githubusercontent.com/openvinotoolkit/open_model_zoo/master/LICENSE

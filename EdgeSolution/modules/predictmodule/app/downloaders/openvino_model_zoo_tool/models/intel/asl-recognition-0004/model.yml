@@ -1,0 +1,40 @@
+# Copyright (c) 2022 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+description: >-
+  S3D MobileNet V3 based ASL recogniton network.
+task_type: action_recognition
+files:
+  - name: FP32/asl-recognition-0004.xml
+    size: 259473
+    checksum: e7a6f96e477fe84a0353686b0ab5082871bff275775cb60b7a3483b84ef4844619d03e9db5d00f02ef5f6b6474bb16cc
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/asl-recognition-0004/FP32/asl-recognition-0004.xml
+  - name: FP32/asl-recognition-0004.bin
+    size: 16530580
+    checksum: b1912c0f8d9a655b10be57b44169d43f364f32ceacf2fc4f156bb557055296b936058b45d22fa52a529f5a56d690b399
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/asl-recognition-0004/FP32/asl-recognition-0004.bin
+  - name: FP16/asl-recognition-0004.xml
+    size: 348017
+    checksum: dfff5b6026f2af98469ecd84564e8a642788906b4e3716b76b3bae28d8b3ec947e51b56bae9441f252e225ac7133ef75
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/asl-recognition-0004/FP16/asl-recognition-0004.xml
+  - name: FP16/asl-recognition-0004.bin
+    size: 8265302
+    checksum: 0eb81d592d75064fbc2a164e8e83cbf5ab88f2644b04d02b529cef534c11cd6754bb56494ffc507b8bf6542e32c143d7
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/asl-recognition-0004/FP16/asl-recognition-0004.bin
+input_info:
+  - name: input
+    shape: [1, 3, 16, 224, 224]
+    layout: NCDHW
+framework: dldt
+license: https://raw.githubusercontent.com/openvinotoolkit/open_model_zoo/master/LICENSE

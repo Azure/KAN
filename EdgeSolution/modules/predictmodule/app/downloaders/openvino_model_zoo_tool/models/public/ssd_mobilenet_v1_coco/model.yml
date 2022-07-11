@@ -1,0 +1,43 @@
+# Copyright (c) 2022 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+description: >-
+  The "ssd_mobilenet_v1_coco" model is a Single-Shot multibox Detection (SSD) <https://arxiv.org/abs/1801.04381>
+  network intended to perform object detection. The difference between this model
+  and the "mobilenet-ssd" is that there the "mobilenet-ssd" can only detect face,
+  the "ssd_mobilenet_v1_coco" model can detect objects.
+task_type: detection
+files:
+  - name: ssd_mobilenet_v1_coco.tar.gz
+    size: 76541073
+    checksum: 95d7ad978aef6fa7fded5fac04f2cdc286f82ee8e59e2ed638de6d0000dbed051c409ed276b56672d17b5b79fe6ba78c
+    original_source: http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_coco_2018_01_28.tar.gz
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/public/2022.1/ssd_mobilenet_v1_coco/ssd_mobilenet_v1_coco_2018_01_28.tar.gz
+postprocessing:
+  - $type: unpack_archive
+    format: gztar
+    file: ssd_mobilenet_v1_coco.tar.gz
+input_info:
+  - name: image_tensor
+    shape: [1, 300, 300, 3]
+    layout: NHWC
+model_optimizer_args:
+  - --reverse_input_channels
+  - --output=detection_scores,detection_boxes,num_detections
+  - --transformations_config=$mo_ext_dir/front/tf/ssd_v2_support.json
+  - --tensorflow_object_detection_api_pipeline_config=$dl_dir/ssd_mobilenet_v1_coco_2018_01_28/pipeline.config
+  - --input_model=$dl_dir/ssd_mobilenet_v1_coco_2018_01_28/frozen_inference_graph.pb
+framework: tf
+quantizable: true
+license: https://raw.githubusercontent.com/tensorflow/models/master/LICENSE

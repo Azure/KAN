@@ -1,0 +1,56 @@
+# Copyright (c) 2022 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+description: >-
+  Decoder part of latex formula recognition model.
+task_type: token_recognition
+files:
+  - name: vocab.json
+    size: 1747
+    checksum: 2b2fcc77178a679975411af460e6fcc463779674568eeabfe35b8bc93c54bdd958f64c986efad8ea726c38ae29be74ae
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/formula-recognition-polynomials-handwritten-0001/formula-recognition-polynomials-handwritten-0001-decoder/vocab.json
+  - name: FP32/formula-recognition-polynomials-handwritten-0001-decoder.xml
+    size: 52363
+    checksum: eb6024484bbccf2073e78460a22b8e06e3c91eb65d92f1d2aec32e3b60f0665b525b4400e03a971112268c1e40036d58
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/formula-recognition-polynomials-handwritten-0001/formula-recognition-polynomials-handwritten-0001-decoder/FP32/formula-recognition-polynomials-handwritten-0001-decoder.xml
+  - name: FP32/formula-recognition-polynomials-handwritten-0001-decoder.bin
+    size: 10179548
+    checksum: b320bcbaaefbe008b8784751a5c9ddf76bf8edae0b3c3241d4efcbea5b87fa00388019ad6e897058a8eee4c0d1fb2524
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/formula-recognition-polynomials-handwritten-0001/formula-recognition-polynomials-handwritten-0001-decoder/FP32/formula-recognition-polynomials-handwritten-0001-decoder.bin
+  - name: FP16/formula-recognition-polynomials-handwritten-0001-decoder.xml
+    size: 59573
+    checksum: a57701d1c7c660bd82988b9e88a0b1a23e3ca04c9ff107982a601249728ed42dd6538e79b4e3c47f620a6a2e2627d7df
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/formula-recognition-polynomials-handwritten-0001/formula-recognition-polynomials-handwritten-0001-decoder/FP16/formula-recognition-polynomials-handwritten-0001-decoder.xml
+  - name: FP16/formula-recognition-polynomials-handwritten-0001-decoder.bin
+    size: 5089822
+    checksum: 45191a4a6264c2af12671ecea2a86dc34e83c16a951fa008e4689ee4ab588dd6df24ab78dd9e5c3e267cb362a377274d
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/formula-recognition-polynomials-handwritten-0001/formula-recognition-polynomials-handwritten-0001-decoder/FP16/formula-recognition-polynomials-handwritten-0001-decoder.bin
+input_info:
+  - name: dec_st_c
+    shape: [1, 512]
+    layout: ND
+  - name: dec_st_h
+    shape: [1, 512]
+    layout: ND
+  - name: output_prev
+    shape: [1, 256]
+    layout: NC
+  - name: row_enc_out
+    shape: [1, 6, 62, 512]
+    layout: NHWD
+  - name: tgt
+    shape: [1, 1]
+    layout: ND
+framework: dldt
+license: https://raw.githubusercontent.com/openvinotoolkit/open_model_zoo/master/LICENSE

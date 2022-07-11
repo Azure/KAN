@@ -1,0 +1,19 @@
+models:
+  - name: forward-tacotron-duration-prediction
+    launchers:
+      - framework: openvino
+        adapter:
+          type: multi_output_regression
+          outputs:
+            - duration
+            - embeddings
+    datasets:
+      - name: tacotron-io-duration-prediction
+        metrics:
+          - type: mae
+            presenter: print_vector
+            reference:
+              embeddings@mean: 0.037433
+              embeddings@std: 0.002421
+              duration@mean: 0.141132
+              duration@std: 0.020022

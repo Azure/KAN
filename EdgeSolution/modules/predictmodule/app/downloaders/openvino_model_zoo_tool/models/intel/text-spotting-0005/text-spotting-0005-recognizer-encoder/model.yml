@@ -1,0 +1,41 @@
+# Copyright (c) 2022 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+description: >-
+  Encoder part of text recognition head that takes features from text-spotting-0005-detector
+  as input.
+task_type: feature_extraction
+files:
+  - name: FP32/text-spotting-0005-recognizer-encoder.xml
+    size: 11953
+    checksum: 3bb55341d28c80b8fb3ee6a367dfc365de154fb67321597c323bfc370c2160da7c3a5f4921d42f5520fb62e3c92ea7c4
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-spotting-0005/text-spotting-0005-recognizer-encoder/FP32/text-spotting-0005-recognizer-encoder.xml
+  - name: FP32/text-spotting-0005-recognizer-encoder.bin
+    size: 5311488
+    checksum: c39b30d4c4ab709a183104daff4d033d003be3f71f33404ef66b948cb5a60b19d1e1028909f4bf197ab48d68ccc48bc0
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-spotting-0005/text-spotting-0005-recognizer-encoder/FP32/text-spotting-0005-recognizer-encoder.bin
+  - name: FP16/text-spotting-0005-recognizer-encoder.xml
+    size: 15271
+    checksum: 71d4f0b0b0d829e459eff938b91342fecaec3ffc5e2fa7effd60cfd5aaf8d549e6bfb9e33acefd9974e76895ac7cf7aa
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-spotting-0005/text-spotting-0005-recognizer-encoder/FP16/text-spotting-0005-recognizer-encoder.xml
+  - name: FP16/text-spotting-0005-recognizer-encoder.bin
+    size: 2655744
+    checksum: 814811b3b95e8da8b95bf3aaf8db7061faa356023130e125eed7fa942f8cca2e752c30d401a96e6e9ce006ef29d17e4f
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-spotting-0005/text-spotting-0005-recognizer-encoder/FP16/text-spotting-0005-recognizer-encoder.bin
+input_info:
+  - name: input
+    shape: [1, 64, 28, 28]
+    layout: NCHW
+framework: dldt
+license: https://raw.githubusercontent.com/openvinotoolkit/open_model_zoo/master/LICENSE

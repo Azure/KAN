@@ -18,6 +18,14 @@ def is_local():
     
     return True
 
+def is_symphony():
+    if 'INSTANCE' in os.environ:
+        return True
+    return False
+
+def get_instance_name():
+    return os.environ['INSTANCE']
+
 
 class SymphonyAgent:
 
@@ -26,7 +34,11 @@ class SymphonyAgent:
 
 class StreamingModule:
 
-    Url = 'http://localhost:5002' if is_local() else 'http://streamingmodule:5002/'
+    Url = 'http://streamingmodule:5002'
+    if is_local(): 
+        Url = 'http://localhost:5002' 
+    elif is_symphony():
+        Url = f'http://{get_instance_name()}-streamingmodule:5002'
 
     class Status(BaseModel):
         status: StatusEnum
@@ -38,7 +50,11 @@ class StreamingModule:
 
 class PredictModule:
 
-    Url = 'http://localhost:5004' if is_local() else 'http://predictmodule:5004/'
+    Url = 'http://predictmodule:5004'
+    if is_local(): 
+        Url = 'http://localhost:5004' 
+    elif is_symphony():
+        Url = f'http://{get_instance_name()}-predictmodule:5004'
 
     class Status(BaseModel):
         status: StatusEnum

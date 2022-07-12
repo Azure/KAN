@@ -1,5 +1,6 @@
 networkx
 pydantic
+fastapi
 uvicorn
 opencv-python
 semantic_version

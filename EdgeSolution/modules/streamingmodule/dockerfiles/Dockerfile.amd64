@@ -4,16 +4,30 @@ RUN apt update
 RUN apt install ffmpeg libsm6 libxext6 -y
 
 
+### Install requirements ###
+
+# common libs
+COPY common/requirements.txt /app/requirements-common.txt
+RUN pip install -r /app/requirements-common.txt
+
+# this module
 COPY streamingmodule/requirements.txt /app/
 RUN pip install -r /app/requirements.txt
 
+
+
+### Copy Files ###
+
+# common libs
+COPY common/common /app/common
 COPY streamingmodule/app/*.py /app/
 COPY common/common app/common
 
+# this module
 COPY streamingmodule/sample.json /  
 
 
 WORKDIR /app/
 
-CMD ["python", "main.py"]
+CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5002"]
 

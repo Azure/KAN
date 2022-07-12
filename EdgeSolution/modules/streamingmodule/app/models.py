@@ -45,8 +45,8 @@ class ObjectDetectionModel(Model):
         #FIXME fix the url
         res = requests.post(PredictModule.Url + '/predict/'+self.model, files={'file': img}, params={'width': width, 'height': height})
 
-        print(res)
-        print(res.json())
+        #print(res)
+        #print(res.json())
 
         res = ObjectDetectionModelResult(**res.json())
 

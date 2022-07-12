@@ -2,7 +2,7 @@
   "$schema-version": "0.0.1",
   "description": "",
   "image": {
-    "repository": "${CONTAINER_REGISTRY_NAME}/intelligentedge/predictmodule",
+    "repository": "${CONTAINER_REGISTRY_NAME}/voe/predictmodule",
     "tag": {
       "version": "0.37.0",
       "platforms": {

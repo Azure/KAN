@@ -1,12 +1,19 @@
 ---
-kind: Role
+kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: access-symphony 
+  name: access-symphony
 rules:
-- apiGroups: ["", "fabric.symphony","solution.symphony","ai.symphony","config.symphony"]
-  resources: ["*"]
-  verbs: ["*"]
+  - apiGroups:
+      [
+        "",
+        "fabric.symphony",
+        "solution.symphony",
+        "ai.symphony",
+        "config.symphony",
+      ]
+    resources: ["*"]
+    verbs: ["*"]
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -14,13 +21,14 @@ metadata:
   name: symphony-user
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
   name: symphony-user
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: access-symphony
 subjects:
-- kind: ServiceAccount
-  name: symphony-user
+  - kind: ServiceAccount
+    name: symphony-user
+    namespace: default

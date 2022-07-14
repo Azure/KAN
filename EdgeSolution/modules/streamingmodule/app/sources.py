@@ -20,7 +20,7 @@ class RtspSource(Source):
         while True:
             b, image_pointer = self.cap.read()
             if b is False or image_pointer is None:
-                print(f'failed to get image from {ip}')
+                print(f'failed to get image from {self.ip}')
                 time.sleep(1)
             else:
                 break

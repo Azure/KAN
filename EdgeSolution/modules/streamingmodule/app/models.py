@@ -98,6 +98,16 @@ class ClassificationModelResult(BaseModel):
     classifications: List[Classification]
 
 
+class Classification(BaseModel):
+    name: str
+    label: str
+    confidence: float
+
+
+class ClassificationModelResult(BaseModel):
+    classifications: List[Classification]
+
+
 class ClassificationModel(Model):
 
 
@@ -113,6 +123,7 @@ class ClassificationModel(Model):
 
     
         for object_meta in frame.insights_meta.objects_meta:
+
             x1 = max(0, int(object_meta.bbox.l * width))
             x2 = min(width-1, int( ( object_meta.bbox.l+ object_meta.bbox.w) * width ))
             y1 = max(0, int( object_meta.bbox.t * height ))
@@ -125,6 +136,7 @@ class ClassificationModel(Model):
 
             res = requests.post(PredictModule.Url + '/predict/'+self.model, files={'file': cropped_img}, params={'width': cropped_w, 'height': cropped_h})
             #print(res, flush=True)
+
             res = ClassificationModelResult(**res.json())
 
             for classification in res.classifications:

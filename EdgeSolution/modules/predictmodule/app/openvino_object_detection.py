@@ -73,11 +73,8 @@ class OpenVINOObjectDetectionModel(ObjectDetectionModel):
         arr = output_data[self.output] 
 
         objects = []
-        print(arr)
         for _, label_index, confidence, x_min, y_min, x_max, y_max in arr[arr[:,:,:,2]>threshold]:
-            print('->', x_min, y_min, x_max, y_max, flush=True)
             bbox = Bbox(l=x_min, t=y_min, w=x_max-x_min, h=y_max-y_min)
-            print(bbox, flush=True)
             label_index = int(label_index)
             #print(label_index, self.labels)
             if 0 < label_index < len(self.labels):

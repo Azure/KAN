@@ -52,4 +52,5 @@ class InsightsMeta(BaseModel):
 class Frame(BaseModel):
     image: Image
     insights_meta: InsightsMeta = InsightsMeta()
-
+    timestamp: float
+    frame_id: str

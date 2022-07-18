@@ -7,7 +7,11 @@ from fastapi import FastAPI, File, UploadFile, BackgroundTasks
 from pydantic import BaseModel
 import subprocess
 
-from openvino_object_detection import OpenVINOObjectDetectionModel
+if find_spec('openvino_object_detection'):
+    from openvino_object_detection import OpenVINOObjectDetectionModel
+if find_spec('openvino_classification'):
+    from openvino_classification import OpenVINOClassificationModel
+
 from customvision_object_detection import CustomVisionObjectDetectionModel
 
 import threading
@@ -62,6 +66,19 @@ def get_openvino_object_detection_model(name):
 
     return model
 
+def get_openvino_classification_model(name):
+
+    if os.path.isdir(f'models/{name}'):
+        print(f'model {name} already exists')
+    else:
+        print(f'Downloading {name} from openvino model zoo ...')
+        download_folder = f'models/{name}'
+        subprocess.check_output(f'bash downloaders/download_openvino_object_detection.sh {name} {download_folder}'.split())
+
+    model = OpenVINOClassificationModel(name)
+
+    return model
+
 def _set(settings: PredictModule.Setting):
     status.set_creating()
     print('--> Start to download models')
@@ -77,6 +94,11 @@ def _set(settings: PredictModule.Setting):
             if model_config.executor == 'openvino':
                 if model_config.type == 'ObjectDetection':
                     model = get_openvino_object_detection_model(model_config.name)
+                    #print('adding model_config', model_config.name)
+                    models[model_config.name] = model
+
+                elif model_config.type == 'Classification':
+                    model = get_openvino_classification_model(model_config.name)
                     #print('adding model_config', model_config.name)
                     models[model_config.name] = model
 

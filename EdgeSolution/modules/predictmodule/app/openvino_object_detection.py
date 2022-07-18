@@ -96,9 +96,21 @@ class OpenVINOObjectDetectionModel(ObjectDetectionModel):
         
 
 if __name__ == '__main__':
-    m = OpenVINOObjectDetectionModel('person-detection-retail-0013')
-    #m = OpenVINOObjectDetectionModel('face-detection-retail-0004')
+    #m = OpenVINOObjectDetectionModel('person-detection-retail-0013')
+    m = OpenVINOObjectDetectionModel('face-detection-retail-0004')
     import cv2
     c = cv2.VideoCapture(0)
     _, img = c.read()
-    print(m.predict(img))
+    res = m.predict(img)
+
+    h, w, _ = img.shape
+    for obj in res:
+        x1 = int(obj.bbox.l) * w
+        x2 = int(obj.bbox.l + obj.bbox.w) * w
+        y1 = int(obj.bbox.t) * h
+        y2 = int(obj.bbox.t + obj.bbox.h) * h
+        color = (0, 0, 255)
+        thickness = 2
+        cv2.rectangle(img, (x1, y1), (x2, y2), color, thickness)
+    
+    cv2.imwrite('img.jpg', img)

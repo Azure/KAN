@@ -73,8 +73,11 @@ class OpenVINOObjectDetectionModel(ObjectDetectionModel):
         arr = output_data[self.output] 
 
         objects = []
+        print(arr)
         for _, label_index, confidence, x_min, y_min, x_max, y_max in arr[arr[:,:,:,2]>threshold]:
+            print('->', x_min, y_min, x_max, y_max, flush=True)
             bbox = Bbox(l=x_min, t=y_min, w=x_max-x_min, h=y_max-y_min)
+            print(bbox, flush=True)
             label_index = int(label_index)
             #print(label_index, self.labels)
             if 0 < label_index < len(self.labels):
@@ -96,9 +99,21 @@ class OpenVINOObjectDetectionModel(ObjectDetectionModel):
         
 
 if __name__ == '__main__':
-    m = OpenVINOObjectDetectionModel('person-detection-retail-0013')
-    #m = OpenVINOObjectDetectionModel('face-detection-retail-0004')
+    #m = OpenVINOObjectDetectionModel('person-detection-retail-0013')
+    m = OpenVINOObjectDetectionModel('face-detection-retail-0004')
     import cv2
     c = cv2.VideoCapture(0)
     _, img = c.read()
-    print(m.predict(img))
+    res = m.predict(img)
+
+    h, w, _ = img.shape
+    for obj in res:
+        x1 = int(obj.bbox.l) * w
+        x2 = int(obj.bbox.l + obj.bbox.w) * w
+        y1 = int(obj.bbox.t) * h
+        y2 = int(obj.bbox.t + obj.bbox.h) * h
+        color = (0, 0, 255)
+        thickness = 2
+        cv2.rectangle(img, (x1, y1), (x2, y2), color, thickness)
+    
+    cv2.imwrite('img.jpg', img)

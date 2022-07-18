@@ -1,6 +1,7 @@
 from core import Export
 import utils
 
+import os
 import time
 import datetime
 import cv2
@@ -9,6 +10,7 @@ import threading
 
 import httpx
 
+from common.azure_utils import get_blob_client
 
 
 class VideoSnippetStatus(str, Enum):
@@ -29,6 +31,7 @@ class VideoSnippetExport(Export):
 
         self.filename_prefix = filename_prefix
         self.recording_duration = float(recording_duration)
+        print('--> recoring duration', self.recording_duration, flush=True)
         self.insights_overlay = insights_overlay
         self.delay_buffer = float(delay_buffer) # in minutes        
 
@@ -52,16 +55,24 @@ class VideoSnippetExport(Export):
 
             if len(self.imgs) > 0:
                 #FIXME fps
-                fps = 30.0
+                fps = len(self.imgs) / self.recording_duration
                 h, w, _ = self.imgs[0].shape
 
-                filename = f"{self.filename_prefix}-{datetime.datetime.fromtimestamp(time.time()).isoformat()}.avi"
-
+                basename = f"{self.filename_prefix}-{datetime.datetime.fromtimestamp(time.time()).isoformat()}.avi"
+                filename = f'/tmp/{basename}'
+                
                 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
                 out = cv2.VideoWriter(filename, fourcc, fps, (w, h))
                 for img in self.imgs:
                     out.write(img)
                 out.release()
+
+                # Upload to azure blob storage's container
+                print('uploading video snippet to blobstorage', flush=True)
+                client = get_blob_client(basename)
+                with open(filename, 'rb') as f:
+                    client.upload_blob(f)
+                os.remove(filename)
 
                 self.imgs = []
 

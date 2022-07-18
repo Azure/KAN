@@ -4,7 +4,7 @@ import requests
 from pydantic import BaseModel
 
 from core import Model
-from frame import Frame, Bbox, ObjectMeta
+from frame import Frame, Bbox, ObjectMeta, Attribute
 from common.voe_ipc import PredictModule
 
 class FakeModel(Model):
@@ -45,22 +45,56 @@ class ObjectDetectionModel(Model):
         #FIXME fix the url
         res = requests.post(PredictModule.Url + '/predict/'+self.model, files={'file': img}, params={'width': width, 'height': height})
 
-        print(res)
-        print(res.json())
+        #print(res)
+        #print(res.json())
 
         res = ObjectDetectionModelResult(**res.json())
 
         for obj in res.objects:
-            object_meta = ObjectMeta(label=obj.label, bbox=obj.bbox, confidence=obj.confidence)
+            object_meta = ObjectMeta(label=obj.label, bbox=obj.bbox, confidence=obj.confidence, attributes=[])
             frame.insights_meta.objects_meta.append(object_meta)
 
             # FIXME send image to webmodule for train new models (according to confidence threshold)
+
+
+class Classification(BaseModel):
+    name: str
+    label: str
+    confidence: float
+
+
+class ClassificationModelResult(BaseModel):
+    classifications: List[Classification]
 
 
 class ClassificationModel(Model):
 
     def __init__(self, model, confidence_lower=None, confidence_upper=None, max_images=None):
         super().__init__()
+        self.model = model
 
     def process(self, frame):
-        pass
+        
+        img = frame.image.image_pointer
+        width = frame.image.properties.width
+        height = frame.image.properties.height
+
+    
+        for object_meta in frame.insights_meta.objects_meta:
+            x1 = int(object_meta.bbox.l * width)
+            x2 = int( ( object_meta.bbox.l+ object_meta.bbox.w) * width )
+            y1 = int( object_meta.bbox.t * height )
+            y2 = int( ( object_meta.bbox.t+ object_meta.bbox.h) * height )
+            cropped_img = img[x1:x2, y1:y2]
+
+            res = requests.post(PredictModule.Url + '/predict/'+self.model, files={'file': cropped_img}, params={'width': x2-x1, 'height': y2-y1})
+            res = ClassificationModelResult(**res.json())
+
+            for classification in res.classifications:
+                object_meta.attributes.append(
+                    Attribute(
+                        name=classification.name,
+                        label=classification.label,
+                        confidence=classification.confidence
+                    )
+                )   

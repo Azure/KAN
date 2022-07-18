@@ -1,5 +1,5 @@
-import importlib
-if not importlib.util.find_spec('common'):
+from importlib.util import find_spec
+if find_spec('common'):
     import sys
     sys.path.append('../../common')
 

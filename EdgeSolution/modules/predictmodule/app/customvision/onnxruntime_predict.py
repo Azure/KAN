@@ -25,7 +25,8 @@ class ONNXRuntimeObjectDetection(ObjectDetection):
             model.graph.input[0].type.tensor_type.shape.dim[-1].dim_param = 'dim1'
             model.graph.input[0].type.tensor_type.shape.dim[-2].dim_param = 'dim2'
             onnx.save(model, temp)
-            self.session = onnxruntime.InferenceSession(temp)
+            providers = ['CUDAExecutionProvider', 'CPUExecutionProvider']
+            self.session = onnxruntime.InferenceSession(temp, providers=providers)
         self.input_name = self.session.get_inputs()[0].name
         self.is_fp16 = self.session.get_inputs()[0].type == 'tensor(float16)'
         

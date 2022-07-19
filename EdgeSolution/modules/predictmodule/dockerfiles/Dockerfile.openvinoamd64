@@ -1,0 +1,36 @@
+FROM python:3.8-slim-buster
+
+RUN apt update
+RUN apt install ffmpeg libsm6 libxext6 -y
+RUN apt install wget unzip -y
+
+
+### Install requirements ###
+
+# common libs
+COPY common/requirements.txt /app/requirements-common.txt
+RUN pip install -r /app/requirements-common.txt
+
+# this module
+COPY predictmodule/requirements-gpu.txt /app/
+RUN pip install -r /app/requirements-openvino.txt
+# move onnxruntimethis to acclerator specific
+
+
+### Copy Files ###
+
+# common libs
+COPY common/common /app/common
+
+# this module
+COPY predictmodule/app/*.py /app/
+COPY predictmodule/app/models/*.py /app/models/
+COPY predictmodule/app/customvision /app/customvision
+COPY predictmodule/app/downloaders /app/downloaders
+
+
+
+WORKDIR /app/
+
+CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5004"]
+

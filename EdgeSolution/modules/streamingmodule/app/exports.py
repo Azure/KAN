@@ -19,7 +19,8 @@ class VideoSnippetStatus(str, Enum):
     EXPORTING = 'EXPORTING'    
 
 class VideoSnippetExport(Export):
-    def __init__(self, filename_prefix, recording_duration=1, insights_overlay=True, delay_buffer=1, module_name=''):
+    def __init__(self, filename_prefix, recording_duration=1, insights_overlay=True, delay_buffer=1, module_name='',
+                    instance_displayname='instance', skill_displayname='skill', device_displayname='device'):
         super().__init__()
 
         #FIXME
@@ -27,6 +28,10 @@ class VideoSnippetExport(Export):
             insights_overlay = False
         elif insights_overlay == 'true':
             insights_overlay = True
+
+        self.instance_displayname = instance_displayname
+        self.skill_displayname = skill_displayname
+        self.device_displayname = device_displayname
 
 
         self.filename_prefix = filename_prefix
@@ -59,20 +64,22 @@ class VideoSnippetExport(Export):
                 h, w, _ = self.imgs[0].shape
 
                 basename = f"{self.filename_prefix}-{datetime.datetime.fromtimestamp(time.time()).isoformat()}.avi"
-                filename = f'/tmp/{basename}'
                 
+                local_filename = f'/tmp/{basename}'
+                blob_filename = f'video-snippet/{self.instance_displayname}/{self.skill_displayname}/{self.device_displayname}/{basename}'
+
                 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-                out = cv2.VideoWriter(filename, fourcc, fps, (w, h))
+                out = cv2.VideoWriter(local_filename, fourcc, fps, (w, h))
                 for img in self.imgs:
                     out.write(img)
                 out.release()
 
                 # Upload to azure blob storage's container
                 print('uploading video snippet to blobstorage', flush=True)
-                client = get_blob_client(basename)
-                with open(filename, 'rb') as f:
+                client = get_blob_client(blob_filename)
+                with open(local_filename, 'rb') as f:
                     client.upload_blob(f)
-                os.remove(filename)
+                os.remove(local_filename)
 
                 self.imgs = []
 

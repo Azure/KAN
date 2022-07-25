@@ -57,7 +57,7 @@ class OpenVINOObjectDetectionModel(ObjectDetectionModel):
     def _preprocess(self, image):
 
         resized_image = cv2.resize(image, dsize=self.dsize)
-        input_data = np.expand_dims(np.transpose(resized_image, (2, 1, 0)), 0).astype(np.float32)
+        input_data = np.expand_dims(np.transpose(resized_image, (2, 0, 1)), 0).astype(np.float32)
 
         #print(input_data.shape)
 
@@ -74,6 +74,7 @@ class OpenVINOObjectDetectionModel(ObjectDetectionModel):
 
         objects = []
         for _, label_index, confidence, x_min, y_min, x_max, y_max in arr[arr[:,:,:,2]>threshold]:
+            #if confidence > 0.05: print(x_min, y_min, x_max, y_max)
             bbox = Bbox(l=x_min, t=y_min, w=x_max-x_min, h=y_max-y_min)
             label_index = int(label_index)
             #print(label_index, self.labels)
@@ -99,18 +100,24 @@ if __name__ == '__main__':
     #m = OpenVINOObjectDetectionModel('person-detection-retail-0013')
     m = OpenVINOObjectDetectionModel('face-detection-retail-0004')
     import cv2
-    c = cv2.VideoCapture(0)
-    _, img = c.read()
+    #c = cv2.VideoCapture(0)
+    #_, img = c.read()
+    img = cv2.imread('willy.jpg')
     res = m.predict(img)
 
     h, w, _ = img.shape
-    for obj in res:
-        x1 = int(obj.bbox.l) * w
-        x2 = int(obj.bbox.l + obj.bbox.w) * w
-        y1 = int(obj.bbox.t) * h
-        y2 = int(obj.bbox.t + obj.bbox.h) * h
+    #print(res.objects)
+    for obj in res.objects:
+        #print(obj)
+        if obj.confidence < 0.05: continue
+        x1 = int(obj.bbox.l * w)
+        x2 = int((obj.bbox.l + obj.bbox.w) * w)
+        y1 = int(obj.bbox.t * h)
+        y2 = int((obj.bbox.t + obj.bbox.h) * h)
         color = (0, 0, 255)
         thickness = 2
-        cv2.rectangle(img, (x1, y1), (x2, y2), color, thickness)
+        print(obj.bbox.l, obj.bbox.t, obj.bbox.l+obj.bbox.w, obj.bbox.t+obj.bbox.h)
+        print((x1, y1), (x2, y2))
+        img = cv2.rectangle(img, (x1, y1), (x2, y2), color, thickness)
     
     cv2.imwrite('img.jpg', img)

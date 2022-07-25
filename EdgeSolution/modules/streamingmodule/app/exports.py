@@ -63,12 +63,12 @@ class VideoSnippetExport(Export):
                 fps = len(self.imgs) / self.recording_duration
                 h, w, _ = self.imgs[0].shape
 
-                basename = f"{self.filename_prefix}-{datetime.datetime.fromtimestamp(time.time()).isoformat()}.avi"
+                basename = f"{self.filename_prefix}-{datetime.datetime.fromtimestamp(time.time()).isoformat()}.mp4"
                 
                 local_filename = f'/tmp/{basename}'
                 blob_filename = f'video-snippet/{self.instance_displayname}/{self.skill_displayname}/{self.device_displayname}/{basename}'
 
-                fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+                fourcc = cv2.VideoWriter_fourcc(*'MP4V')
                 out = cv2.VideoWriter(local_filename, fourcc, fps, (w, h))
                 for img in self.imgs:
                     out.write(img)

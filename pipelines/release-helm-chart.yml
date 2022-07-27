@@ -14,7 +14,7 @@ trigger:
 steps:
 - task: HelmInstaller@0
   inputs:
-    helmVersion: '3.9.1'
+    helmVersion: '3.9.2'
     installKubectl: false
 
 - task: Bash@3
@@ -22,7 +22,7 @@ steps:
     targetType: 'inline'
     script: |
      export HELM_EXPERIMENTAL_OCI=1
-     /opt/hostedtoolcache/helm/3.9.1/x64/linux-amd64/helm registry login $(acr_host) --username $(acr_username) --password $acr_password
+     /opt/hostedtoolcache/helm/3.9.2/x64/linux-amd64/helm registry login $(acr_host) --username $(acr_username) --password $acr_password
   env:
     acr_password: $(acr_password)
   displayName: login acr

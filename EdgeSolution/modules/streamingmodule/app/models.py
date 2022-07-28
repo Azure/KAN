@@ -75,15 +75,15 @@ class ObjectDetectionModel(Model):
 
         for obj in res.objects:
 
-            x1 = max(0, obj.bbox.x)
-            y1 = max(0, obj.bbox.y)
-            x2 = min(1, obj.bbox.x + obj.bbox.w)
-            y2 = min(1, obj.bbox.y + obj.bbox.h)
+            x1 = max(0, obj.bbox.l)
+            y1 = max(0, obj.bbox.t)
+            x2 = min(1, obj.bbox.l + obj.bbox.w)
+            y2 = min(1, obj.bbox.t + obj.bbox.h)
 
             
             bbox = Bbox(
-                x=x1,
-                y=y1,
+                l=x1,
+                t=y1,
                 w=x2-x1,
                 h=y2-y1,
             )

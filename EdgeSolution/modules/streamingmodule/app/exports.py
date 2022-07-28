@@ -161,9 +161,10 @@ class IotedgeExport(Export):
             self.last_timestamp = cur_timestamp
 
 
-class HttpExport(Export):
+class HttpExportWithDelayBuffer(Export):
     
     def __init__(self, url, delay_buffer=6):
+        
         super().__init__()
         self.delay_buffer = float(delay_buffer)
 
@@ -183,6 +184,22 @@ class HttpExport(Export):
             except httpx.RequestError as exc:
                 print(f"An error occurred while requesting {exc.request.url!r}.")
             self.last_timestamp = cur_timestamp
+
+class HttpExport(Export):
+    
+    def __init__(self, url):  
+        super().__init__()
+        self.url = url
+
+
+    def process(self, frame):
+    
+        print('send a request to ', self.url)
+        try:
+            httpx.post(self.url, json=frame.json())
+        except httpx.RequestError as exc:
+            print(f"An error occurred while requesting {exc.request.url!r}.")
+    
 
 
 class Cv2ImshowExport(Export):

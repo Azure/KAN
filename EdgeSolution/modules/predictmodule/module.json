@@ -7,7 +7,8 @@
       "version": "0.37.4",
       "platforms": {
         "amd64": "./dockerfiles/Dockerfile.amd64",
-        "gpuamd64": "./dockerfiles/Dockerfile.gpuamd64"
+        "gpuamd64": "./dockerfiles/Dockerfile.gpuamd64",
+        "openvinoamd64": "./dockerfiles/Dockerfile.openvinoamd64"
       }
     },
     "buildOptions": [],

@@ -7,6 +7,7 @@ import datetime
 import cv2
 from enum import Enum, auto
 import threading
+import subprocess
 
 import httpx
 
@@ -63,22 +64,27 @@ class VideoSnippetExport(Export):
                 fps = len(self.imgs) / self.recording_duration
                 h, w, _ = self.imgs[0].shape
 
+                basename_ori = f"{self.filename_prefix}-{datetime.datetime.fromtimestamp(time.time()).isoformat()}-ori.mp4"
                 basename = f"{self.filename_prefix}-{datetime.datetime.fromtimestamp(time.time()).isoformat()}.mp4"
-                
+
+                local_filename_ori = f'/tmp/{basename_ori}'
                 local_filename = f'/tmp/{basename}'
                 blob_filename = f'video-snippet/{self.instance_displayname}/{self.skill_displayname}/{self.device_displayname}/{basename}'
 
                 fourcc = cv2.VideoWriter_fourcc(*'MP4V')
-                out = cv2.VideoWriter(local_filename, fourcc, fps, (w, h))
+                out = cv2.VideoWriter(local_filename_ori, fourcc, fps, (w, h))
                 for img in self.imgs:
                     out.write(img)
                 out.release()
+
+                subprocess.check_output(f'ffmpeg -i {local_filename_ori} {local_filename}'.split())
 
                 # Upload to azure blob storage's container
                 print('uploading video snippet to blobstorage', flush=True)
                 client = get_blob_client(blob_filename)
                 with open(local_filename, 'rb') as f:
                     client.upload_blob(f)
+                os.remove(local_filename_ori)
                 os.remove(local_filename)
 
                 self.imgs = []

@@ -74,6 +74,21 @@ class ObjectDetectionModel(Model):
         res = ObjectDetectionModelResult(**res.json())
 
         for obj in res.objects:
+
+            x1 = max(0, obj.bbox.x)
+            y1 = max(0, obj.bbox.y)
+            x2 = min(1, obj.bbox.x + obj.bbox.w)
+            y2 = min(1, obj.bbox.y + obj.bbox.h)
+
+            
+            bbox = Bbox(
+                x=x1,
+                y=y1,
+                w=x2-x1,
+                h=y2-y1,
+            )
+
+
             object_meta = ObjectMeta(label=obj.label, bbox=obj.bbox, confidence=obj.confidence, attributes=[])
             frame.insights_meta.objects_meta.append(object_meta)
 

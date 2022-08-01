@@ -6,3 +6,4 @@ opencv-python
 semantic_version
 requests
 httpx
+azure-iot-device

@@ -12,6 +12,7 @@ import subprocess
 import httpx
 
 from common.azure_utils import get_blob_client
+from azure.iot.device import IoTHubModuleClient
 
 
 class VideoSnippetStatus(str, Enum):
@@ -122,6 +123,7 @@ class VideoSnippetExport(Export):
                 self._append_image(frame)                    
 
 
+iot = IoTHubModuleClient.create_from_edge_environment()
 
 class IothubExport(Export):
     def __init__(self, delay_buffer=6, **kwargs):
@@ -136,9 +138,8 @@ class IothubExport(Export):
         cur_timestamp = time.time()
         if cur_timestamp > self.last_timestamp + self.delay_buffer:
 
-            #FIXME
-            print('exporting to iothub')
-
+            #print('exporting to iothub')
+            iot.send_message_to_output(frame.json(), 'metrics')
             self.last_timestamp = cur_timestamp
 
 

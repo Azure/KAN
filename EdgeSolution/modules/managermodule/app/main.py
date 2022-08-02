@@ -169,90 +169,60 @@ if __name__ == '__main__':
         skill_name, skill_alias = skill_with_alias.split(" as ")
         #skill = client.get_skill(skill_name)
         skill = client.get_skill_with_instance_name_and_alias(skill_name, instance_name, skill_alias)
-        print(skill_name, skill_alias)
-        print(skill)
+        print(f'skill_name: {skill_name}, skill_alias: {skill_alias}', flush=True)
+        print(skill, flush=True)
         new_cascade_config, new_model_configs = process_skill(skill)
 
         cascade_configs.append(new_cascade_config)
         model_configs += new_model_configs
 
-    #exit()
-
-    #last_skills[skill_name] = skill
-    #print(skill['spec'])
-    
-    
-    #exit()
-    #print(cascade_config, model_configs)
-    print('ok', flush=True)
+ 
     streamingmodule_setting = StreamingModule.Setting(cascade_configs=cascade_configs)
     predictmodule_setting = PredictModule.Setting(model_configs=model_configs)
-    print('ok', flush=True)
+    
     while True:
         try:
-            print('Waiting for StreamingModule and PredictModule')
-            httpx.get(PredictModule.Url+'/status')
-            httpx.get(StreamingModule.Url+'/status')
-            break
+            print('------------------------------------------------------------')
+            print('  Getting status from StreamingModule and PredictModule ...', flush=True)
+            print('------------------------------------------------------------')
+            res = httpx.get(PredictModule.Url+'/status')
+            predict_module_status = PredictModule.Status(**res.json())
+            
+            res = httpx.get(StreamingModule.Url+'/status')
+            streaming_module_status = StreamingModule.Status(**res.json())
+
+            print()
+            print(f'  Predict   Module: {predict_module_status.status}')
+            print(f'  Streaming Module: {streaming_module_status.status}')
+            print()
         except:
+            
             time.sleep(3)
-    
+            continue
 
-    while True:
-        print('-->')
-        print('--> wait until predict module status becomes WAITING ...')
-        print('-->')
-        print()
-        print(f'--> get status from predict module {PredictModule.Url}/status')
-        res = httpx.get(PredictModule.Url+'/status')
-        print('--> status ', res, flush=True)
-        module_status = PredictModule.Status(**res.json())
-        #print(module_status.status)
-        if module_status.status == StatusEnum.WAITING : break
+        
+        if predict_module_status.status == StatusEnum.WAITING:
+
+            print('-----------------------------------------------')
+            print('  sending model_configs to predictmodule ...')
+            print('-----------------------------------------------')
+            print()
+            print(model_configs)
+            print()
+            httpx.post(PredictModule.Url+'/set', data=predictmodule_setting.json())
+
+        if predict_module_status.status == StatusEnum.RUNNING and streaming_module_status.status == StatusEnum.WAITING:
+
+            print('------------------------------------------------------------')
+            print('  sending cascade_configs to predictmodule ...')
+            print('------------------------------------------------------------')
+            print()
+            print(cascade_configs)
+            print()
+            httpx.post(StreamingModule.Url+'/set', data=streamingmodule_setting.json())
+
+   
         time.sleep(3)
-
-    print('-->')
-    print('--> sending model_configs to predictmodule ...')
-    print('-->')
-    print()
-    print(model_configs)
-    print()
-    httpx.post(PredictModule.Url+'/set', data=predictmodule_setting.json())
-
-    while True:
-        print('-->')
-        print('--> wait until predictmodule status becomes RUNNING ...')
-        print('-->')
-        print()
-        
-        res = httpx.get(PredictModule.Url+'/status')
-        module_status = PredictModule.Status(**res.json())
-        if module_status.status == StatusEnum.RUNNING: break
-        time.sleep(1)
-
-    print('-->')
-    print('--> sending cascade_configs to predictmodule ...')
-    print('-->')
-    print()
-    print(model_configs)
-    print()
-    httpx.post(StreamingModule.Url+'/set', data=streamingmodule_setting.json())
-
-    #while True:
-    #    print('-->')
-    #    print('--> wait until streamingmodule status becomes RUNNING ...')
-    #    print('-->')
-    #    print()
-        
-    #    res = httpx.get(StreamingModule.Url+'/status')
-    #    module_status = StreamingModule.Status(**res.json())
-    #    if module_status.status == StatusEnum.RUNNING: break
-    #    time.sleep(1)
-
-
-    #print(cascade)
-    while True:
-        time.sleep(1)
-
+    
 
 

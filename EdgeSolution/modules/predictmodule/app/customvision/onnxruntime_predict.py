@@ -25,7 +25,12 @@ class ONNXRuntimeObjectDetection(ObjectDetection):
             model.graph.input[0].type.tensor_type.shape.dim[-1].dim_param = 'dim1'
             model.graph.input[0].type.tensor_type.shape.dim[-2].dim_param = 'dim2'
             onnx.save(model, temp)
-            providers = ['CUDAExecutionProvider', 'CPUExecutionProvider']
+            
+            providers = ['CPUExecutionProvider']
+            if 'CUDAExecutionProvider' in onnxruntime.get_available_providers():
+                providers = ['CUDAExecutionProvider'] + providers
+            if 'OpenVINOExecutionProvider' in onnxruntime.get_available_providers():
+                providers = ['OpenVINOExecutionProvider'] + providers
             self.session = onnxruntime.InferenceSession(temp, providers=providers)
         self.input_name = self.session.get_inputs()[0].name
         self.is_fp16 = self.session.get_inputs()[0].type == 'tensor(float16)'

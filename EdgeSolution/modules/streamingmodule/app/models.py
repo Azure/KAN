@@ -66,8 +66,10 @@ class ObjectDetectionModel(Model):
         width = frame.image.properties.width
         height = frame.image.properties.height
         #FIXME fix the url
-        res = requests.post(PredictModule.Url + '/predict/'+self.model, files={'file': img}, params={'width': width, 'height': height})
-
+        try:
+            res = requests.post(PredictModule.Url + '/predict/'+self.model, files={'file': img}, params={'width': width, 'height': height})
+        except:
+            return
         #print(res)
         #print(res.json())
 
@@ -149,7 +151,10 @@ class ClassificationModel(Model):
             cropped_img = img[y1:y2, x1:x2].copy()
             cropped_h, cropped_w, _ = cropped_img.shape
 
-            res = requests.post(PredictModule.Url + '/predict/'+self.model, files={'file': cropped_img}, params={'width': cropped_w, 'height': cropped_h})
+            try:
+                res = requests.post(PredictModule.Url + '/predict/'+self.model, files={'file': cropped_img}, params={'width': cropped_w, 'height': cropped_h})
+            except:
+                return
             #print(res, flush=True)
 
             res = ClassificationModelResult(**res.json())

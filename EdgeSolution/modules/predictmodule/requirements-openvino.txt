@@ -1,9 +1,6 @@
-openvino==2022.1.0
 FastAPI
 python-multipart
 opencv-python
 uvicorn
 numpy
 pillow
-onnx
-onnxruntime-openvino==1.11.0

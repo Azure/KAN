@@ -4,7 +4,7 @@
 
 Percept Open Source Project (POSS) is an open-source project that accelerates and simplifies the journey of building vision-based intelligent edge solutions using Machine Learning (ML). POSS helps you with extracting insights and actions from RTSP IP cameras using a no-code UI that runs and processes streams locally on your edge device.
 
-## Overview
+# Overview
 
 Gaining meaningful insights from the physical world can be quite complex and time consuming. Camera is quickly becoming the one universal sensor that can capture the essence of the physical world for many different use cases. To be able to reason about your desired events happening in the physical world using cameras you need to be able to ingest, process and reason about many camera streams at once. Creating a video ingestion process with only 1 camera is not an easy task but creating a scalable, yet extensible video pipeline is even more difficult. In addition, understanding things/objects in the physical world requires algorithms that are not easy to build without specialized knowledge and resources. 
 
@@ -18,7 +18,10 @@ POSS combines the power of Azure services such as Custom Vision and Video Analyz
 - Create a more complex AI Skill/Logic by combining your custom ML models with already trained models from our model zoo
 - Deploy your hardware optimized ML models on your IP camera streams to extract insights and create actions locally or in the cloud
 
-## Characteristics 
+# Get Started
+
+
+# Characteristics 
 * **Kubernetes-native.** Works nicely with beloved [Kubernetes](https://kubernetes.io/) tools and open-source projects like [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/), [Helm](https://helm.sh/), [Istio](https://istio.io/), and [Akri](https://github.com/project-akri/akri).   <sub>[:blue_book: more...](./docs/p4e/architecture/k8s-support.md) </sub>
 
 * **Arc-enabled.** Manage your intelligent apps and distributed edge clusters using [Azure Arc](https://azure.microsoft.com/en-us/services/azure-arc/). <sub>[:blue_book: more...](./docs/p4e/architecture/arc-enabled.md) </sub>
@@ -45,7 +48,7 @@ POSS combines the power of Azure services such as Custom Vision and Video Analyz
 
 * **Embrace OSS.** POSS is fully open sourced. And it leverage the OSS community to deliver enhanced experiences. For example, it can be used together with [Dapr](https://dapr.io/) to provide a platform-agnostic programming model to intelligent edge developers. <sub>[:blue_book: more...](TBD) </sub>
 
-# Get Started
+# How It Works
 
 
 # Contributing

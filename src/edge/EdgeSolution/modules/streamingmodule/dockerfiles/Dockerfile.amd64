@@ -1,0 +1,36 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+FROM python:3.10.1-slim-buster
+
+RUN apt update
+RUN apt install ffmpeg libsm6 libxext6 -y
+
+
+### Install requirements ###
+
+# common libs
+COPY common/requirements.txt /app/requirements-common.txt
+RUN pip install -r /app/requirements-common.txt
+
+# this module
+COPY streamingmodule/requirements.txt /app/
+RUN pip install -r /app/requirements.txt
+
+
+
+### Copy Files ###
+
+# common libs
+COPY common/common /app/common
+COPY streamingmodule/app/*.py /app/
+COPY common/common app/common
+
+# this module
+COPY streamingmodule/sample.json /  
+
+
+WORKDIR /app/
+
+CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5002"]
+

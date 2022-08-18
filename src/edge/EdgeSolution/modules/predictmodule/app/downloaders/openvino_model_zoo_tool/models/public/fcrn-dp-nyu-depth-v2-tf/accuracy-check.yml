@@ -1,0 +1,23 @@
+models:
+  - name: fcrn-dp-nyu-depth-v2-tf
+    launchers:
+      - framework: openvino
+        adapter: mono_depth
+    datasets:
+      - name: NYU_Depth_V2
+        preprocessing:
+          - type: resize
+            use_pillow: true
+            dst_height: 228
+            dst_width: 304
+        postprocessing:
+          - type: resize_prediction_depth_map
+        metrics:
+          - type: rmse
+            reference: 0.573
+          - type: log10_error
+            name: log10
+            reference: 0.055
+          - type: mape
+            name: rel
+            reference: 0.127

@@ -1,0 +1,34 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+FROM python:3.10.1-slim-buster
+
+RUN apt update
+
+
+### Install requirements ###
+
+# common libs
+COPY common/requirements.txt /app/requirements-common.txt
+RUN pip install -r /app/requirements-common.txt
+
+# this module
+COPY managermodule/requirements.txt /app/
+RUN pip install -r /app/requirements.txt
+
+
+### Copy Files ###
+
+# common libs
+COPY common/common /app/common
+
+# this module
+COPY managermodule/app/*.py /app/
+
+
+#
+WORKDIR /app/
+
+
+#CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["python3", "main.py"]

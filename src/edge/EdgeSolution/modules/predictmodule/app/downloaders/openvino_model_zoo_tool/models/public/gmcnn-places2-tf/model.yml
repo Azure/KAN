@@ -1,0 +1,43 @@
+# Copyright (c) 2022 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+description: >-
+  The "gmcnn-places2-tf" is the TensorFlow* implementation of GMCNN Image Inpainting
+  model, aimed to estimate suitable pixel information to fill holes in images. "gmcnn-places2-tf"
+  is trained on Places2 dataset with free-form masks. Originally redistributed as
+  checkpoint files, it was converted to a frozen graph. For details see repository
+  <https://github.com/shepnerd/inpainting_gmcnn>.
+task_type: image_inpainting
+files:
+  - name: gmcnn-places2-tf.zip
+    size: 46187310
+    checksum: 35fbd27cfab9f23fe0e5cf87cce3bb6b200af657f3a21054f0d430b1a2b430a004a128a9acd19e0ee3bb6983d48cbbba
+    original_source: https://download.01.org/opencv/public_models/092020/gmcnn-places2-tf/gmcnn-places2-tf.zip
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/public/2022.1/gmcnn-places2-tf/gmcnn-places2-tf.zip
+postprocessing:
+  - $type: unpack_archive
+    format: zip
+    file: gmcnn-places2-tf.zip
+input_info:
+  - name: Placeholder
+    shape: [1, 512, 680, 3]
+    layout: NHWC
+  - name: Placeholder_1
+    shape: [1, 512, 680, 1]
+    layout: NHWC
+model_optimizer_args:
+  - --input_model=$dl_dir/gmcnn-places2-tf/frozen_model.pb
+  - --output=Minimum
+framework: tf
+license: https://raw.githubusercontent.com/shepnerd/inpainting_gmcnn/master/LICENSE

@@ -1,0 +1,26 @@
+models:
+  - name: road-segmentation-adas-0001
+
+    launchers:
+      - framework: openvino
+        adapter: segmentation
+
+    datasets:
+      - name: road_segmentation
+        metrics:
+          - type: mean_iou
+            presenter: print_vector
+            reference:
+              BG: 0.986
+              curbs: 0.727
+              marks: 0.707
+              mean: 0.844
+              road: 0.954
+          - type: mean_accuracy
+            presenter: print_vector
+            reference:
+              BG: 0.994
+              curbs: 0.825
+              marks: 0.803
+              mean: 0.899
+              road: 0.974

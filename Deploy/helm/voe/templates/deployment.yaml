@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webmodule
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webmodule
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: webmodule
+    spec:
+      serviceAccountName: symphony-user
+      containers:
+      - name: webmodule
+        image: {{.Values.image.image}}:{{.Values.image.tag}}
+        imagePullPolicy: {{.Values.image.pullPolicy}}
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: 200m
+        envFrom:
+        - secretRef:
+            name: azure-env
+        env:          
+          - name: DF_PD_VIDEO_SOURCE
+            value: {{.Values.webmodule.videoSource}}
+          - name: IS_K8S
+            value: "true"

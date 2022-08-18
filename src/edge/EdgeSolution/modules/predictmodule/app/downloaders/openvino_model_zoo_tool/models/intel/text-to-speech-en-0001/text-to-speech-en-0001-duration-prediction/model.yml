@@ -1,0 +1,47 @@
+# Copyright (c) 2022 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+description: >-
+  ForwardTacotron is a model for the text-to-speech task. This model represents a
+  duration prediction part.
+task_type: text_to_speech
+files:
+  - name: FP32/text-to-speech-en-0001-duration-prediction.xml
+    size: 579109
+    checksum: eb2c72199abf781607217be9fd0ddb54cda65a7e747a2e25d74099d3b51c7528694309d9170d5a80c80fbd97aff31406
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-to-speech-en-0001/text-to-speech-en-0001-duration-prediction/FP32/text-to-speech-en-0001-duration-prediction.xml
+  - name: FP32/text-to-speech-en-0001-duration-prediction.bin
+    size: 54275736
+    checksum: 87ee129edd1a132aebc8454f285a49b28268c0f6dd7621f75e46fe3a394605602492595fb8e2ff474b48fc59a7fe4ec4
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-to-speech-en-0001/text-to-speech-en-0001-duration-prediction/FP32/text-to-speech-en-0001-duration-prediction.bin
+  - name: FP16/text-to-speech-en-0001-duration-prediction.xml
+    size: 722722
+    checksum: 38fd15a4cd690ee34fd865cc811e8c0a195e371acc60af98b64ab62320c582ab177a9639156b8598c9c0c56280b4334a
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-to-speech-en-0001/text-to-speech-en-0001-duration-prediction/FP16/text-to-speech-en-0001-duration-prediction.xml
+  - name: FP16/text-to-speech-en-0001-duration-prediction.bin
+    size: 27137928
+    checksum: 03b5b3322250a11c8a6b31d8bc1eba79ca44c364900fc3d2732f972af1e75f5fba092e34b8ea8a3138d3f7533a3a2760
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-to-speech-en-0001/text-to-speech-en-0001-duration-prediction/FP16/text-to-speech-en-0001-duration-prediction.bin
+input_info:
+  - name: input_seq
+    shape: [1, 512]
+    layout: NC
+  - name: input_mask
+    shape: [1, 1, 512]
+    layout: NDC
+  - name: pos_mask
+    shape: [1, 1, 512, 512]
+    layout: NDCW
+framework: dldt
+license: https://raw.githubusercontent.com/openvinotoolkit/open_model_zoo/master/LICENSE

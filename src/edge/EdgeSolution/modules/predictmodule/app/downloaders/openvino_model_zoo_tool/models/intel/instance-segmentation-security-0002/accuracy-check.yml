@@ -1,0 +1,34 @@
+models:
+  - name: instance-segmentation-security-0002
+
+    launchers:
+      - framework: openvino
+        adapter:
+          type: mask_rcnn
+          classes_out: labels
+          boxes_out: boxes
+          raw_masks_out: masks
+
+    datasets:
+      - name: ms_coco_mask_rcnn_short_80_classes_without_background
+
+        preprocessing:
+          - type: resize
+            dst_width: 1024
+            dst_height: 768
+            aspect_ratio_scale: fit_to_window
+
+          - type: padding
+            dst_width: 1024
+            dst_height: 768
+            pad_type: right_bottom
+            use_numpy: True
+
+        metrics:
+          - name: AP@masks
+            type: coco_orig_segm_precision
+            reference: 0.3644
+
+          - name: AP@boxes
+            type: coco_orig_precision
+            reference: 0.3986

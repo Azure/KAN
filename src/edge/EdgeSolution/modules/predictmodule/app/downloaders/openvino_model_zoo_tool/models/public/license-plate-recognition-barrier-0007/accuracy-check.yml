@@ -1,0 +1,13 @@
+models:
+  - name: license-plate-recognition-barrier-0007
+
+    launchers:
+      - framework: openvino
+        adapter: lpr
+
+    datasets:
+      - name: synthetic_chinese_license_plates
+
+        metrics:
+          - type: character_recognition_accuracy
+            reference: 0.98

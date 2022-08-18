@@ -1,0 +1,37 @@
+# Copyright (c) 2022 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+description: >-
+  "mobilenet-v3-large-1.0-224-tf" is one of MobileNets V3 - next generation of MobileNets,
+  based on a combination of complementary search techniques as well as a novel architecture
+  design. "mobilenet-v3-large-1.0-224-tf" is targeted for high resource use cases.
+  For details see paper <https://arxiv.org/abs/1905.02244>.
+task_type: classification
+files:
+  - name: weights_mobilenet_v3_large_224_1.0_float.h5
+    size: 22661472
+    checksum: 4e7e0ecab69b15ecde1e3f4c494826cece07169bdc14d7da29eb07bef718c32f532d952d0b3113ffaca95c2d6d9577b5
+    original_source: https://storage.googleapis.com/tensorflow/keras-applications/mobilenet_v3/weights_mobilenet_v3_large_224_1.0_float.h5
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/public/2022.1/mobilenet-v3-large-1.0-224-tf/weights_mobilenet_v3_large_224_1.0_float.h5
+input_info:
+  - name: input_1
+    shape: [1, 224, 224, 3]
+    layout: NHWC
+model_optimizer_args:
+  - --reverse_input_channels
+  - --output=StatefulPartitionedCall/MobilenetV3large/Predictions/Softmax
+  - --saved_model_dir=$conv_dir/mobilenet_v3_large_224_1.0_float.savedmodel
+framework: tf
+quantizable: true
+license: https://raw.githubusercontent.com/tensorflow/models/master/LICENSE

@@ -1,0 +1,50 @@
+# Copyright (c) 2022 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+description: >-
+  ForwardTacotron is a model for the text-to-speech task. This model represents a
+  mel-spectrogram regression part.
+task_type: text_to_speech
+files:
+  - name: FP32/text-to-speech-en-multi-0001-regression.xml
+    size: 654386
+    checksum: 252bfee8ae41573d288958466c087a5c2c86ab4e297cf995400fe0c1028ad8882f12eb8d3f95d6f079a74b7d75c391bd
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-to-speech-en-multi-0001/text-to-speech-en-multi-0001-regression/FP32/text-to-speech-en-multi-0001-regression.xml
+  - name: FP32/text-to-speech-en-multi-0001-regression.bin
+    size: 20493548
+    checksum: d8a914f6b6b99a71fad683e62dfe7580d2ceefe384febcace5dab21031325a0358262190a78a52815190d6fa28a1b914
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-to-speech-en-multi-0001/text-to-speech-en-multi-0001-regression/FP32/text-to-speech-en-multi-0001-regression.bin
+  - name: FP16/text-to-speech-en-multi-0001-regression.xml
+    size: 797737
+    checksum: a790aa776a08b4ca60a5c21acade35d74d5d96d5f9d1bc53aec2bc42a5a8fa482a007b204accad5f3d26bbf0d8a411a4
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-to-speech-en-multi-0001/text-to-speech-en-multi-0001-regression/FP16/text-to-speech-en-multi-0001-regression.xml
+  - name: FP16/text-to-speech-en-multi-0001-regression.bin
+    size: 10246874
+    checksum: 792eff9e5625601174aae39473bdd98fdcb3fdc53612e416572af8319b63763fc4947d3eba8739f00682ff1787e07d35
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-to-speech-en-multi-0001/text-to-speech-en-multi-0001-regression/FP16/text-to-speech-en-multi-0001-regression.bin
+input_info:
+  - name: data
+    shape: [1, 512, 256]
+    layout: NCH
+  - name: data_mask
+    shape: [1, 1, 512]
+    layout: NDC
+  - name: pos_mask
+    shape: [1, 1, 512, 512]
+    layout: NDCW
+  - name: speaker_embedding
+    shape: [1, 2]
+    layout: ND
+framework: dldt
+license: https://raw.githubusercontent.com/openvinotoolkit/open_model_zoo/master/LICENSE

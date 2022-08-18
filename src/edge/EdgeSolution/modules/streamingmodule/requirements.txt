@@ -1,0 +1,9 @@
+networkx
+pydantic
+fastapi
+uvicorn
+opencv-python
+semantic_version
+requests
+httpx
+azure-iot-device

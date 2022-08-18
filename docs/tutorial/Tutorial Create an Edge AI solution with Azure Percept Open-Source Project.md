@@ -1,4 +1,4 @@
-**Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model**
+# Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model
 
 This tutorial demonstrates how you can create an Edge artificial intelligence (AI) solution with [Azure Percept Open-Source Project](https://microsoft.sharepoint-df.com/:w:/r/teams/AzurePerceptHCIDocumentation/_layouts/15/Doc.aspx?sourcedoc=%7B96d221ea-e664-4c0d-ab02-5950064512f1%7D&action=edit&wdLOR=c1AECDBAD-D20F-49B5-A84B-E8093397CFEE&wdPid=4321a745&share=IQHqIdKWZOYNTKsCWVAGRRLxAew6L2SjCJjgcXOqFtjo5FA) using the prebuilt model path.
 

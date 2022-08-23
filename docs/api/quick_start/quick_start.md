@@ -7,5 +7,5 @@ Symphony is designed with flexibility in mind. Depends on your hosting needs, th
 |--------|--------|--------|--------|--------|--------|
 | [Deploying a simulated temperature sensor Solution to an Azure IoT Edge device](./deploy_solution_to_azure_iot_edge.md) | **Yes** | **Yes** | **Yes** | - | - |
 | Deploying a Redis server to a K8s cluster | **Yes** | - | - | - | - |
-| Managing RTSP cameras attached to a gateway | **Yes**| **Yes**| - | - |  **Yes** |
+| [Managing RTSP cameras attached to a gateway](./manage_rtsp_cameras.md) | **Yes**| **Yes**| - | - |  **Yes** |
 

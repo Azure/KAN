@@ -16,7 +16,7 @@ You need the following items before getting started with the self-hosting setup 
 
 ![image](https://user-images.githubusercontent.com/10191339/186480918-c366a912-c036-4ee7-ada8-d7ca4ad4d054.png)
 
-3. Run the following 2 commands (one at a time) in your Azure Cloud CLI environment (note run in home, not in a subdirectory) to update the Helm version of your environment as there is an issue with the current version of Helm installed as part of Azure Cloud CLI environment:
+3. Run the following 2 commands (one at a time and in order) in your Azure Cloud CLI environment (note run in home, not in a subdirectory) to update the Helm version of your environment as there is an issue with the current version of Helm installed as part of Azure Cloud CLI environment:
 
 ```
     wget -O fix-helm-issue.sh 
@@ -27,7 +27,7 @@ You need the following items before getting started with the self-hosting setup 
 4. Run the following command to download the setup installer while substituting <download-url> with your desired download URL corresponding to a specific version of installer and POSS release using the table below:
 
 ```
-    `wget -O poss-installer.sh "download-url"`
+    wget -O poss-installer.sh "download-url"
 ```
 Installation Options:
 
@@ -39,11 +39,11 @@ Installation Options:
     
 **NOTE:** before starting the installation process by the above command, please make sure Azure CLI's az context is set to your desired Azure Subscription: 
     
-    `az account show` 
+    az account show
 
 If the subscription context is not correct, you can use the following command to set the right Azure subscription context: 
     
-    `az account set -s <your subscription name or id>`
+    az account set -s <your subscription name or id>
 
 5. Start the installation process by running the following command:
 
@@ -82,7 +82,7 @@ Use the LoadBalancer IP address as shown below:
 
 ![image](https://user-images.githubusercontent.com/10191339/186488705-03d3af9b-4536-4575-afe8-978b8a692a73.png)
 
-## Limit access to the VoE Portal
+## Limit access to the POSS Portal
 Once you have the LoadBalancer IP address as shown above:
 - Open the resource group associated with your AKS cluster (not the AKS cluster itself)
 - Open the network security (NSG) resource
@@ -95,11 +95,12 @@ In your Azure Cloud CLI instance run the following two commands, in order below,
 1. `helm uninstall voe`
 2. `helm uninstall symphony`
 
-## Join Azure GitHub org in order to access VoE GitHub
-Using your GitHub account, Sign in to the following GitHub group and select ‘Request to join’ –  https://repos.opensource.microsoft.com/orgs/Azure, search for PerceptOSS.
-    
-You should see “Your linked GitHub account is a member of the Azure GitHub organization.”
-If you don’t, Link your GitHub account to Microsoft here https://repos.opensource.microsoft.com/Azure/join
     
 ## Reporting Issues and Bugs
 Please report any issues or bugs you face using [repository's issues page](https://github.com/Azure/perceptoss/issues).
+
+## Next steps
+
+Now that you have successfully setup POSS experience onto your Kubernetes environment, we recommend the following resources:
+
+-   [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)

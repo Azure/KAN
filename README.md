@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Azure Percept Open-Source Project is a framework for creating, deploying, and operating environment-aware soltions at scale that use artificial intelligence (AI) at the edge with the control and flexibility of open-source natively on your environment. POSS is fully open-sourced and leverages the open-source software (OSS) community to deliver enhanced experiences. And, as a self-managed solution, you can host the experience on your own [Kubernetes](https://kubernetes.io/) clusters.
+Azure Percept Open-Source Project is a framework for creating, deploying, and operating environment-aware solutions at scale that use artificial intelligence (AI) at the edge with the control and flexibility of open-source natively on your environment. POSS is fully open-sourced and leverages the open-source software (OSS) community to deliver enhanced experiences. And, as a self-managed solution, you can host the experience on your own [Kubernetes](https://kubernetes.io/) clusters.
 
 POSS has a no- to low-code portal experience as well as APIs that can be used to build custom Edge AI applications. It supports running Edge AI apps by utilizing cameras and Edge devices with different Edge runtimes and accelerators across multiple locations at scale. Since it is designed with machine learning operations (MLOps) in mind, it provides support for active learning, continuous training, and data gathering using your machine learning (ML) models running at the edge.
 

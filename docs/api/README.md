@@ -12,6 +12,19 @@ POSS API is based on another OSS project – [Symphony](https://github.com/azure
 * [Solution](./object-model/solution.md) (```solution.solution.symphony```)
 * [Instance](./object-model/instance.md) (```instance.solution.symphony```)
 
+## Mapping between POSS Object Model and POSS Portal Concepts
+
+POSS Portal experience aims to provide a streamlined experience of creating and managing intelligent solutions leveraging cameras. Hence, we’ve hidden some POSS API concepts and renamed a few objects to make the UX more intuitive for target scenarios. The following table summarizes how portal concepts are mapped to API concepts:
+
+| API Object | Portal Concept |
+|--------|--------|
+| ```device.fabric.symphony``` | Camera |
+| ```instance.solution.symphony``` | Deployment |
+| ```model.ai.symphony``` | AI Model |
+| ```skill.ai.symphony``` | AI Skill |
+| ```solution.solution.symphony``` | There’s no Solutions surfaced on portal. Essentially, a portal operates on a single, system-maintained Solution object on behalf of the user. |
+| ```target.fabric.symphony``` | Compute Device | 
+
 ## Typical Workflows
 
 Depending on your focus, you may start with the AI workflow, the device workflow, or the solution workflow as described below. At the end, you want to create ```Instance``` objects which represent running deployments of your intelligent edge solution.

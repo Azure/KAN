@@ -1,24 +1,12 @@
 # POSS Setup Guide
-## Overview
-Percept Open-Source Project (POSS) is a framework that simplifies the journey of building/deploying/managing sensor-based edge AI solutions at scale natively on Kubernetes. It seamlessly allows you to create, deploy and operate edge AI solutions with the control and flexibility of open-source. Some of its capabilities are as follows:
-
-- Integrated developer Exp: easily build sensor-based edge AI apps using 1st/3rd ML models
-- Management Exp at scale: control plane on Kubernetes to centrally define, deploy and manage edge AI assets and apps with native support for Azure Arc and GitOps
-- Standard-based: Built on popular industrial standards/technologies such as Kubernetes, Dapr, ONVIF, MQTT, ONNX, Akri, kubectl, Helm, etc
-
 ## Pre-requisites
 You need the following items before getting started with the self-hosting setup experience:
-- An active Azure Subscription
-- A Resource group
+- An active Azure Subscription with Owner role access 
 - A Kubernetes cluster, accessible using Azure CLI. If you don't have an existing Kubernetes cluster, you can create one easily using Azure Kubernetes Service (AKS): [Quickstart: Deploy an AKS cluster by using the Azure portal - Azure Kubernetes Service | Microsoft Docs](https://docs.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli)
-- An IoT Hub with at lease one IoT Edge device (should be under the same subscription you are using P4OSS Installer below). If you don't have IoT Hub or IoT edge device:
-    - Create an IoT hub by going to the Azure portal search for IoT Hub and create new, follow the defaults.
-    - Add IoT Edge device, Go to your IoT Hub --> IoTEdge --> Add IoT Edge device --> Go with the defaults
-- Once added click on your IoT edge device and save the primary connection string, you will need it if you choose to run it as an Azure VM.
-- If you don't have an edge device already (like Percept on HCI VM), you can use an Azure VM with IoTEdge installed and configured on it easily using the following guide: Run Azure IoT Edge on Ubuntu Virtual Machines | Microsoft Docs, when following the Arm template to create the VM:
-    - Add the connection string that you saved in the previus step. 
-    - Type Standard_DS3_v2 for the VM size instead of the DS1 which is the default
-- Add a new role assignment to your subscription for "Storage account contributor", click on your subscription --> Access control --> Add role assignment (see screenshot) --> search for "Storage account contributor" (not the classic one) -->click next --> Add member --> select your account --> review and assign
+- An IoT Hub account with at least one IoT Edge device. If you don't have any IoT Edge device onboarded onto Azure IoT Hub you can follow [this guide to create an IoT Edge device using an Azure VM](CreateIoTEdgeDevice.md). Please note that if you have already used Percept on Azure Stack HCI's WAC Extention to onboard a VM, the VM is already automatically onboarded as an IoT Edge device onto Azure IoT Hub. 
+
+
+- Have "Storage account contributor" role assignment under your subscription. If you don't have the role assignment, you can add a new role assignment to your subscription for "Storage account contributor" by clicking on your subscription --> Access control --> Add role assignment (see screenshot) --> search for "Storage account contributor" (not the classic one) --> click next --> Add member --> select your account --> review and assign
 
 ![image](https://user-images.githubusercontent.com/10191339/186480363-7eb2a5fa-66e0-49f5-a4c6-7b9fc0caee9b.png)
 

@@ -11,7 +11,7 @@ In this quickstart you learn how to:
 * Install and start the IoT Edge runtime on your virtual device.
 
 
-![Diagram - Quickstart architecture for device and cloud](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/iot-edge/media/quickstart/install-edge-full.png)
+![Diagram - Quickstart architecture for device and cloud](https://raw.githubusercontent.com/MicrosoftDocs/azure-docs/main/articles/iot-edge/media/quickstart/install-edge-full.png)
 
 This quickstart walks you through creating a Linux virtual machine that's configured to be an IoT Edge device. Then, you deploy a module from the Azure portal to your device. The module used in this quickstart is a simulated sensor that generates temperature, humidity, and pressure data. The other Azure IoT Edge tutorials build upon the work you do here by deploying additional modules that analyze the simulated data for business insights.
 
@@ -25,9 +25,9 @@ To start Azure Cloud Shell:
 
 | Option | Example/Link |
 |-----------------------------------------------|---|
-| Select **Try It** in the upper-right corner of a code block. Selecting **Try It** doesn't automatically copy the code to Cloud Shell. | ![Example of Try It for Azure Cloud Shell](https://github.com/MicrosoftDocs/azure-docs/blob/master/includes/media/cloud-shell-try-it/hdi-azure-cli-try-it.png) |
-| Go to [https://shell.azure.com](https://shell.azure.com), or select the **Launch Cloud Shell** button to open Cloud Shell in your browser. | [![Launch Cloud Shell in a new window](https://github.com/MicrosoftDocs/azure-docs/blob/master/includes/media/cloud-shell-try-it/hdi-launch-cloud-shell.png)](https://shell.azure.com) |
-| Select the **Cloud Shell** button on the menu bar at the upper right in the [Azure portal](https://portal.azure.com). | ![Cloud Shell button in the Azure portal](https://github.com/MicrosoftDocs/azure-docs/blob/master/includes/media/cloud-shell-try-it/hdi-cloud-shell-menu.png) |
+| Select **Try It** in the upper-right corner of a code block. Selecting **Try It** doesn't automatically copy the code to Cloud Shell. | ![Example of Try It for Azure Cloud Shell](https://raw.githubusercontent.com/MicrosoftDocs/azure-docs/main/includes/media/cloud-shell-try-it/hdi-azure-cli-try-it.png) |
+| Go to [https://shell.azure.com](https://shell.azure.com), or select the **Launch Cloud Shell** button to open Cloud Shell in your browser. | [![Launch Cloud Shell in a new window](https://raw.githubusercontent.com/MicrosoftDocs/azure-docs/main/includes/media/cloud-shell-try-it/hdi-launch-cloud-shell.png)](https://shell.azure.com) |
+| Select the **Cloud Shell** button on the menu bar at the upper right in the [Azure portal](https://portal.azure.com). | ![Cloud Shell button in the Azure portal](https://raw.githubusercontent.com/MicrosoftDocs/azure-docs/main/includes/media/cloud-shell-try-it/hdi-cloud-shell-menu.png) |
 
 To run the code in this article in Azure Cloud Shell:
 
@@ -72,7 +72,7 @@ Cloud resources:
 
 Start the quickstart by creating an IoT hub with Azure CLI.
 
-![Diagram - Create an IoT hub in the cloud](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/iot-edge/media/quickstart-linux/create-iot-hub.png)
+![Diagram - Create an IoT hub in the cloud](https://raw.githubusercontent.com/MicrosoftDocs/azure-docs/main/articles/iot-edge/media/quickstart-linux/create-iot-hub.png)
 
 The free level of IoT Hub works for this quickstart. If you've used IoT Hub in the past and already have a hub created, you can use that IoT hub.
 
@@ -88,7 +88,7 @@ The following code creates a free **F1** hub in the resource group **IoTEdgeReso
 
 Register an IoT Edge device with your newly created IoT hub.
 
-![Diagram - Register a device with an IoT Hub identity](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/iot-edge/media/quickstart-linux/register-device.png)
+![Diagram - Register a device with an IoT Hub identity](https://raw.githubusercontent.com/MicrosoftDocs/azure-docs/main/articles/iot-edge/media/quickstart-linux/register-device.png)
 
 Create a device identity for your IoT Edge device so that it can communicate with your IoT hub. The device identity lives in the cloud, and you use a unique device connection string to associate a physical device to a device identity.
 
@@ -108,13 +108,13 @@ Since IoT Edge devices behave and can be managed differently than typical IoT de
    az iot hub device-identity connection-string show --device-id myEdgeDevice --hub-name {hub_name}
    ```
 
-   ![View connection string from CLI output](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/iot-edge/media/quickstart/retrieve-connection-string.png)
+   ![View connection string from CLI output](https://raw.githubusercontent.com/MicrosoftDocs/azure-docs/main/articles/iot-edge/media/quickstart/retrieve-connection-string.png)
 
 ## Configure your IoT Edge device
 
 Create a virtual machine with the Azure IoT Edge runtime on it.
 
-![Diagram - Start the runtime on device](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/iot-edge/media/quickstart-linux/start-runtime.png)
+![Diagram - Start the runtime on device](https://raw.githubusercontent.com/MicrosoftDocs/azure-docs/main/articles/iot-edge/media/quickstart-linux/start-runtime.png)
 
 ### Deploy the IoT Edge device
 
@@ -131,8 +131,6 @@ ARM template to deploy a VM with IoT Edge pre-installed (via cloud-init)
 </a>
 
 
-
-The IoT Edge runtime is deployed on all IoT Edge devices. It has three components. The *IoT Edge security daemon* starts each time an IoT Edge device boots and bootstraps the device by starting the IoT Edge agent. The *IoT Edge agent* facilitates deployment and monitoring of modules on the IoT Edge device, including the IoT Edge hub. The *IoT Edge hub* manages communications between modules on the IoT Edge device, and between the device and IoT Hub.
-
 During the runtime configuration, you provide a device connection string. This is the string that you retrieved from the Azure CLI. This string associates your physical device with the IoT Edge device identity in Azure.
 
+The IoT Edge runtime is deployed on all IoT Edge devices. It has three components. The *IoT Edge security daemon* starts each time an IoT Edge device boots and bootstraps the device by starting the IoT Edge agent. The *IoT Edge agent* facilitates deployment and monitoring of modules on the IoT Edge device, including the IoT Edge hub. The *IoT Edge hub* manages communications between modules on the IoT Edge device, and between the device and IoT Hub.

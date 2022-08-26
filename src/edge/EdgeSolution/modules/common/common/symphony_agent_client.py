@@ -110,8 +110,8 @@ class SymphonyAgentClient:
     def post_instance_status(self, name, status_code, status_description):
         self._post('Instance', name, data={"status_code": status_code, "status_description": status_description})
 
-    def post_instance_fps(self, name, fps):
-        self._post('Instance', name, data={"fps": str(fps)})
+    def post_instance_fps(self, name, skill_name, fps):
+        self._post('Instance', name, data={f'fps_{skill_name}': str(fps)})
 
 if __name__ == '__main__':
 

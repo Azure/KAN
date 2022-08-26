@@ -46,13 +46,16 @@ COPY common/common /app/common
 
 # this module
 COPY predictmodule/app/*.py /app/
-COPY predictmodule/app/models/*.py /app/models/
+#COPY predictmodule/app/models/*.py /app/models/
 COPY predictmodule/app/customvision /app/customvision
 COPY predictmodule/app/downloaders /app/downloaders
 
 
 
 WORKDIR /app/
+
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
 
 CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5004"]
 

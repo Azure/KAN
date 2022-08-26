@@ -51,7 +51,7 @@ class Source(Element):
 class Export(Element):
     def __init__(self):
         super().__init__()
-        self._q = queue.Queue(maxsize=1)
+        self._q = queue.Queue(maxsize=2)
 
     def loop(self):
         while True:
@@ -72,7 +72,7 @@ class Export(Element):
 class Transform(Element):
     def __init__(self):
         super().__init__()
-        self._q = queue.Queue(maxsize=1)
+        self._q = queue.Queue(maxsize=2)
 
     def loop(self):
         while True:

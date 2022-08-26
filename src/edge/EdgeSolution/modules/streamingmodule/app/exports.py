@@ -11,6 +11,7 @@ import cv2
 from enum import Enum, auto
 import threading
 import subprocess
+import queue
 
 import httpx
 
@@ -69,8 +70,11 @@ class VideoSnippetExport(Export):
                 fps = len(self.imgs) / self.recording_duration
                 h, w, _ = self.imgs[0].shape
 
-                basename_ori = f"{self.filename_prefix}-{datetime.datetime.fromtimestamp(time.time()).isoformat()}-ori.mp4"
-                basename = f"{self.filename_prefix}-{datetime.datetime.fromtimestamp(time.time()).isoformat()}.mp4"
+                # timestamp of (2100-01-01 - timestamp) * 1000 
+                ID = str(int((4102416000 - time.time()) * 1000))
+
+                basename_ori = f"{self.filename_prefix}-{ID}-{datetime.datetime.fromtimestamp(time.time()).isoformat()}-ori.mp4"
+                basename = f"{self.filename_prefix}-{ID}-{datetime.datetime.fromtimestamp(time.time()).isoformat()}.mp4"
 
                 local_filename_ori = f'/tmp/{basename_ori}'
                 local_filename = f'/tmp/{basename}'
@@ -85,7 +89,7 @@ class VideoSnippetExport(Export):
                 subprocess.check_output(f'ffmpeg -i {local_filename_ori} {local_filename}'.split())
 
                 # Upload to azure blob storage's container
-                print('uploading video snippet to blobstorage', flush=True)
+                print('VideoSnippetExport: uploading video snippet to blobstorage', flush=True)
                 client = get_blob_client(blob_filename)
                 with open(local_filename, 'rb') as f:
                     client.upload_blob(f)
@@ -137,16 +141,34 @@ class IothubExport(Export):
         self.delay_buffer = float(delay_buffer)
         
         self.last_timestamp = -1
-         
+
+        self._export_q = queue.Queue(30)
+        
+
+        def _exporter():
+            while True:
+                j = self._export_q.get()
+                try:
+                    print('IotHubExport: send a message to metrics')
+                    iot.send_message_to_output(j, 'metrics')
+                except Exception as e:
+                    print(f"IotHubExport: An error occurred while sending message to metrics: {e}.")
+
+        self._export_thread = threading.Thread(target=_exporter)
+        self._export_thread.start()
+
 
     def process(self, frame):
 
         cur_timestamp = time.time()
         if cur_timestamp > self.last_timestamp + self.delay_buffer:
 
-            #print('exporting to iothub')
-            iot.send_message_to_output(frame.json(), 'metrics')
-            self.last_timestamp = cur_timestamp
+            if len(frame.insights_meta.objects_meta) > 0:
+                if not self._export_q.full():
+                    self._export_q.put(frame.json())
+                else:
+                    print(f'IotHubExport: drop result since queue is full', flush=True)
+                self.last_timestamp = cur_timestamp
 
 
 class IotedgeExport(Export):
@@ -157,41 +179,36 @@ class IotedgeExport(Export):
 
         self.last_timestamp = -1
 
+        self._export_q = queue.Queue(30)
 
-    def process(self, frame):
-        cur_timestamp = time.time()
-        if cur_timestamp > self.last_timestamp + self.delay_buffer:
+        def _exporter():
+            while True:
+                j = self._export_q.get()
+                try:
+                    print('IotEdgeExport: send a message to localmetrics')
+                    iot.send_message_to_output(j, 'localmetrics')
+                except Exception as e:
+                    print(f"IotEdgeExport: An error occurred while sending message to localmetrics: {e}.")        
 
-            #FIXME
-            #print('exporting to iotedge', self.module_name)
-            iot.send_message_to_output(frame.json(), 'localmetrics')
 
-            self.last_timestamp = cur_timestamp
+        self._export_thread = threading.Thread(target=_exporter)
+        self._export_thread.start()
 
-
-class HttpExportWithDelayBuffer(Export):
     
-    def __init__(self, url, delay_buffer=6):
-        
-        super().__init__()
-        self.delay_buffer = float(delay_buffer)
-
-        self.last_timestamp = -1
-
-        self.url = url
-
 
     def process(self, frame):
         cur_timestamp = time.time()
         if cur_timestamp > self.last_timestamp + self.delay_buffer:
 
-            #FIXME
-            print('send a request to ', self.url)
-            try:
-                httpx.post(self.url, json=frame.json())
-            except httpx.RequestError as exc:
-                print(f"An error occurred while requesting {exc.request.url!r}.")
-            self.last_timestamp = cur_timestamp
+            if len(frame.insights_meta.objects_meta) > 0:
+                if not self._export_q.full():
+                    self._export_q.put(frame.json())
+                else:
+                    print(f'IotEdgeExport: drop result since queue is full', flush=True)
+                self.last_timestamp = cur_timestamp
+
+
+
 
 class HttpExport(Export):
     
@@ -199,14 +216,30 @@ class HttpExport(Export):
         super().__init__()
         self.url = url
 
+        
+        self._export_q = queue.Queue(30)
+
+        def _exporter():
+            while True:
+                j = self._export_q.get()
+                try:
+                    print('HttpExport: send a request to ', self.url)
+                    httpx.post(self.url, json=j)
+                except httpx.RequestError as exc:
+                    print(f"An error occurred while requesting {exc.request.url!r}.")
+
+        
+        self._export_thread = threading.Thread(target=_exporter)
+        self._export_thread.start()
+        
 
     def process(self, frame):
     
-        print('send a request to ', self.url)
-        try:
-            httpx.post(self.url, json=frame.json())
-        except httpx.RequestError as exc:
-            print(f"An error occurred while requesting {exc.request.url!r}.")
+        if not self._export_q.full():
+            self._export_q.put(frame.json())
+        else:
+            print(f'HttpExport: drop result since queue is full', flush=True)
+        
     
 
 

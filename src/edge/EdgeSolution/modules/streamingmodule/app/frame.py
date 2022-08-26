@@ -59,3 +59,6 @@ class Frame(BaseModel):
     timestamp: float
     frame_id: str
     instance_id: str = INSTANCE
+    skill_id: str
+    device_id: str
+    datetime: str

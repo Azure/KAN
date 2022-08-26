@@ -3,7 +3,11 @@
 
 from platform import node
 from pydantic import BaseModel, Field, Extra
-from typing import List, Literal
+from typing import List
+try:
+    from typing import Literal
+except:
+    from typing_extensions import Literal
 
 from common.symphony_params import crd_params
 

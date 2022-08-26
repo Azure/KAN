@@ -30,7 +30,7 @@ STATUS_INITIALIZE_MANAGERMODULE = '1'
 STATUS_UNITIALIZE_PREDICTMODULE = '2'
 STATUS_INITIALIZE_STREAMINGMODULE = '3'
 
-def process_skill(skill):
+def process_skill(skill, skill_name):
 
 
 
@@ -39,6 +39,7 @@ def process_skill(skill):
     nodes = []
     edges = []
     model_configs = []
+
 
     for skill_node in skill_spec.nodes:
         
@@ -87,17 +88,18 @@ def process_skill(skill):
                 while True:
                     try:
                         res = client.export_model(model_name)
-                        logging.debug(res)
-                        if len(res) > 0:
+                        if res is None or len(res) == 0:
+                            print(f'Model {model_name} is Not Ready to Export', flush=True)
+                        elif len(res) > 0:
                             m = res[0]
                             if m['status'] == 'Exporting':
-                                print('Exporting Model')
+                                print(f'Exporting Model {model_name}')
                             elif m['status'] == 'Done':
                                 download_uri = m['downloadUri']
                                 break
                                 
                     except Exception as e:
-                        print(e)
+                        print(e, flush=True)
                         
                     time.sleep(3)
                     
@@ -130,7 +132,17 @@ def process_skill(skill):
                 name=node_name,
                 configurations=configurations
             )
-            
+        elif skill_node.type == 'source':
+
+            configurations = skill_node.configurations.copy()
+            configurations['skill_name'] = skill_name
+
+            node = Node(
+                id=skill_node.id,
+                type=skill_node.type,
+                name=skill_node.name,
+                configurations=configurations
+            )
 
         else:
             node = Node(
@@ -162,15 +174,23 @@ if __name__ == '__main__':
     raw_aiskills = os.environ.get('AISKILLS')
     instance_name = os.environ.get('INSTANCE')
 
-    # update status
-    client.post_instance_status(instance_name, STATUS_INITIALIZE_MANAGERMODULE, "init manager module")
+    print(raw_aiskills)
 
     
-    instance = client.get_instance(instance_name)
+    while True:    
+        instance = client.get_instance(instance_name)
+        if instance is None:
+            print('Getting instance', instance_name, flush=True)
+            time.sleep(1)
+        else:
+            break
+        
     instance_spec = InstanceSpec(**instance['spec'])
     print(instance_spec)
 
-    
+    # update status
+    client.post_instance_status(instance_name, STATUS_INITIALIZE_MANAGERMODULE, "init manager module")
+
 
     print('ok', flush=True)
     
@@ -183,7 +203,7 @@ if __name__ == '__main__':
         skill = client.get_skill_with_instance_name_and_alias(skill_name, instance_name, skill_alias)
         print(f'skill_name: {skill_name}, skill_alias: {skill_alias}', flush=True)
         print(skill, flush=True)
-        new_cascade_config, new_model_configs = process_skill(skill)
+        new_cascade_config, new_model_configs = process_skill(skill, skill_name)
 
         cascade_configs.append(new_cascade_config)
         model_configs += new_model_configs

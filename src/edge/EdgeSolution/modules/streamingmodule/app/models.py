@@ -11,6 +11,8 @@ from frame import Frame, Bbox, ObjectMeta, Attribute
 from common.voe_ipc import PredictModule
 from common.voe_utils import upload_relabel_image
 
+import cv2
+
 import time
 
 class FakeModel(Model):
@@ -65,14 +67,23 @@ class ObjectDetectionModel(Model):
 
     def process(self, frame):
 
-        img = frame.image.image_pointer
-        width = frame.image.properties.width
-        height = frame.image.properties.height
+        # FIXME should resize according to model input size
+        img = cv2.resize(frame.image.image_pointer, (300, 300))
+        width = 300
+        height = 300
+        #img = frame.image.image_pointer
+        #width = frame.image.properties.width
+        #height = frame.image.properties.height
         #FIXME fix the url
         try:
             res = requests.post(PredictModule.Url + '/predict/'+self.model, files={'file': img}, params={'width': width, 'height': height})
+            if res.status_code != 200:
+                print('failed to send the image to predict module', flush=True)
+                return
         except:
-            return
+            return 
+
+        
         #print(res)
         #print(res.json())
 

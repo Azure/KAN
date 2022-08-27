@@ -2,6 +2,7 @@
 ## Pre-requisites
 You need the following items before getting started with the self-hosting setup experience:
 - An active Azure Subscription with Owner role access 
+- A Resource Group created in a location where [Azure Custom Vision](https://azure.microsoft.com/en-us/global-infrastructure/services/?products=cognitive-services&regions=all) is available.
 - A Kubernetes cluster, accessible using Azure CLI. If you don't have an existing Kubernetes cluster, you can create one easily using Azure Kubernetes Service (AKS): [Quickstart: Deploy an AKS cluster by using the Azure portal - Azure Kubernetes Service | Microsoft Docs](https://docs.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli)
 - An IoT Hub account with at least one IoT Edge device. If you don't have any IoT Edge device onboarded onto Azure IoT Hub you can follow [this guide to create an IoT Edge device using an Azure VM](CreateIoTEdgeDevice.md). Please note that if you have already used Percept on Azure Stack HCI's WAC Extention to onboard a VM, the VM is already automatically onboarded as an IoT Edge device onto Azure IoT Hub. 
 
@@ -34,7 +35,7 @@ Installation Options:
 
 |Setup Installer Version	|POSS Version	|Download URL	|Supported Accelerators for Edge Workloads	|Released Date|
 |---------------------------|---------------|---------------|-------------------------------------------|-------------|
-|0.3.0	|0.37.12	|https://p4efiles.blob.core.windows.net/installers/Private-Alpha/POSS-V0.37.12-Installer0.3.0.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (e.g. Orin), x64 CPU	|08/23/2022 |
+|0.38.0	|0.38.0 |https://p4efiles.blob.core.windows.net/installers/Private-Alpha/POSS-V0.38.0-Installer0.38.0_Test.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (e.g. Orin), x64 CPU	|08/26/2022 |
  
     
 **NOTE:** before starting the installation process by the above command, please make sure Azure CLI's az context is set to your desired Azure Subscription: 

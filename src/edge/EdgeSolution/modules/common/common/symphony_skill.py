@@ -1,7 +1,11 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-from typing import Union, Literal, Optional
+from typing import Union, Optional
+try:
+    from typing import Literal
+except:
+    from typing_extensions import Literal
 
 from pydantic import BaseModel
 

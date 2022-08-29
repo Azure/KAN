@@ -1,54 +1,6 @@
 apiVersion: ai.symphony/v1
 kind: Model
 metadata:
-  name: "face-detection"
-spec:
-  properties:
-    displayName: "face-detection-retail-0004"
-    model.type: "modelzoo"
-    model.subtype: "intel.ObjectDetection"
-    model.project: "face-detection-retail-0004"
-    model.endpoint: ""
-    model.version.1: ""
-    model.symphony.id: "face-detection"
-    tags: "['face']"
-    state: trained
----
-apiVersion: ai.symphony/v1
-kind: Model
-metadata:
-  name: "emotion-recognition"
-spec:
-  properties:
-    displayName: "emotions-recognition-retail-0003"
-    model.type: "modelzoo"
-    model.subtype: "intel.Classification"
-    model.project: "emotions-recognition-retail-0003"
-    model.endpoint: ""
-    model.version.1: ""
-    model.symphony.id: "emotion-recognition"
-    tags: "['neutral', 'happy', 'sad', 'surprise', 'anger']"
-    state: trained
----
-apiVersion: ai.symphony/v1
-kind: Model
-metadata:
-  name: "age-gender-recognition"
-spec:
-  properties:
-    displayName: "age-gender-recognition-retail-0013"
-    model.type: "modelzoo"
-    model.subtype: "intel.Classification"
-    model.project: "age-gender-recognition-retail-0013"
-    model.endpoint: ""
-    model.version.1: ""
-    model.symphony.id: "age-gender-recognition"
-    tags: "['female', 'male']"
-    state: trained
----
-apiVersion: ai.symphony/v1
-kind: Model
-metadata:
   name: "vehicle-attributes-recognition"
 spec:
   properties:
@@ -91,5 +43,5 @@ spec:
     model.endpoint: ""
     model.version.1: ""
     model.symphony.id: "person-detection"
-    tags: "['face']"
+    tags: "['person']"
     state: trained

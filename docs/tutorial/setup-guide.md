@@ -21,7 +21,7 @@ You need the following items before getting started with the self-hosting setup 
 
 ```
     wget -O fix-helm-issue.sh 
-    "https://p4efiles.blob.core.windows.net/installers/Private-Alpha/fix-helm-issue.sh"
+    "https://possfiles.blob.core.windows.net/setup/Private-Alpha/fix-helm-issue.sh"
     source fix-helm-issue.sh
 ```
 
@@ -35,7 +35,7 @@ Installation Options:
 
 |Setup Installer Version	|POSS Version	|Download URL	|Supported Accelerators for Edge Workloads	|Released Date|
 |---------------------------|---------------|---------------|-------------------------------------------|-------------|
-|0.38.0	|0.38.0 |https://p4efiles.blob.core.windows.net/installers/Private-Alpha/POSS-V0.38.0-Installer0.38.0_Test.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (e.g. Orin), x64 CPU	|08/26/2022 |
+|0.38.0	|0.38.0 |https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.0-Installer0.38.0.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (e.g. Orin), x64 CPU	|08/29/2022 |
  
     
 **NOTE:** before starting the installation process by the above command, please make sure Azure CLI's az context is set to your desired Azure Subscription: 

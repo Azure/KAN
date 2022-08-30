@@ -35,6 +35,7 @@ Installation Options:
 
 |Setup Installer Version	|POSS Version	|Download URL	|Supported Accelerators for Edge Workloads	|Released Date|
 |---------------------------|---------------|---------------|-------------------------------------------|-------------|
+|0.38.1	|0.38.0 |https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.0-Installer0.38.1.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (e.g. Orin), x64 CPU	|08/30/2022 |
 |0.38.0	|0.38.0 |https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.0-Installer0.38.0.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (e.g. Orin), x64 CPU	|08/29/2022 |
  
     
@@ -75,7 +76,9 @@ If the subscription context is not correct, you can use the following command to
 ![image](https://user-images.githubusercontent.com/10191339/186488549-4c74bbc5-4f49-4bb7-a103-18e6452adfca.png)
 
 
-The installation will take a couple of minutes. Once completed you can find the IP address of the portal to access it by running the following command in your Azure Cloud CLI command line: 
+The installation will take a couple of minutes. **Note:** If you face any issues towards the end of the installation to download our Helm charts to install either "symphony" or "voe", please uninstall the experience using the commands below and retry running the installer script in a couple of minutes. Azure is facing some issues with the Azure Container Registry not handling all download requests successfully due to high load so trying again in a couple of minutes can solve your issue.  
+    
+Once completed you can find the IP address of the portal to access it by running the following command in your Azure Cloud CLI command line: 
 
 ``kubectl get svc -A``
 

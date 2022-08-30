@@ -20,8 +20,8 @@ The five major steps we will cover in this tutorial are:
 -   Access to the latest version of one of these supported browsers:
     -   Microsoft Edge
     -   Google Chrome
--   An RTSP IP camera accessible by your IoT Edge device. If you don’t have one, you can use the RTSP that simulates a video file [here.](http://rtsp://20.69.91.148:554/media/people.mkv)
--   You must have configured an Azure Percept Open-Source Project in your environment. If you haven’t, follow the steps in the setup [guide](https://teams.microsoft.com/l/channel/19%3Ab11efeeb04fe442394f09e3fd3d8c55c%40thread.tacv2/tab%3A%3Aba057fe6-1fe9-4743-853f-0bc337b5403b?groupId=ed14a293-7cb0-409c-b605-643ecc7cba7d&tenantId=72f988bf-86f1-41af-91ab-2d7cd011db47&allowXTenantAccess=false).
+-   An RTSP IP camera accessible by your IoT Edge device.
+-   You must have configured an Azure Percept Open-Source Project in your environment. If you haven’t, follow the steps in the setup [guide](https://github.com/Azure/PerceptOSS/blob/main/docs/tutorial/setup-guide.md).
 -   Launch the Azure Percept Open-Source Project portal. To do this, paste the link displayed at the end of setup into your browser.
 
 ## Step 1: Connect a compute device to power your Edge AI solution

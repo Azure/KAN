@@ -20,8 +20,7 @@ You need the following items before getting started with the self-hosting setup 
 3. Run the following 2 commands (one at a time and in order) in your Azure Cloud CLI environment (note run in home, not in a subdirectory) to update the Helm version of your environment as there is an issue with the current version of Helm installed as part of Azure Cloud CLI environment:
 
 ```
-    wget -O fix-helm-issue.sh 
-    "https://possfiles.blob.core.windows.net/setup/Private-Alpha/fix-helm-issue.sh"
+    wget -O fix-helm-issue.sh "https://possfiles.blob.core.windows.net/setup/Private-Alpha/fix-helm-issue.sh"
     source fix-helm-issue.sh
 ```
 

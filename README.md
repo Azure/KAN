@@ -32,9 +32,12 @@ Follow [this document](docs/tutorial/setup-guide.md) to get started in minutes.
 
 # How It Works
 
-POSS has three high-level components: portal, API and agent.
+POSS has three high-level components: portal, controller-API and agent. You can interact with POSS through its portal, Kuberntes tools like [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/), and [Azure Arc](https://docs.microsoft.com/en-us/azure/azure-arc/overview) through [GitOps](https://docs.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-gitops-flux2), as shown in the following diagram.
+
+![poss-architecture](./docs/images/poss-architecture.png)
+
 * **Portal** provides an intuitive graphic interface for users to create, edit and manage their intelligent edge payloads. It offers an AI model zoo, a drag-n-drop AI skill editor, live camera previews and many other features.
-* **API** is a Kubernetes operator that manages states of objects of a POSS object model. Read more about POSS API [here](./docs/api/README.md).
+* **Controller-API** is a Kubernetes operator that manages states of objects of a POSS object model (code named Symphony). Read more about POSS API [here](./docs/api/README.md).
 * **Agent** offers a number of services to edge payloads, such as retrieving new AI skill definitions and reporting object states.
 
 # Contributing

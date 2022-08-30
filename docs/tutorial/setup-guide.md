@@ -89,9 +89,8 @@ Use the LoadBalancer IP address as shown below:
 Once you have the LoadBalancer IP address as shown above:
 - Open the resource group associated with your AKS cluster (not the AKS cluster itself)
 - Open the network security (NSG) resource
-- For each line that references the LoadBalancer IP address, click on the inbound security rule, change the source IP address range to corpnet+your home IP
-    - 131.107.0.0/16,<your_home_ip_address>/20
-    - e.g. 131.107.0.0/16,174.61.128.0/20    
+- For each line that references the LoadBalancer IP address, click on the inbound security rule, change the source IP address range to the network you want to allow access to the portal, for example your home or corporate IP address space in CIDR notation.
+    - e.g. 203.0.113.0/24
 
 ## Uninstalling the experience
 In your Azure Cloud CLI instance run the following two commands, in order below, to uninstall POSS:

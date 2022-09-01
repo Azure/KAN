@@ -5,7 +5,7 @@ symphonyAgentVersion: "0.38.0"
 image:
   pullPolicy: Always
   image: possprod.azurecr.io/webmodule
-  tag: "0.38.0-amd64"
+  tag: "0.38.1-amd64"
 webmodule:
   videoSource: opencv
 storage:

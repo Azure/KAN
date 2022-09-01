@@ -86,7 +86,7 @@ class VideoSnippetExport(Export):
                     out.write(img)
                 out.release()
 
-                subprocess.check_output(f'ffmpeg -i {local_filename_ori} {local_filename}'.split())
+                subprocess.check_output(['ffmpeg', '-i', local_filename_ori, local_filename])
 
                 # Upload to azure blob storage's container
                 print('VideoSnippetExport: uploading video snippet to blobstorage', flush=True)

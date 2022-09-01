@@ -1,0 +1,60 @@
+# syntax = docker/dockerfile:experimental
+# =========================================================
+# === Build Static UI                                   ===
+# =========================================================
+FROM node:16 as builder
+
+WORKDIR /app
+COPY ui/package.json .
+COPY ui/yarn.lock .
+RUN yarn install --production
+COPY ui/tsconfig.json .
+COPY ui/src/ ./src
+COPY ui/public/ ./public
+RUN yarn build
+
+ARG GIT_LOG
+RUN echo ${GIT_LOG} > ./build/static/git_sha1.txt
+
+# =========================================================
+# === Build Backend                                     ===
+# =========================================================
+FROM intelligentedge/python3-opencv:py3.8.6-cv4.4.0.44-arm64v8
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    libffi-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# =========================================================
+# === Build Backend Production                          ===
+# =========================================================
+
+WORKDIR /app
+
+RUN python -m pip install --upgrade pip
+
+COPY backend/requirements/core.txt requirements/core.txt
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install -r ./requirements/core.txt
+
+COPY backend/requirements/base.txt requirements/base.txt
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install -r ./requirements/base.txt
+
+COPY backend/requirements/production-arm.txt requirements/production-arm.txt
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install -r ./requirements/production-arm.txt
+
+COPY backend/manage.py .
+COPY backend/config.py .
+COPY backend/vision_on_edge vision_on_edge
+COPY backend/configs configs
+RUN python manage.py makemigrations
+RUN python manage.py migrate
+
+COPY --from=builder /app/build vision_on_edge/ui_production
+EXPOSE 8000
+
+CMD python manage.py runserver 0.0.0.0:8000

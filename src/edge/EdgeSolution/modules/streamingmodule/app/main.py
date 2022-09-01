@@ -10,11 +10,13 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 from stream import Stream
+import time
 
 from common.voe_status import ModuleStatus, StatusEnum
 from common.voe_ipc import StreamingModule
 
 
+time.sleep(5)
 app = FastAPI()
 
 

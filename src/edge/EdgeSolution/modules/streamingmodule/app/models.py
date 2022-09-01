@@ -86,9 +86,10 @@ class ObjectDetectionModel(Model):
         
         #print(res)
         #print(res.json())
-
-        res = ObjectDetectionModelResult(**res.json())
-
+        try:
+            res = ObjectDetectionModelResult(**res.json())
+        except:
+            return
         for obj in res.objects:
 
             x1 = max(0, obj.bbox.l)

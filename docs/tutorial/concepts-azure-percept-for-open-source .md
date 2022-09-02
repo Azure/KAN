@@ -9,10 +9,9 @@ This article provides you with a deep understanding of Azure Percept for Open-So
 3.  Models
 4.  AI Skills
 5.  Deployments
-
 ![](../assets/13fc6b9fb936ac86d478fecb8e519eca.png)
 
-After reviewing this article, visit the [Tutorial: Create an Edge AI solution with Azure Percept for Open-Source Project](https://microsoft.sharepoint-df.com/:w:/t/AzurePerceptHCIDocumentation/ERF8mxgtOqhIt2YJWFafuZoBC6kZ6hC-iRAMuCJeyZjD-w?e=Bb28qo) for step-by-step guidance on how to create an end-to-end Edge artificial intelligence (AI) solution.
+After reviewing this article, visit the [Tutorial: Create an Edge AI solution with Azure Percept for Open-Source Project](https://github.com/Azure/PerceptOSS/blob/main/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md) for step-by-step guidance on how to create an end-to-end Edge artificial intelligence (AI) solution.
 
 ## 1. **Compute Devices**
 
@@ -48,11 +47,11 @@ The following table provides general guidelines for your hardware options:
 
 | **Acceleration** | **Simple Model** | **Complex Model** | **Real-time Required** | **Safety or Critical Impact** |
 |------------------|------------------|-------------------|------------------------|-------------------------------|
-| CPU              | ü                |                   |                        |                               |
-| Intel iGPU       | ü                | ü                 | ü2                     |                               |
-| GPU              | ü                | ü                 | ü                      | ü                             |
-| VPU              | ü                | ü                 | ü                      | ü                             |
-| Jetson           | ü                | ü                 | ü                      | ü                             |
+| CPU              | :heavy_check_mark: |                   |                        |                               |
+| Intel iGPU       | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:    |                               |
+| GPU              | :heavy_check_mark: |:heavy_check_mark:  | :heavy_check_mark:    | :heavy_check_mark:            |
+| VPU              | :heavy_check_mark: |:heavy_check_mark:  |:heavy_check_mark:     | :heavy_check_mark:            |
+| Jetson           |:heavy_check_mark:  |:heavy_check_mark:  | :heavy_check_mark:    | :heavy_check_mark:            |
 
 If your solution falls into multiple categories, choose the option with the best performance. For example, if you have a simple model that requires real-time response, choose a dedicated GPU or VPU.
 
@@ -66,7 +65,13 @@ A model is a machine learning (ML) algorithm, we support object detection and cl
 
 ### Prebuilt models from Model Zoo
 
-You can use prebuilt models from the [OpenVINO](https://docs.openvino.ai/latest/model_zoo.html) model zoo in your Edge AI solution. OpenVINO has 200 neural network models from which you can choose to best fit your solution. The models include model complexity and size considerations as well as support for acceleration hardware. Model Zoo models are already trained.
+You can use prebuilt models from the model zoo in your Edge AI solution. Currently there are three models in the zoo:
+
+1. pedestrian and vehicle detection
+2. person detection
+3. vehicle attributes recognition
+
+In a future release the [OpenVINO](https://docs.openvino.ai/latest/model_zoo.html) model zoo will be available for importing into an AI skill. OpenVINO has 200 neural network models from which you can choose to best fit your solution. The models include model complexity and size considerations as well as support for acceleration hardware. Model Zoo models are already trained.
 
 ### Custom models with custom vision
 
@@ -87,14 +92,8 @@ There are three groups of nodes that comprise AI Skills:
 
     Export nodes help you export raw inference data and actionable insights to a broad range of locations to the edge or to the cloud. These nodes are located locally at the edge, so you can also connect custom IoT Edge modules that allow you to integrate with other applications and systems in your environment.
 
-    This screenshot displays some of the nodes Azure Percept for Open-Source Project supports:
-
-    ![Graphical user interface, application Description automatically generated](../assets/7005cc8e5afd1de93a13e86b150173c3.png)
-
-To summarize, you can chain nodes together in an AI skill to allow the result of one model to feed into the next. For example, the first model may detect vehicles and pass this information to a model that classifies vehicles by type; for example, car, truck, or bus. Based on user defined logic, these insights can be sent to IoT hub, you can also capture video snippets when an event of interest triggered, and it will be stored in your storage account.
-
+   To summarize, you can chain nodes together in an AI skill to allow the result of one model to feed into the next. For example, the first model may detect vehicles and pass this information to a model that classifies vehicles by type; for example, car, truck, or bus. Based on user defined logic, these insights can be sent to IoT hub, you can also capture video snippets when an event of interest triggered, and it will be stored in your storage account.
 ![](../assets/ec960a4d6611fe07fad6ae221393130d.png)
-
 ## 5. Deployments
 
 After defining your compute devices, cameras, models, and AI skills, your next step is to package and deploy them to your target device via the portal. When a deployment is live, you can monitor camera feeds and recordings, gather inference results from a feed, and reconfigure your deployment as needed to get the information you need.
@@ -104,4 +103,4 @@ After defining your compute devices, cameras, models, and AI skills, your next s
 Now that you understand the main concepts in the Azure Percept for Open-Source portal and the key considerations for creating your Edge AI solution, we recommend the following resources to get started:
 
 -   [Get started](https://github.com/Azure/PerceptOSS/blob/main/docs/tutorial/setup-guide.md)
--   Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project
+-   [Tutorial](https://github.com/Azure/PerceptOSS/blob/main/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)

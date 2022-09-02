@@ -34,6 +34,7 @@ Installation Options:
 
 |Setup Installer Version	|POSS Version	|Download URL	|Supported Accelerators for Edge Workloads	|Released Date|
 |---------------------------|---------------|---------------|-------------------------------------------|-------------|
+|0.38.2	|0.38.2 |https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.2-Installer0.38.2.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (e.g. Orin), x64 CPU	|09/02/2022 |
 |0.38.1	|0.38.0 |https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.0-Installer0.38.1.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (e.g. Orin), x64 CPU	|08/30/2022 |
 |0.38.0	|0.38.0 |https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.0-Installer0.38.0.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (e.g. Orin), x64 CPU	|08/29/2022 |
  

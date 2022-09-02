@@ -242,7 +242,7 @@ class SymphonySolutionClient(SymphonyClient):
                 })
 
         # container image
-        container_version = "0.38.1"
+        container_version = "0.38.2"
         managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
         streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
         predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"

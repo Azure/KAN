@@ -10,7 +10,15 @@ class FilterTransform(Transform):
         if confidence_threshold is not None: 
             confidence_threshold = float(confidence_threshold)
 
-        self.labels = [] #labels
+        if labels is None:
+            self.labels = []
+        else:
+            try:
+                self.labels = eval(labels)
+            except:
+                print(f'Unknown labels {labels}', labels)
+                self.labels = []
+
         self.confidence_threshold = confidence_threshold
 
 

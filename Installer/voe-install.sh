@@ -231,7 +231,7 @@ while [ $current_step -lt 6 ]; do
             2 )
                 while true; do
                     echo "listing all cognitive services"
-                    cognitiveservices=$(az cognitiveservices list --only-show-errors --query='[].{id: id, name: name, rg: resourceGroup }' | jq 'sort_by(.id)' )
+                    cognitiveservices=$(az cognitiveservices list --only-show-errors --query="[?kind == 'CustomVision.Training'].{id: id, name: name, rg: resourceGroup }" | jq 'sort_by(.id)' )
                     echo $cognitiveservices | jq -r '.[] | "\(.rg)/\(.name)"' | awk '{$1=++b")" FS $1}1'
                     read -p "Select a cognitive services: " -r; echo
                     case $REPLY in
@@ -394,11 +394,11 @@ while [ $current_step -lt 6 ]; do
                 echo "creating custom role"
                 subscriptionId=$(az account show --query "id" -o tsv)
 
-                if [  $(az role definition list --custom-role-only true --name "voe contributor" | jq ". | length") -lt 1 ]; 
+                if [  $(az role definition list --custom-role-only true --name "voe contributor $subscriptionId" | jq ". | length") -lt 1 ]; 
                 then
                     az role definition create --role-definition "{
-                        \"Name\": \"voe contributor\",
-                        \"Description\": \"voe contributor\",
+                        \"Name\": \"voe contributor $subscriptionId\",
+                        \"Description\": \"voe contributor $subscriptionId\",
                         \"Actions\": [
                             \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
                             \"Microsoft.Devices/iotHubs/listkeys/Action\"
@@ -407,8 +407,8 @@ while [ $current_step -lt 6 ]; do
                     }"
                 else
                     az role definition update --role-definition "{
-                        \"Name\": \"voe contributor\",
-                        \"Description\": \"voe contributor\",
+                        \"Name\": \"voe contributor $subscriptionId\",
+                        \"Description\": \"voe contributor $subscriptionId\",
                         \"Actions\": [
                             \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
                             \"Microsoft.Devices/iotHubs/listkeys/Action\"
@@ -419,7 +419,7 @@ while [ $current_step -lt 6 ]; do
 
                 sleep 5
                 echo "assigning voe contributor role to subscription"
-                az role assignment create --role "voe contributor" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv) 
+                az role assignment create --role "voe contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv) 
 
                 echo "assigning reader role to subscription"
                 az role assignment create --role "Reader" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv) 
@@ -445,9 +445,11 @@ while [ $current_step -lt 6 ]; do
 
                 echo -e "\e[32mInstalling symphony\e[0m"
                 helm upgrade --install symphony oci://possprod.azurecr.io/helm/symphony --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version 0.38.0 --wait
-
+                if [ $? != "0" ];  then
+                    echo -e "\e[31mWe faced some issues while pull symphony from container registry. Please try the installer again a few minutes later\e[0m"
+                fi
                 echo -e "\e[32mInstalling webmodule\e[0m"
-                helm upgrade --install voe oci://possprod.azurecr.io/helm/voe --version 0.38.0-amd64 \
+                helm upgrade --install voe oci://possprod.azurecr.io/helm/voe --version 0.38.1-amd64 \
                     --set "storage.storageAccount=$selected_storage_account_name" \
                     --set "storage.storageContainer=$selected_blob_container_name" \
                     --set "storage.subscriptionId=$storage_account_subscription" \
@@ -456,6 +458,9 @@ while [ $current_step -lt 6 ]; do
                     --set "servicePrincipal.tenantId=$sp_tenant" \
                     --set "servicePrincipal.clientId=$app_id" \
                     --set "servicePrincipal.clientSecret=$sp_password" 
+                if [ $? != "0" ];  then
+                    echo -e "\e[31mWe faced some issues while pull voe from container registry. Please try the installer again a few minutes later\e[0m"
+                fi
 
                 current_step=`expr $current_step + 1`
                 break

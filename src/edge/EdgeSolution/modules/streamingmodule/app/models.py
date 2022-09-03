@@ -68,15 +68,11 @@ class ObjectDetectionModel(Model):
     def process(self, frame):
 
         # FIXME should resize according to model input size
-        img = cv2.resize(frame.image.image_pointer, (300, 300))
-        width = 300
-        height = 300
-        #img = frame.image.image_pointer
-        #width = frame.image.properties.width
-        #height = frame.image.properties.height
+        img_to_predict = cv2.resize(frame.image.image_pointer, (300, 300))
+
         #FIXME fix the url
         try:
-            res = requests.post(PredictModule.Url + '/predict/'+self.model, files={'file': img}, params={'width': width, 'height': height})
+            res = requests.post(PredictModule.Url + '/predict/'+self.model, files={'file': img_to_predict}, params={'width': 300, 'height': 300})
             if res.status_code != 200:
                 print('failed to send the image to predict module', flush=True)
                 return
@@ -84,6 +80,10 @@ class ObjectDetectionModel(Model):
             return 
 
         
+        img = frame.image.image_pointer
+        width = frame.image.properties.width
+        height = frame.image.properties.height
+
         #print(res)
         #print(res.json())
         try:

@@ -107,3 +107,4 @@ Please report any issues or bugs you face using [repository's issues page](https
 Now that you have successfully setup POSS experience onto your Kubernetes environment, we recommend the following resources:
 
 -   [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)
+-   [Introduction to POSS Portal's Core Concepts](concepts-azure-percept-for-open-source%20.md)

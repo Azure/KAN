@@ -30,6 +30,8 @@ POSS has a no- to low-code portal experience as well as APIs that can be used to
 # Get Started
 Follow [this document](docs/tutorial/setup-guide.md) to get started in minutes. 
 
+Please note! The experiences in this repository should be considered to be in preview/alpha. Significant portions of these experiences are subject to change without warning.
+
 # How It Works
 
 POSS has three high-level components: portal, controller-API and agent. You can interact with POSS through its portal, Kuberntes tools like [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/), and [Azure Arc](https://docs.microsoft.com/en-us/azure/azure-arc/overview) through [GitOps](https://docs.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-gitops-flux2), as shown in the following diagram.
@@ -56,7 +58,9 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 # Join the discussion
 
-To report bugs, send feedbacks, or discuss any POSS related topic, please join our Discord server: https://discord.gg/zctJRcUv.
+To report bugs, send feedbacks, or discuss any POSS related topics, please join our Discord server: 
+
+[![Discord Banner 2](https://discordapp.com/api/guilds/1012135822188875876/widget.png?style=banner2)](https://discord.gg/RfcNBrN3vb)
 
 # Trademarks
 

@@ -36,7 +36,6 @@ Installation Options:
 |---------------------------|---------------|---------------|-------------------------------------------|-------------|
 |0.38.2	|0.38.2 |https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.2-Installer0.38.2.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (e.g. Orin), x64 CPU	|09/02/2022 |
 |0.38.1	|0.38.0 |https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.0-Installer0.38.1.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (e.g. Orin), x64 CPU	|08/30/2022 |
-|0.38.0	|0.38.0 |https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.0-Installer0.38.0.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (e.g. Orin), x64 CPU	|08/29/2022 |
  
     
 **NOTE:** before starting the installation process by the above command, please make sure Azure CLI's az context is set to your desired Azure Subscription: 

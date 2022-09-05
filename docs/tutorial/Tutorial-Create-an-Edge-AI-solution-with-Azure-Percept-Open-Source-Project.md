@@ -266,4 +266,4 @@ You can view the deployment you just created and a library of other deployments 
 
 Now that you have successfully created an Edge AI solution with Azure Percept Open-Source Project, we recommend the following resources:
 
--   [Introduction to POSS Portal's Core Concepts](/concepts-azure-percept-for-open-source%20.md)
+-   [Introduction to POSS Portal's Core Concepts](concepts-azure-percept-for-open-source%20.md)

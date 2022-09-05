@@ -21,6 +21,7 @@ You need the following items before getting started with the self-hosting setup 
 
 ```
     wget -O fix-helm-issue.sh "https://possfiles.blob.core.windows.net/setup/Private-Alpha/fix-helm-issue.sh"
+    
     source fix-helm-issue.sh
 ```
 

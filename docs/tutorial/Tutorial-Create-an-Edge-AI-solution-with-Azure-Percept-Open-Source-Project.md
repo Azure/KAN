@@ -1,6 +1,6 @@
 # Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model
 
-This tutorial demonstrates how you can create an Edge artificial intelligence (AI) solution with [Azure Percept Open-Source Project](https://microsoft.sharepoint-df.com/:w:/r/teams/AzurePerceptHCIDocumentation/_layouts/15/Doc.aspx?sourcedoc=%7B96d221ea-e664-4c0d-ab02-5950064512f1%7D&action=edit&wdLOR=c1AECDBAD-D20F-49B5-A84B-E8093397CFEE&wdPid=4321a745&share=IQHqIdKWZOYNTKsCWVAGRRLxAew6L2SjCJjgcXOqFtjo5FA) using the prebuilt model path.
+This tutorial demonstrates how you can create an Edge artificial intelligence (AI) solution with Azure Percept Open-Source Project using the prebuilt model path.
 
 Using an example use case to help you understand pedestrian and vehicle activity and occupancy in a parking lot or on a street, you’ll learn how to process a video stream via a pre-built machine learning (ML) model from Model Zoo. You’ll enrich the model with business logic and derive insights in real time, and then use an Azure virtual machine (VM) with four vCPUs as your IoT Edge device and prerecorded video as your Real-Time Streaming Protocol (RTSP) stream.
 
@@ -262,20 +262,8 @@ You can view the deployment you just created and a library of other deployments 
 
 **Congratulations! You have now successfully created and deployed an Edge AI image classification solution with Azure Percept Open-Source Project.**
 
-## Clean up resources
-
-If you're not going to continue to use Azure Percept Open-Source Project, delete your project with the following steps:
-
-In your Azure Cloud CLI instance run the following two commands, in order below, to uninstall Azure Percept Open-Source Project:
-
-1.  helm uninstall voe
-2.  helm uninstall symphony
-
 ## Next steps
 
 Now that you have successfully created an Edge AI solution with Azure Percept Open-Source Project, we recommend the following resources:
 
--   Tutorial for API ​
--   how to create custom model​
--   how to create a complex ai skill​
--   Troubleshoot
+-   [Introduction to POSS Portal's Core Concepts](/concepts-azure-percept-for-open-source%20.md)

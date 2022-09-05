@@ -1,4 +1,4 @@
-**Introduction to Azure Percept for Open-Source Project core concepts**
+# Introduction to Azure Percept for Open-Source Project Core Concepts
 
 Azure Percept for Open-Source Project (POSS) is a framework for creating, deploying, and operating Edge artificial intelligence (AI) solutions at scale with the control and flexibility of open-source natively on your environment. It is fully open-sourced and leverages the open-source software (OSS) community to deliver enhanced experiences. And, as a self-managed solution, you can host the experience on your own Kubernetes clusters.
 

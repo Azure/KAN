@@ -405,6 +405,8 @@ while [ $current_step -lt 6 ]; do
                         ],
                         \"AssignableScopes\": [\"/subscriptions/$subscriptionId\"]
                     }"
+		    echo "Waiting for custom role to be created..."
+		    sleep 120
                 else
                     az role definition update --role-definition "{
                         \"Name\": \"voe contributor $subscriptionId\",

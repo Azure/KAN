@@ -97,6 +97,7 @@ This screenshot displays some of the nodes Azure Percept for Open-Source Project
 ![](./media/ec960a4d6611fe07fad6ae221393130d.png)
 
    To summarize, you can chain nodes together in an AI skill to allow the result of one model to feed into the next. For example, the first model may detect vehicles and pass this information to a model that classifies vehicles by type; for example, car, truck, or bus. Based on user defined logic, these insights can be sent to IoT hub, you can also capture video snippets when an event of interest triggered, and it will be stored in your storage account.
+   
 ![](./media/aiskill.png)
 
 ## 5. Deployments

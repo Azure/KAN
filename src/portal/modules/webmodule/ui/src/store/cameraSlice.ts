@@ -220,7 +220,7 @@ export const getCameras = createWrappedAsync<any, boolean, { state: State }>(
 export const getSingleCamera = createWrappedAsync<any, number, { state: State }>(
   'cameras/getSingle',
   async (id) => {
-    const response = await rootRquest.get(`/api/cameras/${id}`);
+    const response = await rootRquest.get(`/api/cameras/${id}/update_status`);
 
     return normalizeCameras([response.data]);
   },

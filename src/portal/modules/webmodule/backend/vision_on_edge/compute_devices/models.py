@@ -102,7 +102,7 @@ class ComputeDevice(models.Model):
             solution_client.deploy_config(group="solution.symphony", plural="solutions")
         else:
             # update
-            target_client.update_config(
+            target_client.patch_config(
                 group="fabric.symphony", plural="targets", name=instance.symphony_id)
         az_logger.warning(
             "create_compute_device",

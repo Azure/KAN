@@ -82,9 +82,10 @@ class Cascade(models.Model):
                 for cam in configure:
                     for skill in cam['skills']:
                         if int(skill['id']) == int(instance.id):
-                            affected_solutions.append(instance_obj.compute_device.solution_id)
+                            affected_solutions.append(
+                                instance_obj.compute_device.solution_id)
 
-            skill_client.update_config(
+            skill_client.patch_config(
                 group="ai.symphony", plural="skills", name=instance.symphony_id)
 
             logger.warning(f"Updating affected solutions: {affected_solutions}")

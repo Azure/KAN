@@ -52,6 +52,21 @@ class SymphonyModelClient(SymphonyClient):
         }
         return config_json
 
+    def get_patch_config(self):
+
+        tag_list = self.args.get("tag_list", "")
+
+        labels = {}
+        if tag_list:
+            for tag in json.loads(tag_list):
+                labels[tag["name"]] = tag["value"]
+
+        # can only patch labels on portal for now
+        patch_config = [
+            {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
+        ]
+        return patch_config
+
     def load_symphony_objects(self):
         from .models import Project
         from ..azure_settings.models import Setting

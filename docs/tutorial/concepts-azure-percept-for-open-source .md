@@ -9,26 +9,25 @@ This article provides you with a deep understanding of Azure Percept for Open-So
 3.  Models
 4.  AI Skills
 5.  Deployments
-![](../assets/13fc6b9fb936ac86d478fecb8e519eca.png)
+![](../media/13fc6b9fb936ac86d478fecb8e519eca.png)
 
 After reviewing this article, visit the [Tutorial: Create an Edge AI solution with Azure Percept for Open-Source Project](https://github.com/Azure/PerceptOSS/blob/main/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md) for step-by-step guidance on how to create an end-to-end Edge artificial intelligence (AI) solution.
 
 ## 1. **Compute Devices**
 
-A compute device is an essential part of the [Azure Percept for Open-Source Project](https://microsoft.sharepoint-df.com/:w:/t/AzurePerceptHCIDocumentation/Eeoh0pZk5g1MqwJZUAZFEvEBMYmfAqdibII6Znm-PnnDIQ?e=RmbWSo) architecture. It holds all the components of the vision-based Edge AI deployments and executes close to the operating environment in real time. It is highly configurable and capable of processing several camera streams at once.
+A compute device is an essential part of the [Azure Percept for Open-Source Project](https://github.com/Azure/PerceptOSS) architecture. It holds all the components of the vision-based Edge AI deployments and executes close to the operating environment in real time. It is highly configurable and capable of processing several camera streams at once.
 
 Azure Percept for Open-Source Project and its Edge AI solutions are supported on many different devices and accelerators, for example, NVIDIA Orin AGX/NX, Xavier AGX/NX, Azure Stack HCI, and Azure stack edge.
 
 ### Configuration options
 
 The following table provides information about the compute devices and configuration options available to you.
-
 | **Acceleration**                                                                                                                   | **OS (Operating Systems)** |
 |------------------------------------------------------------------------------------------------------------------------------------|----------------------------|
 | **X64** **CPU (central processing units)**                                                                                         |                            |
-| CPU GPU (graphic processing units) – Nvidia A2, T41 VPU (Video Processing Unit) - Intel Movidius Myriad X22 iGPU (integrated GPU)  | Ubuntu 20.04 CBL-Mariner   |
+|<ul><li>CPU GPU (graphic processing units)</li><li>Nvidia A2, T41 VPU (Video Processing Unit)</li><li>Intel Movidius Myriad X22</li><li> iGPU (integrated GPU)</li></ul>|<ul><li>Ubuntu 20.04</li><li>CBL-Mariner</li></ul>
 | **ARM64 CPU**                                                                                                                      |                            |
-| Nvidia Jetson (Jetpack 5)                                                                                                          | Ubuntu 20.04               |
+| <ul><li>Nvidia Jetson (Jetpack 5)</li></ul>|<ul><li>Ubuntu 20.04</li></ul>               |
 
 ### Acceleration options for building your Edge AI solutions
 
@@ -92,8 +91,11 @@ There are three groups of nodes that comprise AI Skills:
 
     Export nodes help you export raw inference data and actionable insights to a broad range of locations to the edge or to the cloud. These nodes are located locally at the edge, so you can also connect custom IoT Edge modules that allow you to integrate with other applications and systems in your environment.
 
+This screenshot displays some of the nodes Azure Percept for Open-Source Project supports:
+![](../media/ec960a4d6611fe07fad6ae221393130d.png)
+
    To summarize, you can chain nodes together in an AI skill to allow the result of one model to feed into the next. For example, the first model may detect vehicles and pass this information to a model that classifies vehicles by type; for example, car, truck, or bus. Based on user defined logic, these insights can be sent to IoT hub, you can also capture video snippets when an event of interest triggered, and it will be stored in your storage account.
-![](../assets/ec960a4d6611fe07fad6ae221393130d.png)
+![](../media/aiskill.png)
 ## 5. Deployments
 
 After defining your compute devices, cameras, models, and AI skills, your next step is to package and deploy them to your target device via the portal. When a deployment is live, you can monitor camera feeds and recordings, gather inference results from a feed, and reconfigure your deployment as needed to get the information you need.

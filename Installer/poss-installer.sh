@@ -451,7 +451,7 @@ while [ $current_step -lt 6 ]; do
                     echo -e "\e[31mWe faced some issues while pull symphony from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
                 echo -e "\e[32mInstalling webmodule\e[0m"
-                helm upgrade --install voe oci://possprod.azurecr.io/helm/voe --version 0.38.2-amd64 \
+                helm upgrade --install voe oci://possprod.azurecr.io/helm/voe --version 0.38.3-amd64 \
                     --set "storage.storageAccount=$selected_storage_account_name" \
                     --set "storage.storageContainer=$selected_blob_container_name" \
                     --set "storage.subscriptionId=$storage_account_subscription" \

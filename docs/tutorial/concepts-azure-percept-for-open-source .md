@@ -9,7 +9,8 @@ This article provides you with a deep understanding of Azure Percept for Open-So
 3.  Models
 4.  AI Skills
 5.  Deployments
-![](../media/13fc6b9fb936ac86d478fecb8e519eca.png)
+
+![](./media/13fc6b9fb936ac86d478fecb8e519eca.png)
 
 After reviewing this article, visit the [Tutorial: Create an Edge AI solution with Azure Percept for Open-Source Project](https://github.com/Azure/PerceptOSS/blob/main/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md) for step-by-step guidance on how to create an end-to-end Edge artificial intelligence (AI) solution.
 
@@ -92,10 +93,12 @@ There are three groups of nodes that comprise AI Skills:
     Export nodes help you export raw inference data and actionable insights to a broad range of locations to the edge or to the cloud. These nodes are located locally at the edge, so you can also connect custom IoT Edge modules that allow you to integrate with other applications and systems in your environment.
 
 This screenshot displays some of the nodes Azure Percept for Open-Source Project supports:
-![](../media/ec960a4d6611fe07fad6ae221393130d.png)
+
+![](./media/ec960a4d6611fe07fad6ae221393130d.png)
 
    To summarize, you can chain nodes together in an AI skill to allow the result of one model to feed into the next. For example, the first model may detect vehicles and pass this information to a model that classifies vehicles by type; for example, car, truck, or bus. Based on user defined logic, these insights can be sent to IoT hub, you can also capture video snippets when an event of interest triggered, and it will be stored in your storage account.
-![](../media/aiskill.png)
+![](./media/aiskill.png)
+
 ## 5. Deployments
 
 After defining your compute devices, cameras, models, and AI skills, your next step is to package and deploy them to your target device via the portal. When a deployment is live, you can monitor camera feeds and recordings, gather inference results from a feed, and reconfigure your deployment as needed to get the information you need.

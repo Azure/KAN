@@ -42,7 +42,10 @@ class SymphonyAgentClient:
 
         #FIXME error handling
         #print(params)
-        r = httpx.get(self.url, params=params)
+        try:
+            r = httpx.get(self.url, params=params)
+        except:
+            raise Exception('Cannot access Symphony Agent')
 
         return r.json()
 
@@ -75,7 +78,10 @@ class SymphonyAgentClient:
         params['instance'] = instance_name
         params['alias'] = alias
 
-        r = httpx.get(self.url, params=params)
+        try:
+            r = httpx.get(self.url, params=params)
+        except:
+            raise Exception('Cannot access Symphony Agent')
 
         return r.json()
 
@@ -90,7 +96,10 @@ class SymphonyAgentClient:
         params['iteration'] = 'latest'
         params['platform'] = 'ONNX'
         
-        r = httpx.get(self.url, params=params)
+        try:
+            r = httpx.get(self.url, params=params)
+        except:
+            raise Exception('Cannot access Symphony Agent')
 
         return r.json()
 
@@ -102,10 +111,11 @@ class SymphonyAgentClient:
         params['id'] = object_name
 
 
-        #FIXME error handling
-        #print(params)
-        r = httpx.post(self.url, params=params, json=data)
-
+        
+        try:
+            r = httpx.post(self.url, params=params, json=data)
+        except:
+            raise Exception('Cannot access Symphony Agent')
         
     def post_instance_status(self, name, status_code, status_description):
         self._post('Instance', name, data={"status_code": status_code, "status_description": status_description})

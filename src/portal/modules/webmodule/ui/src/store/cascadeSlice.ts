@@ -135,3 +135,18 @@ export const {
   selectById: selectCascadeById,
   selectEntities: selectCascadeEntities,
 } = cascadesAdapter.getSelectors<State>((state) => state.cascade);
+
+export const selectHasUseAiSkillSelectoryFactory = (modelSymphonyId: string) =>
+  createSelector(selectAllCascades, (skillList) => {
+    if (skillList.length === 0) return false;
+
+    const isUsed = skillList
+      .reduce((accModelList, skill) => {
+        const test = JSON.parse(skill.flow);
+
+        return [...accModelList, ...test.nodes.filter((node) => node.type === 'model')];
+      }, [])
+      .some((model) => model.name === modelSymphonyId);
+
+    return isUsed;
+  });

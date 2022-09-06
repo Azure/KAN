@@ -90,7 +90,7 @@ const Basics = (props: Props) => {
   );
 
   return (
-    <Stack styles={{ root: { paddingTop: '40px' } }} tokens={{ childrenGap: 35 }}>
+    <Stack styles={{ root: { padding: '40px 0' } }} tokens={{ childrenGap: 35 }}>
       <Stack tokens={{ childrenGap: 20 }}>
         <Stack>
           <HorizontalChoiceGroup
@@ -103,6 +103,10 @@ const Basics = (props: Props) => {
               onFormDataChange({
                 ...localFormData,
                 createType: option.key as CreateType,
+                customVisionId: '',
+                name: '',
+                type: '',
+                objects: [],
                 error: { ...localFormData.error, createType: '' },
               })
             }

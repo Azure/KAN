@@ -11,6 +11,7 @@ import { State as RootState } from 'RootStateType';
 import { Url } from '../../constant';
 import { UpdateCameraFormData, PivotTabKey } from './types';
 import { selectCameraById } from '../../store/cameraSlice';
+import { getScrllStackClasses } from '../Common/styles';
 
 import Basics from './Edit/Basics';
 import Preview from './Create/Preview';
@@ -20,7 +21,9 @@ import ErrorIcon from '../Common/ErrorIcon';
 
 const CameraCreate = () => {
   const { id, step } = useParams<{ id: string; step: PivotTabKey }>();
+
   const history = useHistory();
+  const scrollClasses = getScrllStackClasses();
 
   const camera = useSelector((state: RootState) => selectCameraById(state, id));
   const [isUpdating, setIsUpdating] = useState(false);
@@ -149,25 +152,27 @@ const CameraCreate = () => {
         </Pivot>
         {isUpdating && <Spinner size={3} />}
       </Stack>
-      <Switch>
-        <Route
-          exact
-          path={Url.CAMERAS_EDIT_PREVIEW}
-          render={() => <Preview localFormData={localFormData} onLinkClick={onLinkClick} />}
-        />
-        <Route
-          exact
-          path={Url.CAMERAS_EDIT_TAG}
-          render={() => (
-            <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
-          )}
-        />
-        <Route
-          exact
-          path={Url.CAMERAS_EDIT_BASICS}
-          render={() => <Basics localFormData={localFormData} onFormDataChange={onFormDataChange} />}
-        />
-      </Switch>
+      <Stack className={scrollClasses.root}>
+        <Switch>
+          <Route
+            exact
+            path={Url.CAMERAS_EDIT_PREVIEW}
+            render={() => <Preview localFormData={localFormData} onLinkClick={onLinkClick} />}
+          />
+          <Route
+            exact
+            path={Url.CAMERAS_EDIT_TAG}
+            render={() => (
+              <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
+            )}
+          />
+          <Route
+            exact
+            path={Url.CAMERAS_EDIT_BASICS}
+            render={() => <Basics localFormData={localFormData} onFormDataChange={onFormDataChange} />}
+          />
+        </Switch>
+      </Stack>
       <EditFooter
         cameraId={camera.id}
         currentStep={localPivotKey}

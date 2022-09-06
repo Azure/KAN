@@ -11,18 +11,19 @@ import dagre from 'dagre';
 import html2canvas from 'html2canvas';
 
 import { State as RootState } from 'RootStateType';
-import { PivotTabKey, UpdateAiSkillFormData } from './types';
+import { PivotTabKey, UpdateAiSkillFormData, STEP_ORDER } from './types';
 import { Url, theme } from '../../constant';
 import { selectCascadeById } from '../../store/cascadeSlice';
 import { selectAllTrainingProjects } from '../../store/trainingProjectSlice';
 import { selectHasUseAiSkillSelectoryFactory } from '../../store/deploymentSlice';
 import {
-  isCascadeError,
+  getCascadeErrorMessage,
   convertElementsPayload,
   backToSkillRawElements,
   NODE_CONSTANT_X_POSITION,
   NODE_CONSTANT_Y_POSITION,
 } from './utils';
+import { getScrllStackClasses } from '../Common/styles';
 
 import TagTab, { Tag, getErrorMessage } from '../Common/TagTab';
 import Basics from './Edit/Basics';
@@ -72,8 +73,10 @@ const getLayoutedElements = (elements, direction = 'TB') => {
 };
 
 const AiSkillEdit = () => {
-  const { id, step: currentStep } = useParams<{ id: string; step: PivotTabKey }>();
+  const { id, step: editStep } = useParams<{ id: string; step: PivotTabKey }>();
+
   const history = useHistory();
+  const scrllStackClasses = getScrllStackClasses();
 
   const skill = useSelector((state: RootState) => selectCascadeById(state, id));
   const modelList = useSelector((state: RootState) => selectAllTrainingProjects(state));
@@ -94,7 +97,7 @@ const AiSkillEdit = () => {
     symphony_id: '',
     screenshot: '',
   });
-  const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(currentStep);
+  const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(editStep);
   const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
@@ -140,10 +143,6 @@ const AiSkillEdit = () => {
     [history, skill],
   );
 
-  const onFormDataChange = useCallback((newFormData: UpdateAiSkillFormData) => {
-    setLocalFormData({ ...newFormData });
-  }, []);
-
   const onTagChange = useCallback(
     (idx: number, newTag: Tag) => {
       const newTagList = clone(localFormData.tag_list);
@@ -174,10 +173,11 @@ const AiSkillEdit = () => {
   );
 
   const onFormDateValidate = useCallback(
-    (_: PivotTabKey) => {
+    (nextStep: PivotTabKey, currentStep: PivotTabKey) => {
       if (
         localFormData.tag_list.length > 1 &&
-        localFormData.tag_list.some((tag) => tag.errorMessage !== '')
+        localFormData.tag_list.some((tag) => tag.errorMessage !== '') &&
+        currentStep === 'tag'
       ) {
         return true;
       }
@@ -187,54 +187,53 @@ const AiSkillEdit = () => {
     [localFormData],
   );
 
-  const onCascadeValidate = useCallback(
-    async (key: PivotTabKey) => {
-      const error = isCascadeError(elements);
+  const onCascadeCreate = useCallback(async () => {
+    setIsCreating(true);
 
-      if (isCascadeError(elements)) {
-        onFormDataChange({ ...localFormData, cascade: { ...localFormData.cascade, error } });
-        return;
+    const elementsPayload = convertElementsPayload(elements);
+    const blob = await html2canvas(reactFlowRef.current, {
+      backgroundColor: theme.palette.neutralLight,
+    });
+    const dataURL = blob.toDataURL();
+
+    setLocalFormData((prev) => ({
+      ...prev,
+      raw_data: JSON.stringify(elements),
+      cascade: {
+        flow: JSON.stringify({
+          ...elementsPayload,
+        }),
+        error: '',
+      },
+      screenshot: dataURL,
+    }));
+
+    setIsCreating(false);
+  }, [elements, reactFlowRef]);
+
+  const onValidationRedirect = useCallback(
+    async (nextStep: PivotTabKey, currentStep: PivotTabKey) => {
+      const nextStepIdx = STEP_ORDER.findIndex((step) => step === nextStep);
+      const currentStepIdx = STEP_ORDER.findIndex((step) => step === currentStep);
+
+      if (nextStepIdx > currentStepIdx) {
+        const isInvalid = onFormDateValidate(nextStep, currentStep);
+
+        if (isInvalid) return;
       }
 
-      setIsCreating(true);
+      if (currentStep === 'cascade') await onCascadeCreate();
 
-      const elementsPayload = convertElementsPayload(elements);
-      const blob = await html2canvas(reactFlowRef.current, {
-        backgroundColor: theme.palette.neutralLight,
-      });
-      const dataURL = blob.toDataURL();
-
-      onFormDataChange({
-        ...localFormData,
-        raw_data: JSON.stringify(elements),
-        cascade: {
-          flow: JSON.stringify({
-            ...elementsPayload,
-          }),
-          error: '',
-        },
-        screenshot: dataURL,
-      });
-
-      setIsCreating(false);
-      onLinkClick(key);
+      onLinkClick(nextStep);
     },
-    [onLinkClick, elements, localFormData, onFormDataChange, reactFlowRef],
-  );
-
-  const onPivotLinkClick = useCallback(
-    (key: PivotTabKey) => {
-      if (localPivotKey === 'cascade') onCascadeValidate(key);
-      else onLinkClick(key);
-    },
-    [localPivotKey, onCascadeValidate, onLinkClick],
+    [onLinkClick, onFormDateValidate, onCascadeCreate],
   );
 
   return (
     <>
       <Stack horizontal verticalAlign="center">
         <Pivot
-          onLinkClick={(item) => onPivotLinkClick(item?.props.itemKey! as PivotTabKey)}
+          onLinkClick={(item) => onValidationRedirect(item?.props.itemKey as PivotTabKey, localPivotKey)}
           selectedKey={localPivotKey}
         >
           <PivotItem headerText="Basics" itemKey="basics" />
@@ -267,38 +266,44 @@ const AiSkillEdit = () => {
         </Pivot>
         {isCreating && <Spinner size={3} />}
       </Stack>
-      <Switch>
-        <Route
-          exact
-          path={Url.AI_SKILL_EDIT_PREVIEW}
-          render={() => <Preview localFormData={localFormData} onLinkClick={onLinkClick} />}
-        />
-        <Route
-          exact
-          path={Url.AI_SKILL_EDIT_TAG}
-          render={() => (
-            <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
-          )}
-        />
-        <Route
-          exact
-          path={Url.AI_SKILL_EDIT_CASCADE}
-          render={() => (
-            <CascadeFlow
-              elements={elements}
-              setElements={setElements}
-              cascadeError={localFormData.cascade.error}
-              onErrorCancel={() =>
-                setLocalFormData((prev) => ({ ...prev, cascade: { ...prev.cascade, error: '' } }))
-              }
-              reactFlowRef={reactFlowRef}
-              selectedAcceleraction={localFormData.acceleration}
-              hasUseAiSkill={!!hasAiSkillDeployment}
-            />
-          )}
-        />
-        <Route exact path={Url.AI_SKILL_EDIT_BASIC} render={() => <Basics localFormData={localFormData} />} />
-      </Switch>
+      <Stack styles={{ root: scrllStackClasses.root }}>
+        <Switch>
+          <Route
+            exact
+            path={Url.AI_SKILL_EDIT_PREVIEW}
+            render={() => <Preview localFormData={localFormData} onLinkClick={onLinkClick} />}
+          />
+          <Route
+            exact
+            path={Url.AI_SKILL_EDIT_TAG}
+            render={() => (
+              <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
+            )}
+          />
+          <Route
+            exact
+            path={Url.AI_SKILL_EDIT_CASCADE}
+            render={() => (
+              <CascadeFlow
+                elements={elements}
+                setElements={setElements}
+                cascadeError={localFormData.cascade.error}
+                onErrorCancel={() =>
+                  setLocalFormData((prev) => ({ ...prev, cascade: { ...prev.cascade, error: '' } }))
+                }
+                reactFlowRef={reactFlowRef}
+                selectedAcceleraction={localFormData.acceleration}
+                hasUseAiSkill={!!hasAiSkillDeployment}
+              />
+            )}
+          />
+          <Route
+            exact
+            path={Url.AI_SKILL_EDIT_BASIC}
+            render={() => <Basics localFormData={localFormData} />}
+          />
+        </Switch>
+      </Stack>
       <EditFooter
         aiSkillId={id}
         currentStep={localPivotKey}
@@ -307,9 +312,7 @@ const AiSkillEdit = () => {
         isCreating={isCreating}
         onCreatingChange={(value: boolean) => setIsCreating(value)}
         stepList={['basics', 'cascade', 'tag', 'preview']}
-        onFormDateValidate={onFormDateValidate}
-        onFormDataChange={onFormDataChange}
-        onCascadeValidate={onCascadeValidate}
+        onValidationRedirect={onValidationRedirect}
         hasUseAiSkill={!!hasAiSkillDeployment}
       />
     </>

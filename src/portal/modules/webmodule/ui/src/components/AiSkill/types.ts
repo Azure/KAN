@@ -4,6 +4,8 @@ import { Tag } from '../Common/TagTab';
 import { ModelNodeType, ModelCategory, ModelProjectType, TrainingProject } from '../../store/types';
 
 export type PivotTabKey = 'basics' | 'preview' | 'tag' | 'cascade';
+export const STEP_ORDER = ['basics', 'cascade', 'tag', 'preview'] as PivotTabKey[];
+
 export type ExportType = 'snippet' | 'iotHub' | 'iotEdge' | 'http';
 
 export type CreateAISkillFormData = {

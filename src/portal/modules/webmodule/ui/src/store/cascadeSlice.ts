@@ -1,4 +1,4 @@
-import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
+import { createSlice, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
 
 import { State } from 'RootStateType';
 import rootRquest from './rootRquest';
@@ -119,9 +119,7 @@ const cascadeSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getCascades.fulfilled, cascadesAdapter.setAll)
-      // .addCase(createCascade.fulfilled, cascadesAdapter.addOne)
       .addCase(createAiSkill.fulfilled, cascadesAdapter.addOne)
-      // .addCase(updateCascade.fulfilled, cascadesAdapter.upsertOne)
       .addCase(updateAiSkill.fulfilled, cascadesAdapter.upsertOne)
       .addCase(deleteCascade.fulfilled, cascadesAdapter.removeOne)
       .addCase(deleteAiSkill.fulfilled, cascadesAdapter.removeOne);

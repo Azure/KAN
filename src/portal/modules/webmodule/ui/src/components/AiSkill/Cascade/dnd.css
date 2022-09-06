@@ -1,8 +1,7 @@
 .dndflow {
   flex-direction: column;
   display: flex;
-  /* height: 100%; */
-  height: calc(100% - 150px);
+  height: 100%;
   position: relative;
 }
 
@@ -10,7 +9,6 @@
   border-right: 1px solid #eee;
   font-size: 12px;
   background: #fff;
-  /* height: 730px; */
   overflow-y: auto;
 }
 

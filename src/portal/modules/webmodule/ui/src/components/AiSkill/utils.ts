@@ -108,7 +108,7 @@ export const isDiscreteFlow = (nodeList: Node[], edgeList: Edge[]) => {
   return false;
 };
 
-export const isCascadeError = (elements: (Node | Edge)[]) => {
+export const getCascadeErrorMessage = (elements: (Node | Edge)[]) => {
   if (elements.length === 1) return 'Drag and drop these nodes to the canvas on the right';
 
   const nodeList: Node[] = [];

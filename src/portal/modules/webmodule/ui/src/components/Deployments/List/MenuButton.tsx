@@ -24,7 +24,7 @@ const MenuButton = (props: Props) => {
     history.push(
       generatePath(Url.DEPLOYMENT_EDIT, {
         id: deployemnt.id,
-        key: 'basics',
+        step: 'basics',
       }),
     );
   }, [history, deployemnt]);

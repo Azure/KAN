@@ -2,12 +2,13 @@
 // Licensed under the MIT License.
 
 import React, { useCallback, useState } from 'react';
-import { useHistory, generatePath, useLocation, Route, Switch } from 'react-router-dom';
+import { useHistory, generatePath, Route, Switch, useParams } from 'react-router-dom';
 import { Pivot, PivotItem, Spinner, Stack, IPivotItemProps } from '@fluentui/react';
 import { clone, isEmpty } from 'ramda';
 
 import { Url, ERROR_BLANK_VALUE, ERROR_NAME_BLANK, ERROR_NAME_BE_USED } from '../../constant';
-import { CreateCameraFormData, PivotTabKey } from './types';
+import { CreateCameraFormData, PivotTabKey, MediaType } from './types';
+import { getScrllStackClasses } from '../Common/styles';
 
 import Basics from './Create/Basics';
 import Preview from './Create/Preview';
@@ -22,6 +23,16 @@ interface Props {
   existingNameList: string[];
 }
 
+const getUrlMessage = (url: string, mediaType: MediaType) => {
+  const rtspRe = new RegExp('^rtsp://.+');
+  const mediaSourceRe = new RegExp('(^(?:http|https)://.+)+');
+
+  if (isEmpty(url)) return ERROR_BLANK_VALUE;
+  if (mediaType === 'Camera' && !rtspRe.test(url)) return ERROR_CAMERA_INVALID_RTSP;
+  if (mediaType === 'Video' && !mediaSourceRe.test(url)) return ERROR_CAMERA_INVALID_RTSP;
+  return '';
+};
+
 const getLocalFormError = (form: CreateCameraFormData, existingNameList: string[]) => {
   const error = {
     name: '',
@@ -31,20 +42,13 @@ const getLocalFormError = (form: CreateCameraFormData, existingNameList: string[
     location: '',
   };
 
-  const rtspRe = new RegExp('^rtsp://.+');
-  const mediaSourceRe = new RegExp('(^(?:http|https)://.+)+');
-
   if (isEmpty(form.name)) error.name = ERROR_NAME_BLANK;
   if (existingNameList.includes(form.name)) error.name = ERROR_NAME_BE_USED;
   if (form.media_type === 'Camera') {
-    if (isEmpty(form.rtsp)) error.rtsp = ERROR_BLANK_VALUE;
-    if (!rtspRe.test(form.rtsp)) error.rtsp = ERROR_CAMERA_INVALID_RTSP;
+    error.rtsp = getUrlMessage(form.rtsp, form.media_type);
+  } else {
+    error.mediaSource = getUrlMessage(form.media_source, form.media_type);
   }
-  if (form.media_type === 'Video') {
-    if (isEmpty(form.media_source)) error.mediaSource = ERROR_BLANK_VALUE;
-    if (!mediaSourceRe.test(form.media_source)) error.mediaSource = ERROR_CAMERA_INVALID_RTSP;
-  }
-
   if (form.selectedDeviceList.length === 0) error.selectedDeviceList = ERROR_BLANK_VALUE;
   if (form.location === -1) error.location = ERROR_BLANK_VALUE;
 
@@ -54,8 +58,9 @@ const getLocalFormError = (form: CreateCameraFormData, existingNameList: string[
 const CameraCreate = (props: Props) => {
   const { existingNameList } = props;
 
-  const location = useLocation();
+  const scrollClasses = getScrllStackClasses();
   const history = useHistory();
+  const { step } = useParams<{ step: PivotTabKey }>();
 
   const [isCreating, setIsCreating] = useState(false);
   const [localFormData, setLocalFormData] = useState<CreateCameraFormData>({
@@ -77,10 +82,7 @@ const CameraCreate = (props: Props) => {
       location: '',
     },
   });
-
-  const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(
-    location.pathname.split('/')[3] as PivotTabKey,
-  );
+  const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(step);
 
   const onLinkClick = useCallback(
     (key: PivotTabKey) => {
@@ -199,25 +201,27 @@ const CameraCreate = (props: Props) => {
         </Pivot>
         {isCreating && <Spinner size={3} />}
       </Stack>
-      <Switch>
-        <Route
-          exact
-          path={Url.CAMERAS_CREATION_PREVIEW}
-          render={() => <Preview localFormData={localFormData} onLinkClick={onLinkClick} />}
-        />
-        <Route
-          exact
-          path={Url.CAMERAS_CREATION_TAG}
-          render={() => (
-            <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
-          )}
-        />
-        <Route
-          exact
-          path={Url.CAMERAS_CREATION_BASICS}
-          render={() => <Basics localFormData={localFormData} onFormDataChange={onFormDataChange} />}
-        />
-      </Switch>
+      <Stack styles={{ root: scrollClasses.root }}>
+        <Switch>
+          <Route
+            exact
+            path={Url.CAMERAS_CREATION_PREVIEW}
+            render={() => <Preview localFormData={localFormData} onLinkClick={onLinkClick} />}
+          />
+          <Route
+            exact
+            path={Url.CAMERAS_CREATION_TAG}
+            render={() => (
+              <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
+            )}
+          />
+          <Route
+            exact
+            path={Url.CAMERAS_CREATION_BASICS}
+            render={() => <Basics localFormData={localFormData} onFormDataChange={onFormDataChange} />}
+          />
+        </Switch>
+      </Stack>
       <Footer
         currentStep={localPivotKey}
         localFormData={localFormData}

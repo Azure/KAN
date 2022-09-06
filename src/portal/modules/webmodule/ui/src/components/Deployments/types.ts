@@ -3,6 +3,7 @@ import { Deployment } from '../../store/types';
 import { Tag } from '../Common/TagTab';
 
 export type PivotTabKey = 'basics' | 'preview' | 'tag' | 'configure';
+export const STEP_ORDER = ['basics', 'configure', 'tag', 'preview'] as PivotTabKey[];
 
 export type FormattedDeployment = Deployment & {
   deviceName: string;

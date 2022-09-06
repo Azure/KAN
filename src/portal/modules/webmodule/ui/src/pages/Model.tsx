@@ -11,6 +11,7 @@ import { getParts } from '../store/partSlice';
 import { getImages } from '../store/imageSlice';
 import { getTrainingProjectStatusList } from '../store/trainingProjectStatusSlice';
 import { getTrainingProject } from '../store/trainingProjectSlice';
+import { getCascades } from '../store/cascadeSlice';
 
 import ModelCreation from '../components/Models/ModelCreation';
 import ModelDetailWrapper from '../components/Models/ModelDetailWrapper';
@@ -30,6 +31,7 @@ const Model = () => {
       await dispatch(getTrainingProject(false));
       await dispatch(getImages({ freezeRelabelImgs: false }));
       await dispatch(getTrainingProjectStatusList());
+      await dispatch(getCascades());
       setIsLoading(false);
     })();
   }, [dispatch]);

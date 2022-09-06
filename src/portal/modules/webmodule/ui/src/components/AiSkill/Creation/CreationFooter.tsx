@@ -13,7 +13,7 @@ import { createAiSkill } from '../../../store/cascadeSlice';
 import { theme, Url } from '../../../constant';
 import { getFilteredTagList } from '../../Common/TagTab';
 import { getStepKey } from '../../utils';
-import { isCascadeError, convertElementsPayload } from '../utils';
+import { getCascadeErrorMessage, convertElementsPayload } from '../utils';
 import { getFooterClasses } from '../../Common/styles';
 
 interface Props {
@@ -23,10 +23,7 @@ interface Props {
   isCreating: boolean;
   onCreatingChange: (value: boolean) => void;
   stepList: PivotTabKey[];
-  onFormDateValidate: (key: PivotTabKey) => boolean;
-  elements: (Node | Edge)[];
-  onFormDataChange: (formData: CreateAISkillFormData) => void;
-  reactFlowRef: React.MutableRefObject<any>;
+  onValidationRedirect: (nextStep: PivotTabKey, currentStep: PivotTabKey) => void;
 }
 
 const CreationFooter = (props: Props) => {
@@ -37,10 +34,7 @@ const CreationFooter = (props: Props) => {
     onCreatingChange,
     onLinkClick,
     stepList,
-    onFormDateValidate,
-    elements,
-    onFormDataChange,
-    reactFlowRef,
+    onValidationRedirect,
   } = props;
 
   const classes = getFooterClasses();
@@ -48,16 +42,8 @@ const CreationFooter = (props: Props) => {
   const history = useHistory();
 
   const onCreateClick = useCallback(async () => {
-    if (onFormDateValidate(currentStep)) return;
-    if (localFormData.cascade.flow === '' && localFormData.raw_data === '') {
-      onFormDataChange({
-        ...localFormData,
-        cascade: { ...localFormData.cascade, error: 'Please click Next or Review+Create to save the canvas' },
-      });
-      return;
-    }
-
     onCreatingChange(true);
+
     await dispatch(
       createAiSkill({
         name: localFormData.name,
@@ -81,50 +67,7 @@ const CreationFooter = (props: Props) => {
     history.push(Url.AI_SKILL, {
       isCreated: true,
     });
-  }, [localFormData, dispatch, currentStep, history, onFormDateValidate, onCreatingChange, onFormDataChange]);
-
-  const onValidationRedirect = useCallback(
-    (key: PivotTabKey) => {
-      if (onFormDateValidate(currentStep)) return;
-
-      onLinkClick(key);
-    },
-    [onLinkClick, onFormDateValidate, currentStep],
-  );
-
-  const onCascadeValidate = useCallback(
-    async (key: PivotTabKey) => {
-      const error = isCascadeError(elements);
-      if (isCascadeError(elements)) {
-        onFormDataChange({ ...localFormData, cascade: { ...localFormData.cascade, error } });
-        return;
-      }
-
-      onCreatingChange(true);
-
-      const elementsPayload = convertElementsPayload(elements);
-      const blob = await html2canvas(reactFlowRef.current, {
-        backgroundColor: theme.palette.neutralLight,
-      });
-      const dataURL = blob.toDataURL();
-
-      onFormDataChange({
-        ...localFormData,
-        raw_data: JSON.stringify(elements),
-        cascade: {
-          flow: JSON.stringify({
-            ...elementsPayload,
-          }),
-          error: '',
-        },
-        screenshot: dataURL,
-      });
-
-      onCreatingChange(false);
-      onLinkClick(key);
-    },
-    [onLinkClick, elements, localFormData, onFormDataChange, reactFlowRef, onCreatingChange],
-  );
+  }, [localFormData, dispatch, history, onCreatingChange]);
 
   return (
     <Stack
@@ -137,7 +80,7 @@ const CreationFooter = (props: Props) => {
       {currentStep === 'cascade' && (
         <PrimaryButton
           text="Review + Create"
-          onClick={() => onCascadeValidate('preview')}
+          onClick={() => onValidationRedirect('preview', currentStep)}
           disabled={
             localFormData.tag_list.length === 0 ||
             localFormData.tag_list.some((tag) => tag.errorMessage !== '')
@@ -145,7 +88,7 @@ const CreationFooter = (props: Props) => {
         />
       )}
       {currentStep === 'tag' && (
-        <PrimaryButton text="Review + Create" onClick={() => onLinkClick('preview')} />
+        <PrimaryButton text="Review + Create" onClick={() => onValidationRedirect('preview', currentStep)} />
       )}
       {currentStep === 'preview' && (
         <PrimaryButton text="Create" onClick={onCreateClick} disabled={isCreating} />
@@ -158,21 +101,12 @@ const CreationFooter = (props: Props) => {
           onClick={() => onLinkClick(getStepKey(currentStep, stepList, -1))}
         />
       )}
-      {['basics', 'tag'].includes(currentStep) && (
+      {['basics', 'cascade', 'tag'].includes(currentStep) && (
         <DefaultButton
           text="Next"
           styles={{ flexContainer: { flexDirection: 'row-reverse' } }}
           iconProps={{ iconName: 'ChevronRight' }}
-          onClick={() => onValidationRedirect(getStepKey(currentStep, stepList, 1))}
-        />
-      )}
-      {currentStep === 'cascade' && (
-        <DefaultButton
-          text="Next"
-          styles={{ flexContainer: { flexDirection: 'row-reverse' } }}
-          iconProps={{ iconName: 'ChevronRight' }}
-          onClick={() => onCascadeValidate('tag')}
-          disabled={isCreating}
+          onClick={() => onValidationRedirect(getStepKey(currentStep, stepList, 1), currentStep)}
         />
       )}
     </Stack>

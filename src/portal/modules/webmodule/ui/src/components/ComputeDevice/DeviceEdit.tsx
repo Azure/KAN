@@ -11,6 +11,7 @@ import { State as RootState } from 'RootStateType';
 import { Url } from '../../constant';
 import { UpdateComputeDeviceFromData, PivotTabKey } from './types';
 import { selectComputeDeviceById } from '../../store/computeDeviceSlice';
+import { getScrllStackClasses } from '../Common/styles';
 
 import Basics from './Edit/Basics';
 import Preview from './Creation/Preview';
@@ -21,6 +22,7 @@ import ErrorIcon from '../Common/ErrorIcon';
 const DeviceEdit = () => {
   const { id, step } = useParams<{ id: string; step: PivotTabKey }>();
   const history = useHistory();
+  const scrllStackClasses = getScrllStackClasses();
 
   const device = useSelector((state: RootState) => selectComputeDeviceById(state, id));
   const [isCreating, setIsCreating] = useState(false);
@@ -130,7 +132,7 @@ const DeviceEdit = () => {
       <Stack horizontal verticalAlign="center">
         <Pivot
           styles={{ itemContainer: { height: 'calc(100% - 44px)' } }}
-          onLinkClick={(item) => onLinkClick(item?.props.itemKey! as PivotTabKey)}
+          onLinkClick={(item) => onLinkClick(item?.props.itemKey as PivotTabKey)}
           selectedKey={localPivotKey}
         >
           <PivotItem headerText="Basics" itemKey="basics" />
@@ -153,25 +155,27 @@ const DeviceEdit = () => {
         </Pivot>
         {isCreating && <Spinner size={3} />}
       </Stack>
-      <Switch>
-        <Route
-          exact
-          path={Url.COMPUTE_DEVICE_EDIT_PREVIEW}
-          render={() => <Preview localFormData={localFormData} onLinkClick={onLinkClick} />}
-        />
-        <Route
-          exact
-          path={Url.COMPUTE_DEVICE_EDIT_TAG}
-          render={() => (
-            <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
-          )}
-        />
-        <Route
-          exact
-          path={Url.COMPUTE_DEVICE_EDIT_BASIC}
-          render={() => <Basics localFormData={localFormData} onFormDataChange={onFormDataChange} />}
-        />
-      </Switch>
+      <Stack styles={{ root: scrllStackClasses.root }}>
+        <Switch>
+          <Route
+            exact
+            path={Url.COMPUTE_DEVICE_EDIT_PREVIEW}
+            render={() => <Preview localFormData={localFormData} onLinkClick={onLinkClick} />}
+          />
+          <Route
+            exact
+            path={Url.COMPUTE_DEVICE_EDIT_TAG}
+            render={() => (
+              <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
+            )}
+          />
+          <Route
+            exact
+            path={Url.COMPUTE_DEVICE_EDIT_BASIC}
+            render={() => <Basics localFormData={localFormData} onFormDataChange={onFormDataChange} />}
+          />
+        </Switch>
+      </Stack>
       <EditFooter
         id={device.id}
         currentStep={localPivotKey}

@@ -18,7 +18,7 @@ const Basics = (props: Props) => {
   const { localFormData } = props;
 
   return (
-    <Stack styles={{ root: { paddingTop: '40px' } }} tokens={{ childrenGap: 30 }}>
+    <Stack styles={{ root: { padding: '40px 0' } }} tokens={{ childrenGap: 30 }}>
       <Stack tokens={{ childrenGap: 10 }}>
         <Stack>
           <Label styles={{ root: { fontWeight: 600, lineHeight: '20px' } }}>Basic Info</Label>

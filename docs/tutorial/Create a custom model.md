@@ -12,95 +12,94 @@ For our example use case we will add a custom model that detects when a store ha
 
 The **Model** blade on the left navigation displays two options for adding models to the workspace: **Create Custom Model** or **Browse Model Zoo**.
 
-![](.media/1764311277118aee1939d3d6de71a70c.png)
+![](./media/1764311277118aee1939d3d6de71a70c.png)
 
 1.  From the left navigation, select **Models**.
 2.  To add a prebuilt model, select **Create Custom Model**.
-1.  To reuse an existing Azure Custom Vision (ACV) model2, or to create one from scratch, select **Create Custom Model**.
+3.  To reuse an existing Azure Custom Vision (ACV) model2, or to create one from scratch, select **Create Custom Model**.
 
-    When prompted, choose whether the model is based on an existing or not.
+    When prompted, choose whether the model is based on an existing model or not.
 
-![](.media/b835ebaaf679f77b65ea469bdf8d346a.png)
+![](./media/b835ebaaf679f77b65ea469bdf8d346a.png)
 
-1.  If you select **Yes,** a dropdown list appears allowing you to choose from available models.
+4.  If you select **Yes,** a dropdown list appears allowing you to choose from available models.
 
-![](.media/213d25b05e45e2786acbc49403b7bc5b.png)
+![](./media/213d25b05e45e2786acbc49403b7bc5b.png)
 
-1.  If you select **No**, you can create your own model. Enter **Model Name**, **Type**, and **Objects**.
+5.  If you select **No**, you can create your own model. Enter **Model Name**, **Type**, and **Objects**.
 
-![](.media/47e4b4825eca44d66ef76dd5e54bc220.png)
+![](./media/47e4b4825eca44d66ef76dd5e54bc220.png)
 
-![](.media/326cfc9977c999eb763901c3920b7f7d.png)
+![](./media/326cfc9977c999eb763901c3920b7f7d.png)
 
-1.  Select **Objects** and enter at least one tag for the detection model to identify. Objects should be in quotes and separated by commas.
+6.  Select **Objects** and enter at least one tag for the detection model to identify. Objects should be in quotes and separated by commas.
 
-![](.media/ce1cc6e2e3dd4846f6ae958051c39511.png)
+![](./media/ce1cc6e2e3dd4846f6ae958051c39511.png)
 
 These tags will be used later when you’re training the model to identify and label objects from the camera feeds.
 
-1.  Select **Review + Create** or **Next** to move to the **Tags** page.
-1.  When you have finished adding tags, select **Review + Create** to move to the next .
+7.  Select **Review + Create** or **Next** to move to the **Tags** page.
+8.  When you have finished adding tags, select **Review + Create** to move to the next .
 
-![](.media/efdff115ebd1ac5988e09d7cd1aefac2.png)
+![](./media/efdff115ebd1ac5988e09d7cd1aefac2.png)
 
-1.  Select **Review + Create** to confirm all the inputs. If you want to make any changes, select **Edit**.
+9.  Select **Review + Create** to confirm all the inputs. If you want to make any changes, select **Edit**.
 
-![](.media/bf00a8ace64970c3da335b4660153f77.png)
+![](./media/bf00a8ace64970c3da335b4660153f77.png)
 
-1.  To add the model, select **Create**.
+10.  To add the model, select **Create**.
 
-![](.media/63c9948df94ad9329d4bc21f1ed04780.png)
+![](./media/63c9948df94ad9329d4bc21f1ed04780.png)
 
 ## Model Training
 
 Training the model consists of identifying the objects to be detected or classified and then providing tagged images where the object appears. This [*supervised learning*](https://docs.microsoft.com/en-us/learn/modules/introduction-to-classical-machine-learning/) allows the model’s layers to build features layer by layer. As with any neural network, more data is correlated with a more accurate model.
 
 1.  To train the model, **Model Properties** box, select **Train Model**.
-2.  
 
-![](.media/c552f72443fc4ba9df09f7b3ba47a0c4.png)
+![](./media/c552f72443fc4ba9df09f7b3ba47a0c4.png)
 
-1.  Select **Type Object** to enter any additional tags, and then press **Enter**.
+2.  Select **Type Object** to enter any additional tags, and then press **Enter**.
 
-![](.media/4c990c318622c694306b8c2421a0218b.png)
+![](./media/4c990c318622c694306b8c2421a0218b.png)
 
-1.  After adding objects, select **Save.**
+3.  After adding objects, select **Save.**
 
     Now that you have identified the objects, the next step is to enter input so the model can find objects in a camera feed.
 
-2.  To start the tagging process, select **Capture from camera** and then select a camera from the **Select Camera** dropdown list.
+4.  To start the tagging process, select **Capture from camera** and then select a camera from the **Select Camera** dropdown list.
 
-![](.media/e2250059b66fb4ba00db0709e45081d8.png)
+![](./media/e2250059b66fb4ba00db0709e45081d8.png)
 
-1.  Select **Capture Image.**
+5.  Select **Capture Image.**
 
-![](.media/2cd7bb47072416fae27893e9ac52c07c.png)
+![](./media/2cd7bb47072416fae27893e9ac52c07c.png)
 
-1.  Select **Go to Tagging**
+6.  Select **Go to Tagging**
 
-![](.media/e58489f222cc1130967db12b2ff090a0.png)
+![](./media/e58489f222cc1130967db12b2ff090a0.png)
 
-1.  Tags you have previously identified appear as options. Select **Low stock**. The **Low Stock** tag represents those areas of the image with little or no stock.
-2.  Using the mouse, draw a box around an area of the image representing low stock.   
+7.  Tags you have previously identified appear as options. Select **Low stock**. The **Low Stock** tag represents those areas of the image with little or no stock.
+8.  Using the mouse, draw a box around an area of the image representing low stock.   
     The best practice is to include as much of the object as possible.
 
-![](.media/9b531aa2141135ca3d8e6e153f81623c.png)
+![](./media/9b531aa2141135ca3d8e6e153f81623c.png)
 
-1.  To see the tagged image library, select **Done**.
+9.  To see the tagged image library, select **Done**.
 
-![](.media/7cb3690038117d24797fb2307ea32f23.png)
+![](./media/7cb3690038117d24797fb2307ea32f23.png)
 
 The model requires at least fifteen images for training. More images will improve the model’s performance. You can continue to improve the model over time by adding more images and tagging them. Note that the **Tagged** slider turns blue to reflect the status of the image.
 
-1.  To add images, select **Capture from camera**.
+10.  To add images, select **Capture from camera**.
 
-![](.media/2041854d4094a8f5dfc0039a29ac8356.png)
+![](./media/2041854d4094a8f5dfc0039a29ac8356.png)
 
-1.  Now that there are enough tagged images, select **Train.**
+11.  Now that there are enough tagged images, select **Train.**
 
-    It may take to train the model.
+    It may take time to train the model.
 
-![](.media/47a0517359d08420236a0b5745e0b3ba.png)
+![](./media/47a0517359d08420236a0b5745e0b3ba.png)
 
 When **Successfully trained Model!** displays, the model is ready to be added to AI Skills.
 

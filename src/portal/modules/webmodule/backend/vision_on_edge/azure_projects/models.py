@@ -483,7 +483,7 @@ class Project(models.Model):
                 model_client.deploy_config(group="ai.symphony", plural="models")
             else:
                 # update
-                model_client.update_config(
+                model_client.patch_config(
                     group="ai.symphony", plural="models", name=instance.symphony_id)
 
     @staticmethod

@@ -65,13 +65,16 @@ class SymphonyClient:
     def get_config(self):
         raise NotImplementedError
 
+    def get_patch_config(self):
+        raise NotImplementedError
+
     def deploy_config(self, group, plural):
-        api_instance = self.get_client()
-        if api_instance:
+        api = self.get_client()
+        if api:
             resource_json = self.get_config()
             logger.warning(resource_json)
             try:
-                api_instance.create_namespaced_custom_object(
+                api.create_namespaced_custom_object(
                     group=group,
                     version="v1",
                     namespace="default",
@@ -85,11 +88,11 @@ class SymphonyClient:
             logger.warning("not deployed")
 
     def update_config(self, group, plural, name):
-        api_instance = self.get_client()
-        if api_instance:
+        api = self.get_client()
+        if api:
             resource_json = self.get_config()
             try:
-                api_instance.patch_namespaced_custom_object(
+                api.patch_namespaced_custom_object(
                     group=group,
                     version="v1",
                     namespace="default",
@@ -103,11 +106,40 @@ class SymphonyClient:
         else:
             logger.warning("not deployed")
 
-    def remove_config(self, group, plural, name):
-        api_instance = self.get_client()
-        if api_instance:
+    def patch_config(self, group, plural, name):
+        '''patch k8s object using api_call directly to set the patch strategy 
+        '''
+
+        api = self.get_client()
+        if api:
             try:
-                api_instance.delete_namespaced_custom_object(
+                query_params = []
+                path_params = {
+                    "group": group,
+                    "version": "v1",
+                    "namespace": "default",
+                    "plural": plural,
+                    "name": name
+                }
+                header_params = {
+                    "Accept": api.api_client.select_header_accept(['application/json']),
+                    "Content-Type": api.api_client.select_header_content_type(['application/json-patch+json'])
+                }
+                auth_settings = ['BearerToken']
+                patch_config = self.get_patch_config()
+                api.api_client.call_api('/apis/{group}/{version}/namespaces/{namespace}/{plural}/{name}', 'PATCH',
+                                        path_params, query_params, header_params, body=patch_config, auth_settings=auth_settings)
+            except Exception as e:
+                logger.warning("fail")
+                logger.warning(e)
+        else:
+            logger.warning("not patched")
+
+    def remove_config(self, group, plural, name):
+        api = self.get_client()
+        if api:
+            try:
+                api.delete_namespaced_custom_object(
                     group=group,
                     version="v1",
                     namespace="default",

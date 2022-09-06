@@ -39,12 +39,12 @@ enum Url {
   CASCADES_CREATE = '/cascades/create',
 
   DEPLOYMENT = '/deployment',
-  DEPLOYMENT_CREATION = '/deployment/create/:key',
+  DEPLOYMENT_CREATION = '/deployment/create/:step',
   DEPLOYMENT_CREATION_BASIC = '/deployment/create/basics',
   DEPLOYMENT_CREATION_CONFIGURE = '/deployment/create/configure',
   DEPLOYMENT_CREATION_TAG = '/deployment/create/tag',
   DEPLOYMENT_CREATION_PREVIEW = '/deployment/create/preview',
-  DEPLOYMENT_EDIT = '/deployment/edit/:id/:key',
+  DEPLOYMENT_EDIT = '/deployment/edit/:id/:step',
   DEPLOYMENT_EDIT_BASIC = '/deployment/edit/:id/basics',
   DEPLOYMENT_EDIT_CONFIGURE = '/deployment/edit/:id/configure',
   DEPLOYMENT_EDIT_TAG = '/deployment/edit/:id/tag',
@@ -65,7 +65,7 @@ enum Url {
   COMPUTE_DEVICE_EDIT_PREVIEW = '/computeDevice/edit/:id/preview',
 
   AI_SKILL = '/aiSkill',
-  AI_SKILL_CREATION = '/aiSkill/create/:key',
+  AI_SKILL_CREATION = '/aiSkill/create/:step',
   AI_SKILL_CREATION_BASIC = '/aiSkill/create/basics',
   AI_SKILL_CREATION_CASCADE = '/aiSkill/create/cascade',
   AI_SKILL_CREATION_TAG = '/aiSkill/create/tag',

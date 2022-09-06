@@ -113,7 +113,7 @@ const Basics = (props: Props) => {
   }, [onIotHubDeviceFetch, onFormDataChange, localFormData]);
 
   return (
-    <Stack styles={{ root: { paddingTop: '40px' } }} tokens={{ childrenGap: 35 }}>
+    <Stack styles={{ root: { padding: '40px 0' } }} tokens={{ childrenGap: 35 }}>
       <Stack tokens={{ childrenGap: 15 }}>
         <Stack>
           <Label styles={{ root: { fontWeight: 600, lineHeight: '20px' } }}>Basic Info</Label>

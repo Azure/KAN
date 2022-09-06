@@ -19,3 +19,12 @@ export const getFooterClasses = () =>
       backgroundColor: '#FFF4CE',
     },
   });
+
+export const getScrllStackClasses = () =>
+  mergeStyleSets({
+    root: {
+      height: 'calc(100% - 150px)',
+      overflowY: 'auto',
+      overflowX: 'hidden',
+    },
+  });

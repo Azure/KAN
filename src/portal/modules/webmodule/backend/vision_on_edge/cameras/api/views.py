@@ -16,6 +16,7 @@ from rest_framework.exceptions import ValidationError
 
 from ..models import Camera
 from .serializers import CameraSerializer
+from ...general.shortcuts import drf_get_object_or_404
 
 logger = logging.getLogger(__name__)
 
@@ -44,13 +45,6 @@ class CameraViewSet(FiltersMixin, viewsets.ModelViewSet):
             camera_obj.save()
         return queryset
 
-    def get_object(self):
-        camera_obj = super().get_object()
-        camera_obj.status = camera_obj.get_status()
-        camera_obj.skip_signals = True  # only update column, skip symphony api
-        camera_obj.save()
-        return camera_obj
-
     @action(detail=False, methods=["delete"], url_path="bulk-delete")
     def bulk_delete(self, request):
         logger.warning(request)
@@ -61,3 +55,17 @@ class CameraViewSet(FiltersMixin, viewsets.ModelViewSet):
         # this would not trigger pre/post delete, get instance and delete if needed
         Camera.objects.filter(id__in=ids).all().delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=["get"], url_path="update_status")
+    def update_status(self, request, pk=None):
+        queryset = self.get_queryset()
+        camera_obj = drf_get_object_or_404(queryset, pk=pk)
+        camera_obj.status = camera_obj.get_status()
+        camera_obj.skip_signals = True  # only update column, skip symphony api
+        camera_obj.save()
+
+        serializer = CameraSerializer(camera_obj)
+
+        logger.warning('Retrieving device status')
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

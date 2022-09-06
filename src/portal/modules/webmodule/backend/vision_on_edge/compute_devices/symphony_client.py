@@ -112,6 +112,21 @@ class SymphonyTargetClient(SymphonyClient):
         }
         return config_json
 
+    def get_patch_config(self):
+
+        tag_list = self.args.get("tag_list", "")
+
+        labels = {}
+        if tag_list:
+            for tag in json.loads(tag_list):
+                labels[tag["name"]] = tag["value"]
+
+        # can only patch labels on portal for now
+        patch_config = [
+            {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
+        ]
+        return patch_config
+
     def load_symphony_objects(self):
         from .models import ComputeDevice
 
@@ -319,8 +334,9 @@ class SymphonySolutionClient(SymphonyClient):
             )
 
             for module in solution['spec']['components']:
-                module["properties"]["env.REVISIONS"] = str(int(module["properties"].get("env.REVISIONS", "0")) + 1)
-            
+                module["properties"]["env.REVISIONS"] = str(
+                    int(module["properties"].get("env.REVISIONS", "0")) + 1)
+
             try:
                 api.patch_namespaced_custom_object(
                     group="solution.symphony",
@@ -333,4 +349,3 @@ class SymphonySolutionClient(SymphonyClient):
             except Exception as e:
                 logger.warning("fail")
                 logger.warning(e)
-

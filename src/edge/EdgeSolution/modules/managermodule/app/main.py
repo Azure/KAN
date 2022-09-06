@@ -177,14 +177,18 @@ if __name__ == '__main__':
     print(raw_aiskills)
 
     
-    while True:    
-        instance = client.get_instance(instance_name)
-        if instance is None:
-            print('Getting instance', instance_name, flush=True)
-            time.sleep(1)
-        else:
-            break
-        
+    while True:
+        try:
+            instance = client.get_instance(instance_name)
+            if instance is None:
+                print('Getting instance', instance_name, flush=True)
+                time.sleep(1)
+            else:
+                break
+        except Exception as e:
+            print('ERROR', e, flush=True)
+            time.sleep(10)
+
     instance_spec = InstanceSpec(**instance['spec'])
     print(instance_spec)
 

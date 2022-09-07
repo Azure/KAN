@@ -34,6 +34,22 @@ class SymphonySkillClient(SymphonyClient):
         }
         return config_json
 
+    def get_patch_config(self):
+
+        tag_list = self.args.get("tag_list", "")
+        spec = self.args.get("spec", "")
+
+        labels = {}
+        if tag_list:
+            for tag in json.loads(tag_list):
+                labels[tag["name"]] = tag["value"]
+
+        patch_config = [
+            {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
+            {'op': 'replace', 'path': '/spec', 'value': spec},
+        ]
+        return patch_config
+
     def load_symphony_objects(self):
         from .models import Cascade
 

@@ -172,7 +172,7 @@ class Camera(models.Model):
             device_client.deploy_config(group="fabric.symphony", plural="devices")
         else:
             # update
-            device_client.update_config(
+            device_client.patch_config(
                 group="fabric.symphony", plural="devices", name=instance.symphony_id)
 
     @staticmethod

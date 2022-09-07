@@ -44,6 +44,22 @@ class SymphonyInstanceClient(SymphonyClient):
         }
         return config_json
 
+    def get_patch_config(self):
+
+        params = self.args.get("params", {})
+        tag_list = self.args.get("tag_list", "")
+
+        labels = {}
+        if tag_list:
+            for tag in json.loads(tag_list):
+                labels[tag["name"]] = tag["value"]
+
+        patch_config = [
+            {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
+            {'op': 'replace', 'path': '/spec/parameters', 'value': params}
+        ]
+        return patch_config
+
     def load_symphony_objects(self):
         from .models import Deployment
         from ..cameras.models import Camera

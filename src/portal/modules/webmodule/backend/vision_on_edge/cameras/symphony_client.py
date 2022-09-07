@@ -55,6 +55,31 @@ class SymphonyDeviceClient(SymphonyClient):
         }
         return config_json
 
+    def get_patch_config(self):
+
+        allowed_devices = self.args.get("allowed_devices", "")
+        rtsp = self.args.get("rtsp", "")
+        username = self.args.get("username", "")
+        password = self.args.get("password", "")
+        location = self.args.get("location", "")
+        tag_list = self.args.get("tag_list", "")
+
+        device_list = json.loads(allowed_devices)
+        labels = {k: "true" for k in device_list}
+        logger.warning(f"setting camera tags: {tag_list}")
+        if tag_list:
+            for tag in json.loads(tag_list):
+                labels[tag["name"]] = tag["value"]
+
+        patch_config = [
+            {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
+            {'op': 'replace', 'path': '/spec/properties/ip', 'value': rtsp},
+            {'op': 'replace', 'path': '/spec/properties/user', 'value': username},
+            {'op': 'replace', 'path': '/spec/properties/password', 'value': password},
+            {'op': 'replace', 'path': '/spec/properties/location', 'value': location},
+        ]
+        return patch_config
+
     def get_snapshot_url(self, name):
 
         api = self.get_client()

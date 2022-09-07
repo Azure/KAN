@@ -8,6 +8,7 @@ import { clone, isEmpty } from 'ramda';
 
 import { Url, ERROR_BLANK_VALUE, ERROR_NAME_BE_USED, ERROR_NAME_BLANK } from '../../constant';
 import { CreateComputeDeviceFormData, PivotTabKey } from './types';
+import { getScrllStackClasses } from '../Common/styles';
 
 import Basics from './Creation/Basics';
 import Preview from './Creation/Preview';
@@ -37,9 +38,10 @@ const getLocalFormError = (form: CreateComputeDeviceFormData, existingNameList: 
 
 const ComputeDeviceCreation = (props: Props) => {
   const { existingNameList } = props;
-  const { step } = useParams<{ step: PivotTabKey }>();
 
+  const { step } = useParams<{ step: PivotTabKey }>();
   const history = useHistory();
+  const scrllStackClasses = getScrllStackClasses();
 
   const [isCreating, setIsCreating] = useState(false);
   const [localFormData, setLocalFormData] = useState<CreateComputeDeviceFormData>({
@@ -143,7 +145,6 @@ const ComputeDeviceCreation = (props: Props) => {
     <>
       <Stack horizontal verticalAlign="center">
         <Pivot
-          styles={{ itemContainer: { height: 'calc(100% - 44px)' } }}
           onLinkClick={(item) => onValidationRedirect(item?.props.itemKey as PivotTabKey)}
           selectedKey={localPivotKey}
         >
@@ -176,25 +177,27 @@ const ComputeDeviceCreation = (props: Props) => {
         </Pivot>
         {isCreating && <Spinner size={3} />}
       </Stack>
-      <Switch>
-        <Route
-          exact
-          path={Url.COMPUTE_DEVICE_CREATION_PREVIEW}
-          render={() => <Preview localFormData={localFormData} onLinkClick={onLinkClick} />}
-        />
-        <Route
-          exact
-          path={Url.COMPUTE_DEVICE_CREATION_TAG}
-          render={() => (
-            <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
-          )}
-        />
-        <Route
-          exact
-          path={Url.COMPUTE_DEVICE_CREATION_BASIC}
-          render={() => <Basics localFormData={localFormData} onFormDataChange={onFormDataChange} />}
-        />
-      </Switch>
+      <Stack styles={{ root: scrllStackClasses.root }}>
+        <Switch>
+          <Route
+            exact
+            path={Url.COMPUTE_DEVICE_CREATION_PREVIEW}
+            render={() => <Preview localFormData={localFormData} onLinkClick={onLinkClick} />}
+          />
+          <Route
+            exact
+            path={Url.COMPUTE_DEVICE_CREATION_TAG}
+            render={() => (
+              <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
+            )}
+          />
+          <Route
+            exact
+            path={Url.COMPUTE_DEVICE_CREATION_BASIC}
+            render={() => <Basics localFormData={localFormData} onFormDataChange={onFormDataChange} />}
+          />
+        </Switch>
+      </Stack>
       <CreateFooter
         currentStep={localPivotKey}
         localFormData={localFormData}

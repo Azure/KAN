@@ -24,9 +24,10 @@ interface Props {
   onModelCreating: () => void;
   stepList: PivotTabKey[];
   onFormDateValidate: (key: PivotTabKey) => boolean;
+  onValidationRedirect: (key: PivotTabKey) => void;
 }
 
-const Footer = (props: Props) => {
+const CreateFooter = (props: Props) => {
   const {
     currentStep,
     onLinkClick,
@@ -35,6 +36,7 @@ const Footer = (props: Props) => {
     stepList,
     onFormDateValidate,
     onModelCreating,
+    onValidationRedirect,
   } = props;
 
   const classes = getFooterClasses();
@@ -76,15 +78,6 @@ const Footer = (props: Props) => {
     });
   }, [localFormData, onModelAdd, onModelCreate, currentStep, history, onFormDateValidate, onModelCreating]);
 
-  const onValidationRedirect = useCallback(
-    (key: PivotTabKey) => {
-      if (onFormDateValidate(currentStep)) return;
-
-      onLinkClick(key);
-    },
-    [onLinkClick, onFormDateValidate, currentStep],
-  );
-
   return (
     <Stack
       horizontal
@@ -94,7 +87,7 @@ const Footer = (props: Props) => {
       }}
     >
       {['basics', 'tag'].includes(currentStep) ? (
-        <PrimaryButton text="Review + Create" onClick={() => onLinkClick('preview')} />
+        <PrimaryButton text="Review + Create" onClick={() => onValidationRedirect('preview')} />
       ) : (
         <PrimaryButton text="Create" disabled={isCreating} onClick={onCreateClick} />
       )}
@@ -118,4 +111,4 @@ const Footer = (props: Props) => {
   );
 };
 
-export default Footer;
+export default CreateFooter;

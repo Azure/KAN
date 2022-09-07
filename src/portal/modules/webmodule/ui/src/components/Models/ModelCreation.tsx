@@ -3,27 +3,52 @@
 
 import React, { useState, useCallback } from 'react';
 import { Stack, Pivot, PivotItem, IPivotItemProps, IDropdownOption, Spinner } from '@fluentui/react';
-import { useHistory, generatePath, useLocation, Route, Switch } from 'react-router-dom';
-import { clone } from 'ramda';
+import { useHistory, generatePath, Route, Switch, useParams } from 'react-router-dom';
+import { clone, isEmpty } from 'ramda';
 import { useSelector } from 'react-redux';
 
 import { State as RootState } from 'RootStateType';
 import { CreateModelFormData, PivotTabKey } from './types';
 import { Url, ERROR_BLANK_VALUE, ERROR_NAME_BLANK } from '../../constant';
 import { customVisionTrainingProjectFactory } from '../../store/trainingProjectSlice';
+import { getScrllStackClasses } from '../Common/styles';
 
 import Basics from './Creation/Basics';
 import Preview from './Creation/Preview';
 import TagTab, { Tag, getErrorMessage } from '../Common/TagTab';
-import Footer from './Creation/Footer';
+import CreateFooter from './Creation/CreateFooter';
 import ErrorIcon from '../Common/ErrorIcon';
 
 const ERROR_LEAST_ONE_OBJECT = 'At least 1 object. Type object and press enter';
 const ERROR_LEAST_TWO_OBJECT = 'At least 2 objects. Type object and press enter';
 
+const getLocalFormError = (form: CreateModelFormData) => {
+  const error = {
+    createType: '',
+    name: '',
+    type: '',
+    objects: '',
+    customVisionId: '',
+    classification: '',
+  };
+
+  if (isEmpty(form.createType)) error.createType = ERROR_BLANK_VALUE;
+  if (form.createType === 'yes' && isEmpty(form.customVisionId)) error.customVisionId = ERROR_BLANK_VALUE;
+  if (form.createType === 'no') {
+    if (isEmpty(form.name)) error.name = ERROR_NAME_BLANK;
+    if (isEmpty(form.type)) error.type = ERROR_BLANK_VALUE;
+    if (isEmpty(form.objects)) error.objects = ERROR_BLANK_VALUE;
+    if (form.type === 'ObjectDetection' && form.objects.length === 0) error.objects = ERROR_LEAST_ONE_OBJECT;
+    if (form.type === 'Classification' && form.objects.length < 2) error.objects = ERROR_LEAST_TWO_OBJECT;
+  }
+
+  return error;
+};
+
 const ModelCreation = () => {
   const history = useHistory();
-  const location = useLocation();
+  const scrollClasses = getScrllStackClasses();
+  const { key: createStep } = useParams<{ key: PivotTabKey }>();
 
   const customVisionProject = useSelector((state: RootState) => state.setting.cvProjects);
   const customVisionTrainingProject = useSelector(customVisionTrainingProjectFactory());
@@ -52,9 +77,7 @@ const ModelCreation = () => {
       classification: '',
     },
   });
-  const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(
-    location.pathname.split('/')[3] as PivotTabKey,
-  );
+  const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(createStep);
 
   const onLinkClick = useCallback(
     (key: PivotTabKey) => {
@@ -69,9 +92,10 @@ const ModelCreation = () => {
     [history],
   );
 
-  const onFormDataChange = useCallback((newFormData: CreateModelFormData) => {
-    setLocalFormData({ ...newFormData });
-  }, []);
+  const onFormDataChange = useCallback(
+    (newFormData: CreateModelFormData) => setLocalFormData({ ...newFormData }),
+    [],
+  );
 
   const onTagChange = useCallback(
     (idx: number, newTag: Tag) => {
@@ -103,60 +127,16 @@ const ModelCreation = () => {
   );
 
   const onFormDateValidate = useCallback(
-    (currentStep: PivotTabKey) => {
-      if (localFormData.createType === '') {
+    (_: PivotTabKey) => {
+      const error = getLocalFormError(localFormData);
+
+      if (Object.values(error).some((value) => !isEmpty(value))) {
         setLocalFormData((prev) => ({
           ...prev,
-          error: { ...prev.error, createType: ERROR_BLANK_VALUE },
+          error,
         }));
+
         return true;
-      }
-
-      if (localFormData.createType === 'yes' && localFormData.customVisionId === '') {
-        setLocalFormData((prev) => ({
-          ...prev,
-          error: { ...prev.error, customVisionId: ERROR_BLANK_VALUE },
-        }));
-        return true;
-      }
-
-      if (localFormData.createType === 'no') {
-        if (localFormData.name === '') {
-          setLocalFormData((prev) => ({ ...prev, error: { ...prev.error, name: ERROR_NAME_BLANK } }));
-          return true;
-        }
-
-        if (localFormData.type === '') {
-          setLocalFormData((prev) => ({
-            ...prev,
-            error: { ...prev.error, type: ERROR_BLANK_VALUE },
-          }));
-          return true;
-        }
-
-        // if (localFormData.type === 'Classification' && localFormData.classification === '') {
-        //   setLocalFormData((prev) => ({
-        //     ...prev,
-        //     error: { ...prev.error, classification: 'Value cannot be blank.' },
-        //   }));
-        //   return true;
-        // }
-
-        if (localFormData.type === 'ObjectDetection' && localFormData.objects.length === 0) {
-          setLocalFormData((prev) => ({
-            ...prev,
-            error: { ...prev.error, objects: ERROR_LEAST_ONE_OBJECT },
-          }));
-          return true;
-        }
-
-        if (localFormData.type === 'Classification' && localFormData.objects.length < 2) {
-          setLocalFormData((prev) => ({
-            ...prev,
-            error: { ...prev.error, objects: ERROR_LEAST_TWO_OBJECT },
-          }));
-          return true;
-        }
       }
 
       if (
@@ -171,12 +151,21 @@ const ModelCreation = () => {
     [localFormData],
   );
 
+  const onValidationRedirect = useCallback(
+    (key: PivotTabKey) => {
+      if (onFormDateValidate(key)) return;
+
+      onLinkClick(key);
+    },
+    [onLinkClick, onFormDateValidate],
+  );
+
   return (
     <>
       <Stack horizontal verticalAlign="center">
         <Pivot
           styles={{ itemContainer: { height: 'calc(100% - 44px)' } }}
-          onLinkClick={(item) => onLinkClick(item?.props.itemKey! as PivotTabKey)}
+          onLinkClick={(item) => onValidationRedirect(item?.props.itemKey as PivotTabKey)}
           selectedKey={localPivotKey}
         >
           <PivotItem
@@ -208,42 +197,44 @@ const ModelCreation = () => {
         </Pivot>
         {isCreating && <Spinner size={3} />}
       </Stack>
-      <Switch>
-        <Route
-          exact
-          path={Url.MODELS_CREATION_PREVIEW}
-          render={() => (
-            <Preview
-              localFormData={localFormData}
-              onLinkClick={onLinkClick}
-              customVisionName={
-                localFormData.customVisionId
-                  ? customVisionProject.find((project) => project.id === localFormData.customVisionId).name
-                  : ''
-              }
-            />
-          )}
-        />
-        <Route
-          exact
-          path={Url.MODELS_CREATION_TAG}
-          render={() => (
-            <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
-          )}
-        />
-        <Route
-          exact
-          path={Url.MODELS_CREATION_BASIC}
-          render={() => (
-            <Basics
-              localFormData={localFormData}
-              onFormDataChange={onFormDataChange}
-              customVisionProjectOptions={customVisionProjectOptions}
-            />
-          )}
-        />
-      </Switch>
-      <Footer
+      <Stack styles={{ root: scrollClasses.root }}>
+        <Switch>
+          <Route
+            exact
+            path={Url.MODELS_CREATION_PREVIEW}
+            render={() => (
+              <Preview
+                localFormData={localFormData}
+                onLinkClick={onLinkClick}
+                customVisionName={
+                  localFormData.customVisionId
+                    ? customVisionProject.find((project) => project.id === localFormData.customVisionId).name
+                    : ''
+                }
+              />
+            )}
+          />
+          <Route
+            exact
+            path={Url.MODELS_CREATION_TAG}
+            render={() => (
+              <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
+            )}
+          />
+          <Route
+            exact
+            path={Url.MODELS_CREATION_BASIC}
+            render={() => (
+              <Basics
+                localFormData={localFormData}
+                onFormDataChange={onFormDataChange}
+                customVisionProjectOptions={customVisionProjectOptions}
+              />
+            )}
+          />
+        </Switch>
+      </Stack>
+      <CreateFooter
         currentStep={localPivotKey}
         onLinkClick={onLinkClick}
         localFormData={localFormData}
@@ -251,6 +242,7 @@ const ModelCreation = () => {
         onModelCreating={() => setIsCreating(true)}
         stepList={['basics', 'tag', 'preview']}
         onFormDateValidate={onFormDateValidate}
+        onValidationRedirect={onValidationRedirect}
       />
     </>
   );

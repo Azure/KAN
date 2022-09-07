@@ -20,11 +20,9 @@ interface Props {
   onLinkClick: (key: PivotTabKey) => void;
   localFormData: UpdateAiSkillFormData;
   stepList: PivotTabKey[];
-  onFormDateValidate: (key: PivotTabKey) => boolean;
   isCreating: boolean;
   onCreatingChange: (value: boolean) => void;
-  onFormDataChange: (formData: UpdateAiSkillFormData) => void;
-  onCascadeValidate: (key: PivotTabKey) => void;
+  onValidationRedirect: (nextStep: PivotTabKey, currentStep: PivotTabKey) => void;
   hasUseAiSkill?: boolean;
 }
 
@@ -34,31 +32,24 @@ const EditFooter = (props: Props) => {
     onLinkClick,
     stepList,
     localFormData,
-    onFormDateValidate,
-    onFormDataChange,
+    // onFormDateValidate,
+    // onFormDataChange,
     onCreatingChange,
     isCreating,
     aiSkillId,
-    onCascadeValidate,
+    // onCascadeValidate,
+    onValidationRedirect,
     hasUseAiSkill,
   } = props;
 
   const classes = getFooterClasses();
   const dispatch = useDispatch();
   const history = useHistory();
-  const isWarningDisplay = currentStep === 'preview' && hasUseAiSkill
+  const isWarningDisplay = currentStep === 'preview' && hasUseAiSkill;
 
   const onUpdateClick = useCallback(async () => {
-    if (onFormDateValidate(currentStep)) return;
-    if (localFormData.cascade.flow === '' && localFormData.raw_data === '') {
-      onFormDataChange({
-        ...localFormData,
-        cascade: { ...localFormData.cascade, error: 'Please click Next or Review+Create to save the canvas' },
-      });
-      return;
-    }
-
     onCreatingChange(true);
+
     const payload: UpdateAiSkillPayload = {
       id: +aiSkillId,
       body: {
@@ -78,26 +69,9 @@ const EditFooter = (props: Props) => {
     };
 
     await dispatch(updateAiSkill(payload));
+
     history.push(Url.AI_SKILL);
-  }, [
-    onFormDateValidate,
-    onFormDataChange,
-    localFormData,
-    currentStep,
-    aiSkillId,
-    dispatch,
-    history,
-    onCreatingChange,
-  ]);
-
-  const onValidationRedirect = useCallback(
-    (key: PivotTabKey) => {
-      if (onFormDateValidate(currentStep)) return;
-
-      onLinkClick(key);
-    },
-    [onLinkClick, onFormDateValidate, currentStep],
-  );
+  }, [localFormData, aiSkillId, dispatch, history, onCreatingChange]);
 
   return (
     <Stack
@@ -119,12 +93,15 @@ const EditFooter = (props: Props) => {
         {currentStep === 'cascade' && (
           <PrimaryButton
             text="Review + Update"
-            onClick={() => onCascadeValidate('preview')}
+            onClick={() => onValidationRedirect('preview', currentStep)}
             disabled={isCreating}
           />
         )}
         {currentStep === 'tag' && (
-          <PrimaryButton text="Review + Update" onClick={() => onLinkClick('preview')} />
+          <PrimaryButton
+            text="Review + Update"
+            onClick={() => onValidationRedirect('preview', currentStep)}
+          />
         )}
         {currentStep === 'preview' && (
           <PrimaryButton text="Update" onClick={onUpdateClick} disabled={isCreating} />
@@ -138,29 +115,12 @@ const EditFooter = (props: Props) => {
             disabled={isCreating}
           />
         )}
-        {currentStep === 'basics' && (
+        {['basics', 'cascade', 'tag'].includes(currentStep) && (
           <DefaultButton
             text="Next"
             styles={{ flexContainer: { flexDirection: 'row-reverse' } }}
             iconProps={{ iconName: 'ChevronRight' }}
-            onClick={() => onLinkClick(getStepKey(currentStep, stepList, 1))}
-          />
-        )}
-        {currentStep === 'cascade' && (
-          <DefaultButton
-            text="Next"
-            styles={{ flexContainer: { flexDirection: 'row-reverse' } }}
-            iconProps={{ iconName: 'ChevronRight' }}
-            onClick={() => onCascadeValidate('tag')}
-            disabled={isCreating}
-          />
-        )}
-        {currentStep === 'tag' && (
-          <DefaultButton
-            text="Next"
-            styles={{ flexContainer: { flexDirection: 'row-reverse' } }}
-            iconProps={{ iconName: 'ChevronRight' }}
-            onClick={() => onValidationRedirect(getStepKey(currentStep, stepList, 1))}
+            onClick={() => onValidationRedirect(getStepKey(currentStep, stepList, 1), currentStep)}
           />
         )}
       </Stack>

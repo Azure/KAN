@@ -4,10 +4,10 @@
 import React, { useState, useCallback } from 'react';
 import { Stack, Pivot, PivotItem, IPivotItemProps } from '@fluentui/react';
 import { useHistory, generatePath, Route, Switch, useParams } from 'react-router-dom';
-import { clone } from 'ramda';
+import { clone, isEmpty } from 'ramda';
 
 import { Url, ERROR_BLANK_VALUE, ERROR_NAME_BE_USED, ERROR_NAME_BLANK } from '../../constant';
-import { CreateDeploymentFormData, PivotTabKey } from './types';
+import { CreateDeploymentFormData, PivotTabKey, STEP_ORDER } from './types';
 import { getDeploymentWrapperClasses } from './styles';
 
 import TagTab, { Tag, getErrorMessage } from '../Common/TagTab';
@@ -21,10 +21,25 @@ interface Props {
   existingNameList: string[];
 }
 
+const getBasicsError = (form: CreateDeploymentFormData, existingNameList: string[]) => {
+  const error = {
+    name: '',
+    cameraList: '',
+    device: '',
+  };
+
+  if (isEmpty(form.name)) error.name = ERROR_NAME_BLANK;
+  if (existingNameList.includes(form.name)) error.name = ERROR_NAME_BE_USED;
+  if (form.device.key === -1) error.device = ERROR_BLANK_VALUE;
+  if (form.cameraList.length === 0) error.cameraList = ERROR_BLANK_VALUE;
+
+  return error;
+};
+
 const DeploymentCreation = (props: Props) => {
   const { existingNameList } = props;
-  const { key } = useParams<{ key: PivotTabKey }>();
 
+  const { step: createdStep } = useParams<{ step: PivotTabKey }>();
   const history = useHistory();
   const classes = getDeploymentWrapperClasses();
 
@@ -41,7 +56,7 @@ const DeploymentCreation = (props: Props) => {
       skillList: '',
     },
   });
-  const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(key);
+  const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(createdStep);
 
   const onLinkClick = useCallback(
     (key: PivotTabKey) => {
@@ -49,7 +64,7 @@ const DeploymentCreation = (props: Props) => {
 
       history.push(
         generatePath(Url.DEPLOYMENT_CREATION, {
-          key,
+          step: key,
         }),
       );
     },
@@ -90,35 +105,22 @@ const DeploymentCreation = (props: Props) => {
   );
 
   const onFormDateValidate = useCallback(
-    (currentStep: PivotTabKey) => {
-      if (localFormData.name === '') {
-        setLocalFormData((prev) => ({ ...prev, error: { ...prev.error, name: ERROR_NAME_BLANK } }));
-        return true;
-      }
+    (nextStep: PivotTabKey, currentStep?: PivotTabKey) => {
+      const error = getBasicsError(localFormData, existingNameList);
 
-      if (existingNameList.includes(localFormData.name)) {
-        setLocalFormData((prev) => ({ ...prev, error: { ...prev.error, name: ERROR_NAME_BE_USED } }));
-        return true;
-      }
-
-      if (localFormData.device.key === -1) {
-        setLocalFormData((prev) => ({ ...prev, error: { ...prev.error, device: ERROR_BLANK_VALUE } }));
-        return true;
-      }
-
-      if (localFormData.cameraList.length === 0) {
+      if (Object.values(error).some((value) => !isEmpty(value)) && currentStep === 'basics') {
         setLocalFormData((prev) => ({
           ...prev,
-          error: { ...prev.error, cameraList: ERROR_BLANK_VALUE },
+          error: { ...prev.error, ...error },
         }));
+
         return true;
       }
-
-      if (currentStep === 'basics') return false;
 
       if (
         localFormData.cameraList.length > 0 &&
-        localFormData.cameraList.some((camera) => camera.skillList.length === 0)
+        localFormData.cameraList.some((camera) => camera.skillList.length === 0) &&
+        currentStep === 'configure'
       ) {
         setLocalFormData((prev) => ({
           ...prev,
@@ -129,7 +131,8 @@ const DeploymentCreation = (props: Props) => {
 
       if (
         localFormData.tag_list.length > 1 &&
-        localFormData.tag_list.some((tag) => tag.errorMessage !== '')
+        localFormData.tag_list.some((tag) => tag.errorMessage !== '') &&
+        currentStep === 'tag'
       ) {
         return true;
       }
@@ -139,13 +142,28 @@ const DeploymentCreation = (props: Props) => {
     [localFormData, existingNameList],
   );
 
+  const onValidationRedirect = useCallback(
+    (nextStep: PivotTabKey, currentStep: PivotTabKey) => {
+      const nextStepIdx = STEP_ORDER.findIndex((step) => step === nextStep);
+      const currentStepIdx = STEP_ORDER.findIndex((step) => step === currentStep);
+
+      if (nextStepIdx > currentStepIdx) {
+        const isInvalid = onFormDateValidate(nextStep, currentStep);
+
+        if (isInvalid) return;
+      }
+
+      onLinkClick(nextStep);
+    },
+    [onLinkClick, onFormDateValidate],
+  );
+
   return (
     <>
       <Stack styles={{ root: classes.root }}>
         <Stack horizontal verticalAlign="center">
           <Pivot
-            styles={{ itemContainer: { height: 'calc(100% - 44px)' } }}
-            onLinkClick={(item) => onLinkClick(item?.props.itemKey! as PivotTabKey)}
+            onLinkClick={(item) => onValidationRedirect(item?.props.itemKey as PivotTabKey, localPivotKey)}
             selectedKey={localPivotKey}
           >
             <PivotItem
@@ -190,17 +208,21 @@ const DeploymentCreation = (props: Props) => {
             />
           </Pivot>
         </Stack>
+      </Stack>
+      <Stack
+        styles={{
+          root: {
+            height: 'calc(100% - 220px)',
+            overflowY: 'auto',
+            padding: '0 20px',
+          },
+        }}
+      >
         <Switch>
           <Route
             exact
             path={Url.DEPLOYMENT_CREATION_PREVIEW}
-            render={() => (
-              <Preview
-                localFormData={localFormData}
-                onLinkClick={onLinkClick}
-                // onConfigureRedirect={() => onLinkClick('configure')}
-              />
-            )}
+            render={() => <Preview localFormData={localFormData} onLinkClick={onLinkClick} />}
           />
           <Route
             exact
@@ -227,8 +249,9 @@ const DeploymentCreation = (props: Props) => {
         localFormData={localFormData}
         isCreating={isCreating}
         onIsCreatingChange={() => setIsCreating(true)}
-        stepList={['basics', 'configure', 'tag', 'preview']}
+        stepList={STEP_ORDER}
         onFormDateValidate={onFormDateValidate}
+        onValidationRedirect={onValidationRedirect}
       />
     </>
   );

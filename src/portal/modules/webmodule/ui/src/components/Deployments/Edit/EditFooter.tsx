@@ -20,13 +20,11 @@ interface Props {
   onLinkClick: (key: PivotTabKey) => void;
   localFormData: UpdateDeploymentFormData;
   stepList: PivotTabKey[];
-  onFormDateValidate: (key: PivotTabKey) => boolean;
-  // isUpdating: boolean;
-  // onUpdatingChange: () => void;
+  onValidationRedirect: (nextStep: PivotTabKey, currentStep: PivotTabKey) => void;
 }
 
 const EditFooter = (props: Props) => {
-  const { currentStep, onLinkClick, stepList, localFormData, onFormDateValidate, deploymentId } = props;
+  const { currentStep, onLinkClick, stepList, localFormData, deploymentId, onValidationRedirect } = props;
 
   const classes = getFooterClasses();
   const dispatch = useDispatch();
@@ -62,15 +60,6 @@ const EditFooter = (props: Props) => {
     history.push(Url.DEPLOYMENT);
   }, [localFormData, dispatch, history, deploymentId]);
 
-  const onValidationRedirect = useCallback(
-    (key: PivotTabKey) => {
-      if (onFormDateValidate(currentStep)) return;
-
-      onLinkClick(key);
-    },
-    [onLinkClick, onFormDateValidate, currentStep],
-  );
-
   return (
     <Stack
       horizontal
@@ -80,21 +69,15 @@ const EditFooter = (props: Props) => {
       }}
     >
       {['configure', 'tag'].includes(currentStep) && (
-        <PrimaryButton text="Review + Update" onClick={() => onLinkClick('preview')} />
+        <PrimaryButton text="Review + Update" onClick={() => onValidationRedirect('preview', currentStep)} />
       )}
-      {currentStep === 'preview' && (
-        <PrimaryButton
-          text="Update"
-          onClick={onUpdateClick}
-          // disabled={isCreating}
-        />
-      )}
+      {currentStep === 'preview' && <PrimaryButton text="Update" onClick={onUpdateClick} />}
       {['configure', 'tag', 'preview'].includes(currentStep) && (
         <DefaultButton
           text="Previous"
           styles={{ flexContainer: { flexDirection: 'row-reverse' } }}
           iconProps={{ iconName: 'ChevronLeft' }}
-          onClick={() => onLinkClick(getStepKey(currentStep, stepList, -1))}
+          onClick={() => onValidationRedirect(getStepKey(currentStep, stepList, -1), currentStep)}
         />
       )}
       {currentStep === 'basics' && (
@@ -110,7 +93,7 @@ const EditFooter = (props: Props) => {
           text="Next"
           styles={{ flexContainer: { flexDirection: 'row-reverse' } }}
           iconProps={{ iconName: 'ChevronRight' }}
-          onClick={() => onValidationRedirect(getStepKey(currentStep, stepList, 1))}
+          onClick={() => onValidationRedirect(getStepKey(currentStep, stepList, 1), currentStep)}
         />
       )}
     </Stack>

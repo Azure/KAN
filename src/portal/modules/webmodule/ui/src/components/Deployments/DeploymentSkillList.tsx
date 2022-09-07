@@ -115,7 +115,7 @@ const DeploymentSkillList = () => {
         history.push(
           generatePath(Url.DEPLOYMENT_EDIT, {
             id,
-            key: 'configure',
+            step: 'configure',
           }),
         );
       },

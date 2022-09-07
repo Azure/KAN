@@ -28,6 +28,7 @@ import { wrapperPadding } from './styles';
 import { getFooterClasses } from '../Common/styles';
 import { commonCommandBarItems } from '../utils';
 import { theme, Url } from '../../constant';
+import { AiSkill, DeploymentConfigureCamera, DeploymentFPS } from '../../store/types';
 
 import SidePanelLabel from '../Common/SidePanel/SidePanelLabel';
 
@@ -51,6 +52,28 @@ const getClasses = () =>
     dateListWrapper: { paddingLeft: '35px' },
     subContentHeader: { fontSize: '14px', lineHeight: '20px' },
   });
+
+const getUsedSkillList = (skillList: AiSkill[], configureCameraList: DeploymentConfigureCamera[]) => {
+  const usedSkillIDs = configureCameraList.map((c) => c.skills.map((s) => s.id)).flat(1);
+
+  return skillList.filter((skill) => usedSkillIDs.includes(skill.id));
+};
+
+const getDisplayFPS = (
+  skillList: AiSkill[],
+  configureCameraList: DeploymentConfigureCamera[],
+  fpsObj: DeploymentFPS,
+) => {
+  const result = Object.entries(fpsObj).reduce((acc, [symphonyId, fps]) => {
+    const matchSkill = getUsedSkillList(skillList, configureCameraList).find(
+      (skill) => skill.symphony_id === symphonyId,
+    );
+
+    if (matchSkill) return [...acc, { name: matchSkill.name, fps }];
+  }, []);
+
+  return result;
+};
 
 const DeploymentSkillList = () => {
   const { id } = useParams<{ id: string }>();
@@ -247,11 +270,9 @@ const DeploymentSkillList = () => {
               contentElement={
                 <>
                   {Object.keys(deployment.status.fps).length > 0 &&
-                    Object.entries(deployment.status.fps).map(([symphonyId, fps], idx) => (
-                      <Text key={idx}>{`${
-                        skillList.find((skill) => skill.symphony_id === symphonyId).name
-                      } : ${fps}`}</Text>
-                    ))}
+                    getDisplayFPS(skillList, deployment.configure, deployment.status.fps).map(
+                      ([name, fps], idx) => <Text key={idx}>{`${name} : ${fps}`}</Text>,
+                    )}
                 </>
               }
             />

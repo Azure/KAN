@@ -158,3 +158,25 @@ export const selectHasUseAiSkillSelectoryFactory = (skillId: number) =>
 
     return result;
   });
+
+export const selectHasCameraDeploymentSelectoryFactory = (cameraId: number) =>
+  createSelector(selectAllDeployments, (deploymentList) => {
+    if (deploymentList.length === 0) return false;
+
+    const result = deploymentList
+      .reduce((acc, deployment) => [...acc, ...deployment.configure.map((configure) => configure.camera)], [])
+      .some((camera) => camera === cameraId);
+
+    return result;
+  });
+
+export const selectHasDeviceDeploymentSelectoryFactory = (deviceId: number) =>
+  createSelector(selectAllDeployments, (deploymentList) => {
+    if (deploymentList.length === 0) return false;
+
+    const result = deploymentList
+      .reduce((acc, deployment) => [...acc, deployment.compute_device], [])
+      .some((device) => device === deviceId);
+
+    return result;
+  });

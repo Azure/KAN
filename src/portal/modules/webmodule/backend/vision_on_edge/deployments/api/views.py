@@ -202,6 +202,16 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
         skill_symphony_id = request.query_params.get("skill_symphony_id")
         device_symphony_id = request.query_params.get("device_symphony_id")
 
-        logger.warning(f'Retrieving iothub insight parameters:{instance_id}/{skill_symphony_id}/{device_symphony_id}')
+        logger.warning(
+            f'Retrieving iothub insight parameters:{instance_id}/{skill_symphony_id}/{device_symphony_id}')
 
         return Response(iothub_insights.get(instance_id, {}).get(skill_symphony_id, {}).get(device_symphony_id, []))
+
+    @action(detail=True, methods=["get"], url_path="get_deployment_properties")
+    def get_deployment_properties(self, request, pk=None):
+        queryset = self.get_queryset()
+        instance = drf_get_object_or_404(queryset, pk=pk)
+
+        logger.warning(f"Retrieving instance [{instance.symphony_id}] config.")
+
+        return Response(instance.get_properties())

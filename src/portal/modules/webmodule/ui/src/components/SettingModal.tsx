@@ -12,7 +12,6 @@ import {
   MessageBarType,
   PrimaryButton,
   DefaultButton,
-  Spinner,
   styled,
   ITextFieldProps,
   ITextFieldStyleProps,
@@ -20,26 +19,20 @@ import {
   Label,
   IconButton,
 } from '@fluentui/react';
-import { equals } from 'ramda';
 
 import { State as RootState } from 'RootStateType';
 import {
   checkSettingStatus,
-  updateNamespace,
-  updateKey,
+  // updateNamespace,
+  // updateKey,
   thunkPostSetting,
   thunkGetAllCvProjects,
 } from '../store/setting/settingAction';
 import { theme } from '../constant';
 
-import { CustomLabel } from './SettingPanel';
-// import { WarningDialog } from './WarningDialog';
-
 interface Props {
   isModalOpen: boolean;
   onModalClose: () => void;
-  // isOpen: boolean;
-  // onDismiss: () => void;
   canBeDismissed: boolean;
   showProjectDropdown: boolean;
 }
@@ -55,9 +48,9 @@ const HorizontalTextField = styled<ITextFieldProps, ITextFieldStyleProps, ITextF
   TextField,
   () => ({
     root: {
-      '& .ms-Stack': {
-        width: '200px',
+      '& .ms-Label': {
         fontWeight: 400,
+        width: '200px',
         color: theme.palette.neutralPrimary,
       },
     },
@@ -67,14 +60,25 @@ const HorizontalTextField = styled<ITextFieldProps, ITextFieldStyleProps, ITextF
   }),
 );
 
+// const NormalLabel = (props: ITextFieldProps): JSX.Element => {
+//   return (
+//     <Stack horizontal verticalAlign="center">
+//       <Label styles={{ root: { fontWeight: 400 } }} required={props.required}>
+//         {props.label}
+//       </Label>
+//       <IconButton iconProps={{ iconName: 'Info' }} />
+//     </Stack>
+//   );
+// };
+
 const SettingModal = (props: Props) => {
   const { isModalOpen, onModalClose, canBeDismissed, showProjectDropdown } = props;
 
-  const settingData = useSelector((state: RootState) => state.setting.current);
-  const originSettingData = useSelector((state: RootState) => state.setting.origin);
+  const settingData = useSelector((state: RootState) => state.setting);
+  // const originSettingData = useSelector((state: RootState) => state.setting.origin);
   const error = useSelector((state: RootState) => state.setting.error);
 
-  const dontNeedUpdateOrSave = equals(settingData, originSettingData);
+  // const dontNeedUpdateOrSave = equals(settingData, originSettingData);
   const [loading, setLoading] = useState(false);
 
   const classes = getClasses();
@@ -118,42 +122,57 @@ const SettingModal = (props: Props) => {
           />
         </Stack>
         <Stack tokens={{ childrenGap: 12 }}>
-          <h4 className={classes.sbutTitle}>Azure Cognitive Services settings</h4>
+          <h4 className={classes.sbutTitle}>Service Principal Settings</h4>
           <HorizontalTextField
-            label="Endpoint"
+            label="tenantId"
             required
-            value={settingData.namespace}
-            onChange={(_, value): void => {
-              dispatch(updateNamespace(value));
-            }}
-            onRenderLabel={(props: ITextFieldProps) => <CustomLabel {...props} />}
-            disabled={showProjectDropdown}
+            value={settingData.tenant_id}
+            disabled={true}
+            // styles={{ root: classes.contentTitle }}
+          />
+          <HorizontalTextField label="clientId" required value={settingData.client_id} disabled={true} />
+          <HorizontalTextField
+            label="clientSecret"
+            required
+            value={settingData.client_secret}
+            disabled={true}
+          />
+        </Stack>
+
+        <Stack tokens={{ childrenGap: 12 }}>
+          <h4 className={classes.sbutTitle}>Azure Storage Settings</h4>
+          <HorizontalTextField
+            label="storageAccount"
+            required
+            value={settingData.storage_account}
+            disabled={true}
           />
           <HorizontalTextField
-            label="Key"
+            label="storageContainer"
             required
-            value={settingData.key}
-            onChange={(_, value): void => {
-              dispatch(updateKey(value));
-            }}
-            onRenderLabel={(props: ITextFieldProps) => (
-              <Stack horizontal verticalAlign="center" tokens={{ childrenGap: 4 }}>
-                <Label required={props.required}>{props.label}</Label>
-                <IconButton iconProps={{ iconName: 'Info' }} />
-              </Stack>
-            )}
-            disabled={showProjectDropdown}
+            value={settingData.storage_container}
+            disabled={true}
           />
+          <HorizontalTextField
+            label="subscriptionId"
+            required
+            value={settingData.subscription_id}
+            disabled={true}
+          />
+        </Stack>
+
+        <Stack tokens={{ childrenGap: 12 }}>
+          <h4 className={classes.sbutTitle}>Azure Cognitive Services Settings</h4>
+          <HorizontalTextField label="Endpoint" value={settingData.endpoint} disabled={true} />
+          <HorizontalTextField label="Key" value={settingData.training_key} disabled={true} />
         </Stack>
 
         {error && <MessageBar messageBarType={MessageBarType.blocked}>{error.message}</MessageBar>}
 
         <Stack horizontal tokens={{ childrenGap: 10 }}>
-          <PrimaryButton text="Save" onClick={onConfirm} disabled={dontNeedUpdateOrSave || loading} />
+          <PrimaryButton text="Save" onClick={onConfirm} disabled={true} />
           {showProjectDropdown && <DefaultButton text="Cancel" onClick={onModalClose} />}
         </Stack>
-
-        {loading && <Spinner label="loading" />}
       </Stack>
     </Modal>
   );

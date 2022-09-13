@@ -45,7 +45,7 @@ const PropertyPanel = (props: Props) => {
       isOpen={true}
       onDismiss={onPanelClose}
       hasCloseButton
-      headerText="Solution Instance Properties"
+      headerText="Deployment Properties"
       onRenderFooterContent={onRenderFooterContent}
       isFooterAtBottom={true}
       onOuterClick={() => null}

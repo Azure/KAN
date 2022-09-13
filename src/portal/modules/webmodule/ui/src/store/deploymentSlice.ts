@@ -80,10 +80,11 @@ export const getDeploymentInsight = createWrappedAsync<any, GetDeploymentInsight
   },
 );
 
-export const getDeploymentProperty = createWrappedAsync<any, number, { state: State }>(
-  'Deployment/getDeploymentInsight',
+export const getDeploymentProperty = createWrappedAsync<any, number>(
+  'Deployment/getDeploymentProperty',
   async (id) => {
     const response = await rootRquest.get(`/api/deployments/${id}/get_deployment_properties`);
+
     return response.data;
   },
 );

@@ -47,8 +47,8 @@ const ListManagement = (props: Props) => {
           <Card
             key={idx}
             deployment={deploy}
-            onDeleteModalOpen={(deployment) => setDeletedDeployment(deployment)}
-            onPropertyOpen={() => null}
+            onDeleteModalOpen={() => setDeletedDeployment(deploy)}
+            onPropertyOpen={() => onPropertiesPanelOpen(deploy)}
           />
         ))}
       </Stack>
@@ -60,13 +60,13 @@ const ListManagement = (props: Props) => {
           onClose={() => setDeletedDeployment(null)}
         />
       )}
-      {/* {selectedDeployment && (
+      {selectedDeployment && (
         <PropertyPanel
           onPanelClose={() => setSelectedDeployment(null)}
-          selectedDeploymentId={selectedDeployment.id.toString()}
+          selectedDeploymentId={selectedDeployment.id}
           onDeleteModalOpen={() => setDeletedDeployment(selectedDeployment)}
         />
-      )} */}
+      )}
     </>
   );
 };

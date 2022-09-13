@@ -16,7 +16,7 @@ interface Props {
 }
 
 const MenuButton = (props: Props) => {
-  const { deployemnt, iconName, onDeleteModalOpen } = props;
+  const { deployemnt, iconName, onDeleteModalOpen, onPropertyOpen } = props;
 
   const history = useHistory();
 
@@ -35,12 +35,12 @@ const MenuButton = (props: Props) => {
 
   const menuProps: IContextualMenuProps = {
     items: [
-      // {
-      //   key: 'view',
-      //   text: 'Properties',
-      //   iconProps: { iconName: 'Equalizer' },
-      //   onClick: onPropertyOpen,
-      // },
+      {
+        key: 'view',
+        text: 'Properties',
+        iconProps: { iconName: 'Equalizer' },
+        onClick: onPropertyOpen,
+      },
       {
         key: 'edit',
         text: 'Edit Deployment',

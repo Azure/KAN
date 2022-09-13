@@ -43,8 +43,8 @@ const getDelayBufferLabelClasses = () =>
     },
   });
 
-export const ERROR_GREAT_THAN_ONE = 'Value must be equal to or greater than 1.';
-export const ERROR_GREAT_THAN_ZERO = 'Value must be greater than 0.';
+const ERROR_GREAT_THAN_ONE = 'Value must be equal to or greater than 1.';
+const ERROR_GREAT_THAN_ZERO = 'Value must be greater than 0.';
 
 const durationOptions: IDropdownOption[] = [
   { key: '10', text: '10s' },
@@ -81,6 +81,21 @@ const getExportNodeDesc = (exportType: ExportType) => {
       return 'Use this node to send metadata from this skill directly to your IoT Edge Modules.';
     case 'http':
       return 'Use this node to send insights from this skill directly to your HTTP endpoint.';
+    default:
+      return '';
+  }
+};
+
+const getDelayBufferDefaultValue = (exportType: ExportType) => {
+  switch (exportType) {
+    case 'snippet':
+      return '2'; // unit: minutes
+    case 'iotHub':
+      return '30'; // unit: second
+    case 'iotEdge':
+      return '10'; // unit: second
+    case 'http':
+      return '';
     default:
       return '';
   }
@@ -148,7 +163,7 @@ const ModelPanel = (props: Props) => {
     filename_prefix: '',
     recording_duration: '',
     insights_overlay: '',
-    delay_buffer: '',
+    delay_buffer: getDelayBufferDefaultValue(data.exportType),
     module_name: '',
     module_input: '',
     url: '',

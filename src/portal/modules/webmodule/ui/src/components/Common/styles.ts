@@ -1,5 +1,7 @@
 import { mergeStyleSets } from '@fluentui/react';
 
+import { theme } from '../../constant';
+
 export const getFooterClasses = () =>
   mergeStyleSets({
     root: {
@@ -26,5 +28,17 @@ export const getScrllStackClasses = () =>
       height: 'calc(100% - 150px)',
       overflowY: 'auto',
       overflowX: 'hidden',
+    },
+  });
+
+export const getPropertyClasses = () =>
+  mergeStyleSets({
+    root: {
+      paddingTop: '25px',
+      whiteSpace: 'pre',
+      color: theme.palette.black,
+      fontSize: '13px',
+      lineHeight: '18px',
+      overflow: 'auto',
     },
   });

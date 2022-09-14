@@ -57,10 +57,11 @@ const PropertyPanel = (props: Props) => {
           styles={{
             root: {
               paddingTop: '25px',
-              whiteSpace: 'pre-wrap',
+              whiteSpace: 'pre',
               color: theme.palette.black,
               fontSize: '13px',
               lineHeight: '18px',
+              overflow: 'auto',
             },
           }}
           tokens={{ childrenGap: 15 }}

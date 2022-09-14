@@ -4,29 +4,38 @@ import { patchIsCollectData } from './settingAction';
 export const initialState: Setting = {
   loading: false,
   error: null,
-  current: {
-    id: -1,
-    key: '',
-    namespace: '',
-  },
-  origin: {
-    id: -1,
-    key: '',
-    namespace: '',
-  },
+  // current: {
+  //   id: -1,
+  //   key: '',
+  //   namespace: '',
+  // },
+  // origin: {
+  //   id: -1,
+  //   key: '',
+  //   namespace: '',
+  // },
+  id: -1,
+  training_key: '',
+  endpoint: '',
   isTrainerValid: true,
   appInsightHasInit: true,
   isCollectData: false,
   appInsightKey: '',
   cvProjects: [],
+  subscription_id: '',
+  storage_account: '',
+  storage_container: '',
+  tenant_id: '',
+  client_id: '',
+  client_secret: '',
 };
 
 const settingReducer = (state = initialState, action: SettingActionType): Setting => {
   switch (action.type) {
-    case 'UPDATE_KEY':
-      return { ...state, current: { ...state.current, key: action.payload } };
-    case 'UPDATE_NAMESPACE':
-      return { ...state, current: { ...state.current, namespace: action.payload } };
+    // case 'UPDATE_KEY':
+    //   return { ...state, current: { ...state.current, key: action.payload } };
+    // case 'UPDATE_NAMESPACE':
+    //   return { ...state, current: { ...state.current, namespace: action.payload } };
     case 'REQUEST_START':
       return { ...state, loading: true };
     case 'REQUEST_SUCCESS':

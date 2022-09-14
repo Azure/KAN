@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { State } from 'RootStateType';
 import { MainLayout } from './components/MainLayout';
-import { RootRouter } from './routes/RootRouter';
+import RootRouter from './routes/RootRouter';
 import TelemetryProvider from './components/TelemetryProvider';
 import { useWebSocket } from './hooks/useWebSocket';
 import { thunkGetSettingAndAppInsightKey } from './store/setting/settingAction';

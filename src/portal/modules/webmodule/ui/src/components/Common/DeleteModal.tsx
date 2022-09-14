@@ -35,15 +35,13 @@ const getDisplayPageTitle = (type: PageType) => {
 const getWarningText = (type: PageType) => {
   switch (type) {
     case 'device':
-      return 'compute device';
+      return 'Warning! This device is referenced in at least one deployment. Deleting this device will affect your deployments that have a reference to this device.';
     case 'camera':
-      return 'camera';
+      return 'Warning! This camera is referenced in at least one deployment. Deleting this camera will affect your deployments that have a reference to this camera.';
     case 'model':
-      return ' Warning! This model is referenced in at least one ai skill. Deleting this model will affect yourdeployments that have a reference to this skill.';
+      return 'Warning! This model is referenced in at least one ai skill. Deleting this model will affect your ai skill that have a reference to this model.';
     case 'skill':
       return 'Warning! This skill is referenced in at least one deployment. Deleting this skill will affect your deployments that have a reference to this skill.';
-    case 'deployment':
-      return 'ai deployment';
     default:
       return '';
   }

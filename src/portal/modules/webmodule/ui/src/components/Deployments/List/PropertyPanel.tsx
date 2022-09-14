@@ -1,30 +1,35 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Panel, Stack, DefaultButton, ProgressIndicator } from '@fluentui/react';
+import { useDispatch } from 'react-redux';
+import { getDeploymentProperty } from '../../../store/deploymentSlice';
+import { theme } from '../../../constant';
 
 interface Props {
   onPanelClose: () => void;
-  selectedDeploymentId: string;
+  selectedDeploymentId: number;
   onDeleteModalOpen: () => void;
 }
 
-const CameraSidePanel = (props: Props) => {
-  const { onPanelClose, onDeleteModalOpen } = props;
+const PropertyPanel = (props: Props) => {
+  const { onPanelClose, onDeleteModalOpen, selectedDeploymentId } = props;
+
+  const dispatch = useDispatch();
 
   const [isFetching, setIsFetching] = useState(false);
-  const [localProperty, setLocqlPorperty] = useState(null);
+  const [localProperty, setLocqlPorperty] = useState('');
 
-  // useEffect(() => {
-  //   (async () => {
-  //     setIsFetching(true);
-  //     const response = (await dispatch(getDeploymentProperty(selectedDeploymentId))) as any;
+  useEffect(() => {
+    (async () => {
+      setIsFetching(true);
+      const response = (await dispatch(getDeploymentProperty(selectedDeploymentId))) as any;
 
-  //     setLocqlPorperty(response.payload);
-  //     setIsFetching(false);
-  //   })();
-  // }, [dispatch, selectedDeploymentId]);
+      setLocqlPorperty(response.payload);
+      setIsFetching(false);
+    })();
+  }, [dispatch, selectedDeploymentId]);
 
   const onRenderFooterContent = useCallback(
     () => (
@@ -40,7 +45,7 @@ const CameraSidePanel = (props: Props) => {
       isOpen={true}
       onDismiss={onPanelClose}
       hasCloseButton
-      headerText="Solution Instance Properties"
+      headerText="Deployment Properties"
       onRenderFooterContent={onRenderFooterContent}
       isFooterAtBottom={true}
       onOuterClick={() => null}
@@ -48,10 +53,24 @@ const CameraSidePanel = (props: Props) => {
       {isFetching ? (
         <ProgressIndicator />
       ) : (
-        <Stack styles={{ root: { paddingTop: '25px' } }} tokens={{ childrenGap: 15 }}></Stack>
+        <Stack
+          styles={{
+            root: {
+              paddingTop: '25px',
+              whiteSpace: 'pre',
+              color: theme.palette.black,
+              fontSize: '13px',
+              lineHeight: '18px',
+              overflow: 'auto',
+            },
+          }}
+          tokens={{ childrenGap: 15 }}
+        >
+          {localProperty}
+        </Stack>
       )}
     </Panel>
   );
 };
 
-export default CameraSidePanel;
+export default PropertyPanel;

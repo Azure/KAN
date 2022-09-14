@@ -8,7 +8,7 @@ import { useHistory, generatePath } from 'react-router-dom';
 import { isEmpty } from 'ramda';
 
 import { State as RootState } from 'RootStateType';
-import { deleteCameras, selectCameraById, getSingleCamera } from '../../store/cameraSlice';
+import { selectCameraById, getSingleCamera } from '../../store/cameraSlice';
 import { selectAllLocations } from '../../store/locationSlice';
 import { Url } from '../../constant';
 
@@ -31,7 +31,6 @@ const CameraSidePanel = (props: Props) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  // const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
@@ -41,13 +40,6 @@ const CameraSidePanel = (props: Props) => {
       setIsFetching(false);
     })();
   }, [dispatch, selectedCameraId]);
-
-  // const onTaskDelete = useCallback(async () => {
-  //   setIsLoading(true);
-
-  //   await dispatch(deleteCameras([camera.id]));
-  //   onPanelClose();
-  // }, [dispatch, camera, onPanelClose]);
 
   const onRenderFooterContent = useCallback(
     () => (

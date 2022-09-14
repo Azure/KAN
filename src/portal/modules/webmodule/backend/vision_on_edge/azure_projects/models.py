@@ -12,6 +12,7 @@ import time
 import subprocess
 import json
 import uuid
+import yaml
 
 from azure.cognitiveservices.vision.customvision.training.models import (
     CustomVisionErrorException,
@@ -158,6 +159,13 @@ class Project(models.Model):
             if raise_exception:
                 raise ProjectCustomVisionError
             return False
+
+    def get_properties(self):
+        prop = model_client.get_config_from_symphony(self.symphony_id)
+        if prop:
+            return yaml.dump(prop)
+        else:
+            return ""
 
     @staticmethod
     def pre_save(**kwargs):

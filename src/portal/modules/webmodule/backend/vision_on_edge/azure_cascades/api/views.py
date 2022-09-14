@@ -21,7 +21,6 @@ from .serializers import CascadeSerializer
 logger = logging.getLogger(__name__)
 
 
-
 class CascadeViewSet(FiltersMixin, viewsets.ModelViewSet):
     """Cascade ModelViewSet
 
@@ -31,3 +30,12 @@ class CascadeViewSet(FiltersMixin, viewsets.ModelViewSet):
 
     queryset = Cascade.objects.all()
     serializer_class = CascadeSerializer
+
+    @action(detail=True, methods=["get"], url_path="get_properties")
+    def get_properties(self, request, pk=None):
+        queryset = self.get_queryset()
+        instance = drf_get_object_or_404(queryset, pk=pk)
+
+        logger.warning(f"Retrieving skill [{instance.symphony_id}] config.")
+
+        return Response(instance.get_properties())

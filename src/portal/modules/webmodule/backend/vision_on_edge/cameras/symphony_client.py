@@ -122,6 +122,22 @@ class SymphonyDeviceClient(SymphonyClient):
         else:
             return ""
 
+    def get_config_from_symphony(self, name):
+
+        api = self.get_client()
+
+        if api:
+            instance = api.get_namespaced_custom_object(
+                group="fabric.symphony",
+                version="v1",
+                namespace="default",
+                plural="devices",
+                name=name
+            )
+            return instance
+        else:
+            return ""
+
     def load_symphony_objects(self):
         from .models import Camera
         from ..azure_settings.models import Setting

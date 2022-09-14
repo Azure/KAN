@@ -18,6 +18,7 @@ import {
   ITextFieldStyles,
   Label,
   IconButton,
+  Text,
 } from '@fluentui/react';
 
 import { State as RootState } from 'RootStateType';
@@ -41,6 +42,7 @@ const getClasses = () =>
   mergeStyleSets({
     scrollableContent: { width: '1080px', padding: '25px' },
     title: { fontSize: '20px', lineHeight: '24px', fontWeight: 600 },
+    describe: { fontSize: '13px', lineHeight: '18px', fontWeight: 400 },
     sbutTitle: { fontSize: '14px', lineHeight: '24px', fontWeight: 600 },
   });
 
@@ -121,6 +123,7 @@ const SettingModal = (props: Props) => {
             disabled={!showProjectDropdown}
           />
         </Stack>
+        <Text styles={{ root: classes.describe }}>These settings are autofilled with your credentials.</Text>
         <Stack tokens={{ childrenGap: 12 }}>
           <h4 className={classes.sbutTitle}>Service Principal Settings</h4>
           <HorizontalTextField

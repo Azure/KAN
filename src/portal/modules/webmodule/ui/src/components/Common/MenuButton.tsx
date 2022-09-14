@@ -17,10 +17,16 @@ const MenuButton = (props: Props) => {
     items: [
       {
         key: 'edit',
-        text: 'Properties',
+        text: 'See Properties',
         iconProps: { iconName: 'Equalizer' },
         onClick: onTargetSelected,
       },
+      // {
+      //   key: 'view',
+      //   text: 'View Definition',
+      //   iconProps: { iconName: 'View' },
+      //   onClick: onTargetSelected,
+      // },
       {
         key: 'delete',
         text: 'Delete',

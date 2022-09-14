@@ -136,6 +136,7 @@ const SettingModal = (props: Props) => {
             required
             value={settingData.client_secret}
             disabled={true}
+            type="password"
           />
         </Stack>
 
@@ -164,7 +165,7 @@ const SettingModal = (props: Props) => {
         <Stack tokens={{ childrenGap: 12 }}>
           <h4 className={classes.sbutTitle}>Azure Cognitive Services Settings</h4>
           <HorizontalTextField label="Endpoint" value={settingData.endpoint} disabled={true} />
-          <HorizontalTextField label="Key" value={settingData.training_key} disabled={true} />
+          <HorizontalTextField label="Key" value={settingData.training_key} disabled={true} type="password" />
         </Stack>
 
         {error && <MessageBar messageBarType={MessageBarType.blocked}>{error.message}</MessageBar>}

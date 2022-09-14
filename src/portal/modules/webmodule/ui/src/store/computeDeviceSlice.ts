@@ -55,7 +55,7 @@ export const getSingleComputeDevice = createWrappedAsync<any, number, { state: R
   'computeDevice/GetSingle',
   async (id) => {
     const response = await rootRquest.get(
-      `/api/compute_devices/${id}`,
+      `/api/compute_devices/${id}/update_status`,
       // http://20.89.186.195/api/compute_devices/${id}`
     );
 

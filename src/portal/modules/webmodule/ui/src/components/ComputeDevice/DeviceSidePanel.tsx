@@ -39,13 +39,6 @@ const DeviceSidePanel = (props: Props) => {
     })();
   }, [dispatch, selectedDeviceId]);
 
-  // const onDeviceDelete = useCallback(async () => {
-  //   await dispatch(deleteComputeDevice([device.id]));
-
-  //   onDeleteModalClose();
-  //   onPanelClose();
-  // }, [dispatch, device, onPanelClose, onDeleteModalClose]);
-
   const onRenderFooterContent = useCallback(
     () => (
       <Stack tokens={{ childrenGap: 5 }} horizontal>

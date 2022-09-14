@@ -25,7 +25,7 @@ import AiSkill from '../pages/AiSkill';
 import Model from '../pages/Model';
 import HomePage from '../pages/HomePage';
 
-export const RootRouter: FC = () => {
+const RootRouter: FC = () => {
   // const history = useHistory();
 
   // const projectHasConfiged = useSelector((state: State) => state.project.status !== Status.None);
@@ -61,3 +61,5 @@ export const RootRouter: FC = () => {
     </Switch>
   );
 };
+
+export default RootRouter;

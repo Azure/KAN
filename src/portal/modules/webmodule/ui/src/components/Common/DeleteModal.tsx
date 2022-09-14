@@ -32,6 +32,21 @@ const getDisplayPageTitle = (type: PageType) => {
   }
 };
 
+const getWarningText = (type: PageType) => {
+  switch (type) {
+    case 'device':
+      return 'Warning! This device is referenced in at least one deployment. Deleting this device will affect your deployments that have a reference to this device.';
+    case 'camera':
+      return 'Warning! This camera is referenced in at least one deployment. Deleting this camera will affect your deployments that have a reference to this camera.';
+    case 'model':
+      return 'Warning! This model is referenced in at least one ai skill. Deleting this model will affect your ai skill that have a reference to this model.';
+    case 'skill':
+      return 'Warning! This skill is referenced in at least one deployment. Deleting this skill will affect your deployments that have a reference to this skill.';
+    default:
+      return '';
+  }
+};
+
 const getClasses = () =>
   mergeStyleSets({
     modalMain: { width: '1060px', padding: '15px 20px' },
@@ -62,10 +77,7 @@ const DeleteModal = (props: Props) => {
       <Stack>
         <Label styles={{ root: classes.title }}>{`Delete ${name}`}</Label>
         {isUsed ? (
-          <Text styles={{ root: classes.usedText }}>
-            Warning! This skill is referenced in at least one deployment. Deleting this skill will affect your
-            deployments that have a reference to this skill.
-          </Text>
+          <Text styles={{ root: classes.usedText }}>{getWarningText(type)}</Text>
         ) : (
           <Text>
             This action will permanently delete the {getDisplayPageTitle(type)} {name}

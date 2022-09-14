@@ -14,6 +14,7 @@ from rest_framework.exceptions import ValidationError
 from ..models import ComputeDevice
 from .serializers import ComputeDeviceSerializer
 from ..utils import list_iothub, list_devices
+from ...general.shortcuts import drf_get_object_or_404
 
 logger = logging.getLogger(__name__)
 
@@ -32,13 +33,6 @@ class ComputeDeviceViewSet(viewsets.ModelViewSet):
 
             return Response(data=serialized_data.data, status=201)
         return Response(serialized_data.errors, status=400)
-
-    def get_object(self):
-        compute_device_obj = super().get_object()
-        compute_device_obj.status = compute_device_obj.get_status()
-        compute_device_obj.skip_signals = True  # only update column, skip symphony api
-        compute_device_obj.save()
-        return compute_device_obj
 
     @action(detail=False, methods=["get"], url_path="list-iothub")
     def get_iothub(self, request):
@@ -65,3 +59,26 @@ class ComputeDeviceViewSet(viewsets.ModelViewSet):
         # this would not trigger pre/post delete, get instance and delete if needed
         ComputeDevice.objects.filter(id__in=ids).all().delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=["get"], url_path="update_status")
+    def update_status(self, request, pk=None):
+        queryset = self.get_queryset()
+        compute_device_obj = drf_get_object_or_404(queryset, pk=pk)
+        compute_device_obj.status = compute_device_obj.get_status()
+        compute_device_obj.skip_signals = True  # only update column, skip symphony api
+        compute_device_obj.save()
+
+        serializer = ComputeDeviceSerializer(compute_device_obj)
+
+        logger.warning('Retrieving target status')
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["get"], url_path="get_properties")
+    def get_properties(self, request, pk=None):
+        queryset = self.get_queryset()
+        instance = drf_get_object_or_404(queryset, pk=pk)
+
+        logger.warning(f"Retrieving target [{instance.symphony_id}] config.")
+
+        return Response(instance.get_properties())

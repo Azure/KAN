@@ -10,6 +10,7 @@ import { theme, Url } from '../constant';
 import { getComputeDeviceList } from '../store/computeDeviceSlice';
 import { getCameras } from '../store/cameraSlice';
 import { getLocations } from '../store/locationSlice';
+import { getDeployments } from '../store/deploymentSlice';
 import { formattedCameraSelectoryFactory } from '../store/selectors';
 
 import CamerasDetailWrapper from '../components/Cameras/CamerasDetailWrapper';
@@ -32,6 +33,7 @@ const Cameras = () => {
       await dispatch(getComputeDeviceList());
       await dispatch(getCameras(false));
       await dispatch(getLocations(false));
+      await dispatch(getDeployments());
       setIsLoading(false);
     })();
   }, [dispatch]);

@@ -6,6 +6,7 @@ import requests
 import json
 import uuid
 import threading
+import yaml
 
 from django.db import models
 from django.db.models.signals import post_save, post_delete, pre_save
@@ -47,6 +48,13 @@ class Deployment(models.Model):
         else:
             return ""
 
+    def get_properties(self):
+        prop = instance_client.get_config_from_symphony(self.symphony_id)
+        if prop:
+            return yaml.dump(prop)
+        else:
+            return ""
+
     @staticmethod
     def pre_save(**kwargs):
         instance = kwargs["instance"]
@@ -83,7 +91,8 @@ class Deployment(models.Model):
                 skill_obj = Cascade.objects.get(pk=int(skill['id']))
                 skill_alias = str(uuid.uuid4())[-4:]
                 skill_env.append(f"{skill_obj.symphony_id} as skill-{skill_alias}")
-                skill_params[f"skill-{skill_alias}.rtsp"] = f"rtsp://{device_obj.username}:{device_obj.password}@{device_obj.rtsp.split('rtsp://')[1]}"
+                skill_params[
+                    f"skill-{skill_alias}.rtsp"] = f"rtsp://{device_obj.username}:{device_obj.password}@{device_obj.rtsp.split('rtsp://')[1]}"
                 skill_params[f"skill-{skill_alias}.fps"] = skill_obj.fps
                 skill_params[f"skill-{skill_alias}.device_id"] = device_obj.symphony_id
                 skill_params[f"skill-{skill_alias}.instance_displayname"] = instance.name
@@ -135,7 +144,7 @@ class Deployment(models.Model):
             # update
             solution_client.update_config(
                 group="solution.symphony", plural="solutions", name=instance.compute_device.solution_id)
-            instance_client.update_config(
+            instance_client.patch_config(
                 group="solution.symphony", plural="instances", name=instance.symphony_id)
 
         # monitor iothub messages

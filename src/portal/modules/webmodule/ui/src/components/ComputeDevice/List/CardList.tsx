@@ -3,10 +3,11 @@
 
 import React, { useState, useCallback } from 'react';
 import { Stack } from '@fluentui/react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ComputeDevice } from '../../../store/types';
 import { deleteComputeDevice } from '../../../store/computeDeviceSlice';
+import { selectHasDeviceDeploymentSelectoryFactory } from '../../../store/deploymentSlice';
 
 import DeviceCard from './DeviceCard';
 import DeviceSidePanel from '../DeviceSidePanel';
@@ -24,6 +25,7 @@ const CardList = (props: Props) => {
 
   const [localSelectedDevice, setLocalSelectedDevice] = useState<ComputeDevice | null>(null);
   const [deletedDeivce, setDeletedDeivce] = useState<ComputeDevice | null>(null);
+  const hasDeviceDeploy = useSelector(selectHasDeviceDeploymentSelectoryFactory(deletedDeivce?.id ?? 0));
 
   const onDeviceDelete = useCallback(async () => {
     await dispatch(deleteComputeDevice({ ids: [localSelectedDevice.id] }));
@@ -66,6 +68,7 @@ const CardList = (props: Props) => {
           name={deletedDeivce.name}
           onDelte={onSingleDeviceDelete}
           onClose={() => setDeletedDeivce(null)}
+          isUsed={hasDeviceDeploy}
         />
       )}
     </>

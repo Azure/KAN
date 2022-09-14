@@ -58,10 +58,6 @@ const normalizeDeployment = (deployment: DeploymentForServer): Deployment => {
     tag_list: getArrayObject(deployment.tag_list),
     configure: getArrayObject(deployment.configure),
     status: getStatusObject(deployment.status),
-    // status: getStatusObject(
-    //   // '{"fps_skill-a8e21f30-0465-44b4-80a9-ff0570b33405": "9.7", "status_code": "0", "status_description": "running"}',
-    //   '{"status_code": "0", "status_description": "running"}',
-    // ),
     iothub_insights: getArrayObject(deployment.iothub_insights),
   };
 };
@@ -69,21 +65,26 @@ const normalizeDeployment = (deployment: DeploymentForServer): Deployment => {
 export const getDeployments = createWrappedAsync<any, undefined, { state: State }>(
   'Deployment/get',
   async () => {
-    const response = await rootRquest.get(
-      '/api/deployments/',
-      // 'http://20.89.186.195/api/deployments/',
-    );
+    const response = await rootRquest.get('/api/deployments/');
     return response.data.map((result) => normalizeDeployment(result));
   },
 );
 
 export const getDeploymentInsight = createWrappedAsync<any, GetDeploymentInsightPayload, { state: State }>(
-  'Deployment/getDeploymentProperty',
+  'Deployment/getDeploymentInsight',
   async ({ deployment, skill_symphony_id, camera_symphony_id }) => {
     const response = await rootRquest.get(
       `/api/deployments/${deployment}/list_deployment_insights?skill_symphony_id=${skill_symphony_id}&device_symphony_id=${camera_symphony_id}`,
-      // 'http://20.89.186.195/api/deployments/1/list_deployment_insights?skill_symphony_id=skill-38802ff1-dbce-4da9-9eff-86d0fe9f9531&device_symphony_id=device-ac6d15a1-1aa0-41a6-ba4a-883fbd67feee',
     );
+    return response.data;
+  },
+);
+
+export const getDeploymentProperty = createWrappedAsync<any, number>(
+  'Deployment/getDeploymentProperty',
+  async (id) => {
+    const response = await rootRquest.get(`/api/deployments/${id}/get_deployment_properties`);
+
     return response.data;
   },
 );
@@ -95,7 +96,6 @@ export const getDeploymentVideoRecordings = createWrappedAsync<
 >('Deployment/getCameraVideoRecording', async ({ deployment, skillName, cameraName }) => {
   const response = await rootRquest.get(
     `/api/deployments/${deployment}/list_deployment_videos?skill_displayname=${skillName}&device_displayname=${cameraName}`,
-    // 'http://20.89.186.195/api/deployments/2/list_deployment_videos?skill_displayname=fcpu&device_displayname=f8',
   );
   return response.data;
 });
@@ -155,6 +155,28 @@ export const selectHasUseAiSkillSelectoryFactory = (skillId: number) =>
       .map((deployment) => deployment.configure.map((configure) => configure.skills.map((skill) => skill.id)))
       .flat(2)
       .some((skill) => skill === skillId);
+
+    return result;
+  });
+
+export const selectHasCameraDeploymentSelectoryFactory = (cameraId: number) =>
+  createSelector(selectAllDeployments, (deploymentList) => {
+    if (deploymentList.length === 0) return false;
+
+    const result = deploymentList
+      .reduce((acc, deployment) => [...acc, ...deployment.configure.map((configure) => configure.camera)], [])
+      .some((camera) => camera === cameraId);
+
+    return result;
+  });
+
+export const selectHasDeviceDeploymentSelectoryFactory = (deviceId: number) =>
+  createSelector(selectAllDeployments, (deploymentList) => {
+    if (deploymentList.length === 0) return false;
+
+    const result = deploymentList
+      .reduce((acc, deployment) => [...acc, deployment.compute_device], [])
+      .some((device) => device === deviceId);
 
     return result;
   });

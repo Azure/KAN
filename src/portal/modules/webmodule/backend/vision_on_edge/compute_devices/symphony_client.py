@@ -112,6 +112,37 @@ class SymphonyTargetClient(SymphonyClient):
         }
         return config_json
 
+    def get_patch_config(self):
+
+        tag_list = self.args.get("tag_list", "")
+
+        labels = {}
+        if tag_list:
+            for tag in json.loads(tag_list):
+                labels[tag["name"]] = tag["value"]
+
+        # can only patch labels on portal for now
+        patch_config = [
+            {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
+        ]
+        return patch_config
+
+    def get_config_from_symphony(self, name):
+
+        api = self.get_client()
+
+        if api:
+            instance = api.get_namespaced_custom_object(
+                group="fabric.symphony",
+                version="v1",
+                namespace="default",
+                plural="targets",
+                name=name
+            )
+            return instance
+        else:
+            return ""
+
     def load_symphony_objects(self):
         from .models import ComputeDevice
 
@@ -242,7 +273,7 @@ class SymphonySolutionClient(SymphonyClient):
                 })
 
         # container image
-        container_version = "0.38.2"
+        container_version = "0.38.1"
         managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
         streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
         predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"
@@ -319,8 +350,9 @@ class SymphonySolutionClient(SymphonyClient):
             )
 
             for module in solution['spec']['components']:
-                module["properties"]["env.REVISIONS"] = str(int(module["properties"].get("env.REVISIONS", "0")) + 1)
-            
+                module["properties"]["env.REVISIONS"] = str(
+                    int(module["properties"].get("env.REVISIONS", "0")) + 1)
+
             try:
                 api.patch_namespaced_custom_object(
                     group="solution.symphony",
@@ -333,4 +365,3 @@ class SymphonySolutionClient(SymphonyClient):
             except Exception as e:
                 logger.warning("fail")
                 logger.warning(e)
-

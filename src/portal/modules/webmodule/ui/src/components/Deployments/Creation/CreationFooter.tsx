@@ -22,19 +22,23 @@ interface Props {
   onIsCreatingChange: () => void;
   stepList: PivotTabKey[];
   onFormDateValidate: (key: PivotTabKey) => boolean;
+  onValidationRedirect: (nextStep: PivotTabKey, currentStep: PivotTabKey) => void;
 }
 
-const Footer = (props: Props) => {
-  const { currentStep, onLinkClick, localFormData, isCreating, stepList, onFormDateValidate } = props;
+const CreationFooter = (props: Props) => {
+  const {
+    currentStep,
+    onLinkClick,
+    localFormData,
+    isCreating,
+    stepList,
+    onFormDateValidate,
+    onValidationRedirect,
+  } = props;
 
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = getFooterClasses();
-
-  // console.log(
-  //   'onFormDateValidate(getStepKey(currentStep, stepList, 0))',
-  //   onFormDateValidate(getStepKey(currentStep, stepList, 0)),
-  // );
 
   const onCreateClick = useCallback(async () => {
     if (onFormDateValidate(currentStep)) return;
@@ -70,15 +74,6 @@ const Footer = (props: Props) => {
     });
   }, [localFormData, history, onFormDateValidate, currentStep, dispatch]);
 
-  const onValidationRedirect = useCallback(
-    (key: PivotTabKey) => {
-      if (onFormDateValidate(currentStep)) return;
-
-      onLinkClick(key);
-    },
-    [onLinkClick, onFormDateValidate, currentStep],
-  );
-
   return (
     <Stack
       horizontal
@@ -90,7 +85,7 @@ const Footer = (props: Props) => {
       {['configure', 'tag'].includes(currentStep) && (
         <PrimaryButton
           text="Review + Deploy"
-          onClick={() => onLinkClick('preview')}
+          onClick={() => onValidationRedirect('preview', currentStep)}
           disabled={
             localFormData.cameraList.length === 0 ||
             localFormData.cameraList.some((camera) => camera.skillList.length === 0)
@@ -113,11 +108,11 @@ const Footer = (props: Props) => {
           text="Next"
           styles={{ flexContainer: { flexDirection: 'row-reverse' } }}
           iconProps={{ iconName: 'ChevronRight' }}
-          onClick={() => onValidationRedirect(getStepKey(currentStep, stepList, 1))}
+          onClick={() => onValidationRedirect(getStepKey(currentStep, stepList, 1), currentStep)}
         />
       )}
     </Stack>
   );
 };
 
-export default Footer;
+export default CreationFooter;

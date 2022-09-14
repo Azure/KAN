@@ -247,7 +247,8 @@ export const deleteTrainingProject = createWrappedAsync<any, { id: number }>(
 export const getSelectedProjectInfo = createWrappedAsync<any, string, { state: State }>(
   'trainingSlice/GetSelectedProjectInfo',
   async (id, { getState }) => {
-    const settingId = getState().setting.current.id;
+    const settingId = getState().setting.id;
+
     // await rootRquest.delete(`/api/settings/9/project_info?customvision_id=${id}`);
     const response = await rootRquest.get(`/api/settings/${settingId}/project_info?customvision_id=${id}`);
 

@@ -15,7 +15,7 @@ import MenuButton from './MenuButton';
 
 interface Props {
   deployment: FormattedDeployment;
-  onDeleteModalOpen: (deployment: FormattedDeployment) => void;
+  onDeleteModalOpen: () => void;
   onPropertyOpen: () => void;
 }
 
@@ -74,8 +74,8 @@ const Card = (props: Props) => {
         <MenuButton
           deployemnt={deployment}
           iconName="MoreVertical"
-          onDeleteModalOpen={() => onDeleteModalOpen(deployment)}
-          onPropertyOpen={onPropertyOpen}
+          onDeleteModalOpen={onDeleteModalOpen}
+          onDefinitionOpen={onPropertyOpen}
         />
       </Stack>
       <Stack styles={{ root: classes.cardBottomWrapper }} tokens={{ childrenGap: 5 }}>

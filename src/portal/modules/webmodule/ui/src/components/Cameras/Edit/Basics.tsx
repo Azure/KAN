@@ -11,7 +11,6 @@ import { selectAllComputeDevices } from '../../../store/computeDeviceSlice';
 import { UpdateCameraFormData } from '../types';
 import { CreateByNameDialog } from '../../CreateByNameDialog';
 
-// import TagLabel from '../../Common/TagLabel';
 import HorizontalDropdown from '../../Common/HorizontalDropdown';
 import HorizontalTextField from '../../Common/HorizontalTextField';
 
@@ -48,7 +47,7 @@ const Basics = (props: Props) => {
   );
 
   return (
-    <Stack styles={{ root: { paddingTop: '40px' } }}>
+    <Stack styles={{ root: { padding: '40px 0' } }}>
       <Label styles={{ root: { fontWeight: 600, lineHeight: '20px' } }}>Basic Info</Label>
       <Stack styles={{ root: { paddingTop: '10px' } }} tokens={{ childrenGap: 10 }}>
         <HorizontalTextField required label="Name" value={localFormData.name} disabled />

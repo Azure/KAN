@@ -7,6 +7,7 @@
 import logging
 import json
 import uuid
+import yaml
 
 from django.db import models
 from django.db.models.signals import post_save, post_delete, pre_save
@@ -51,6 +52,13 @@ class ComputeDevice(models.Model):
                             status_table[camera_table[cam]] = "disconnected"
 
             return json.dumps(status_table)
+        else:
+            return ""
+
+    def get_properties(self):
+        prop = target_client.get_config_from_symphony(self.symphony_id)
+        if prop:
+            return yaml.dump(prop)
         else:
             return ""
 
@@ -102,7 +110,7 @@ class ComputeDevice(models.Model):
             solution_client.deploy_config(group="solution.symphony", plural="solutions")
         else:
             # update
-            target_client.update_config(
+            target_client.patch_config(
                 group="fabric.symphony", plural="targets", name=instance.symphony_id)
         az_logger.warning(
             "create_compute_device",

@@ -13,7 +13,7 @@ import { selectDeploymentById } from '../../store/deploymentSlice';
 import { selectAllComputeDevices } from '../../store/computeDeviceSlice';
 import { selectAllCameras } from '../../store/cameraSlice';
 import { selectAllCascades } from '../../store/cascadeSlice';
-import { UpdateDeploymentFormData, PivotTabKey } from './types';
+import { UpdateDeploymentFormData, PivotTabKey, STEP_ORDER } from './types';
 import { getDeploymentWrapperClasses } from './styles';
 
 import Basics from './Edit/Basics';
@@ -24,7 +24,7 @@ import EditFooter from './Edit/EditFooter';
 import ErrorIcon from '../Common/ErrorIcon';
 
 const DeploymentEdit = () => {
-  const { id, key } = useParams<{ id: string; key: PivotTabKey }>();
+  const { id, step: editStep } = useParams<{ id: string; step: PivotTabKey }>();
 
   const history = useHistory();
   const classes = getDeploymentWrapperClasses();
@@ -44,7 +44,7 @@ const DeploymentEdit = () => {
       skillList: '',
     },
   });
-  const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(key);
+  const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(editStep);
 
   useEffect(() => {
     if (!deployment || !cameraList.length || !deviceList.length || !skillList.length) return;
@@ -87,7 +87,7 @@ const DeploymentEdit = () => {
       history.push(
         generatePath(Url.DEPLOYMENT_EDIT, {
           id,
-          key,
+          step: key,
         }),
       );
     },
@@ -128,8 +128,8 @@ const DeploymentEdit = () => {
   );
 
   const onFormDateValidate = useCallback(
-    (currentStep: PivotTabKey) => {
-      if (localFormData.cameraList.length === 0) {
+    (nextStep: PivotTabKey, currentStep: PivotTabKey) => {
+      if (localFormData.cameraList.length === 0 && currentStep === 'configure') {
         setLocalFormData((prev) => ({
           ...prev,
           error: { ...prev.error, cameraList: 'Value cannot be blank.' },
@@ -137,11 +137,10 @@ const DeploymentEdit = () => {
         return true;
       }
 
-      if (currentStep === 'basics') return false;
-
       if (
         localFormData.cameraList.length > 0 &&
-        localFormData.cameraList.some((camera) => camera.skillList.length === 0)
+        localFormData.cameraList.some((camera) => camera.skillList.length === 0) &&
+        currentStep === 'configure'
       ) {
         setLocalFormData((prev) => ({
           ...prev,
@@ -152,7 +151,8 @@ const DeploymentEdit = () => {
 
       if (
         localFormData.tag_list.length > 1 &&
-        localFormData.tag_list.some((tag) => tag.errorMessage !== '')
+        localFormData.tag_list.some((tag) => tag.errorMessage !== '') &&
+        currentStep === 'tag'
       ) {
         return true;
       }
@@ -162,13 +162,29 @@ const DeploymentEdit = () => {
     [localFormData],
   );
 
+  const onValidationRedirect = useCallback(
+    (nextStep: PivotTabKey, currentStep: PivotTabKey) => {
+      const nextStepIdx = STEP_ORDER.findIndex((step) => step === nextStep);
+      const currentStepIdx = STEP_ORDER.findIndex((step) => step === currentStep);
+
+      if (nextStepIdx > currentStepIdx) {
+        const isInvalid = onFormDateValidate(nextStep, currentStep);
+
+        if (isInvalid) return;
+      }
+
+      onLinkClick(nextStep);
+    },
+    [onLinkClick, onFormDateValidate],
+  );
+
   return (
     <>
       <Stack styles={{ root: classes.root }}>
         <Stack horizontal verticalAlign="center">
           <Pivot
             styles={{ itemContainer: { height: 'calc(100% - 44px)' } }}
-            onLinkClick={(item) => onLinkClick(item?.props.itemKey! as PivotTabKey)}
+            onLinkClick={(item) => onLinkClick(item?.props.itemKey as PivotTabKey)}
             selectedKey={localPivotKey}
           >
             <PivotItem headerText="Basics" itemKey="basics" />
@@ -200,6 +216,16 @@ const DeploymentEdit = () => {
             />
           </Pivot>
         </Stack>
+      </Stack>
+      <Stack
+        styles={{
+          root: {
+            height: 'calc(100% - 220px)',
+            overflowY: 'auto',
+            padding: '0 20px',
+          },
+        }}
+      >
         <Switch>
           <Route
             exact
@@ -230,10 +256,8 @@ const DeploymentEdit = () => {
         currentStep={localPivotKey}
         onLinkClick={onLinkClick}
         localFormData={localFormData}
-        // isCreating={isCreating}
-        // onIsCreatingChange={() => setIsCreating(true)}
-        stepList={['basics', 'configure', 'tag', 'preview']}
-        onFormDateValidate={onFormDateValidate}
+        stepList={STEP_ORDER}
+        onValidationRedirect={onValidationRedirect}
       />
     </>
   );

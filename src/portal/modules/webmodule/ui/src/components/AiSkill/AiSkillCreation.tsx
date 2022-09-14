@@ -4,17 +4,24 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { Stack, Pivot, PivotItem, IPivotItemProps, Spinner } from '@fluentui/react';
 import { useHistory, generatePath, Route, Switch, useParams } from 'react-router-dom';
-import { clone } from 'ramda';
+import { clone, isEmpty } from 'ramda';
 import { Node, Edge } from 'react-flow-renderer';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import html2canvas from 'html2canvas';
 
-import { PivotTabKey, CreateAISkillFormData } from './types';
-import { Url, ERROR_BLANK_VALUE, ERROR_NAME_BE_USED, ERROR_NAME_BLANK } from '../../constant';
+import { PivotTabKey, CreateAISkillFormData, STEP_ORDER } from './types';
+import { Url, ERROR_BLANK_VALUE, ERROR_NAME_BE_USED, ERROR_NAME_BLANK, theme } from '../../constant';
 import { nodeTypeModelFactory } from '../../store/trainingProjectSlice';
-import { NODE_CONSTANT_X_POSITION, NODE_CONSTANT_Y_POSITION } from './utils';
+import {
+  NODE_CONSTANT_X_POSITION,
+  NODE_CONSTANT_Y_POSITION,
+  getCascadeErrorMessage,
+  convertElementsPayload,
+} from './utils';
 import { SOURCE_CONFIGURATIONS } from './constant';
-
+import { getScrllStackClasses } from '../Common/styles';
 import TagTab, { Tag, getErrorMessage } from '../Common/TagTab';
+
 import Basics from './Creation/Basics';
 import Preview from './Creation/Preview';
 import CascadeFlow from './Cascade/CascadeFlow';
@@ -25,11 +32,27 @@ interface Props {
   existingNameList: string[];
 }
 
+const getLocalFormError = (form: CreateAISkillFormData, existingNameList: string[]) => {
+  const error = {
+    name: '',
+    acceleration: '',
+    fps: '',
+  };
+
+  if (isEmpty(form.name)) error.name = ERROR_NAME_BLANK;
+  if (existingNameList.includes(form.name)) error.name = ERROR_NAME_BE_USED;
+  if (form.acceleration === '-') error.acceleration = ERROR_BLANK_VALUE;
+  if (form.fps === 0) error.fps = ERROR_BLANK_VALUE;
+
+  return error;
+};
+
 const AISkillCreation = (props: Props) => {
   const { existingNameList } = props;
 
-  const { key } = useParams<{ key: PivotTabKey }>();
+  const { step: createdStep } = useParams<{ step: PivotTabKey }>();
   const history = useHistory();
+  const scrllStackClasses = getScrllStackClasses();
 
   const sourceModel = useSelector(nodeTypeModelFactory(['source']))[0];
 
@@ -72,7 +95,7 @@ const AISkillCreation = (props: Props) => {
       fps: '',
     },
   });
-  const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(key);
+  const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(createdStep);
   const [isCreating, setIsCreating] = useState(false);
 
   const onLinkClick = useCallback(
@@ -81,7 +104,7 @@ const AISkillCreation = (props: Props) => {
 
       history.push(
         generatePath(Url.AI_SKILL_CREATION, {
-          key,
+          step: key,
         }),
       );
     },
@@ -121,50 +144,90 @@ const AISkillCreation = (props: Props) => {
     [localFormData.tag_list],
   );
 
+  const onCascadeCreate = useCallback(async () => {
+    setIsCreating(true);
+
+    const elementsPayload = convertElementsPayload(elements);
+    const blob = await html2canvas(reactFlowRef.current, {
+      backgroundColor: theme.palette.neutralLight,
+    });
+    const dataURL = blob.toDataURL();
+
+    setLocalFormData((prev) => ({
+      ...prev,
+      raw_data: JSON.stringify(elements),
+      cascade: {
+        flow: JSON.stringify({
+          ...elementsPayload,
+        }),
+        error: '',
+      },
+      screenshot: dataURL,
+    }));
+
+    setIsCreating(false);
+  }, [elements, reactFlowRef]);
+
   const onFormDateValidate = useCallback(
-    (_: PivotTabKey) => {
-      if (localFormData.name === '') {
-        setLocalFormData((prev) => ({ ...prev, error: { ...prev.error, name: ERROR_NAME_BLANK } }));
+    (nextStep: PivotTabKey, currentStep: PivotTabKey) => {
+      const error = getLocalFormError(localFormData, existingNameList);
+
+      if (Object.values(error).some((value) => !isEmpty(value)) && currentStep === 'basics') {
+        setLocalFormData((prev) => ({
+          ...prev,
+          error,
+        }));
+
         return true;
       }
 
-      if (existingNameList.includes(localFormData.name)) {
-        setLocalFormData((prev) => ({ ...prev, error: { ...prev.error, name: ERROR_NAME_BE_USED } }));
-        return true;
-      }
+      const cascadeErrorMessage = getCascadeErrorMessage(elements);
 
-      if (localFormData.acceleration === '-') {
+      if (currentStep === 'cascade' && !isEmpty(cascadeErrorMessage)) {
         setLocalFormData((prev) => ({
           ...prev,
-          error: { ...prev.error, acceleration: ERROR_BLANK_VALUE },
+          cascade: { ...localFormData.cascade, error: cascadeErrorMessage },
         }));
-        return true;
-      }
-      if (localFormData.fps === 0) {
-        setLocalFormData((prev) => ({
-          ...prev,
-          error: { ...prev.error, fps: ERROR_BLANK_VALUE },
-        }));
+
         return true;
       }
 
       if (
         localFormData.tag_list.length > 1 &&
-        localFormData.tag_list.some((tag) => tag.errorMessage !== '')
+        localFormData.tag_list.some((tag) => tag.errorMessage !== '') &&
+        currentStep === 'tag'
       ) {
         return true;
       }
 
       return false;
     },
-    [localFormData, existingNameList],
+    [localFormData, existingNameList, elements],
+  );
+
+  const onValidationRedirect = useCallback(
+    async (nextStep: PivotTabKey, currentStep: PivotTabKey) => {
+      const nextStepIdx = STEP_ORDER.findIndex((step) => step === nextStep);
+      const currentStepIdx = STEP_ORDER.findIndex((step) => step === currentStep);
+
+      if (nextStepIdx > currentStepIdx) {
+        const isInvalid = onFormDateValidate(nextStep, currentStep);
+
+        if (isInvalid) return;
+      }
+
+      if (currentStep === 'cascade') await onCascadeCreate();
+
+      onLinkClick(nextStep);
+    },
+    [onLinkClick, onFormDateValidate, onCascadeCreate],
   );
 
   return (
     <>
       <Stack horizontal verticalAlign="center">
         <Pivot
-          onLinkClick={(item) => onLinkClick(item?.props.itemKey! as PivotTabKey)}
+          onLinkClick={(item) => onValidationRedirect(item?.props.itemKey as PivotTabKey, localPivotKey)}
           selectedKey={localPivotKey}
         >
           <PivotItem
@@ -206,52 +269,51 @@ const AISkillCreation = (props: Props) => {
         </Pivot>
         {isCreating && <Spinner size={3} />}
       </Stack>
-      <Switch>
-        <Route
-          exact
-          path={Url.AI_SKILL_CREATION_PREVIEW}
-          render={() => <Preview localFormData={localFormData} onLinkClick={onLinkClick} />}
-        />
-        <Route
-          exact
-          path={Url.AI_SKILL_CREATION_TAG}
-          render={() => (
-            <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
-          )}
-        />
-        <Route
-          exact
-          path={Url.AI_SKILL_CREATION_CASCADE}
-          render={() => (
-            <CascadeFlow
-              elements={elements}
-              setElements={setElements}
-              cascadeError={localFormData.cascade.error}
-              onErrorCancel={() =>
-                setLocalFormData((prev) => ({ ...prev, cascade: { ...prev.cascade, error: '' } }))
-              }
-              reactFlowRef={reactFlowRef}
-              selectedAcceleraction={localFormData.acceleration}
-            />
-          )}
-        />
-        <Route
-          exact
-          path={Url.AI_SKILL_CREATION_BASIC}
-          render={() => <Basics localFormData={localFormData} onFormDataChange={onFormDataChange} />}
-        />
-      </Switch>
+      <Stack styles={{ root: scrllStackClasses.root }}>
+        <Switch>
+          <Route
+            exact
+            path={Url.AI_SKILL_CREATION_PREVIEW}
+            render={() => <Preview localFormData={localFormData} onLinkClick={onLinkClick} />}
+          />
+          <Route
+            exact
+            path={Url.AI_SKILL_CREATION_TAG}
+            render={() => (
+              <TagTab tagList={localFormData.tag_list} onTagChange={onTagChange} onTagDelete={onTagDelete} />
+            )}
+          />
+          <Route
+            exact
+            path={Url.AI_SKILL_CREATION_CASCADE}
+            render={() => (
+              <CascadeFlow
+                elements={elements}
+                setElements={setElements}
+                cascadeError={localFormData.cascade.error}
+                onErrorCancel={() =>
+                  setLocalFormData((prev) => ({ ...prev, cascade: { ...prev.cascade, error: '' } }))
+                }
+                reactFlowRef={reactFlowRef}
+                selectedAcceleraction={localFormData.acceleration}
+              />
+            )}
+          />
+          <Route
+            exact
+            path={Url.AI_SKILL_CREATION_BASIC}
+            render={() => <Basics localFormData={localFormData} onFormDataChange={onFormDataChange} />}
+          />
+        </Switch>
+      </Stack>
       <CreationFooter
         currentStep={localPivotKey}
         onLinkClick={onLinkClick}
         localFormData={localFormData}
         isCreating={isCreating}
         onCreatingChange={(value: boolean) => setIsCreating(value)}
-        stepList={['basics', 'cascade', 'tag', 'preview']}
-        onFormDateValidate={onFormDateValidate}
-        elements={elements}
-        onFormDataChange={onFormDataChange}
-        reactFlowRef={reactFlowRef}
+        stepList={STEP_ORDER}
+        onValidationRedirect={onValidationRedirect}
       />
     </>
   );

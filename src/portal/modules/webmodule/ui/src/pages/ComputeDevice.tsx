@@ -9,6 +9,7 @@ import { Switch, Route, useRouteMatch, useHistory } from 'react-router-dom';
 import { State as RootState } from 'RootStateType';
 import { Url } from '../constant';
 import { getComputeDeviceList, selectAllComputeDevices } from '../store/computeDeviceSlice';
+import { getDeployments } from '../store/deploymentSlice';
 import { getPageClasses } from './styles';
 
 import DeviceDetailWrapper from '../components/ComputeDevice/DeviceDetailWrapper';
@@ -30,6 +31,7 @@ const ComputeDevice = () => {
     (async () => {
       setIsLoading(true);
       await dispatch(getComputeDeviceList());
+      await dispatch(getDeployments());
       setIsLoading(false);
     })();
   }, [dispatch]);

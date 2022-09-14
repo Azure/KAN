@@ -9,7 +9,16 @@ import sys
 
 from django.apps import AppConfig
 
-from configs.customvision_config import ENDPOINT, TRAINING_KEY
+from configs.client_config import (
+    SUBSCRIPTION_ID,
+    STORAGE_ACCOUNT,
+    STORAGE_CONTAINER,
+    TENANT_ID,
+    CLIENT_ID,
+    CLIENT_SECRET,
+    ENDPOINT,
+    TRAINING_KEY
+)
 from configs.iot_config import DEVICE_ID, IOT_HUB_CONNECTION_STRING, MODULE_ID
 
 from .constants import DEFAULT_SETTING_NAME
@@ -76,6 +85,12 @@ class AzureSettingsConfig(AppConfig):
                     iot_hub_connection_string=IOT_HUB_CONNECTION_STRING,
                     device_id=DEVICE_ID,
                     module_id=MODULE_ID,
+                    subscription_id=SUBSCRIPTION_ID,
+                    storage_account=STORAGE_ACCOUNT,
+                    storage_container=STORAGE_CONTAINER,
+                    tenant_id=TENANT_ID,
+                    client_id=CLIENT_ID,
+                    client_secret=CLIENT_SECRET,
                 )
                 if not created:
                     logger.error(

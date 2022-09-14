@@ -7,6 +7,7 @@
 import logging
 import json
 import uuid
+import yaml
 
 from django.db import models
 from django.db.models.signals import pre_save, post_delete, post_save
@@ -108,6 +109,13 @@ class Camera(models.Model):
         else:
             return ""
 
+    def get_properties(self):
+        prop = device_client.get_config_from_symphony(self.symphony_id)
+        if prop:
+            return yaml.dump(prop)
+        else:
+            return ""
+
     def __str__(self):
         return self.name
 
@@ -172,7 +180,7 @@ class Camera(models.Model):
             device_client.deploy_config(group="fabric.symphony", plural="devices")
         else:
             # update
-            device_client.update_config(
+            device_client.patch_config(
                 group="fabric.symphony", plural="devices", name=instance.symphony_id)
 
     @staticmethod

@@ -12,11 +12,11 @@ interface Props {
   deployemnt: Deployment;
   iconName: string;
   onDeleteModalOpen: () => void;
-  onPropertyOpen: () => void;
+  onDefinitionOpen: () => void;
 }
 
 const MenuButton = (props: Props) => {
-  const { deployemnt, iconName, onDeleteModalOpen } = props;
+  const { deployemnt, iconName, onDeleteModalOpen, onDefinitionOpen } = props;
 
   const history = useHistory();
 
@@ -24,28 +24,24 @@ const MenuButton = (props: Props) => {
     history.push(
       generatePath(Url.DEPLOYMENT_EDIT, {
         id: deployemnt.id,
-        key: 'basics',
+        step: 'basics',
       }),
     );
   }, [history, deployemnt]);
 
-  // const onCameraDelete = useCallback(() => {
-  //   dispatch(deleteDeployment(deployemnt.id));
-  // }, [dispatch, deployemnt]);
-
   const menuProps: IContextualMenuProps = {
     items: [
-      // {
-      //   key: 'view',
-      //   text: 'Properties',
-      //   iconProps: { iconName: 'Equalizer' },
-      //   onClick: onPropertyOpen,
-      // },
       {
         key: 'edit',
         text: 'Edit Deployment',
         iconProps: { iconName: 'Edit' },
         onClick: onRedirectClick,
+      },
+      {
+        key: 'view',
+        text: 'View Definition',
+        iconProps: { iconName: 'Equalizer' },
+        onClick: onDefinitionOpen,
       },
       {
         key: 'delete',

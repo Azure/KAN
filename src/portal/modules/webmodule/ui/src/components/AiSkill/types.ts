@@ -4,6 +4,8 @@ import { Tag } from '../Common/TagTab';
 import { ModelNodeType, ModelCategory, ModelProjectType, TrainingProject } from '../../store/types';
 
 export type PivotTabKey = 'basics' | 'preview' | 'tag' | 'cascade';
+export const STEP_ORDER = ['basics', 'cascade', 'tag', 'preview'] as PivotTabKey[];
+
 export type ExportType = 'snippet' | 'iotHub' | 'iotEdge' | 'http';
 
 export type CreateAISkillFormData = {
@@ -87,6 +89,8 @@ export type ExportPanelFromData = {
   }>;
 };
 
+export type SkillModel = Pick<TrainingProject, 'id' | 'name' | 'inputs' | 'outputs' | 'symphony_id'>;
+
 export type SkillSideNode = {
   name?: string;
   displayName?: string;
@@ -97,8 +101,6 @@ export type SkillSideNode = {
   isEditDone: boolean;
   model?: SkillModel;
 };
-
-export type SkillModel = Pick<TrainingProject, 'id' | 'name' | 'inputs' | 'outputs' | 'symphony_id'>;
 
 export type SkillNodeData = SkillSideNode & {
   configurations?: Partial<

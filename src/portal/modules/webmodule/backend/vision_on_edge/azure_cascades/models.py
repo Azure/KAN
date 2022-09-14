@@ -5,6 +5,7 @@ import logging
 import requests
 import json
 import uuid
+import yaml
 
 from django.db import models
 from django.db.models.signals import post_save, post_delete, pre_save
@@ -39,6 +40,13 @@ class Cascade(models.Model):
         return self.name.__str__()
 
     # automatically modify single model cascade
+
+    def get_properties(self):
+        prop = skill_client.get_config_from_symphony(self.symphony_id)
+        if prop:
+            return yaml.dump(prop)
+        else:
+            return ""
 
     @staticmethod
     def pre_save(**kwargs):
@@ -82,9 +90,10 @@ class Cascade(models.Model):
                 for cam in configure:
                     for skill in cam['skills']:
                         if int(skill['id']) == int(instance.id):
-                            affected_solutions.append(instance_obj.compute_device.solution_id)
+                            affected_solutions.append(
+                                instance_obj.compute_device.solution_id)
 
-            skill_client.update_config(
+            skill_client.patch_config(
                 group="ai.symphony", plural="skills", name=instance.symphony_id)
 
             logger.warning(f"Updating affected solutions: {affected_solutions}")

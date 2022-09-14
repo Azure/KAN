@@ -13,41 +13,41 @@ Open the portal URL you received as part of initial [setup](https://github.com/A
 
 1.  From the left navigation, select **Models**.
 
-![Graphical user interface, text, application, email Description automatically generated](.media/cee1a5b7a3bfbf8c7444351dfb323b57.png)
+![Graphical user interface, text, application, email Description automatically generated](./media/cee1a5b7a3bfbf8c7444351dfb323b57.png)
 
 1.  Select **Add External Model.**
 
 This opens a page very similar to adding a **custom model**.
 
-![Graphical user interface, text, application, email Description automatically generated](.media/c90dbb3041129c4d098aa5d9eba4c155.png)
+![Graphical user interface, text, application, email Description automatically generated](./media/c90dbb3041129c4d098aa5d9eba4c155.png)
 
 1.  Select **Model Name** and assign your model a meaningful name.
 2.  Select **Type** and choose either **detection** or **classification**.
 
-![Graphical user interface Description automatically generated with medium confidence](.media/863577c99ad3bf7564e63f529edb0805.png)
+![Graphical user interface Description automatically generated with medium confidence](./media/863577c99ad3bf7564e63f529edb0805.png)
 
 1.  Select **Model Format** and choose **ONNX**.
 
 Later releases will cover a variety of formats.
 
-![Graphical user interface Description automatically generated](.media/cf6919bde0b518e6974d402a42080cec.png)
+![Graphical user interface Description automatically generated](./media/cf6919bde0b518e6974d402a42080cec.png)
 
 1.  Select the **Blobstorage** path for the model file and fill in the location of the model. Do the same for the label file.
 2.  Fill in a meaningful description of the model in the **Description** field.
 
-![A picture containing graphical user interface Description automatically generated](.media/4198a3a888f4c19b4d45a165e0230ced.png)
+![A picture containing graphical user interface Description automatically generated](./media/4198a3a888f4c19b4d45a165e0230ced.png)
 
 1.  (**Optional**) Select next and assign tags similarly to the way Azure resources are tagged.
 
-![Graphical user interface, text, application Description automatically generated](.media/d8abc90d51d5e3459908a94cb1527961.png)
+![Graphical user interface, text, application Description automatically generated](./media/d8abc90d51d5e3459908a94cb1527961.png)
 
 1.  Select **Review and Create.**
 
-![Graphical user interface, text, application Description automatically generated](.media/a99bbcd0ec9d105b7cb51f0b6f5fe728.png)
+![Graphical user interface, text, application Description automatically generated](./media/a99bbcd0ec9d105b7cb51f0b6f5fe728.png)
 
 1.  Select **Create** and your model will now appear under **Your Added Models**.
 
-![Graphical user interface, text, application, email Description automatically generated](.media/e13bb4f4802f6d39c5e376f5882b6298.png)
+![Graphical user interface, text, application, email Description automatically generated](./media/e13bb4f4802f6d39c5e376f5882b6298.png)
 
 ## Next steps
 

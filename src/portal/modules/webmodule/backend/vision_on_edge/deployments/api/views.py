@@ -207,8 +207,8 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
 
         return Response(iothub_insights.get(instance_id, {}).get(skill_symphony_id, {}).get(device_symphony_id, []))
 
-    @action(detail=True, methods=["get"], url_path="get_deployment_properties")
-    def get_deployment_properties(self, request, pk=None):
+    @action(detail=True, methods=["get"], url_path="get_properties")
+    def get_properties(self, request, pk=None):
         queryset = self.get_queryset()
         instance = drf_get_object_or_404(queryset, pk=pk)
 

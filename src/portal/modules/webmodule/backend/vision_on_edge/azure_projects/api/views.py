@@ -346,6 +346,15 @@ class ProjectViewSet(FiltersMixin, viewsets.ModelViewSet):
             response_data = {"status": "Model Dose Not Exist"}
             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=True, methods=["get"], url_path="get_properties")
+    def get_properties(self, request, pk=None):
+        queryset = self.get_queryset()
+        instance = drf_get_object_or_404(queryset, pk=pk)
+
+        logger.warning(f"Retrieving model [{instance.symphony_id}] config.")
+
+        return Response(instance.get_properties())
+
 
 class TaskViewSet(FiltersMixin, viewsets.ModelViewSet):
     """Task ModelViewSet"""

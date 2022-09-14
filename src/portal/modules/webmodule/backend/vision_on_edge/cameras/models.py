@@ -7,6 +7,7 @@
 import logging
 import json
 import uuid
+import yaml
 
 from django.db import models
 from django.db.models.signals import pre_save, post_delete, post_save
@@ -105,6 +106,13 @@ class Camera(models.Model):
                                          ] = "disconnected"
 
             return json.dumps(status_table)
+        else:
+            return ""
+
+    def get_properties(self):
+        prop = device_client.get_config_from_symphony(self.symphony_id)
+        if prop:
+            return yaml.dump(prop)
         else:
             return ""
 

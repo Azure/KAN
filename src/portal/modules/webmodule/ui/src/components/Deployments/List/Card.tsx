@@ -75,7 +75,7 @@ const Card = (props: Props) => {
           deployemnt={deployment}
           iconName="MoreVertical"
           onDeleteModalOpen={onDeleteModalOpen}
-          onPropertyOpen={onPropertyOpen}
+          onDefinitionOpen={onPropertyOpen}
         />
       </Stack>
       <Stack styles={{ root: classes.cardBottomWrapper }} tokens={{ childrenGap: 5 }}>

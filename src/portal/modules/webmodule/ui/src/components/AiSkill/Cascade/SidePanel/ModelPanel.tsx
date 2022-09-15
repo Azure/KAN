@@ -14,9 +14,15 @@ import {
   TextField,
   PrimaryButton,
   DefaultButton,
+  mergeStyleSets,
+  IconButton,
+  Callout,
+  DirectionalHint,
+  IDropdownProps,
 } from '@fluentui/react';
 import { Node, Edge } from 'react-flow-renderer';
 import { clone } from 'ramda';
+import { useBoolean, useId } from '@uifabric/react-hooks';
 
 import { accelerationModelSelectorFactory } from '../../../../store/selectors';
 import { FormattedModel } from '../../../../store/types';
@@ -43,6 +49,74 @@ const ERROR_BETWEEN_0_100 = 'Value 0-100.';
 const ERROR_LOWER_UPPER = 'Confidence lower bound needs to be smaller than upper bound';
 const ERROR_BIGGER_LOWER = 'Confidence upper bound needs to be bigger than lower bound';
 const ERROR_BOTH_BLANK_BETWEEN_0_100 = 'Value cannot be blank. Value 1-100.';
+
+const getSelectModelLabelClasses = () =>
+  mergeStyleSets({
+    lable: { fontWeight: 600 },
+    contentWrapper: { padding: '17px 25px', display: 'inline-block' },
+    boldContent: { fontSize: '13px', fontWeight: 600 },
+    content: { fontSize: '13px' },
+    requiredMark: {
+      color: 'rgb(164, 38, 44)',
+      paddingRight: '12px',
+    },
+  });
+
+const SelectModelLabel = (props: IDropdownProps): JSX.Element => {
+  const [isCalloutVisible, { toggle: toggleIsCalloutVisible }] = useBoolean(false);
+  const iconButtonId: string = useId('iconButton');
+
+  const classes = getSelectModelLabelClasses();
+
+  return (
+    <>
+      <Stack
+        horizontal
+        verticalAlign="center"
+        tokens={{
+          childrenGap: 4,
+          maxWidth: 300,
+        }}
+      >
+        <span id={props.id} className={classes.lable}>
+          {props.label}
+        </span>
+        <IconButton
+          id={iconButtonId}
+          iconProps={{ iconName: 'Info' }}
+          title="Info"
+          ariaLabel="Info"
+          onClick={toggleIsCalloutVisible}
+        />
+        <span className={classes.requiredMark}>*</span>
+      </Stack>
+      {isCalloutVisible && (
+        <Callout
+          target={`#${iconButtonId}`}
+          setInitialFocus
+          onDismiss={toggleIsCalloutVisible}
+          role="alertdialog"
+          directionalHint={DirectionalHint.bottomCenter}
+        >
+          <Stack
+            tokens={{
+              childrenGap: 4,
+              maxWidth: 280,
+            }}
+            horizontalAlign="start"
+            styles={{ root: classes.contentWrapper }}
+          >
+            <span className={classes.boldContent}>Note: </span>
+            <span className={classes.content}>
+              Models from the model zoo will not appear if they are incompatible with your device
+              acceleration.
+            </span>
+          </Stack>
+        </Callout>
+      )}
+    </>
+  );
+};
 
 const ModelPanel = (props: Props) => {
   const { node, onDismiss, setElements, acceleraction } = props;
@@ -233,6 +307,7 @@ const ModelPanel = (props: Props) => {
         <Stack tokens={{ childrenGap: 5 }}>
           <Dropdown
             label="Select Model"
+            onRenderLabel={(props: IDropdownProps) => <SelectModelLabel {...props} />}
             selectedKey={localForm.model.id}
             onChange={(_, option: IDropdownOption) => onModelSelect(option)}
             options={modelOptions}

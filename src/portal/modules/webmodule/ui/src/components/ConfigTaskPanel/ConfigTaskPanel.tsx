@@ -30,7 +30,7 @@ import { getConfigure, thunkPostProject } from '../../store/project/projectActio
 import { getScenario } from '../../store/scenarioSlice';
 import { OnChangeType } from './type';
 import { Url } from '../../constant';
-import { getCascades, selectAllCascades } from '../../store/cascadeSlice';
+import { getAiSkillList, selectAllCascades } from '../../store/cascadeSlice';
 import rootRequest from '../../store/rootRquest';
 
 import { extractRecommendFps } from '../../utils/projectUtils';
@@ -239,7 +239,7 @@ export const ConfigTaskPanel: React.FC<ConfigTaskPanelProps> = ({
     dispatch(getCameras(true));
     dispatch(getTrainingProject(true));
     dispatch(getScenario());
-    dispatch(getCascades());
+    dispatch(getAiSkillList());
   }, [dispatch]);
 
   const onDeployClicked = async () => {

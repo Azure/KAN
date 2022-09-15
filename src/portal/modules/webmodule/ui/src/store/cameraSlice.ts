@@ -207,7 +207,7 @@ const normalizeCameras = R.compose(normalizeCamerasAndAOIsByNormalizr, serialize
 const entityAdapter = createEntityAdapter<Camera>();
 
 export const getCameras = createWrappedAsync<any, boolean, { state: State }>(
-  'cameras/get',
+  'Cameras/get',
   async (isDemo) => {
     const response = await getSliceApiByDemo('cameras', isDemo);
     return normalizeCameras(response.data);
@@ -218,7 +218,7 @@ export const getCameras = createWrappedAsync<any, boolean, { state: State }>(
 );
 
 export const getSingleCamera = createWrappedAsync<any, number, { state: State }>(
-  'cameras/getSingle',
+  'Cameras/getSingle',
   async (id) => {
     const response = await rootRquest.get(`/api/cameras/${id}/update_status`);
 
@@ -229,8 +229,14 @@ export const getSingleCamera = createWrappedAsync<any, number, { state: State }>
   // },
 );
 
+export const getCameraDefinition = createWrappedAsync<any, number>('Cameras/getDefinition', async (id) => {
+  const response = await rootRquest.get(`/api/cameras/${id}/get_properties`);
+
+  return response.data;
+});
+
 export const postRTSPCamera = createWrappedAsync(
-  'cameras/rtsp/post',
+  'Cameras/rtsp/post',
   async (payload: CreateCameraPayload) => {
     const response = await rootRquest.post(`/api/cameras/`, payload);
 
@@ -242,14 +248,14 @@ export const postRTSPCamera = createWrappedAsync(
   },
 );
 
-export const putRTSPCamera = createWrappedAsync('cameras/rtsp/put', async (newCamera: any) => {
+export const putRTSPCamera = createWrappedAsync('Cameras/rtsp/put', async (newCamera: any) => {
   const response = await rootRquest.put(`/api/cameras/${newCamera.id}/`, newCamera);
 
   return response.data;
 });
 
 export const postMediaSourceCamera = createWrappedAsync(
-  'cameras/mediaSource/post',
+  'Cameras/mediaSource/post',
   async (payload: CreateCameraPayload) => {
     // Don't wait response, avoid timeout
 
@@ -257,20 +263,20 @@ export const postMediaSourceCamera = createWrappedAsync(
   },
 );
 
-export const updateCamera = createWrappedAsync('cameras/update', async (payload: UpdateCameraPayload) => {
+export const updateCamera = createWrappedAsync('Cameras/update', async (payload: UpdateCameraPayload) => {
   const response = await rootRquest.patch(`/api/cameras/${payload.id}`, payload.body);
 
   return normalizeCameras([response.data]);
 });
 
-export const putMediaSourceCamera = createWrappedAsync('cameras/mediaSource/put', async (newCamera: any) => {
+export const putMediaSourceCamera = createWrappedAsync('Cameras/mediaSource/put', async (newCamera: any) => {
   // Don't wait response, avoid timeout
 
   rootRquest.put(`/api/cameras/${newCamera.id}/`, newCamera);
 });
 
 export const deleteCameras = createWrappedAsync<any, { ids: number[]; resolve?: () => void }>(
-  'cameras/delete',
+  'Cameras/delete',
   async ({ ids, resolve }) => {
     const url = `/api/cameras/bulk-delete?${ids.map((id) => `id=${id}`).join('&')}`;
 

@@ -194,6 +194,15 @@ export const addExistingCustomVisionProject = createWrappedAsync<
   dispatch(getTrainingProjectStatusList());
 });
 
+export const getCustomVisionProjectDefinition = createWrappedAsync<any, number, { state: State }>(
+  'trainingSlice/getDefinition',
+  async (id) => {
+    const response = await rootRquest.get(`/api/projects/${id}/get_properties`);
+
+    return response.data;
+  },
+);
+
 export const createCustomVisionProject = createWrappedAsync<any, CreateCustomVisionModelPayload>(
   'trainingSlice/createCustomVisionProject',
   async (payload, { dispatch }) => {

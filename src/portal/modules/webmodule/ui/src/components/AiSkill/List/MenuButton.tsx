@@ -14,10 +14,11 @@ interface Props {
   skill: AiSkill;
   iconName: string;
   onDeleteModalOpen: () => void;
+  onDefinitionOpen: () => void;
 }
 
 const MenuButton = (props: Props) => {
-  const { skill, iconName, onDeleteModalOpen } = props;
+  const { skill, iconName, onDeleteModalOpen, onDefinitionOpen } = props;
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -42,6 +43,12 @@ const MenuButton = (props: Props) => {
         text: 'Edit AI Skill',
         iconProps: { iconName: 'Edit' },
         onClick: onPanelOpen,
+      },
+      {
+        key: 'view',
+        text: 'View Definition',
+        iconProps: { iconName: 'View' },
+        onClick: onDefinitionOpen,
       },
       {
         key: 'delete',

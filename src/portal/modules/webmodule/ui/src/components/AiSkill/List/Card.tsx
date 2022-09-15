@@ -13,7 +13,8 @@ import MenuButton from './MenuButton';
 
 interface Props {
   skill: AiSkill;
-  onDeleteModalOpen: (skill: AiSkill) => void;
+  onDeleteModalOpen: () => void;
+  onDefinitionOpen: () => void;
 }
 
 const getClasses = () =>
@@ -35,7 +36,7 @@ const getClasses = () =>
   });
 
 const Card = (props: Props) => {
-  const { skill, onDeleteModalOpen } = props;
+  const { skill, onDeleteModalOpen, onDefinitionOpen } = props;
 
   const classes = getClasses();
   const history = useHistory();
@@ -65,7 +66,8 @@ const Card = (props: Props) => {
         <MenuButton
           skill={skill}
           iconName="MoreVertical"
-          onDeleteModalOpen={() => onDeleteModalOpen(skill)}
+          onDeleteModalOpen={onDeleteModalOpen}
+          onDefinitionOpen={onDefinitionOpen}
         />
       </Stack>
       <Stack styles={{ root: classes.bottomContentWrapper }} horizontal tokens={{ childrenGap: 10 }}>

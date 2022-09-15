@@ -14,11 +14,11 @@ import {
   TextField,
   PrimaryButton,
   DefaultButton,
-  ITextFieldProps,
   mergeStyleSets,
   IconButton,
   Callout,
   DirectionalHint,
+  IDropdownProps,
 } from '@fluentui/react';
 import { Node, Edge } from 'react-flow-renderer';
 import { clone } from 'ramda';
@@ -62,7 +62,7 @@ const getSelectModelLabelClasses = () =>
     },
   });
 
-const SelectModelLabel = (props: ITextFieldProps): JSX.Element => {
+const SelectModelLabel = (props: IDropdownProps): JSX.Element => {
   const [isCalloutVisible, { toggle: toggleIsCalloutVisible }] = useBoolean(false);
   const iconButtonId: string = useId('iconButton');
 
@@ -307,7 +307,7 @@ const ModelPanel = (props: Props) => {
         <Stack tokens={{ childrenGap: 5 }}>
           <Dropdown
             label="Select Model"
-            onRenderLabel={(props) => <SelectModelLabel {...props} />}
+            onRenderLabel={(props: IDropdownProps) => <SelectModelLabel {...props} />}
             selectedKey={localForm.model.id}
             onChange={(_, option: IDropdownOption) => onModelSelect(option)}
             options={modelOptions}

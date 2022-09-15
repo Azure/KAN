@@ -66,7 +66,7 @@ const ModelCard = (props: Props) => {
     items: [
       {
         key: 'properties',
-        text: 'Properties',
+        text: 'See Properties',
         iconProps: { iconName: 'Equalizer' },
         onClick: () => onModelSelect(model),
       },

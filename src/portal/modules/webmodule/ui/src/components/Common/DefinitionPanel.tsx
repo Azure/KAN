@@ -40,15 +40,15 @@ const getRequestMethod = (pageType: PageType, id: number) => {
 const getTitle = (pageType: PageType) => {
   switch (pageType) {
     case 'deivce':
-      return 'Compute Devices Properties';
+      return 'Compute Devices Definition';
     case 'camera':
-      return 'Cameras Properties';
+      return 'Cameras Definition';
     case 'model':
-      return 'Models Properties';
+      return 'Models Definition';
     case 'skill':
-      return 'AI Skills Properties';
+      return 'AI Skills Definition';
     case 'deployment':
-      return 'Deployment Properties';
+      return 'Deployment Definition';
     default:
       return '';
   }

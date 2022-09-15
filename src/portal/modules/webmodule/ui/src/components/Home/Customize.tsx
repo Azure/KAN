@@ -4,12 +4,13 @@
 import React, { useState, useEffect } from 'react';
 import { Stack, Text, Link, mergeStyleSets } from '@fluentui/react';
 import { Card } from '@uifabric/react-cards';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { State } from 'RootStateType';
-import { useDispatch, useSelector } from 'react-redux';
-import { ConfigTaskPanel } from '../ConfigTaskPanel/ConfigTaskPanel';
-import { initialProjectData } from '../../store/project/projectReducer';
 import { getScenario, Scenario } from '../../store/scenarioSlice';
+import { initialProjectData } from '../../store/project/projectReducer';
+
+import ConfigTaskPanel from '../ConfigTaskPanel/ConfigTaskPanel';
 
 const classes = mergeStyleSets({
   subTitle: {

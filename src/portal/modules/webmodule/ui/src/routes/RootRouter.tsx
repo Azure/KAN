@@ -15,7 +15,7 @@ import { Url } from '../constant';
 // import { Models } from '../pages/Models';
 // import ImageDetail from '../pages/deprecation/ImageDetail';
 import CVModelPage from '../pages/CVModelPage';
-import { DeploymentPage } from '../pages/deprecation/Deployment';
+import DeploymentPage from '../pages/deprecation/Deployment';
 import Cameras from '../pages/Cameras';
 import CameraLiveFeed from '../pages/CameraLiveFeed';
 import AzureLogin from '../pages/AzureLogin';

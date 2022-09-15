@@ -42,29 +42,32 @@ const normalizeComputeDevice = (response: ComputeDeviceFromServer): ComputeDevic
   status: getStatus(response.status),
 });
 
-export const getComputeDeviceList = createWrappedAsync('computeDevice/Get', async () => {
-  const response = await rootRquest.get(
-    `/api/compute_devices`,
-    // 'http://20.89.186.195/api/compute_devices',
-  );
+export const getComputeDeviceList = createWrappedAsync('ComputeDevice/Get', async () => {
+  const response = await rootRquest.get(`/api/compute_devices`);
 
   return response.data.map((da) => normalizeComputeDevice(da));
 });
 
 export const getSingleComputeDevice = createWrappedAsync<any, number, { state: RootState }>(
-  'computeDevice/GetSingle',
+  'ComputeDevice/GetSingle',
   async (id) => {
-    const response = await rootRquest.get(
-      `/api/compute_devices/${id}/update_status`,
-      // http://20.89.186.195/api/compute_devices/${id}`
-    );
+    const response = await rootRquest.get(`/api/compute_devices/${id}/update_status`);
 
     return normalizeComputeDevice(response.data);
   },
 );
 
+export const getComputeDeviceDefinition = createWrappedAsync<any, number, { state: RootState }>(
+  'ComputeDevice/getDefinition',
+  async (id) => {
+    const response = await rootRquest.get(`/api/compute_devices/${id}/get_properties`);
+
+    return response.data;
+  },
+);
+
 export const createComputeDevice = createWrappedAsync<any, CreateComputeDevicePayload, { state: RootState }>(
-  'computeDevice/Create',
+  'ComputeDevice/Create',
   async (payload) => {
     const response = await rootRquest.post(`/api/compute_devices`, payload);
 
@@ -73,7 +76,7 @@ export const createComputeDevice = createWrappedAsync<any, CreateComputeDevicePa
 );
 
 export const updateComputeDevice = createWrappedAsync<any, UpdateComputeDevicePayload>(
-  'computeDevice/Update',
+  'ComputeDevice/Update',
   async (payload) => {
     const { id, body } = payload;
     const response = await rootRquest.patch(`/api/compute_devices/${id}`, body);
@@ -83,7 +86,7 @@ export const updateComputeDevice = createWrappedAsync<any, UpdateComputeDevicePa
 );
 
 export const deleteComputeDevice = createWrappedAsync<any, { ids: number[]; resolve?: () => void }>(
-  'computeDevice/Delete',
+  'ComputeDevice/Delete',
   async ({ ids, resolve }) => {
     const url = `/api/compute_devices/bulk-delete?${ids.map((id) => `id=${id}`).join('&')}`;
 

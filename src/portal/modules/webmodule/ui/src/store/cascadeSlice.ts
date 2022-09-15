@@ -55,13 +55,16 @@ const normalizeAiSkill = (aiSkill: AiSkillFromServer): AiSkill => {
 
 const cascadesAdapter = createEntityAdapter<AiSkill>();
 
-export const getCascades = createWrappedAsync('cascade/Get', async () => {
-  const response = await rootRquest.get(
-    `/api/cascades`,
-    // 'http://20.89.186.195/api/cascades',
-  );
+export const getAiSkillList = createWrappedAsync('AI-Skill/GetList', async () => {
+  const response = await rootRquest.get(`/api/cascades`);
 
   return response.data.map((aiSkill) => normalizeAiSkill(aiSkill));
+});
+
+export const getAiSkillDefinition = createWrappedAsync<any, number>('AI-Skill/GetDefinition', async (id) => {
+  const response = await rootRquest.get(`/api/cascades/${id}/get_properties`);
+
+  return response.data;
 });
 
 export const createCascade = createWrappedAsync<any, CreateCascadePayload>(
@@ -92,7 +95,7 @@ export const updateCascade = createWrappedAsync<any, UpdateCascadePayload>(
 );
 
 export const updateAiSkill = createWrappedAsync<any, UpdateAiSkillPayload>(
-  'cascade/Update',
+  'AI-Skill/Update',
   async (payload) => {
     const { id, body } = payload;
 
@@ -118,10 +121,9 @@ const cascadeSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getCascades.fulfilled, cascadesAdapter.setAll)
+      .addCase(getAiSkillList.fulfilled, cascadesAdapter.setAll)
       .addCase(createAiSkill.fulfilled, cascadesAdapter.addOne)
       .addCase(updateAiSkill.fulfilled, cascadesAdapter.upsertOne)
-      .addCase(deleteCascade.fulfilled, cascadesAdapter.removeOne)
       .addCase(deleteAiSkill.fulfilled, cascadesAdapter.removeOne);
   },
 });

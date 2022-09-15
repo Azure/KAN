@@ -8,18 +8,25 @@ interface Props {
   iconName: string;
   onTargetSelected: () => void;
   onDeleteModalOpen: () => void;
+  onDefinitionOpen: () => void;
 }
 
 const MenuButton = (props: Props) => {
-  const { iconName, onTargetSelected, onDeleteModalOpen } = props;
+  const { iconName, onTargetSelected, onDeleteModalOpen, onDefinitionOpen } = props;
 
   const menuProps: IContextualMenuProps = {
     items: [
       {
         key: 'edit',
-        text: 'Properties',
+        text: 'See Properties',
         iconProps: { iconName: 'Equalizer' },
         onClick: onTargetSelected,
+      },
+      {
+        key: 'view',
+        text: 'View Definition',
+        iconProps: { iconName: 'View' },
+        onClick: onDefinitionOpen,
       },
       {
         key: 'delete',

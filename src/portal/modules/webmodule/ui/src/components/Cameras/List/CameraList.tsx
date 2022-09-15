@@ -95,7 +95,12 @@ const CameraList = (props: Props) => {
       maxWidth: 50,
       name: '',
       onRender: (item: Camera) => (
-        <MenuButton iconName="More" onDeleteModalOpen={() => null} onTargetSelected={() => null} />
+        <MenuButton
+          iconName="More"
+          onDeleteModalOpen={() => null}
+          onTargetSelected={() => null}
+          onDefinitionOpen={() => null}
+        />
       ),
     },
   ];

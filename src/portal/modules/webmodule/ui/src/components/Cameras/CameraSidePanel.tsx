@@ -62,7 +62,7 @@ const CameraSidePanel = (props: Props) => {
       isOpen={true}
       onDismiss={onPanelClose}
       hasCloseButton
-      headerText="Properties"
+      headerText="Camera Properties"
       onRenderFooterContent={onRenderFooterContent}
       isFooterAtBottom={true}
       onOuterClick={() => null}

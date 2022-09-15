@@ -26,6 +26,7 @@ interface Props {
   onModelRedirect: (modeId: number) => void;
   onModelDelete: (model: FormattedModel) => void;
   isCustomVisionModel: boolean;
+  onDefinitionOpen: () => void;
 }
 
 const getClasses = () =>
@@ -56,7 +57,8 @@ const getClasses = () =>
   });
 
 const ModelCard = (props: Props) => {
-  const { model, onModelSelect, onModelRedirect, onModelDelete, isCustomVisionModel } = props;
+  const { model, onModelSelect, onModelRedirect, onModelDelete, isCustomVisionModel, onDefinitionOpen } =
+    props;
 
   const classes = getClasses();
 
@@ -64,9 +66,16 @@ const ModelCard = (props: Props) => {
     items: [
       {
         key: 'properties',
-        text: 'Properties',
+        text: 'See Properties',
         iconProps: { iconName: 'Equalizer' },
         onClick: () => onModelSelect(model),
+      },
+      {
+        key: 'view',
+        text: 'View Definition',
+        iconProps: { iconName: 'View' },
+        onClick: onDefinitionOpen,
+        disabled: !isCustomVisionModel,
       },
       {
         key: 'delete',

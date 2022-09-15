@@ -17,6 +17,7 @@ from rest_framework.response import Response
 
 from ..models import Cascade
 from .serializers import CascadeSerializer
+from ...general.shortcuts import drf_get_object_or_404
 
 logger = logging.getLogger(__name__)
 

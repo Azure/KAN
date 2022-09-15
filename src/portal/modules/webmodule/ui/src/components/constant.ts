@@ -38,3 +38,5 @@ export const arm64AccelerationOptions = accelerationOptions.filter((option) =>
 
 export const FEEDBACK_URL = 'https://go.microsoft.com/fwlink/?linkid=2205447';
 export const TROUBLE_SHOOTING_URL = 'https://go.microsoft.com/fwlink/?linkid=2205255';
+
+export type PageType = 'deivce' | 'camera' | 'model' | 'skill' | 'deployment';

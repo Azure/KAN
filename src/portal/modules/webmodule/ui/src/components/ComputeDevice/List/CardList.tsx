@@ -12,6 +12,7 @@ import { selectHasDeviceDeploymentSelectoryFactory } from '../../../store/deploy
 import DeviceCard from './DeviceCard';
 import DeviceSidePanel from '../DeviceSidePanel';
 import DeleteModal from '../../Common/DeleteModal';
+import DefinitionPanel from '../../Common/DefinitionPanel';
 
 interface Props {
   deviceList: ComputeDevice[];
@@ -25,6 +26,7 @@ const CardList = (props: Props) => {
 
   const [localSelectedDevice, setLocalSelectedDevice] = useState<ComputeDevice | null>(null);
   const [deletedDeivce, setDeletedDeivce] = useState<ComputeDevice | null>(null);
+  const [selectedDefinition, setSelectedDefinition] = useState<ComputeDevice | null>(null);
   const hasDeviceDeploy = useSelector(selectHasDeviceDeploymentSelectoryFactory(deletedDeivce?.id ?? 0));
 
   const onDeviceDelete = useCallback(async () => {
@@ -49,8 +51,9 @@ const CardList = (props: Props) => {
             key={idx}
             device={device}
             onDeviceCardSelect={onDeviceCardSelect}
-            onDeviceSelected={(inputDevice) => setLocalSelectedDevice(inputDevice)}
-            onDeleteModalOpen={(inputDevice) => setDeletedDeivce(inputDevice)}
+            onDeviceSelected={() => setLocalSelectedDevice(device)}
+            onDeleteModalOpen={() => setDeletedDeivce(device)}
+            onDefinitionOpen={() => setSelectedDefinition(device)}
           />
         ))}
       </Stack>
@@ -69,6 +72,14 @@ const CardList = (props: Props) => {
           onDelte={onSingleDeviceDelete}
           onClose={() => setDeletedDeivce(null)}
           isUsed={hasDeviceDeploy}
+        />
+      )}
+      {selectedDefinition && (
+        <DefinitionPanel
+          onPanelClose={() => setSelectedDefinition(null)}
+          selectedTargetId={selectedDefinition.id}
+          pageType="deivce"
+          onDeleteModalOpen={() => setDeletedDeivce(selectedDefinition)}
         />
       )}
     </>

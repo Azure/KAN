@@ -9,6 +9,7 @@ image:
 webmodule:
   videoSource: opencv
 storage:
+  storageAccount: "<Storage Account Resource Group>"
   storageAccount: "<Storage Account>"
   storageContainer: "<Storate Container>"
   subscriptionId: "<Subscription Id>"

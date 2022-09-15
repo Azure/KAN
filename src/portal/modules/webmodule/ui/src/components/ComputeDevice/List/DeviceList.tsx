@@ -61,8 +61,9 @@ const DeviceList = (props: Props) => {
       name: '',
       onRender: (item: ComputeDevice) => (
         <MenuButton
-          onDeleteModalOpen={() => console.log(item)}
-          onTargetSelected={() => console.log(item)}
+          onDeleteModalOpen={() => null}
+          onTargetSelected={() => null}
+          onDefinitionOpen={() => null}
           iconName="More"
         />
       ),

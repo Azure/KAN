@@ -9,6 +9,8 @@ environment variables as well.
 
 Related fields will be overwritten by environment variables (if set).
 """
+SUBSCRIPTION_ID = ""
+
 # Azure Custom Vision
 TRAINING_KEY = ""
 ENDPOINT = ""
@@ -20,3 +22,12 @@ MODULE_ID = ""
 
 # DEFAULT_INFERENCE_MODULE
 DF_PD_VIDEO_SOURCE = False
+
+# Azure Storage
+STORAGE_ACCOUNT = ""
+STORAGE_CONTAINER = ""
+
+# AAD
+TENANT_ID = ""
+CLIENT_ID = ""
+CLIENT_SECRET = ""

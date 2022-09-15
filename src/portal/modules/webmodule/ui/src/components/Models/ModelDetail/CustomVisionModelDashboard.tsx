@@ -14,6 +14,7 @@ import { theme, Url } from '../../../constant';
 import ModelCard from '../List/ModelCard';
 import ModelSidePanel from '../ModelSidePanel';
 import DeleteModal from '../../Common/DeleteModal';
+import DefinitionPanel from '../../Common/DefinitionPanel';
 
 interface Props {
   modelList: FormattedModel[];
@@ -28,6 +29,7 @@ const CustomVisionVModelDashboard = (props: Props) => {
   const [isCustomModel, setIsCustomModel] = useState(true);
   const [localSelectedModel, setLocalSelectedModel] = useState<FormattedModel | null>(null);
   const [deleteModel, setDeleteModel] = useState<FormattedModel | null>(null);
+  const [selectedDefinition, setSelectedDefinition] = useState<FormattedModel | null>(null);
 
   const hasModelUsed = useSelector(selectHasUseAiSkillSelectoryFactory(deleteModel?.symphony_id ?? ''));
 
@@ -46,9 +48,9 @@ const CustomVisionVModelDashboard = (props: Props) => {
     [isCustomModel],
   );
 
-  const onModelSelect = useCallback((model) => {
-    setLocalSelectedModel(model);
-  }, []);
+  // const onModelSelect = useCallback((model) => {
+  //   setLocalSelectedModel(model);
+  // }, []);
 
   const onModelRedirect = useCallback(
     (modeId: number) => {
@@ -93,11 +95,12 @@ const CustomVisionVModelDashboard = (props: Props) => {
               <ModelCard
                 key={id}
                 model={model}
-                onModelSelect={onModelSelect}
-                onModelRedirect={onModelRedirect}
+                onModelSelect={() => setLocalSelectedModel(model)}
+                onModelRedirect={() => onModelRedirect(model.id)}
                 // onModelDelete={() => onModelDelete}
-                onModelDelete={(inputModel) => setDeleteModel(inputModel)}
+                onModelDelete={() => setDeleteModel(model)}
                 isCustomVisionModel
+                onDefinitionOpen={() => setSelectedDefinition(model)}
               />
             ))}
           </Stack>
@@ -117,6 +120,14 @@ const CustomVisionVModelDashboard = (props: Props) => {
           onDelte={onModelDelete}
           onClose={() => setDeleteModel(null)}
           isUsed={hasModelUsed}
+        />
+      )}
+      {selectedDefinition && (
+        <DefinitionPanel
+          onPanelClose={() => setSelectedDefinition(null)}
+          selectedTargetId={selectedDefinition.id}
+          pageType="model"
+          onDeleteModalOpen={() => setDeleteModel(selectedDefinition)}
         />
       )}
     </>

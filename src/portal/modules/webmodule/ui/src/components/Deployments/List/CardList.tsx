@@ -10,7 +10,7 @@ import { FormattedDeployment } from '../types';
 
 import Card from './Card';
 import DeleteModal from '../../Common/DeleteModal';
-import PropertyPanel from './PropertyPanel';
+import DefinitionPanel from '../../Common/DefinitionPanel';
 
 interface Props {
   deploymentList: FormattedDeployment[];
@@ -22,17 +22,13 @@ const ListManagement = (props: Props) => {
   const dispatch = useDispatch();
 
   const [deletedDeployment, setDeletedDeployment] = useState<FormattedDeployment | null>(null);
-  const [selectedDeployment, setSelectedDeployment] = useState<FormattedDeployment | null>(null);
+  const [selectedDefinition, setSelectedDefinition] = useState<FormattedDeployment | null>(null);
 
   const onSingleDeploymentDelete = useCallback(() => {
     dispatch(deleteDeployment(deletedDeployment.id));
 
     setDeletedDeployment(null);
   }, [dispatch, deletedDeployment]);
-
-  const onPropertiesPanelOpen = useCallback((deploy: FormattedDeployment) => {
-    setSelectedDeployment(deploy);
-  }, []);
 
   return (
     <>
@@ -47,8 +43,8 @@ const ListManagement = (props: Props) => {
           <Card
             key={idx}
             deployment={deploy}
-            onDeleteModalOpen={(deployment) => setDeletedDeployment(deployment)}
-            onPropertyOpen={() => null}
+            onDeleteModalOpen={() => setDeletedDeployment(deploy)}
+            onPropertyOpen={() => setSelectedDefinition(deploy)}
           />
         ))}
       </Stack>
@@ -60,13 +56,14 @@ const ListManagement = (props: Props) => {
           onClose={() => setDeletedDeployment(null)}
         />
       )}
-      {/* {selectedDeployment && (
-        <PropertyPanel
-          onPanelClose={() => setSelectedDeployment(null)}
-          selectedDeploymentId={selectedDeployment.id.toString()}
-          onDeleteModalOpen={() => setDeletedDeployment(selectedDeployment)}
+      {selectedDefinition && (
+        <DefinitionPanel
+          onPanelClose={() => setSelectedDefinition(null)}
+          selectedTargetId={selectedDefinition.id}
+          onDeleteModalOpen={() => setDeletedDeployment(selectedDefinition)}
+          pageType="deployment"
         />
-      )} */}
+      )}
     </>
   );
 };

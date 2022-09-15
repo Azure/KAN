@@ -15,7 +15,7 @@ import { Url } from '../constant';
 // import { Models } from '../pages/Models';
 // import ImageDetail from '../pages/deprecation/ImageDetail';
 import CVModelPage from '../pages/CVModelPage';
-import { DeploymentPage } from '../pages/deprecation/Deployment';
+import DeploymentPage from '../pages/deprecation/Deployment';
 import Cameras from '../pages/Cameras';
 import CameraLiveFeed from '../pages/CameraLiveFeed';
 import AzureLogin from '../pages/AzureLogin';
@@ -25,7 +25,7 @@ import AiSkill from '../pages/AiSkill';
 import Model from '../pages/Model';
 import HomePage from '../pages/HomePage';
 
-export const RootRouter: FC = () => {
+const RootRouter: FC = () => {
   // const history = useHistory();
 
   // const projectHasConfiged = useSelector((state: State) => state.project.status !== Status.None);
@@ -61,3 +61,5 @@ export const RootRouter: FC = () => {
     </Switch>
   );
 };
+
+export default RootRouter;

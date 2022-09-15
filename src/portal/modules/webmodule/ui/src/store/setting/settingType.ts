@@ -2,36 +2,37 @@ import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
 import type { State } from 'RootStateType';
 
-export type CVProject = { id: string; name: string, exportable: boolean };
-
-type SettingData = {
-  id: number;
-  key: string;
-  namespace: string;
-};
+export type CVProject = { id: string; name: string; exportable: boolean };
 
 export type Setting = {
   loading: boolean;
   error: Error;
-  current: SettingData;
-  origin: SettingData;
+  id: number;
+  training_key: string;
+  endpoint: string;
   // If the given endpoint and key is valid
   isTrainerValid: boolean;
   cvProjects: CVProject[];
   appInsightHasInit: boolean;
   isCollectData: boolean;
   appInsightKey?: string;
+  subscription_id: string;
+  storage_account: string;
+  storage_container: string;
+  tenant_id: string;
+  client_id: string;
+  client_secret: string;
 };
 
-export type UpdateKeyAction = {
-  type: 'UPDATE_KEY';
-  payload: string;
-};
+// export type UpdateKeyAction = {
+//   type: 'UPDATE_KEY';
+//   payload: string;
+// };
 
-export type UpdateNamespaceAction = {
-  type: 'UPDATE_NAMESPACE';
-  payload: string;
-};
+// export type UpdateNamespaceAction = {
+//   type: 'UPDATE_NAMESPACE';
+//   payload: string;
+// };
 
 export type OnSettingStatusCheckAction = {
   type: 'ON_SETTING_STATUS_CHECK';
@@ -70,8 +71,8 @@ export type GetAllCvProjectsErrorAction = {
 };
 
 export type SettingActionType =
-  | UpdateKeyAction
-  | UpdateNamespaceAction
+  // | UpdateKeyAction
+  // | UpdateNamespaceAction
   | GetSettingRequestAction
   | GetSettingSuccessAction
   | GetSettingFailedAction

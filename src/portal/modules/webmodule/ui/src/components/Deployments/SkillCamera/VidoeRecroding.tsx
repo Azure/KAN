@@ -74,7 +74,7 @@ const VidoeRecroding = (props: Props) => {
               />
               <Stack>
                 <Label>Embed Recordings Widget</Label>
-                <Text>You can embed to above widget for your own application. Learn more </Text>
+                <Text>You can embed to above widget for your own application.</Text>
               </Stack>
             </Stack>
           </Stack>

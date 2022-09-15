@@ -30,7 +30,7 @@ import { getConfigure, thunkPostProject } from '../../store/project/projectActio
 import { getScenario } from '../../store/scenarioSlice';
 import { OnChangeType } from './type';
 import { Url } from '../../constant';
-import { getCascades, selectAllCascades } from '../../store/cascadeSlice';
+import { getAiSkillList, selectAllCascades } from '../../store/cascadeSlice';
 import rootRequest from '../../store/rootRquest';
 
 import { extractRecommendFps } from '../../utils/projectUtils';
@@ -182,7 +182,7 @@ const isBasicInputValid = (project: ProjectData) => {
   return true;
 };
 
-export const ConfigTaskPanel: React.FC<ConfigTaskPanelProps> = ({
+ const ConfigTaskPanel: React.FC<ConfigTaskPanelProps> = ({
   isOpen,
   onDismiss,
   projectData: initialProjectData,
@@ -239,7 +239,7 @@ export const ConfigTaskPanel: React.FC<ConfigTaskPanelProps> = ({
     dispatch(getCameras(true));
     dispatch(getTrainingProject(true));
     dispatch(getScenario());
-    dispatch(getCascades());
+    dispatch(getAiSkillList());
   }, [dispatch]);
 
   const onDeployClicked = async () => {
@@ -352,3 +352,5 @@ export const ConfigTaskPanel: React.FC<ConfigTaskPanelProps> = ({
     </Panel>
   );
 };
+
+export default ConfigTaskPanel

@@ -194,6 +194,15 @@ export const addExistingCustomVisionProject = createWrappedAsync<
   dispatch(getTrainingProjectStatusList());
 });
 
+export const getCustomVisionProjectDefinition = createWrappedAsync<any, number, { state: State }>(
+  'trainingSlice/getDefinition',
+  async (id) => {
+    const response = await rootRquest.get(`/api/projects/${id}/get_properties`);
+
+    return response.data;
+  },
+);
+
 export const createCustomVisionProject = createWrappedAsync<any, CreateCustomVisionModelPayload>(
   'trainingSlice/createCustomVisionProject',
   async (payload, { dispatch }) => {
@@ -247,7 +256,8 @@ export const deleteTrainingProject = createWrappedAsync<any, { id: number }>(
 export const getSelectedProjectInfo = createWrappedAsync<any, string, { state: State }>(
   'trainingSlice/GetSelectedProjectInfo',
   async (id, { getState }) => {
-    const settingId = getState().setting.current.id;
+    const settingId = getState().setting.id;
+
     // await rootRquest.delete(`/api/settings/9/project_info?customvision_id=${id}`);
     const response = await rootRquest.get(`/api/settings/${settingId}/project_info?customvision_id=${id}`);
 

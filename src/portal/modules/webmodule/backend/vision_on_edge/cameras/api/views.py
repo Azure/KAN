@@ -69,3 +69,12 @@ class CameraViewSet(FiltersMixin, viewsets.ModelViewSet):
         logger.warning('Retrieving device status')
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["get"], url_path="get_properties")
+    def get_properties(self, request, pk=None):
+        queryset = self.get_queryset()
+        instance = drf_get_object_or_404(queryset, pk=pk)
+
+        logger.warning(f"Retrieving device [{instance.symphony_id}] config.")
+
+        return Response(instance.get_properties())

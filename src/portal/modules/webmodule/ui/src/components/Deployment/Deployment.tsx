@@ -35,7 +35,7 @@ import { partNamesSelectorFactory, partOptionsSelectorFactory } from '../../stor
 
 import { AdditionalProps, DeploymentProps } from './ts/Deployment';
 
-import { ConfigTaskPanel } from '../ConfigTaskPanel/ConfigTaskPanel';
+import ConfigTaskPanel from '../ConfigTaskPanel/ConfigTaskPanel';
 import { EmptyAddIcon } from '../EmptyAddIcon';
 import { getTrainingProject } from '../../store/trainingProjectSlice';
 import { Insights } from './DeploymentInsights';
@@ -217,7 +217,7 @@ const BaseDeployment: React.FC<DeploymentProps> = (props) => {
   );
 };
 
-export const Deployment = R.compose(
+const Deployment = R.compose(
   (BaseComponent: React.FunctionComponent<AdditionalProps>): React.FC =>
     () => {
       const [isEditPanelOpen, { setTrue: onOpenEditPanel, setFalse: onCloseEditPanel }] = useBoolean(false);
@@ -253,3 +253,5 @@ export const Deployment = R.compose(
       );
     },
 )(BaseDeployment);
+
+export default Deployment;

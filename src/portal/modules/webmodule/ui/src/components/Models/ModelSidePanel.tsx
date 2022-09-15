@@ -59,14 +59,6 @@ const SideModelPanel: React.FC<Props> = (props) => {
         {model.category === 'customvision' && (
           <Stack>
             <Text className={classes.itemTitle}>Performance</Text>
-            {/* <Stack className={classes.itemContent}>
-              <Link
-                target=""
-                href={`https://www.customvision.ai/projects/${model.customVisionId}#/performance`}
-              >
-                {model.name} performance
-              </Link>
-            </Stack> */}
             <Stack horizontal verticalAlign="center">
               <ActionButton
                 styles={{

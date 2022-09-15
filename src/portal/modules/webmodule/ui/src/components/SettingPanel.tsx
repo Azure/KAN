@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import React, { useEffect, useState, useCallback } from 'react';
-import * as R from 'ramda';
 import {
   Panel,
   PanelType,
@@ -28,8 +27,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { State } from 'RootStateType';
 import {
   checkSettingStatus,
-  updateNamespace,
-  updateKey,
+  // updateNamespace,
+  // updateKey,
   thunkPostSetting,
   // patchIsCollectData,
   thunkGetAllCvProjects,
@@ -61,6 +60,44 @@ const layerHostClass = mergeStyles({
 });
 const MAIN_LAYER_HOST_ID = 'mainLayer';
 
+export const CustomLabel = (props: ITextFieldProps): JSX.Element => {
+  const [isModalOpen, setisModalOpen] = useState(false);
+
+  return (
+    <>
+      <Stack horizontal verticalAlign="center" tokens={{ childrenGap: 4 }}>
+        <Label required={props.required}>{props.label}</Label>
+        <IconButton iconProps={{ iconName: 'Info' }} onClick={() => setisModalOpen(true)} />
+      </Stack>
+      <Dialog
+        title="Get Endpoint and Key"
+        hidden={!isModalOpen}
+        modalProps={{ layerProps: { hostId: null } }}
+        maxWidth={800}
+      >
+        <Stack>
+          <p>
+            Step 1: Login Custom vision,{' '}
+            <a href="https://www.customvision.ai/" target="_blank" rel="noopener noreferrer">
+              https://www.customvision.ai/
+            </a>
+          </p>
+          <p>Step 2: Click on the setting icon on the top</p>
+          <img src="/icons/guide_step_2.png" alt="guide" style={{ width: '100%' }} />
+          <p>
+            Step 3: Choose the resources under the account, you will see information of &quot;Key&quot; and
+            &quot;Endpoint&quot;
+          </p>
+          <img src="/icons/guide_step_3.png" alt="guide" style={{ width: '100%' }} />
+        </Stack>
+        <DialogFooter>
+          <PrimaryButton text="Close" onClick={() => setisModalOpen(false)} />
+        </DialogFooter>
+      </Dialog>
+    </>
+  );
+};
+
 export const SettingPanel: React.FC<SettingPanelProps> = ({
   isOpen,
   onDismiss,
@@ -68,10 +105,9 @@ export const SettingPanel: React.FC<SettingPanelProps> = ({
   showProjectDropdown,
   // openDataPolicyDialog,
 }) => {
-  const settingData = useSelector((state: State) => state.setting.current);
-  const originSettingData = useSelector((state: State) => state.setting.origin);
+  const settingData = useSelector((state: State) => state.setting);
 
-  const dontNeedUpdateOrSave = R.equals(settingData, originSettingData);
+  // const dontNeedUpdateOrSave = R.equals(settingData, originSettingData);
   const [loading, setLoading] = useState(false);
   // const isCollectingData = useSelector((state: State) => state.setting.isCollectData);
   const error = useSelector((state: State) => state.setting.error);
@@ -144,20 +180,20 @@ export const SettingPanel: React.FC<SettingPanelProps> = ({
             className={textFieldClass}
             label="Endpoint"
             required
-            value={settingData.namespace}
-            onChange={(_, value): void => {
-              dispatch(updateNamespace(value));
-            }}
+            value={settingData.endpoint}
+            // onChange={(_, value): void => {
+            //   dispatch(updateNamespace(value));
+            // }}
             onRenderLabel={(props) => <CustomLabel {...props} />}
           />
           <TextField
             className={textFieldClass}
             label="Key"
             required
-            value={settingData.key}
-            onChange={(_, value): void => {
-              dispatch(updateKey(value));
-            }}
+            value={settingData.training_key}
+            // onChange={(_, value): void => {
+            //   dispatch(updateKey(value));
+            // }}
           />
           {error && <MessageBar messageBarType={MessageBarType.blocked}>{error.message}</MessageBar>}
           <Stack.Item>
@@ -169,7 +205,7 @@ export const SettingPanel: React.FC<SettingPanelProps> = ({
               }
               confirmButton="Yes"
               onConfirm={onSettingSave}
-              trigger={<PrimaryButton text="Save" disabled={dontNeedUpdateOrSave} />}
+              trigger={<PrimaryButton text="Save" />}
               secondTrigger={showProjectDropdown && <DefaultButton text="Cancel" onClick={onDismiss} />}
             />
           </Stack.Item>
@@ -205,44 +241,6 @@ export const SettingPanel: React.FC<SettingPanelProps> = ({
           /> */}
         </Stack>
       </Panel>
-    </>
-  );
-};
-
-export const CustomLabel = (props: ITextFieldProps): JSX.Element => {
-  const [isModalOpen, setisModalOpen] = useState(false);
-
-  return (
-    <>
-      <Stack horizontal verticalAlign="center" tokens={{ childrenGap: 4 }}>
-        <Label required={props.required}>{props.label}</Label>
-        <IconButton iconProps={{ iconName: 'Info' }} onClick={() => setisModalOpen(true)} />
-      </Stack>
-      <Dialog
-        title="Get Endpoint and Key"
-        hidden={!isModalOpen}
-        modalProps={{ layerProps: { hostId: null } }}
-        maxWidth={800}
-      >
-        <Stack>
-          <p>
-            Step 1: Login Custom vision,{' '}
-            <a href="https://www.customvision.ai/" target="_blank" rel="noopener noreferrer">
-              https://www.customvision.ai/
-            </a>
-          </p>
-          <p>Step 2: Click on the setting icon on the top</p>
-          <img src="/icons/guide_step_2.png" alt="guide" style={{ width: '100%' }} />
-          <p>
-            Step 3: Choose the resources under the account, you will see information of &quot;Key&quot; and
-            &quot;Endpoint&quot;
-          </p>
-          <img src="/icons/guide_step_3.png" alt="guide" style={{ width: '100%' }} />
-        </Stack>
-        <DialogFooter>
-          <PrimaryButton text="Close" onClick={() => setisModalOpen(false)} />
-        </DialogFooter>
-      </Dialog>
     </>
   );
 };

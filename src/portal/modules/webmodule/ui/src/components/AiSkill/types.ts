@@ -89,6 +89,8 @@ export type ExportPanelFromData = {
   }>;
 };
 
+export type SkillModel = Pick<TrainingProject, 'id' | 'name' | 'inputs' | 'outputs' | 'symphony_id'>;
+
 export type SkillSideNode = {
   name?: string;
   displayName?: string;
@@ -99,8 +101,6 @@ export type SkillSideNode = {
   isEditDone: boolean;
   model?: SkillModel;
 };
-
-export type SkillModel = Pick<TrainingProject, 'id' | 'name' | 'inputs' | 'outputs' | 'symphony_id'>;
 
 export type SkillNodeData = SkillSideNode & {
   configurations?: Partial<

@@ -8,10 +8,11 @@ interface Props {
   iconName: string;
   onTargetSelected: () => void;
   onDeleteModalOpen: () => void;
+  onDefinitionOpen: () => void;
 }
 
 const MenuButton = (props: Props) => {
-  const { iconName, onTargetSelected, onDeleteModalOpen } = props;
+  const { iconName, onTargetSelected, onDeleteModalOpen, onDefinitionOpen } = props;
 
   const menuProps: IContextualMenuProps = {
     items: [
@@ -27,6 +28,12 @@ const MenuButton = (props: Props) => {
       //   iconProps: { iconName: 'View' },
       //   onClick: onTargetSelected,
       // },
+      {
+        key: 'view',
+        text: 'View Definition',
+        iconProps: { iconName: 'View' },
+        onClick: onDefinitionOpen,
+      },
       {
         key: 'delete',
         text: 'Delete',

@@ -1,8 +1,8 @@
 import Axios, { AxiosRequestConfig } from 'axios';
 
 import {
-  UpdateKeyAction,
-  UpdateNamespaceAction,
+  // UpdateKeyAction,
+  // UpdateNamespaceAction,
   GetSettingRequestAction,
   GetSettingSuccessAction,
   Setting,
@@ -19,12 +19,12 @@ import { getAppInsights } from '../../TelemetryService';
 import { createWrappedAsync } from '../shared/createWrappedAsync';
 import rootRquest from '../rootRquest';
 
-export const updateKey = (key: string): UpdateKeyAction => ({ type: 'UPDATE_KEY', payload: key });
+// export const updateKey = (key: string): UpdateKeyAction => ({ type: 'UPDATE_KEY', payload: key });
 
-export const updateNamespace = (namespace: string): UpdateNamespaceAction => ({
-  type: 'UPDATE_NAMESPACE',
-  payload: namespace,
-});
+// export const updateNamespace = (namespace: string): UpdateNamespaceAction => ({
+//   type: 'UPDATE_NAMESPACE',
+//   payload: namespace,
+// });
 
 export const onSettingStatusCheck = (
   isTrainerValid: boolean,
@@ -78,20 +78,19 @@ export const thunkGetSetting =
             settingSuccess({
               loading: false,
               error: null,
-              current: {
-                id: data[0].id,
-                key: data[0].training_key,
-                namespace: data[0].endpoint,
-              },
-              origin: {
-                id: data[0].id,
-                key: data[0].training_key,
-                namespace: data[0].endpoint,
-              },
+              id: data[0].id,
+              endpoint: data[0].endpoint,
+              training_key: data[0].training_key,
               isTrainerValid: data[0].is_trainer_valid,
               appInsightHasInit: data[0].app_insight_has_init,
               isCollectData: data[0].is_collect_data,
               cvProjects: [],
+              subscription_id: data[0].subscription_id,
+              storage_account: data[0].storage_account,
+              storage_container: data[0].storage_container,
+              tenant_id: data[0].tenant_id,
+              client_id: data[0].client_id,
+              client_secret: data[0].client_secret,
             }),
           );
         }
@@ -126,21 +125,20 @@ export const thunkGetSettingAndAppInsightKey =
               settingSuccess({
                 loading: false,
                 error: null,
-                current: {
-                  id: settingsData[0].id,
-                  key: settingsData[0].training_key,
-                  namespace: settingsData[0].endpoint,
-                },
-                origin: {
-                  id: settingsData[0].id,
-                  key: settingsData[0].training_key,
-                  namespace: settingsData[0].endpoint,
-                },
+                id: settingsData[0].id,
+                endpoint: settingsData[0].endpoint,
+                training_key: settingsData[0].training_key,
                 isTrainerValid: settingsData[0].is_trainer_valid,
                 appInsightHasInit: settingsData[0].app_insight_has_init,
                 isCollectData: settingsData[0].is_collect_data,
                 appInsightKey: appInsightKeyData.key,
                 cvProjects: [],
+                subscription_id: settingsData[0].subscription_id,
+                storage_account: settingsData[0].storage_account,
+                storage_container: settingsData[0].storage_container,
+                tenant_id: settingsData[0].tenant_id,
+                client_id: settingsData[0].client_id,
+                client_secret: settingsData[0].client_secret,
               }),
             );
           } else {
@@ -151,69 +149,10 @@ export const thunkGetSettingAndAppInsightKey =
       .catch((e) => console.error(e));
   };
 
-export const thunkPostSetting =
-  (): SettingThunk =>
-  (dispatch, getStore): Promise<any> => {
-    const settingData = getStore().setting.current;
-    const isSettingEmpty = settingData.id === -1;
-    const url = isSettingEmpty ? `/api/settings/` : `/api/settings/${settingData.id}/`;
-    const requestConfig: AxiosRequestConfig = isSettingEmpty
-      ? {
-          data: {
-            training_key: settingData.key,
-            endpoint: settingData.namespace,
-            name: '',
-            iot_hub_connection_string: '',
-            device_id: '',
-            module_id: '',
-          },
-          method: 'POST',
-        }
-      : {
-          data: {
-            training_key: settingData.key,
-            endpoint: settingData.namespace,
-          },
-          method: 'PUT',
-        };
-
-    dispatch(settingRequest());
-
-    return rootRquest(url, requestConfig)
-      .then(({ data }) => {
-        dispatch(
-          settingSuccess({
-            loading: false,
-            error: null,
-            current: {
-              id: data.id,
-              key: data.training_key,
-              namespace: data.endpoint,
-            },
-            origin: {
-              id: data.id,
-              key: data.training_key,
-              namespace: data.endpoint,
-            },
-            isTrainerValid: data.is_trainer_valid,
-            appInsightHasInit: data.app_insight_has_init,
-            isCollectData: data.is_collect_data,
-            cvProjects: [],
-          }),
-        );
-        dispatch(thunkGetAllCvProjects());
-        dispatch(getTrainingProject(false));
-        return void 0;
-      })
-      .catch((err) => {
-        dispatch(settingFailed(err));
-      });
-  };
-
 export const thunkGetAllCvProjects = (): SettingThunk => (dispatch, getState) => {
   dispatch(getAllCvProjectsRequest());
 
-  const settingId = getState().setting.current.id;
+  const settingId = getState().setting.id;
   return rootRquest
     .get(`/api/settings/${settingId}/list_projects`)
     .then(({ data }) => {
@@ -256,3 +195,62 @@ export const patchIsCollectData = createWrappedAsync<
   if (!appInsight) throw Error('App Insight hasnot been initialize');
   appInsight.config.disableTelemetry = !isCollectData;
 });
+
+export const thunkPostSetting =
+  (): SettingThunk =>
+  (dispatch, getStore): Promise<any> => {
+    const settingData = getStore().setting;
+
+    const isSettingEmpty = settingData.id === -1;
+    const url = isSettingEmpty ? `/api/settings/` : `/api/settings/${settingData.id}/`;
+    const requestConfig: AxiosRequestConfig = isSettingEmpty
+      ? {
+          data: {
+            training_key: settingData.training_key,
+            endpoint: settingData.endpoint,
+            name: '',
+            iot_hub_connection_string: '',
+            device_id: '',
+            module_id: '',
+          },
+          method: 'POST',
+        }
+      : {
+          data: {
+            training_key: settingData.training_key,
+            endpoint: settingData.endpoint,
+          },
+          method: 'PUT',
+        };
+
+    dispatch(settingRequest());
+
+    return rootRquest(url, requestConfig)
+      .then(({ data }) => {
+        dispatch(
+          settingSuccess({
+            loading: false,
+            error: null,
+            id: data[0].id,
+            endpoint: data[0].endpoint,
+            training_key: data[0].training_key,
+            isTrainerValid: data.is_trainer_valid,
+            appInsightHasInit: data.app_insight_has_init,
+            isCollectData: data.is_collect_data,
+            cvProjects: [],
+            subscription_id: data[0].subscription_id,
+            storage_account: data[0].storage_account,
+            storage_container: data[0].storage_container,
+            tenant_id: data[0].tenant_id,
+            client_id: data[0].client_id,
+            client_secret: data[0].client_secret,
+          }),
+        );
+        dispatch(thunkGetAllCvProjects());
+        dispatch(getTrainingProject(false));
+        return void 0;
+      })
+      .catch((err) => {
+        dispatch(settingFailed(err));
+      });
+  };

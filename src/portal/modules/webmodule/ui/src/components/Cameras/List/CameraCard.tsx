@@ -19,12 +19,13 @@ interface Props {
   camera: Camera;
   onCameraCardSelect: (checked: boolean, cameraId: number) => void;
   onLiveFeedRedirect: (id: number) => void;
-  onCameraSelected: (camera: Camera) => void;
-  onDeleteModalOpen: (camera: Camera) => void;
+  onCameraSelected: () => void;
+  onDeleteModalOpen: () => void;
+  onDefinitionOpen: () => void;
 }
 
 const CameraCard = (props: Props) => {
-  const { camera, onLiveFeedRedirect, onCameraSelected, onDeleteModalOpen } = props;
+  const { camera, onLiveFeedRedirect, onCameraSelected, onDeleteModalOpen, onDefinitionOpen } = props;
 
   const localLocation = useSelector((state: RootState) => selectLocationById(state, camera.location));
 
@@ -39,7 +40,7 @@ const CameraCard = (props: Props) => {
           ...cardBorderStyle,
         },
       }}
-      onClick={() => onCameraSelected(camera)}
+      onClick={onCameraSelected}
     >
       <Stack
         horizontal
@@ -68,8 +69,9 @@ const CameraCard = (props: Props) => {
         <Stack>
           <MenuButton
             iconName="MoreVertical"
-            onTargetSelected={() => onCameraSelected(camera)}
-            onDeleteModalOpen={() => onDeleteModalOpen(camera)}
+            onTargetSelected={onCameraSelected}
+            onDeleteModalOpen={onDeleteModalOpen}
+            onDefinitionOpen={onDefinitionOpen}
           />
         </Stack>
       </Stack>

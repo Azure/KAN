@@ -62,7 +62,7 @@ class SettingViewSet(viewsets.ModelViewSet):
 
                 result["projects"].append(
                     {
-                        "id": project.id, 
+                        "id": project.id,
                         "name": project.name,
                         "exportable": domain_table[domain_id].exportable
                     }
@@ -79,11 +79,14 @@ class SettingViewSet(viewsets.ModelViewSet):
         setting_obj = drf_get_object_or_404(queryset, pk=pk)
         trainer = setting_obj.get_trainer_obj()
         customvision_id = request.query_params.get("customvision_id")
-        domain_type = trainer.get_domain(trainer.get_project(customvision_id).settings.domain_id).type
+        domain_type = trainer.get_domain(trainer.get_project(
+            customvision_id).settings.domain_id).type
         classification_type = ""
         if domain_type == "Classification":
-            classification_type = trainer.get_project(customvision_id).settings.classification_type
-        results = {"tags":[], "type":domain_type, "classification_type":classification_type}
+            classification_type = trainer.get_project(
+                customvision_id).settings.classification_type
+        results = {"tags": [], "type": domain_type,
+                   "classification_type": classification_type}
         tag_list = trainer.get_tags(customvision_id)
         for tag in tag_list:
             results["tags"].append(tag.name)

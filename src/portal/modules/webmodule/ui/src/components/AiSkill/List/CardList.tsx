@@ -11,6 +11,7 @@ import { selectHasUseAiSkillSelectoryFactory } from '../../../store/deploymentSl
 
 import Card from './Card';
 import DeleteModal from '../../Common/DeleteModal';
+import DefinitionPanel from '../../Common/DefinitionPanel';
 
 interface Props {
   skillList: AiSkill[];
@@ -22,6 +23,7 @@ const List = (props: Props) => {
   const dispatch = useDispatch();
 
   const [deletedSkill, setDeletedSkill] = useState<AiSkill | null>(null);
+  const [selectedDefinition, setSelectedDefinition] = useState<AiSkill | null>(null);
   const hasAiSkillDeployment = useSelector(selectHasUseAiSkillSelectoryFactory(deletedSkill?.id ?? 0));
 
   const onSingleCascadeDelete = useCallback(async () => {
@@ -38,7 +40,12 @@ const List = (props: Props) => {
         tokens={{ childrenGap: 30 }}
       >
         {skillList.map((skill, key) => (
-          <Card key={key} skill={skill} onDeleteModalOpen={(inputSkill) => setDeletedSkill(inputSkill)} />
+          <Card
+            key={key}
+            skill={skill}
+            onDeleteModalOpen={() => setDeletedSkill(skill)}
+            onDefinitionOpen={() => setSelectedDefinition(skill)}
+          />
         ))}
       </Stack>
       {deletedSkill && (
@@ -48,6 +55,14 @@ const List = (props: Props) => {
           onDelte={onSingleCascadeDelete}
           onClose={() => setDeletedSkill(null)}
           isUsed={hasAiSkillDeployment}
+        />
+      )}
+      {selectedDefinition && (
+        <DefinitionPanel
+          onPanelClose={() => setSelectedDefinition(null)}
+          selectedTargetId={selectedDefinition.id}
+          pageType="skill"
+          onDeleteModalOpen={() => setDeletedSkill(selectedDefinition)}
         />
       )}
     </>

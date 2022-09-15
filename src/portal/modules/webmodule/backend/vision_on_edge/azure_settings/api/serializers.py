@@ -38,6 +38,12 @@ class SettingSerializer(serializers.ModelSerializer):
                 "device_id": validated_data["device_id"],
                 "module_id": validated_data["module_id"],
                 "is_collect_data": validated_data["is_collect_data"],
+                "subscription_id": validated_data["subscription_id"],
+                "storage_account": validated_data["storage_account"],
+                "storage_container": validated_data["storage_container"],
+                "tenant_id": validated_data["tenant_id"],
+                "client_id": validated_data["client_id"],
+                "client_secret": validated_data["client_secret"],
             },
         )
         return obj

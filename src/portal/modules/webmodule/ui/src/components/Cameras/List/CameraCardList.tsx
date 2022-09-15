@@ -3,13 +3,15 @@
 
 import React, { useState, useCallback } from 'react';
 import { Stack } from '@fluentui/react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Camera, deleteCameras } from '../../../store/cameraSlice';
+import { selectHasCameraDeploymentSelectoryFactory } from '../../../store/deploymentSlice';
 
 import CameraCard from './CameraCard';
 import CameraSidePanel from '../CameraSidePanel';
 import DeleteModal from '../../Common/DeleteModal';
+import DefinitionPanel from '../../Common/DefinitionPanel';
 
 interface Props {
   cameraList: Camera[];
@@ -24,6 +26,8 @@ const CameraList = (props: Props) => {
 
   const [localSelectedCamera, setLocalSelectedCamera] = useState<Camera | null>(null);
   const [deletedCamera, setDeletedCamera] = useState<Camera | null>(null);
+  const [selectedDefinition, setSelectedDefinition] = useState<Camera | null>(null);
+  const hasCameraDeployment = useSelector(selectHasCameraDeploymentSelectoryFactory(deletedCamera?.id ?? 0));
 
   const onSingleCameraDelete = useCallback(async () => {
     const resolve = () => {
@@ -48,8 +52,9 @@ const CameraList = (props: Props) => {
             camera={camera}
             onCameraCardSelect={onCameraCardSelect}
             onLiveFeedRedirect={onLiveFeedRedirect}
-            onCameraSelected={(inputCamera) => setLocalSelectedCamera(inputCamera)}
-            onDeleteModalOpen={(inputCamera) => setDeletedCamera(inputCamera)}
+            onCameraSelected={() => setLocalSelectedCamera(camera)}
+            onDeleteModalOpen={() => setDeletedCamera(camera)}
+            onDefinitionOpen={() => setSelectedDefinition(camera)}
           />
         ))}
       </Stack>
@@ -60,13 +65,21 @@ const CameraList = (props: Props) => {
           onDeleteModalOpen={() => setDeletedCamera(localSelectedCamera)}
         />
       )}
-
       {deletedCamera && (
         <DeleteModal
           type="camera"
           name={deletedCamera.name}
           onDelte={onSingleCameraDelete}
           onClose={() => setDeletedCamera(null)}
+          isUsed={hasCameraDeployment}
+        />
+      )}
+      {selectedDefinition && (
+        <DefinitionPanel
+          onPanelClose={() => setSelectedDefinition(null)}
+          selectedTargetId={selectedDefinition.id}
+          pageType="camera"
+          onDeleteModalOpen={() => setDeletedCamera(selectedDefinition)}
         />
       )}
     </>

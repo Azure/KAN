@@ -40,6 +40,14 @@ class Setting(models.Model):
     device_id = models.CharField(max_length=1000, blank=True)
     module_id = models.CharField(max_length=1000, blank=True)
 
+    subscription_id = models.CharField(max_length=1000, blank=True)
+    storage_account = models.CharField(max_length=1000, blank=True)
+    storage_container = models.CharField(max_length=1000, blank=True)
+    tenant_id = models.CharField(max_length=1000, blank=True)
+    client_id = models.CharField(max_length=1000, blank=True)
+    client_secret = models.CharField(max_length=1000, blank=True)
+
+
     is_collect_data = models.BooleanField(default=False)
 
     is_trainer_valid = models.BooleanField(default=False)

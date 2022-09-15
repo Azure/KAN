@@ -14,12 +14,13 @@ import MenuButton from '../../Common/MenuButton';
 interface Props {
   device: ComputeDevice;
   onDeviceCardSelect: (checked: boolean, cameraId: number) => void;
-  onDeviceSelected: (device: ComputeDevice) => void;
-  onDeleteModalOpen: (id) => void;
+  onDeviceSelected: () => void;
+  onDeleteModalOpen: () => void;
+  onDefinitionOpen: () => void;
 }
 
 const DeviceCard = (props: Props) => {
-  const { device, onDeviceCardSelect, onDeviceSelected, onDeleteModalOpen } = props;
+  const { device, onDeviceCardSelect, onDeleteModalOpen, onDeviceSelected, onDefinitionOpen } = props;
 
   return (
     <Stack
@@ -30,7 +31,7 @@ const DeviceCard = (props: Props) => {
           ...cardBorderStyle,
         },
       }}
-      onClick={() => onDeviceSelected(device)}
+      onClick={onDeviceSelected}
     >
       <Stack
         horizontal
@@ -52,8 +53,9 @@ const DeviceCard = (props: Props) => {
         <Stack>
           <MenuButton
             iconName="MoreVertical"
-            onTargetSelected={() => onDeviceSelected(device)}
-            onDeleteModalOpen={() => onDeleteModalOpen(device)}
+            onTargetSelected={onDeviceSelected}
+            onDeleteModalOpen={onDeleteModalOpen}
+            onDefinitionOpen={onDefinitionOpen}
           />
         </Stack>
       </Stack>

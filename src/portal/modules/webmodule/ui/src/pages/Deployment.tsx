@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Url } from '../constant';
 import { getCameras } from '../store/cameraSlice';
 import { getComputeDeviceList } from '../store/computeDeviceSlice';
-import { getCascades } from '../store/cascadeSlice';
+import { getAiSkillList } from '../store/cascadeSlice';
 import { getLocations } from '../store/locationSlice';
 import { getDeployments } from '../store/deploymentSlice';
 import { formattedDeploymentSelectorFactory } from '../store/selectors';
@@ -43,7 +43,7 @@ const DEPLOYMENT = () => {
       setIsLoading(true);
       await dispatch(getComputeDeviceList());
       await dispatch(getCameras(false));
-      await dispatch(getCascades());
+      await dispatch(getAiSkillList());
       await dispatch(getDeployments());
       await dispatch(getLocations(false));
       setIsLoading(false);

@@ -73,6 +73,7 @@ const IntelModelZooDashboard = (props: Props) => {
               onModelRedirect={() => null}
               onModelDelete={() => null}
               isCustomVisionModel={false}
+              onDefinitionOpen={() => null}
             />
           ))}
         </Stack>

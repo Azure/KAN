@@ -11,6 +11,7 @@ import { getComputeDeviceDefinition } from '../../store/computeDeviceSlice';
 import { getCameraDefinition } from '../../store/cameraSlice';
 import { getCustomVisionProjectDefinition } from '../../store/trainingProjectSlice';
 import { getAiSkillDefinition } from '../../store/cascadeSlice';
+import { getDeploymentDefinition } from '../../store/deploymentSlice';
 
 interface Props {
   onPanelClose: () => void;
@@ -30,9 +31,9 @@ const getRequestMethod = (pageType: PageType, id: number) => {
     case 'skill':
       return getAiSkillDefinition(id);
     case 'deployment':
-      return '';
+      return getDeploymentDefinition(id);
     default:
-      return '';
+      return getDeploymentDefinition(id);
   }
 };
 

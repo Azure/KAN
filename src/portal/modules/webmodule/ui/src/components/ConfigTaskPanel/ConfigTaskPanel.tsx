@@ -182,7 +182,7 @@ const isBasicInputValid = (project: ProjectData) => {
   return true;
 };
 
-export const ConfigTaskPanel: React.FC<ConfigTaskPanelProps> = ({
+ const ConfigTaskPanel: React.FC<ConfigTaskPanelProps> = ({
   isOpen,
   onDismiss,
   projectData: initialProjectData,
@@ -352,3 +352,5 @@ export const ConfigTaskPanel: React.FC<ConfigTaskPanelProps> = ({
     </Panel>
   );
 };
+
+export default ConfigTaskPanel

@@ -11,11 +11,11 @@ Azure Percept (P) skills are deployable packages to Edge devices. The packages a
 1.  Transform – transforms and enriches the data, for instance it can filter classes to the one we want to implement for our scenario. A filter may also only forward inference results that meet confidence level estimates.
 2.  
 
-![Graphical user interface, application Description automatically generated](.media/f6831e85021adeb3d109ce68d1fc8c5c.png)
+![Graphical user interface, application Description automatically generated](./media/f6831e85021adeb3d109ce68d1fc8c5c.png)
 
 1.  Export - helps you export raw inference data and actionable insights to a broad range of locations in the cloud. Locally at the edge, you will be able to create your own custom module that will allow you to integrate with other applications and systems in your customer's environment. Here are few nodes that we support today:
 
-![Graphical user interface, application Description automatically generated](.media/7005cc8e5afd1de93a13e86b150173c3.png)
+![Graphical user interface, application Description automatically generated](./media/7005cc8e5afd1de93a13e86b150173c3.png)
 
 An AI skill allows the result of one model to feed into the next. For example, the first model may detect vehicles and pass those to a model that classifies them by type; car, truck, or bus. Based on user defined logic, these insights video snippets or sent to an IoT Hub.
 
@@ -32,11 +32,11 @@ Building an AI Skill
 
 1.  From the left navigation blades, select **AI Skills**, and then select **Create AI Skill**.
 
-![](.media/2f5504beac989351c5e15ca2a802057a.png)
+![](./media/2f5504beac989351c5e15ca2a802057a.png)
 
 The **AI Skills** page opens, displaying the **Basics** tab.
 
-![](.media/149e4ce010a90895299c465f4fd6f51f.png)
+![](./media/149e4ce010a90895299c465f4fd6f51f.png)
 
 :
 
@@ -45,35 +45,35 @@ The **AI Skills** page opens, displaying the **Basics** tab.
 3.  In the **Acceleration** field, select the acceleration type. If you previously defined an acceleration on a compute device that will run this skill, ensure the types match.
 4.  In the **Desired Frame Rate** field, select a frames per second (fps) value. This is an upper bound and may change based on performance requirements.
 
-![](.media/c3476db70ad31aa86a4b7a803a100889.png)
+![](./media/c3476db70ad31aa86a4b7a803a100889.png)
 
 1.  To advance to the **Drag-and-Drop Nodes** tab, select **Drag-and-Drop Nodes** or **Next**.
 
-![](.media/698c54f68b37a143851ff49a50ba6368.png)
+![](./media/698c54f68b37a143851ff49a50ba6368.png)
 
 In this tab on the left side, you see a tree of nodes to add model, transform and export nodes. Each type of node is required in a skill. Each node has an input connection on the top and an output connection on the bottom. The ellipsis in each node allows editing of the node’s properties or deletion of the node. These are dragged onto the canvas, connected with other nodes, and then configured depending on the type of node. The first node is a model to make inferences on the camera feed.
 
 1.  Select **Add Model.**
 
-![](.media/5a564616d81306e0c215132fc50b33f0.png)
+![](./media/5a564616d81306e0c215132fc50b33f0.png)
 
 1.  From **Add Model** list, drag an object detection model into the outline, as shown in the screenshot below.
 
-![](.media/d8aa8e651dc121780487a1b6a2232a2d.png)
+![](./media/d8aa8e651dc121780487a1b6a2232a2d.png)
 
 1.  Drag the **Connector** from the **Camera Input** to the model.
 
-![Graphical user interface, application Description automatically generated](.media/181807d2a5ab7cbb9710456334c04403.png)
+![Graphical user interface, application Description automatically generated](./media/181807d2a5ab7cbb9710456334c04403.png)
 
 The **Object Detection Model** properties side panel appears on the right of the window when a model is connected. Models you have previously specified appear as options.
 
 1.  Open the **Select Model** dropdown list.
 
-![Graphical user interface, application Description automatically generated](.media/9d710bff56ef151ca071f676a6098d68.png)
+![Graphical user interface, application Description automatically generated](./media/9d710bff56ef151ca071f676a6098d68.png)
 
 1.  Select **pedestrian-and-vehicle-detector (Model Zoo)** per our use case. The tag for the object(s) to be detected appears.
 
-![Graphical user interface, application Description automatically generated](.media/5e45d4265599919877215d563999e7fd.png)
+![Graphical user interface, application Description automatically generated](./media/5e45d4265599919877215d563999e7fd.png)
 
 1.  Select **Done.**
 
@@ -83,7 +83,7 @@ Now that we can detect vehicles and pedestrians, let’s add another model to cl
 2.  Connect it the same way you did with the detection node.
 3.  In the **Classification Model** information box, select **vehicle-attributes-recognition** from the **Select Model** dropdown list. The tag for the object(s) to be detected appears.
 
-![](.media/a89e793daff10ea2b030fffb487518ac.png)
+![](./media/a89e793daff10ea2b030fffb487518ac.png)
 
 1.  Select **Done.**
 
@@ -94,7 +94,7 @@ Add a Transform node
 1.  From the left navigation, select the **Transform** node dropdown list. Transform nodes allow you to filter the classes you want the skill to work on. If you had a model with numerous classes, you could create a subset of the data based on the object and the confidence threshold.
 2.  Drag the **Filter** node onto the canvas and connect it the same way you did with the detection node.
 
-![](.media/410f22e98d47659c9484fdc0c42aa62a.png)
+![](./media/410f22e98d47659c9484fdc0c42aa62a.png)
 
 1.  In the **Filter Transform** information box**,** enter the names of the objects detected by your skill in the **Objects** field.
 2.  In the **Confidence Threshold** field, enter a number for the minimum **confidence threshold.** The threshold you select is determined by your use case. For a deeper dive see [this](https://social.technet.microsoft.com/wiki/contents/articles/33879.classification-algorithms-parameters-in-azure-ml.aspx).
@@ -109,13 +109,13 @@ Send the insights to an IoT Hub
 1.  From the Node/Export accordion select **Send Insights to IoT Hub** and drag it onto the canvas to connect to the **Filter** node.
 2.  In the Export **(Send Insights to IoT Hub)** information box, enter **0.1** seconds into the **Delay Buffer** fiel.
 
-![](.media/0fccade16a18ba0ce56a89c67a0585cd.png)
+![](./media/0fccade16a18ba0ce56a89c67a0585cd.png)
 
 1.  Select **Done**.
 
 Export a Video Snippet
 
-![](.media/8d17d61d6466500ad06b4d45d26f0c37.png)
+![](./media/8d17d61d6466500ad06b4d45d26f0c37.png)
 
 1.  From the **Node/Export** dropdown list, select **Export Video Snippet** and drag it onto the canvas to connect to the **Filter** node.
 2.  In the side panel, enter a meaningful name that you can find in storage in the **Filename Prefix** field.
@@ -130,11 +130,11 @@ Add your tags like you did with [compute devices](#_Add_Tags(Optional)).
 
 1.  Select **Review + Create** to validate all the inputs. If any changes are required, select the **Edit** link.
 
-![](.media/95befbf90f485cbcfd88b12bc34bed69.png)
+![](./media/95befbf90f485cbcfd88b12bc34bed69.png)
 
 1.  Select **Create.**
 
-    ![](.media/828cc4d38b81b3649ab71ba9369856f7.png)
+    ![](./media/828cc4d38b81b3649ab71ba9369856f7.png)
 
     You have now completed creating your AI skill library. All your configured skills are here.
 
@@ -145,7 +145,7 @@ Edit or delete an AI skill
 3.  
 4.  To delete the tile, select **Delete**.
 
-![](.media/b0f6e27ae642e0f28d63189037fa45f8.png)
+![](./media/b0f6e27ae642e0f28d63189037fa45f8.png)
 
 Your AI skill is now ready to be added to a deployment.
 

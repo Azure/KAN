@@ -83,7 +83,7 @@ const ModelCard: React.FC<Props> = (props) => {
     items: [
       {
         key: 'properties',
-        text: 'Properties',
+        text: 'See Properties',
         iconProps: { iconName: 'Equalizer' },
         onClick: () => onSelectedProject(),
       },

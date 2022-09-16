@@ -240,10 +240,11 @@ class SymphonySolutionClient(SymphonyClient):
         webmodule_url = "http://" + webmodule_ip
 
         # get storage acount connection string
+        storage_resource_group = os.getenv('STORAGE_RESOURCE_GROUP')
         storage_container = os.getenv('STORAGE_CONTAINER')
         storage_account = os.getenv('STORAGE_ACCOUNT')
         res = subprocess.check_output(
-            ['az', 'storage', 'account', 'show-connection-string', '--name', storage_account, '-o', 'tsv'])
+            ['az', 'storage', 'account', 'show-connection-string', '--name', storage_account, '--resource-group', storage_resource_group, '-o', 'tsv'])
         storage_conn_str = res.decode('utf8').strip()
 
         # get iotedge device connection string

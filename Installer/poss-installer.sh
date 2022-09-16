@@ -452,6 +452,7 @@ while [ $current_step -lt 6 ]; do
                 fi
                 echo -e "\e[32mInstalling webmodule\e[0m"
                 helm upgrade --install voe oci://possprod.azurecr.io/helm/voe --version 0.38.2-amd64 \
+                    --set "storage.storageResourceGroup=$selected_storage_account_rg" \
                     --set "storage.storageAccount=$selected_storage_account_name" \
                     --set "storage.storageContainer=$selected_blob_container_name" \
                     --set "storage.subscriptionId=$storage_account_subscription" \

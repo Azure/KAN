@@ -4,7 +4,7 @@
 import React from 'react';
 import { Stack, Text, IconButton, MessageBar, MessageBarType, mergeStyleSets } from '@fluentui/react';
 
-type PageType = 'deivce' | 'camera' | 'model' | 'skill' | 'deployment';
+import { PageType } from '../constant';
 
 export type LocationState = {
   isCreated?: boolean;

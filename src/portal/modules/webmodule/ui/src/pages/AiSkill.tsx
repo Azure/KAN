@@ -10,7 +10,7 @@ import { State as RootState } from 'RootStateType';
 import { AiSkill } from '../store/types';
 import { Url } from '../constant';
 import { getTrainingProject } from '../store/trainingProjectSlice';
-import { getCascades, selectAllCascades } from '../store/cascadeSlice';
+import { getAiSkillList, selectAllCascades } from '../store/cascadeSlice';
 import { getDeployments } from '../store/deploymentSlice';
 import { getParts } from '../store/partSlice';
 
@@ -35,7 +35,7 @@ const AiSkillPage = () => {
       await dispatch(getTrainingProject(false));
       await dispatch(getParts());
       await dispatch(getDeployments());
-      await dispatch(getCascades());
+      await dispatch(getAiSkillList());
       setIsLoading(false);
     })();
   }, [dispatch]);

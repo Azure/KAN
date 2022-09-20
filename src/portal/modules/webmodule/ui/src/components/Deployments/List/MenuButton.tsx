@@ -40,7 +40,7 @@ const MenuButton = (props: Props) => {
       {
         key: 'view',
         text: 'View Definition',
-        iconProps: { iconName: 'Equalizer' },
+        iconProps: { iconName: 'View' },
         onClick: onDefinitionOpen,
       },
       {

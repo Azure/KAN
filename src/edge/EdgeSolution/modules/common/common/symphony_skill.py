@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-from typing import Union, Optional
+from typing import Union, Optional, List, Dict
 try:
     from typing import Literal
 except:
@@ -20,29 +20,29 @@ class Node(BaseModel):
     id: NodeId
     type: Literal['source', 'transform', 'export', 'model']
     name: str
-    inputs: list[Route] | None
-    outputs: list[Route] | None
-    configurations: dict[str, object] | None
+    inputs: Optional[List[Route]]
+    outputs: Optional[List[Route]]
+    configurations: Optional[Dict[str, object]]
 
 
 class SourceNode(Node):
     type: Literal['source']
-    outputs: list[Route]
+    outputs: List[Route]
 
 
 class TransformNode(Node):
     type: Literal['transform']
-    inputs: list[Route]
-    outputs: list[Route]
+    inputs: List[Route]
+    outputs: List[Route]
 
 class ExportNode(Node):
     type: Literal['export']
-    inputs: list[Route]
+    inputs: List[Route]
 
 class ModelNode(Node):
     type: Literal['model']
-    inputs: list[Route]
-    outputs: list[Route]
+    inputs: List[Route]
+    outputs: List[Route]
 
 class NodeRoute(BaseModel):
     node: NodeId

@@ -1,0 +1,41 @@
+# Copyright (c) 2022 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+description: >-
+  MelGAN model for text to speech task. This model represents a mel-spectrogram to
+  audio regression.
+task_type: text_to_speech
+files:
+  - name: FP32/text-to-speech-en-multi-0001-generation.xml
+    size: 234226
+    checksum: 4f4b3f102feebc25082ef4c9b95c14bb1366094be8167a6357de9887fcf163b3caa815b98ec7214d05a348fa4fed38d0
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-to-speech-en-multi-0001/text-to-speech-en-multi-0001-generation/FP32/text-to-speech-en-multi-0001-generation.xml
+  - name: FP32/text-to-speech-en-multi-0001-generation.bin
+    size: 51082848
+    checksum: 3932ce13021fb9356d042d57eb9c09a4fb771e8a8a8e816c23c0b86ada74b26fe63a32aac198780c97d8c291a02b95fa
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-to-speech-en-multi-0001/text-to-speech-en-multi-0001-generation/FP32/text-to-speech-en-multi-0001-generation.bin
+  - name: FP16/text-to-speech-en-multi-0001-generation.xml
+    size: 301502
+    checksum: dcc8821c7640f4b5f70927f129c2696b033a6f07b3ddfa573825b84563474cf7c600a39d717342f31679048e5ba586f3
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-to-speech-en-multi-0001/text-to-speech-en-multi-0001-generation/FP16/text-to-speech-en-multi-0001-generation.xml
+  - name: FP16/text-to-speech-en-multi-0001-generation.bin
+    size: 25541524
+    checksum: a8cab15fe6902685566b8908338761c38873459b88d9cfb78679373b0e7923436b6a95b3376175b81d5202ce0f88db4d
+    source: https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/3/text-to-speech-en-multi-0001/text-to-speech-en-multi-0001-generation/FP16/text-to-speech-en-multi-0001-generation.bin
+input_info:
+  - name: mel
+    shape: [1, 80, 128]
+    layout: NCH
+framework: dldt
+license: https://raw.githubusercontent.com/openvinotoolkit/open_model_zoo/master/LICENSE

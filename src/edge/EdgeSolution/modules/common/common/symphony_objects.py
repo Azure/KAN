@@ -20,8 +20,8 @@ from common.symphony_skill import Node, Edge
 class SkillSpec(BaseModel):
     #models: List['SkillModel']
     displayName: str
-    nodes: list[Node]
-    edges: list[Edge]
+    nodes: List[Node]
+    edges: List[Edge]
 
 #class SkillModel(BaseModel):
 #    properties: 'SkillModelProperties'

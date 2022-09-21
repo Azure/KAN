@@ -1,0 +1,19 @@
+{
+  "$schema-version": "0.0.1",
+  "description": "",
+  "image": {
+    "repository": "${CONTAINER_REGISTRY_NAME}/voe/voeedge",
+    "tag": {
+      "version": "0.38.1",
+      "platforms": {
+        "amd64": "./dockerfiles/Dockerfile.amd64",
+        "gpuamd64": "./dockerfiles/Dockerfile.gpuamd64",
+        "openvinoamd64": "./dockerfiles/Dockerfile.openvinoamd64",
+        "jetson": "./dockerfiles/Dockerfile.jetson"
+      }
+    },
+    "buildOptions": [],
+    "contextPath": "./"
+  },
+  "language": "python"
+}

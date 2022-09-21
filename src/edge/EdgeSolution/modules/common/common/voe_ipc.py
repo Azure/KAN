@@ -49,6 +49,8 @@ class StreamingModule:
     class Setting(BaseModel):
         cascade_configs: List[CascadeConfig]
 
+class StreamingModuleSetting(BaseModel):
+    cascade_configs: List[CascadeConfig]
 
 
 class PredictModule:
@@ -64,3 +66,6 @@ class PredictModule:
 
     class Setting(BaseModel):
         model_configs: List[ModelConfig]
+
+class PredictModuleSetting(BaseModel):
+    model_configs: List[ModelConfig]

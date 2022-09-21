@@ -1,0 +1,6 @@
+FastAPI
+python-multipart
+uvicorn
+numpy
+pillow
+onnx

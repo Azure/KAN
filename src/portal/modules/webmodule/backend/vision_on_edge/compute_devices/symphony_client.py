@@ -24,7 +24,7 @@ class SymphonyTargetClient(SymphonyClient):
         solution_id = self.args.get("solution_id", "")
         tag_list = self.args.get("tag_list", "")
         is_k8s = self.args.get("is_k8s", False)
-        cluter_type = self.args.get("cluster_type", "current")
+        cluster_type = self.args.get("cluster_type", "current")
         # connection_str = os.getenv('IOTHUB_CONNECTION_STRING')
         tenant_id = os.getenv('TENANT_ID')
         client_id = os.getenv('CLIENT_ID')
@@ -36,20 +36,9 @@ class SymphonyTargetClient(SymphonyClient):
 
         service_api = self.get_service_client()
         res = service_api.read_namespaced_service(
-            name='symphony-service-ext', namespace='default')
+            name='symphony-service-ext', namespace='symphony-k8s-system')
         symphony_ip = res.status.load_balancer.ingress[0].ip
         symphony_url = "http://" + symphony_ip + ":8080/v1alpha2/agent/references"
-
-        # get iothub connection string
-        res = subprocess.check_output(
-            ['az', 'iot', 'hub', 'connection-string', 'show', '--hub-name', iothub, '-o', 'tsv'])
-        connection_str = res.decode('utf8').strip()
-
-        iot_info = {}
-        for kv in connection_str.split(';'):
-            key = kv.split('=')[0]
-            val = kv[len(key)+1:]
-            iot_info[key] = val
 
         labels = {}
         if tag_list:
@@ -64,6 +53,17 @@ class SymphonyTargetClient(SymphonyClient):
                 # TODO to be modified to provided config
                 config = {"inCluster": 'false'}
         else:
+            # get iothub connection string
+            res = subprocess.check_output(
+                ['az', 'iot', 'hub', 'connection-string', 'show', '--hub-name', iothub, '-o', 'tsv'])
+            connection_str = res.decode('utf8').strip()
+
+            iot_info = {}
+            for kv in connection_str.split(';'):
+                key = kv.split('=')[0]
+                val = kv[len(key)+1:]
+                iot_info[key] = val
+
             provider = "providers.target.azure.iotedge"
             config = {
                 "name": "iot-edge",
@@ -182,9 +182,10 @@ class SymphonyTargetClient(SymphonyClient):
                     0]
                 iotedge_device = target['spec']['topologies'][0]['bindings'][0]['config'].get(
                     'deviceName', "")
-                architecture = target['spec']['properties'].get('cpu', "")
-                acceleration = target['spec']['properties'].get('acceleration', "")
-                solution_id = target['spec']['properties'].get('solutionId', "")
+                architecture = target['spec'].get("properties", {}).get('cpu', "")
+                acceleration = target['spec'].get(
+                    "properties", {}).get('acceleration', "")
+                solution_id = target['spec'].get("properties", {}).get('solutionId', "")
 
                 is_k8s = "k8s" in target['spec']['topologies'][0]['bindings'][0]["provider"]
                 if is_k8s:
@@ -284,10 +285,13 @@ class SymphonySolutionClient(SymphonyClient):
             ['az', 'storage', 'account', 'show-connection-string', '--name', storage_account, '--resource-group', storage_resource_group, '-o', 'tsv'])
         storage_conn_str = res.decode('utf8').strip()
 
-        # get iotedge device connection string
-        res = subprocess.check_output(['az', 'iot', 'hub', 'device-identity', 'connection-string',
-                                       'show', '--device-id', iotedge_device, '--hub-name', iothub, '-o', 'tsv'])
-        iotedge_connection_str = res.decode('utf8').strip()
+        if not is_k8s and iotedge_device and iothub:
+            # get iotedge device connection string
+            res = subprocess.check_output(['az', 'iot', 'hub', 'device-identity', 'connection-string',
+                                           'show', '--device-id', iotedge_device, '--hub-name', iothub, '-o', 'tsv'])
+            iotedge_connection_str = res.decode('utf8').strip()
+        else:
+            iotedge_connection_str = ""
 
         # routes
         routes = []

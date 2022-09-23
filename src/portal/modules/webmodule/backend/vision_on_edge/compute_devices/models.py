@@ -35,6 +35,9 @@ class ComputeDevice(models.Model):
     symphony_id = models.CharField(max_length=1000, null=True, blank=True, default="")
     solution_id = models.CharField(max_length=1000, null=True, blank=True, default="")
     status = models.CharField(max_length=1000, blank=True, default="")
+    is_k8s = models.BooleanField(default=False)
+    cluster_type = models.CharField(
+        max_length=1000, null=True, blank=True, default="current")
 
     def get_status(self):
         from ..cameras.models import Camera
@@ -88,14 +91,17 @@ class ComputeDevice(models.Model):
             "acceleration": instance.acceleration,
             "display_name": instance.name,
             "solution_id": instance.solution_id,
-            "tag_list": instance.tag_list
+            "tag_list": instance.tag_list,
+            "is_k8s": instance.is_k8s,
+            "cluster_type": instance.cluster_type
         }
         target_client.set_attr(attrs)
         solution_client.set_attr({
             "name": instance.solution_id,
             "acceleration": instance.acceleration,
             "iothub": instance.iothub,
-            "iotedge_device": instance.iotedge_device
+            "iotedge_device": instance.iotedge_device,
+            "is_k8s": instance.is_k8s,
         })
 
         az_logger = get_app_insight_logger()

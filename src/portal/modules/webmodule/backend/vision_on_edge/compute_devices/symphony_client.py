@@ -23,6 +23,8 @@ class SymphonyTargetClient(SymphonyClient):
         display_name = self.args.get("display_name", "")
         solution_id = self.args.get("solution_id", "")
         tag_list = self.args.get("tag_list", "")
+        is_k8s = self.args.get("is_k8s", False)
+        cluter_type = self.args.get("cluster_type", "current")
         # connection_str = os.getenv('IOTHUB_CONNECTION_STRING')
         tenant_id = os.getenv('TENANT_ID')
         client_id = os.getenv('CLIENT_ID')
@@ -54,6 +56,24 @@ class SymphonyTargetClient(SymphonyClient):
             for tag in json.loads(tag_list):
                 labels[tag["name"]] = tag["value"]
 
+        if is_k8s:
+            provider = "providers.target.k8s"
+            if cluster_type == "current":
+                config = {"inCluster": 'true'}
+            else:
+                # TODO to be modified to provided config
+                config = {"inCluster": 'false'}
+        else:
+            provider = "providers.target.azure.iotedge"
+            config = {
+                "name": "iot-edge",
+                "keyName": iot_info['SharedAccessKeyName'] if iot_info else None,
+                "key": iot_info["SharedAccessKey"] if iot_info else None,
+                "iotHub": iot_info["HostName"] if iot_info else None,
+                "apiVersion": "2020-05-31-preview",
+                "deviceName": str(iotedge_device),
+            }
+
         config_json = {
             "apiVersion": "fabric.symphony/v1",
             "kind": "Target",
@@ -64,6 +84,12 @@ class SymphonyTargetClient(SymphonyClient):
             "spec": {
                 "name": name,
                 "displayName": display_name,
+                "metadata": {
+                    "deployment.replicas": "#1",
+                    "service.ports": "JA.[{\"name\":\"port8088\",\"port\": 8088}]",
+                    "service.type": "ClusterIP",
+                    "service.name": "symphony-agent"
+                },
                 "components": [
                     {
                         "name": "symphony-agent",
@@ -89,15 +115,8 @@ class SymphonyTargetClient(SymphonyClient):
                         "bindings": [
                             {
                                 "role": "instance",
-                                "provider": "providers.target.azure.iotedge",
-                                "config": {
-                                    "name": "iot-edge",
-                                    "keyName": iot_info['SharedAccessKeyName'] if iot_info else None,
-                                    "key": iot_info["SharedAccessKey"] if iot_info else None,
-                                    "iotHub": iot_info["HostName"] if iot_info else None,
-                                    "apiVersion": "2020-05-31-preview",
-                                    "deviceName": str(iotedge_device),
-                                }
+                                "provider": provider,
+                                "config": config
                             }
                         ]
                     }
@@ -167,6 +186,15 @@ class SymphonyTargetClient(SymphonyClient):
                 acceleration = target['spec']['properties'].get('acceleration', "")
                 solution_id = target['spec']['properties'].get('solutionId', "")
 
+                is_k8s = "k8s" in target['spec']['topologies'][0]['bindings'][0]["provider"]
+                if is_k8s:
+                    if target['spec']['topologies'][0]['bindings'][0]["config"]["inCluster"] == "true":
+                        cluster_type = "current"
+                    else:
+                        cluster_type = "other"
+                else:
+                    cluster_type = "current"
+
                 labels = target['metadata'].get('labels')
                 if labels:
                     tags = [{"name": k, "value": v} for k, v in labels.items()]
@@ -184,6 +212,8 @@ class SymphonyTargetClient(SymphonyClient):
                         "symphony_id": symphony_id,
                         "solution_id": solution_id,
                         "tag_list": tag_list,
+                        "is_k8s": is_k8s,
+                        "cluster_type": cluster_type
                     },
                 )
                 logger.info("ComputeDevice: %s %s.", compute_device_obj,
@@ -225,6 +255,13 @@ class SymphonySolutionClient(SymphonyClient):
         iothub = self.args.get("iothub", "")
         iotedge_device = self.args.get("iotedge_device", "")
         module_routes = self.args.get("module_routes", "")
+
+        # workaround for synphony 0.39.7
+        is_k8s = self.args.get("is_k8s", False)
+        if is_k8s:
+            symphony_agent_address = "symphony-agent.default.svc.cluster.local"
+        else:
+            symphony_agent_address = "target-runtime-symphony-agent"
 
         image_suffix = ""
         create_options = "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}"
@@ -301,7 +338,8 @@ class SymphonySolutionClient(SymphonyClient):
                             "container.type": "docker",
                             "container.version": container_version,
                             "env.AISKILLS": skills,
-                            "env.INSTANCE": "$instance()"
+                            "env.INSTANCE": "$instance()",
+                            "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
                         }
                     },
                     {
@@ -316,7 +354,8 @@ class SymphonySolutionClient(SymphonyClient):
                             "env.BLOB_STORAGE_CONNECTION_STRING": storage_conn_str,
                             "env.BLOB_STORAGE_CONTAINER": storage_container,
                             "env.WEBMODULE_URL": webmodule_url,
-                            "env.IOTEDGE_CONNECTION_STRING": iotedge_connection_str
+                            "env.IOTEDGE_CONNECTION_STRING": iotedge_connection_str,
+                            "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
                         },
                         "routes": routes
                     },

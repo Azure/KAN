@@ -51,7 +51,7 @@ const DeploymentEdit = () => {
 
     const matchedDevice = deviceList.find((device) => device.id === deployment.compute_device);
     const cameraMap = cameraList.reduce((accMap, camera) => {
-      if (!accMap[camera.id]) return { ...accMap, [camera.id]: camera.name };
+      if (!accMap[camera.id]) return { ...accMap, [camera.symphony_id]: camera.name };
       return { ...accMap };
     }, {});
     const skillMap = skillList.reduce((accMap, skill) => {

@@ -26,7 +26,7 @@ interface Props {
 
 type CommonPayload = {
   name: string;
-  location: number;
+  location: string;
   media_type: MediaType;
   tag_list: string;
 };

@@ -54,8 +54,6 @@ const getFilteredConstantModelList = (modelList: ContentModel[], target: string)
     const isValueMatch = Object.values(
       pick(['name', 'describe', 'nodetType'] as (keyof ContentModel)[], model),
     ).find((value: string) => {
-      console.log('value.match(regex)', value.match(regex));
-
       return value.match(regex);
     });
 
@@ -70,8 +68,6 @@ const getFilterdNodelList = (modelList: TrainingProject[], target: string): Trai
     const isValueMatch = Object.values(
       pick(['displayName', 'nodeType'] as (keyof TrainingProject)[], model),
     ).find((value: string) => {
-      console.log('value');
-
       return value.match(regex);
     });
 

@@ -31,7 +31,7 @@ const Basics = (props: Props) => {
   const locationOptions: IDropdownOption[] = useMemo(
     () =>
       locationList.map((l) => ({
-        key: l.id,
+        key: l.name,
         text: l.name,
       })),
     [locationList],

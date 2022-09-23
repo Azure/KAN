@@ -27,9 +27,7 @@ interface Props {
 const CameraCard = (props: Props) => {
   const { camera, onLiveFeedRedirect, onCameraSelected, onDeleteModalOpen, onDefinitionOpen } = props;
 
-  const localLocation = useSelector((state: RootState) => selectLocationById(state, camera.location));
-
-  if (!localLocation) return <></>;
+  console.log('camera', camera);
 
   return (
     <Stack
@@ -89,7 +87,7 @@ const CameraCard = (props: Props) => {
             Location
           </Label>
           <Text styles={{ root: { fontSize: '13px', fontWeight: 400 } }}>
-            {getLimitText(localLocation.name, 33)}
+            {getLimitText(camera.location, 33)}
           </Text>
         </Stack>
         <Stack verticalAlign="end">

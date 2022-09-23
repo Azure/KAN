@@ -41,7 +41,7 @@ const Basics = (props: Props) => {
   const locationOptions: IDropdownOption[] = useMemo(
     () =>
       locationList.map((l) => ({
-        key: l.id,
+        key: l.name,
         text: l.name,
       })),
     [locationList],
@@ -196,7 +196,7 @@ const Basics = (props: Props) => {
             onChange={(_, option) =>
               onFormDataChange({
                 ...localFormData,
-                location: +option.key,
+                location: option.key as string,
                 error: { ...localFormData.error, location: '' },
               })
             }

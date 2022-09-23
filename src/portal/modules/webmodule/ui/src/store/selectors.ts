@@ -7,7 +7,7 @@ import { selectCameraEntities, selectAllCameras } from './cameraSlice';
 import { selectAllAnno } from './annotationSlice';
 import { selectAllCascades, selectCascadeEntities } from './cascadeSlice';
 import { selectAllComputeDevices, selectComputeDeviceEntities } from './computeDeviceSlice';
-import { selectLocationEntities } from './locationSlice';
+import { selectLocationEntities, selectAllLocations } from './locationSlice';
 import { selectAllDeployments } from './deploymentSlice';
 import { selectAllTrainingProjects } from './trainingProjectSlice';
 
@@ -125,17 +125,19 @@ export const matchDeviceAccelerationSelectorFactory = (deivceId: number) =>
     return aiSkillList.filter((skill) => skill.acceleration === matchDevice.acceleration);
   });
 
-export const formattedCameraSelectoryFactory = createSelector(
-  [selectAllCameras, selectLocationEntities],
-  (cameraList, locationEntities) => {
-    if (cameraList.length === 0 || Object.entries(locationEntities).length === 0) return [];
+// export const formattedCameraSelectoryFactory = createSelector(
+//   [selectAllCameras, selectAllLocations],
+//   (cameraList, locationList) => {
+//     if (cameraList.length === 0 || locationList.length === 0) return [];
 
-    return cameraList.map((camera) => ({
-      ...camera,
-      locationName: locationEntities[camera.location].name,
-    }));
-  },
-);
+//     // const matchLocation = locationList.find((location) => location.name === camera.location);
+
+//     return cameraList.map((camera) => ({
+//       ...camera,
+//       locationName: locationList.find((location) => location.name === camera.location).name,
+//     }));
+//   },
+// );
 
 export const formattedDeploymentSelectorFactory = createSelector(
   [selectAllDeployments, selectComputeDeviceEntities, selectCascadeEntities],

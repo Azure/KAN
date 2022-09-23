@@ -27,7 +27,7 @@ const LiveFeed = (props: Props) => {
   const dispatch = useDispatch();
 
   const onSingleCameraDelete = useCallback(async () => {
-    await dispatch(deleteCameras({ ids: [deletedCamera.id] }));
+    await dispatch(deleteCameras({ id: deletedCamera.id, symphony_id: deletedCamera.symphony_id }));
 
     setLocalSelectedCamera(null);
     setDeletedCamera(null);
@@ -60,11 +60,12 @@ const LiveFeed = (props: Props) => {
     <>
       <CommandBar items={commandBarItems} styles={{ root: { paddingLeft: '0', marginBottom: '10px' } }} />
       <div style={{ height: '80%' }}>
-        <RTSPVideo cameraId={camera.id} />
+        <RTSPVideo cameraId={camera.symphony_id} />
       </div>
       {localSelectedCamera && (
         <CameraSidePanel
-          selectedCameraId={camera.id}
+          camereId={camera.id}
+          symphonyId={camera.symphony_id}
           onPanelClose={() => setLocalSelectedCamera(null)}
           onDeleteModalOpen={() => setDeletedCamera(localSelectedCamera)}
         />

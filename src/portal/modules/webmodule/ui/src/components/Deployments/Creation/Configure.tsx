@@ -38,14 +38,16 @@ const Configure = (props: Props) => {
 
   const [isOpenConfigure, setIsOpenConfigure] = useState(false);
   const [isOpenAISkill, setIsOpenAISkill] = useState(false);
-  const [localCameraList, setLocalCameraList] = useState<number[]>([]);
+  const [localCameraList, setLocalCameraList] = useState<string[]>([]);
   const [localConfigureCascade, setLocalConfigureCascade] = useState<ConfigureSkill | null>(null);
+
+  console.log('localCameraList', localCameraList);
 
   const selection = useMemo(
     () =>
       new Selection({
         onSelectionChanged: () => {
-          const selectedCameraList = selection.getSelection() as { camera: number; string: string }[];
+          const selectedCameraList = selection.getSelection() as { camera: string; string: string }[];
 
           setLocalCameraList(selectedCameraList.map((c) => c.camera));
         },
@@ -55,7 +57,7 @@ const Configure = (props: Props) => {
   );
 
   const onConfigureAdd = useCallback(
-    (selectedCameras: number[], selectedCascades: { id: number; name: string }[]) => {
+    (selectedCameras: string[], selectedCascades: { id: number; name: string }[]) => {
       let newCameraList = [] as ConfigureCamera[];
 
       localFormData.cameraList.forEach((camera) => {
@@ -99,15 +101,15 @@ const Configure = (props: Props) => {
   }, [localFormData, localCameraList, onFormDataChange]);
 
   const onConfigureCascadeDelete = useCallback(
-    (cameraId: number, cascadeId: number) => {
+    (camera: string, cascadeId: number) => {
       let newCameraList = [] as ConfigureCamera[];
 
-      localFormData.cameraList.forEach((camera) => {
-        if (camera.camera === cameraId) {
-          const newSkillList = clone(camera.skillList).filter((cascade) => cascade.id !== cascadeId);
-          newCameraList = [...newCameraList, { ...camera, skillList: newSkillList }];
+      localFormData.cameraList.forEach((cam) => {
+        if (cam.camera === camera) {
+          const newSkillList = clone(cam.skillList).filter((cascade) => cascade.id !== cascadeId);
+          newCameraList = [...newCameraList, { ...cam, skillList: newSkillList }];
         } else {
-          newCameraList = [...newCameraList, camera];
+          newCameraList = [...newCameraList, cam];
         }
       });
 
@@ -235,18 +237,7 @@ const Configure = (props: Props) => {
           Link your cameras to AI skill by selecting your cameras below and clicking ‘Add AI Skills’ above.
           Each camera must have a skill configured in order to progress.
         </Text>
-        <DetailsList
-          columns={columns}
-          items={localFormData.cameraList}
-          selection={selection}
-          // styles={{
-          //   root: {
-          //     '.ms-DetailsRow-fields': {
-          //       alignItems: 'center',
-          //     },
-          //   },
-          // }}
-        />
+        <DetailsList columns={columns} items={localFormData.cameraList} selection={selection} />
       </Stack>
       {isOpenConfigure && (
         <ConfigureSidePanel

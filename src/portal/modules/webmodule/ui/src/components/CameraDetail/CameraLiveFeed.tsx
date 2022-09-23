@@ -28,7 +28,7 @@ const CameraLiveFeed = (props: Props) => {
       <Stack.Item grow>
         <div style={{ height: '90%' }}>
           <RTSPVideo
-            cameraId={cameraId}
+            cameraId={cameraId.toString()}
             onStreamCreated={(streamId) => {
               streamIdRef.current = streamId;
             }}

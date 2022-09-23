@@ -6,12 +6,13 @@ import { Stack, IconButton, Label } from '@fluentui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 
+import { State as RootState } from 'RootStateType';
 import { theme, Url } from '../constant';
 import { getComputeDeviceList } from '../store/computeDeviceSlice';
-import { getCameras } from '../store/cameraSlice';
+import { getCameras, selectAllCameras } from '../store/cameraSlice';
 import { getLocations } from '../store/locationSlice';
 import { getDeployments } from '../store/deploymentSlice';
-import { formattedCameraSelectoryFactory } from '../store/selectors';
+// import { formattedCameraSelectoryFactory } from '../store/selectors';
 
 import CamerasDetailWrapper from '../components/Cameras/CamerasDetailWrapper';
 import CameraCreation from '../components/Cameras/CameraCreation';
@@ -21,7 +22,7 @@ import PageLoading from '../components/Common/PageLoading';
 const Cameras = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  const formattedCameraList = useSelector(formattedCameraSelectoryFactory);
+  const cameraList = useSelector((state: RootState) => selectAllCameras(state));
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -58,14 +59,9 @@ const Cameras = () => {
         <Route path={Url.CAMERAS_EDIT} render={() => <CameraEdit />} />
         <Route
           path={Url.CAMERAS_CREATION}
-          render={() => (
-            <CameraCreation existingNameList={formattedCameraList.map((camera) => camera.name)} />
-          )}
+          render={() => <CameraCreation existingNameList={cameraList.map((camera) => camera.name)} />}
         />
-        <Route
-          path={Url.CAMERAS}
-          render={() => <CamerasDetailWrapper formattedList={formattedCameraList} />}
-        />
+        <Route path={Url.CAMERAS} render={() => <CamerasDetailWrapper cameraList={cameraList} />} />
       </Switch>
     </section>
   );

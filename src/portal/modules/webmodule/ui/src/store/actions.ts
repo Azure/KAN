@@ -90,7 +90,8 @@ export const toggleShowDangerZones = createWrappedAsync<any, toggleCameraLabelPa
 export const updateCameraArea = createWrappedAsync<any, number, { state: State }>(
   'cameras/updateArea',
   async (cameraId, { getState }) => {
-    const { useAOI, useCountingLine, useDangerZone } = getState().camera.entities[cameraId];
+    // const { useAOI, useCountingLine, useDangerZone } = getState().camera.entities[cameraId];
+
     const AOIs = getAOIs(getState(), cameraId);
     const countingLines = getCountingLines(getState(), cameraId);
     const dangerZones = getDangerZones(getState(), cameraId);
@@ -99,9 +100,9 @@ export const updateCameraArea = createWrappedAsync<any, number, { state: State }
     const enhanceOrderDangerZones = plusOrderVideoAnnos(dangerZones);
 
     await rootRquest.patch(`/api/cameras/${cameraId}/`, {
-      area: JSON.stringify({ useAOI, AOIs }),
-      lines: JSON.stringify({ useCountingLine, countingLines: enhanceOrderCountingLines }),
-      danger_zones: JSON.stringify({ useDangerZone, dangerZones: enhanceOrderDangerZones }),
+      // area: JSON.stringify({ useAOI, AOIs }),
+      // lines: JSON.stringify({ useCountingLine, countingLines: enhanceOrderCountingLines }),
+      // danger_zones: JSON.stringify({ useDangerZone, dangerZones: enhanceOrderDangerZones }),
     });
   },
 );

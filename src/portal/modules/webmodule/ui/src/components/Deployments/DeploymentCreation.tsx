@@ -58,6 +58,8 @@ const DeploymentCreation = (props: Props) => {
   });
   const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(createdStep);
 
+  console.log('localFormData', localFormData);
+
   const onLinkClick = useCallback(
     (key: PivotTabKey) => {
       setLocalPivotKey(key);

@@ -78,7 +78,7 @@ const DeploymentSkillCamera = () => {
       deployment.configure
         .map((configureCamera) => ({
           key: configureCamera.camera.toString(),
-          text: cameraList.find((camera) => camera.id === configureCamera.camera).name,
+          text: cameraList.find((camera) => camera.symphony_id === configureCamera.camera).name,
         }))
         .filter((option) => (isEmpty(filterInput) ? option : option.text.match(filterInput))),
     [deployment, cameraList, filterInput],

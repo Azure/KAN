@@ -17,8 +17,8 @@ import { useDispatch } from 'react-redux';
 import { isEmpty } from 'ramda';
 
 import { Url, theme } from '../../constant';
-import { deleteCameras } from '../../store/cameraSlice';
-import { ViewMode, FormmatedCamera } from './types';
+import { deleteCameras, Camera } from '../../store/cameraSlice';
+import { ViewMode } from './types';
 import { commonCommandBarItems } from '../utils';
 import {
   getFilterdCameraList,
@@ -33,11 +33,11 @@ import FilteredDropdownLabel from '../Common/FilteredDropdownLabel';
 import CraeteMessageBar, { LocationState } from '../Common/CraeteMessageBar';
 
 interface Props {
-  formattedList: FormmatedCamera[];
+  cameraList: Camera[];
 }
 
 const CamerasDetailWrapper = (props: Props) => {
-  const { formattedList } = props;
+  const { cameraList } = props;
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -47,19 +47,19 @@ const CamerasDetailWrapper = (props: Props) => {
   const [selectedCameraList, setSelectedCameraList] = useState([]);
   const [viewMode, setViewMode] = useState<ViewMode>('card');
   const [filterValue, setFilterValue] = useState('');
-  const [localFormattedCamera, setLocalFormattedCamera] = useState<FormmatedCamera[]>([]);
+  const [localFormattedCamera, setLocalFormattedCamera] = useState<Camera[]>([]);
   const [filterFieldMap, setFilterFieldMap] = useState<CameraFieldMap>({
-    locationName: [],
+    location: [],
   });
   const [localCreated, setLocalCreated] = useState(location.state?.isCreated);
 
   useEffect(() => {
     if (isEmpty(filterValue)) {
-      setLocalFormattedCamera(formattedList);
+      setLocalFormattedCamera(cameraList);
     } else {
-      setLocalFormattedCamera(getFilterdCameraList(formattedList, filterValue));
+      setLocalFormattedCamera(getFilterdCameraList(cameraList, filterValue));
     }
-  }, [formattedList, filterValue]);
+  }, [cameraList, filterValue]);
 
   const onCameraCardSelect = useCallback((checked: boolean, cameraId: number) => {
     setSelectedCameraList((prev) => {
@@ -76,20 +76,16 @@ const CamerasDetailWrapper = (props: Props) => {
     history.push(Url.CAMERAS_CREATION_BASICS);
   }, [history]);
 
-  const onDeleteCameraClick = useCallback(() => {
-    dispatch(deleteCameras({ ids: selectedCameraList }));
-  }, [dispatch, selectedCameraList]);
-
   const onViewClick = useCallback(() => {
     setViewMode((prev) => (prev === 'card' ? 'list' : 'card'));
   }, []);
 
   const onInputSearch = useCallback(
     (newValue: string) => {
-      const filteredCameraList = getFilterdCameraList(formattedList, newValue);
+      const filteredCameraList = getFilterdCameraList(cameraList, newValue);
       setLocalFormattedCamera(filteredCameraList);
     },
-    [formattedList],
+    [cameraList],
   );
 
   const onInputChange = useCallback((newValue: string) => {
@@ -105,7 +101,7 @@ const CamerasDetailWrapper = (props: Props) => {
   const onFilterClear = useCallback(() => {
     setFilterValue('');
     setFilterFieldMap({
-      locationName: [],
+      location: [],
     });
   }, []);
 
@@ -160,7 +156,7 @@ const CamerasDetailWrapper = (props: Props) => {
   return (
     <section>
       <CommandBar styles={{ root: { marginTop: '24px', paddingLeft: 0 } }} items={commandBarItems} />
-      {formattedList.length > 0 ? (
+      {cameraList.length > 0 ? (
         <>
           {isFilter && (
             <Stack
@@ -180,18 +176,16 @@ const CamerasDetailWrapper = (props: Props) => {
                 <FilteredDropdownLabel
                   lablelTitle="Location"
                   currentOptionList={Object.entries(
-                    getDropOptions(getMinContentList(localFormattedCamera, filterFieldMap), 'locationName'),
+                    getDropOptions(getMinContentList(localFormattedCamera, filterFieldMap), 'location'),
                   )}
-                  onContentChange={(newIds) => onFilteredFieldApply(newIds, 'locationName')}
+                  onContentChange={(newIds) => onFilteredFieldApply(newIds, 'location')}
                   selectedObjectNameList={Object.keys(
                     getDropOptions(
-                      localFormattedCamera.filter((camera) =>
-                        filterFieldMap.locationName.includes(camera.id),
-                      ),
-                      'locationName',
+                      localFormattedCamera.filter((camera) => filterFieldMap.location.includes(camera.id)),
+                      'location',
                     ),
                   )}
-                  onContentCancel={() => onFilteredFieldApply([], 'locationName')}
+                  onContentCancel={() => onFilteredFieldApply([], 'location')}
                 />
               </Stack>
               <ActionButton

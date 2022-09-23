@@ -8,7 +8,7 @@ import { theme } from '../../constant';
 
 interface Props {
   lablelTitle: string;
-  currentOptionList: [string, number[]][];
+  currentOptionList: [string, number[] | string[]][];
   onContentChange: (selectedContentIds: number[]) => void;
   selectedObjectNameList: string[];
   onContentCancel: () => void;

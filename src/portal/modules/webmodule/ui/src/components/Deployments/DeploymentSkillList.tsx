@@ -94,7 +94,7 @@ const DeploymentSkillList = () => {
     if (!deployment || !cameraList.length || !skillList.length || !locationList.length) return;
 
     const cameraLocationNameMap = cameraList.reduce((accMap, camera) => {
-      const matchLocation = locationList.find((location) => location.id === camera.location);
+      const matchLocation = locationList.find((location) => location.name === camera.location);
 
       if (!accMap[camera.id])
         return { ...accMap, [camera.id]: { cameraName: camera.name, locationName: matchLocation.name } };

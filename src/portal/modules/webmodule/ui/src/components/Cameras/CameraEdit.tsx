@@ -129,7 +129,7 @@ const CameraCreate = () => {
       <Stack horizontal verticalAlign="center">
         <Pivot
           styles={{ itemContainer: { height: 'calc(100% - 44px)' } }}
-          onLinkClick={(item) => onLinkClick(item?.props.itemKey! as PivotTabKey)}
+          onLinkClick={(item) => onLinkClick(item?.props.itemKey as PivotTabKey)}
           selectedKey={localPivotKey}
         >
           <PivotItem headerText="Basics" itemKey="basics" />
@@ -175,6 +175,7 @@ const CameraCreate = () => {
       </Stack>
       <EditFooter
         cameraId={camera.id}
+        symphony_id={camera.symphony_id}
         currentStep={localPivotKey}
         onLinkClick={onLinkClick}
         localFormData={localFormData}

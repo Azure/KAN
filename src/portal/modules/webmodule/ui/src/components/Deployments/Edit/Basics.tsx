@@ -93,7 +93,7 @@ const Basics = (props: Props) => {
             />
             <Stack horizontal tokens={{ childrenGap: 8 }}>
               {localFormData.cameraList.map((camera, idx) => (
-                <TagLabel key={idx} id={camera.camera} text={camera.name} onDelete={(id: number) => {}} />
+                <TagLabel key={idx} id={idx} text={camera.name} onDelete={(id: number) => {}} />
               ))}
             </Stack>
           </Stack>

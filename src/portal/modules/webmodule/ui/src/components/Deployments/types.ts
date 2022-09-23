@@ -13,14 +13,11 @@ export type FormattedDeployment = Deployment & {
 export type ConfigureSkill = {
   id: number;
   name: string;
-  // threshold: number;
-  // storageLocation: number;
-  // xyz: number;
   configured: boolean;
 };
 
 export type ConfigureCamera = {
-  camera: number;
+  camera: string;
   name: string;
   skillList: ConfigureSkill[];
 };

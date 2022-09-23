@@ -29,6 +29,8 @@ const Basics = (props: Props) => {
   );
   const belongCameraList = useSelector(belongCameraSelector);
 
+  console.log('belongCameraList', belongCameraList);
+
   const deviceOptions: IDropdownOption[] = useMemo(
     () =>
       deviceList.map((device) => ({
@@ -41,9 +43,9 @@ const Basics = (props: Props) => {
 
   const cameraOptions: IDropdownOption[] = useMemo(
     () =>
-      belongCameraList.map((l) => ({
-        key: l.id,
-        text: l.name,
+      belongCameraList.map((camera) => ({
+        key: camera.symphony_id,
+        text: camera.name,
       })),
     [belongCameraList],
   );
@@ -53,7 +55,7 @@ const Basics = (props: Props) => {
       onFormDataChange({
         ...localFormData,
         cameraList: option.selected
-          ? [...localFormData.cameraList, { camera: +option.key, name: option.text, skillList: [] }]
+          ? [...localFormData.cameraList, { camera: option.key.toString(), name: option.text, skillList: [] }]
           : [...localFormData.cameraList].filter((camera) => camera.camera !== option.key),
         error: { ...localFormData.error, cameraList: '' },
       });
@@ -129,7 +131,7 @@ const Basics = (props: Props) => {
             {localFormData.cameraList.map((camera, idx) => (
               <TagLabel
                 key={idx}
-                id={camera.camera}
+                id={idx}
                 text={camera.name}
                 onDelete={(id: number) =>
                   onFormDataChange({

@@ -1,3 +1,4 @@
+import { StringDecoder } from 'string_decoder';
 import { Acceleration } from '../components/constant';
 
 // Slice Types
@@ -38,7 +39,7 @@ export type DeploymentConfigureSkill = {
 };
 
 export type DeploymentConfigureCamera = {
-  camera: number;
+  camera: string;
   skills: DeploymentConfigureSkill[];
 };
 
@@ -125,30 +126,7 @@ export type TrainingProject = {
 };
 
 // Payload Types
-export type CreateCameraPayload = {
-  location: number;
-  name: string;
-  rtsp?: string;
-  media_source?: string;
-  media_type: string;
-  tag_list: string;
-  username?: string;
-  password?: string;
-  allowed_devices?: string;
-};
-
-export type CreateLocationPayload = { name: string };
-
-export type UpdateCameraPayload = {
-  id: number;
-  body: {
-    location: number;
-    tag_list: string;
-    username?: string;
-    password?: string;
-  };
-};
-
+// Device
 export type CreateComputeDevicePayload = {
   name: string;
   iothub: string;
@@ -171,41 +149,45 @@ export type UpdateComputeDevicePayload = {
   };
 };
 
-// configure: {
-//   camera: number;
-//   skills: {
-//     id: number;
-//     configured: boolean;
-//   }[];
-// }[];
-
-export type GetDeploymentVideoRecordingsPayload = {
-  deployment: number;
-  skillName: string;
-  cameraName: string;
-};
-
-export type GetDeploymentInsightPayload = {
-  deployment: number;
-  skill_symphony_id: string;
-  camera_symphony_id: string;
-};
-
-export type CreateDeploymentPayload = {
-  name: string;
-  compute_device: number;
-  tag_list: string;
-  configure: string;
-};
-
-export type UpdateDeploymentPayload = {
+// Camera
+export type GetSingleCameraPayload = {
   id: number;
+  symphony_id: string;
+};
+
+export type CreateCameraPayload = {
+  location: string;
+  name: string;
+  rtsp?: string;
+  media_source?: string;
+  media_type: string;
+  tag_list: string;
+  username?: string;
+  password?: string;
+  allowed_devices?: string;
+};
+
+export type UpdateCameraPayload = {
+  id: number;
+  symphony_id: string;
   body: {
+    location: number | string;
     tag_list: string;
-    configure: string;
+    username?: string;
+    password?: string;
   };
 };
 
+export type DeleteCameraPayload = {
+  id: number;
+  symphony_id: string;
+  resolve?: () => void;
+};
+
+// Location
+export type CreateLocationPayload = { name: string };
+
+// Model
 export type CreateCustomVisionModelPayload = {
   name: string;
   tags: string[];
@@ -217,6 +199,7 @@ export type AddExistingCustomVisionModelPayload = {
   customVisionId: string;
 };
 
+// Ai Skill
 export type CreateAiSkillPayload = {
   name: string;
   flow: string;
@@ -234,6 +217,42 @@ export type UpdateAiSkillPayload = {
     raw_data: string;
     screenshot: string;
     tag_list: string;
+  };
+};
+
+// Deployment
+
+// configure: {
+//   camera: symphony_id: string;
+//   skills: {
+//     id: number;
+//     configured: boolean;
+//   }[];
+// }[];
+export type CreateDeploymentPayload = {
+  name: string;
+  compute_device: number;
+  tag_list: string;
+  configure: string;
+};
+
+export type GetDeploymentVideoRecordingsPayload = {
+  deployment: number;
+  skillName: string;
+  cameraName: string;
+};
+
+export type GetDeploymentInsightPayload = {
+  deployment: number;
+  skill_symphony_id: string;
+  camera_symphony_id: string;
+};
+
+export type UpdateDeploymentPayload = {
+  id: number;
+  body: {
+    tag_list: string;
+    configure: string;
   };
 };
 

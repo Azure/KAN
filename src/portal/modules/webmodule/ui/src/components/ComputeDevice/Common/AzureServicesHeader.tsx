@@ -10,7 +10,7 @@ const AZURE_PORTAL = 'https://portal.azure.com/#home';
 
 const AzureServicesHeader = () => {
   return (
-    <Stack>
+    <>
       <Label styles={{ root: { fontWeight: 600, lineHeight: '20px' } }}>Azure Services</Label>
       <Stack>
         <Text>
@@ -36,7 +36,7 @@ const AzureServicesHeader = () => {
           </ActionButton>
         </Stack>
       </Stack>
-    </Stack>
+    </>
   );
 };
 

@@ -12,6 +12,8 @@ import {
   Label,
   SearchBox,
   ActionButton,
+  CompoundButton,
+  IContextualMenuItem,
 } from '@fluentui/react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { isEmpty } from 'ramda';
@@ -36,6 +38,16 @@ import CraeteMessageBar, { LocationState } from '../Common/CraeteMessageBar';
 interface Props {
   deviceList: ComputeDevice[];
 }
+
+const SubMenuButton = (item: IContextualMenuItem) => (
+  <CompoundButton
+    styles={{ root: { width: '270px' } }}
+    secondaryText={item.data}
+    onClick={() => item.onClick()}
+  >
+    {item.text}
+  </CompoundButton>
+);
 
 const ComputeDeviceDetail = (props: Props) => {
   const { deviceList } = props;
@@ -99,7 +111,34 @@ const ComputeDeviceDetail = (props: Props) => {
       iconProps: {
         iconName: 'Add',
       },
-      onClick: () => history.push(Url.COMPUTE_DEVICE_CREATION_BASIC),
+      subMenuProps: {
+        styles: {
+          root: {
+            '& .ms-ContextualMenu-link': {
+              height: '75px',
+            },
+          },
+          container: {
+            height: '150px',
+          },
+        },
+        items: [
+          {
+            key: 'iot',
+            text: 'Add an IoT Edge Device',
+            data: 'Provide your Azure Service and IoT Hub credentials',
+            onRender: SubMenuButton,
+            onClick: () => history.push({ pathname: Url.COMPUTE_DEVICE_CREATION_BASIC, search: '?type=iot' }),
+          },
+          {
+            key: 'k8s',
+            text: 'Add a Kubernetes Device',
+            data: 'Link your existing device on Kubernetes',
+            onRender: SubMenuButton,
+            onClick: () => history.push({ pathname: Url.COMPUTE_DEVICE_CREATION_BASIC, search: '?type=k8s' }),
+          },
+        ],
+      },
     },
     {
       key: 'refresh',

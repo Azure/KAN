@@ -14,7 +14,7 @@ import { selectComputeDeviceById } from '../../store/computeDeviceSlice';
 import { getScrllStackClasses } from '../Common/styles';
 
 import Basics from './Edit/Basics';
-import Preview from './Creation/Preview';
+import Preview from './Common/Preview';
 import EditFooter from './Edit/EditFooter';
 import TagTab, { Tag, getErrorMessage } from '../Common/TagTab';
 import ErrorIcon from '../Common/ErrorIcon';
@@ -33,6 +33,8 @@ const DeviceEdit = () => {
     acceleration: '',
     architecture: '',
     tag_list: [],
+    is_k8s: true,
+    cluster_type: '',
   });
   const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(step);
 
@@ -45,6 +47,8 @@ const DeviceEdit = () => {
       iotedge_device: device.iotedge_device,
       acceleration: device.acceleration,
       architecture: device.architecture,
+      is_k8s: device.is_k8s,
+      cluster_type: device.cluster_type,
       tag_list: [
         ...device.tag_list.map((tag) => ({ ...tag, errorMessage: '' })),
         { name: '', value: '', errorMessage: '' },
@@ -56,14 +60,15 @@ const DeviceEdit = () => {
     (key: PivotTabKey) => {
       setLocalPivotKey(key);
 
-      history.push(
-        generatePath(Url.COMPUTE_DEVICE_EDIT, {
-          id: device.id,
+      history.push({
+        pathname: generatePath(Url.COMPUTE_DEVICE_EDIT, {
+          id,
           step: key,
         }),
-      );
+        search: `type=${device.is_k8s ? 'k8s' : 'iot'}`,
+      });
     },
-    [history, device],
+    [history, device.is_k8s, id],
   );
 
   const onFormDataChange = useCallback((newFormData: UpdateComputeDeviceFromData) => {
@@ -117,9 +122,6 @@ const DeviceEdit = () => {
 
   const onValidationRedirect = useCallback(
     (key: PivotTabKey) => {
-      console.log(key);
-      console.log(onFormDateValidate(key));
-
       if (onFormDateValidate(key)) return;
 
       onLinkClick(key);

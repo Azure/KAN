@@ -3,7 +3,7 @@ import { createSlice, createEntityAdapter, createSelector } from '@reduxjs/toolk
 import { State as RootState } from 'RootStateType';
 import rootRquest from './rootRquest';
 import { createWrappedAsync } from './shared/createWrappedAsync';
-import { ComputeDevice, CreateComputeDevicePayload, UpdateComputeDevicePayload } from './types';
+import { ComputeDevice, CreateComputeDevicePayload, UpdateComputeDevicePayload, ClusterType } from './types';
 
 const computeDeviceAdapter = createEntityAdapter<ComputeDevice>();
 
@@ -18,6 +18,8 @@ type ComputeDeviceFromServer = {
   symphony_id: string;
   solution_id: string;
   status: string;
+  is_k8s: boolean;
+  cluster_type: string;
 };
 
 const getArrayObject = (value: string) => {
@@ -40,6 +42,7 @@ const normalizeComputeDevice = (response: ComputeDeviceFromServer): ComputeDevic
   ...response,
   tag_list: getArrayObject(response.tag_list),
   status: getStatus(response.status),
+  cluster_type: response.cluster_type as ClusterType,
 });
 
 export const getComputeDeviceList = createWrappedAsync('ComputeDevice/Get', async () => {

@@ -4,7 +4,12 @@
 import React, { useCallback } from 'react';
 import { Stack, Text, Label, IDropdownOption } from '@fluentui/react';
 
-import { UpdateComputeDeviceFromData, CPUArchitecture, cpuArchitectureOptions } from '../types';
+import {
+  UpdateComputeDeviceFromData,
+  CPUArchitecture,
+  cpuArchitectureOptions,
+  clusterOptions,
+} from '../types';
 import { x64AccelerationOptions, arm64AccelerationOptions } from '../../constant';
 
 import HorizontalTextField from '../../Common/HorizontalTextField';
@@ -18,17 +23,7 @@ interface Props {
 }
 
 const Basics = (props: Props) => {
-  const { localFormData, onFormDataChange } = props;
-
-  const onAccelerationClick = useCallback(
-    (option: IDropdownOption) => {
-      onFormDataChange({
-        ...localFormData,
-        acceleration: option.key as string,
-      });
-    },
-    [onFormDataChange, localFormData],
-  );
+  const { localFormData } = props;
 
   return (
     <Stack styles={{ root: { padding: '40px 0' } }} tokens={{ childrenGap: 35 }}>
@@ -41,37 +36,56 @@ const Basics = (props: Props) => {
         </Stack>
         <HorizontalTextField label="Device Name" value={localFormData.name} disabled required />
       </Stack>
-      <Stack tokens={{ childrenGap: 10 }}>
-        <AzureServicesHeader />
-        <Stack tokens={{ childrenGap: 20 }}>
-          <HorizontalDropdown
-            selectedKey={localFormData.iothub}
-            options={[
-              {
-                key: localFormData.iothub,
-                text: localFormData.iothub,
-              },
-            ]}
-            label="IoT Hub"
+      {localFormData.is_k8s ? (
+        <Stack tokens={{ childrenGap: 10 }}>
+          <Stack>
+            <Label styles={{ root: { fontWeight: 600, lineHeight: '20px' } }}>Kubernetes Info</Label>
+            <Stack>
+              <Text>Provide some details of your Kubernetes device.</Text>
+            </Stack>
+          </Stack>
+          <HorizonChoiceGroup
+            label="Cluster Context"
+            selectedKey={localFormData.cluster_type}
+            options={clusterOptions}
             required
-            styles={{ root: { width: '680px' } }}
             disabled
-          />
-          <HorizontalDropdown
-            selectedKey={localFormData.iotedge_device}
-            options={[
-              {
-                key: localFormData.iotedge_device,
-                text: localFormData.iotedge_device,
-              },
-            ]}
-            label="IoT Edge Device"
-            disabled
-            required
-            styles={{ root: { width: '680px' } }}
           />
         </Stack>
-      </Stack>
+      ) : (
+        <Stack tokens={{ childrenGap: 10 }}>
+          <AzureServicesHeader />
+          <Stack tokens={{ childrenGap: 20 }}>
+            <HorizontalDropdown
+              selectedKey={localFormData.iothub}
+              options={[
+                {
+                  key: localFormData.iothub,
+                  text: localFormData.iothub,
+                },
+              ]}
+              label="IoT Hub"
+              required
+              styles={{ root: { width: '680px' } }}
+              disabled
+            />
+            <HorizontalDropdown
+              selectedKey={localFormData.iotedge_device}
+              options={[
+                {
+                  key: localFormData.iotedge_device,
+                  text: localFormData.iotedge_device,
+                },
+              ]}
+              label="IoT Edge Device"
+              disabled
+              required
+              styles={{ root: { width: '680px' } }}
+            />
+          </Stack>
+        </Stack>
+      )}
+
       <Stack tokens={{ childrenGap: 15 }}>
         <Stack>
           <Label styles={{ root: { fontWeight: 600, lineHeight: '20px' } }}>Device Specs</Label>
@@ -83,13 +97,6 @@ const Basics = (props: Props) => {
           label="CPU Architecture"
           selectedKey={localFormData.architecture}
           options={cpuArchitectureOptions}
-          onChange={(_, option) =>
-            onFormDataChange({
-              ...localFormData,
-              architecture: option.key as CPUArchitecture,
-              acceleration: '-',
-            })
-          }
           required
           disabled
         />
@@ -97,7 +104,6 @@ const Basics = (props: Props) => {
           selectedKey={localFormData.acceleration}
           options={localFormData.architecture === 'X64' ? x64AccelerationOptions : arm64AccelerationOptions}
           label="Acceleration"
-          onChange={(_, option) => onAccelerationClick(option)}
           required
           disabled
         />

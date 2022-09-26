@@ -21,8 +21,17 @@ const Preview = (props: Props) => {
   return (
     <Stack styles={{ root: { paddingTop: '40px' } }} tokens={{ childrenGap: 15 }}>
       <PreviewLabel title="name" content={localFormData.name} />
-      <PreviewLabel title="IoT Hub" content={localFormData.iothub} />
-      <PreviewLabel title="IoT Edge" content={localFormData.iotedge_device} />
+      {localFormData.is_k8s ? (
+        <PreviewLabel
+          title="Cluster Context"
+          content={localFormData.cluster_type === 'current' ? 'Current cluster' : 'Other cluster'}
+        />
+      ) : (
+        <>
+          <PreviewLabel title="IoT Hub" content={localFormData.iothub} />
+          <PreviewLabel title="IoT Edge" content={localFormData.iotedge_device} />
+        </>
+      )}
       <PreviewLabel title="CPU Architecture" content={localFormData.architecture} />
       <PreviewLabel title="Acceleration" content={localFormData.acceleration} />
       <PreviewTag tagList={localFormData.tag_list} />

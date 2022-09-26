@@ -71,8 +71,17 @@ const DeviceSidePanel = (props: Props) => {
       ) : (
         <Stack styles={{ root: { paddingTop: '25px' } }} tokens={{ childrenGap: 15 }}>
           <SidePanelLabel title="Device Name" content={device.name} />
-          <SidePanelLabel title="IoT Hub Account" content={device.iothub} />
-          <SidePanelLabel title="IoT Edge Device" content={device.iotedge_device} />
+          {device.is_k8s ? (
+            <SidePanelLabel
+              title="Cluster Context"
+              content={device.cluster_type === 'current' ? 'Current cluster' : 'Other cluster'}
+            />
+          ) : (
+            <>
+              <SidePanelLabel title="IoT Hub Account" content={device.iothub} />
+              <SidePanelLabel title="IoT Edge Device" content={device.iotedge_device} />
+            </>
+          )}
           <SidePanelLabel title="CPU Architecture" content={device.architecture} />
           <SidePanelLabel title="Acceleration" content={device.acceleration} />
           <SidePanelTag tagList={device.tag_list} />

@@ -3,6 +3,8 @@ import { Acceleration } from '../components/constant';
 // Slice Types
 export type ConntectedStatus = 'connected' | 'disconnected';
 
+export type ClusterType = '' | 'current' | 'other';
+
 export type ComputeDevice = {
   id: number;
   name: string;
@@ -14,6 +16,8 @@ export type ComputeDevice = {
   symphony_id: string;
   solution_id: string;
   status: Record<string, ConntectedStatus>;
+  is_k8s: boolean;
+  cluster_type: ClusterType;
 };
 
 export type AiSkill = {
@@ -152,6 +156,8 @@ export type CreateComputeDevicePayload = {
   architecture: string;
   acceleration: string;
   tag_list: string;
+  cluster_type: string;
+  is_k8s: boolean;
 };
 
 export type UpdateComputeDevicePayload = {
@@ -160,6 +166,8 @@ export type UpdateComputeDevicePayload = {
     architecture: string;
     acceleration: string;
     tag_list: string;
+    cluster_type: string;
+    is_k8s: boolean;
   };
 };
 

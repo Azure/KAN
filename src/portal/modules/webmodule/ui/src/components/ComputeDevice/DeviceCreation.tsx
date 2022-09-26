@@ -7,11 +7,12 @@ import { Pivot, PivotItem, Spinner, Stack, IPivotItemProps } from '@fluentui/rea
 import { clone, isEmpty } from 'ramda';
 
 import { Url, ERROR_BLANK_VALUE, ERROR_NAME_BE_USED, ERROR_NAME_BLANK } from '../../constant';
-import { CreateComputeDeviceFormData, PivotTabKey } from './types';
+import { CreateComputeDeviceFormData, PivotTabKey, DeviceCreateType } from './types';
 import { getScrllStackClasses } from '../Common/styles';
+import { useQuery } from '../../hooks/useQuery';
 
 import Basics from './Creation/Basics';
-import Preview from './Creation/Preview';
+import Preview from './Common/Preview';
 import CreateFooter from './Creation/CreateFooter';
 import TagTab, { Tag, getErrorMessage } from '../Common/TagTab';
 import ErrorIcon from '../Common/ErrorIcon';
@@ -26,12 +27,17 @@ const getLocalFormError = (form: CreateComputeDeviceFormData, existingNameList: 
     iotHub: '',
     iotedge_device: '',
     acceleration: '',
+    cluster_type: '',
   };
 
   if (isEmpty(form.name)) error.name = ERROR_NAME_BLANK;
   if (existingNameList.includes(form.name)) error.name = ERROR_NAME_BE_USED;
-  if (isEmpty(form.iothub)) error.iotHub = ERROR_BLANK_VALUE;
-  if (isEmpty(form.iotedge_device)) error.iotedge_device = ERROR_BLANK_VALUE;
+
+  if (!form.is_k8s) {
+    if (isEmpty(form.iothub)) error.iotHub = ERROR_BLANK_VALUE;
+    if (isEmpty(form.iotedge_device)) error.iotedge_device = ERROR_BLANK_VALUE;
+  }
+
   if (form.acceleration === '-') error.acceleration = ERROR_BLANK_VALUE;
   return error;
 };
@@ -42,6 +48,7 @@ const ComputeDeviceCreation = (props: Props) => {
   const { step } = useParams<{ step: PivotTabKey }>();
   const history = useHistory();
   const scrllStackClasses = getScrllStackClasses();
+  const createType = (useQuery().get('type') as DeviceCreateType) ?? 'iot';
 
   const [isCreating, setIsCreating] = useState(false);
   const [localFormData, setLocalFormData] = useState<CreateComputeDeviceFormData>({
@@ -51,6 +58,8 @@ const ComputeDeviceCreation = (props: Props) => {
     architecture: 'X64',
     acceleration: '-',
     tag_list: [{ name: '', value: '', errorMessage: '' }],
+    cluster_type: 'current',
+    is_k8s: createType === 'k8s',
     error: {
       name: '',
       iotHub: '',
@@ -58,20 +67,20 @@ const ComputeDeviceCreation = (props: Props) => {
       acceleration: '',
     },
   });
-
   const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(step);
 
   const onLinkClick = useCallback(
     (key: PivotTabKey) => {
       setLocalPivotKey(key);
 
-      history.push(
-        generatePath(Url.COMPUTE_DEVICE_CREATION, {
+      history.push({
+        pathname: generatePath(Url.COMPUTE_DEVICE_CREATION, {
           step: key,
         }),
-      );
+        search: `type=${createType}`,
+      });
     },
-    [history],
+    [history, createType],
   );
 
   const onFormDataChange = useCallback((newFormData: CreateComputeDeviceFormData) => {
@@ -194,7 +203,13 @@ const ComputeDeviceCreation = (props: Props) => {
           <Route
             exact
             path={Url.COMPUTE_DEVICE_CREATION_BASIC}
-            render={() => <Basics localFormData={localFormData} onFormDataChange={onFormDataChange} />}
+            render={() => (
+              <Basics
+                localFormData={localFormData}
+                onFormDataChange={onFormDataChange}
+                createType={createType}
+              />
+            )}
           />
         </Switch>
       </Stack>

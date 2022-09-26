@@ -53,6 +53,8 @@ const EditFooter = (props: Props) => {
         body: {
           architecture: localFormData.architecture,
           acceleration: localFormData.acceleration,
+          cluster_type: localFormData.cluster_type,
+          is_k8s: localFormData.is_k8s,
           tag_list:
             getFilteredTagList(localFormData.tag_list).length !== 0
               ? JSON.stringify(

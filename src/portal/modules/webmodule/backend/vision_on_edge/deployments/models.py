@@ -122,6 +122,7 @@ class Deployment(models.Model):
                 "iothub": instance.compute_device.iothub,
                 "iotedge_device": instance.compute_device.iotedge_device,
                 "module_routes": module_routes,
+                "is_k8s": instance.compute_device.is_k8s
             }
         )
 

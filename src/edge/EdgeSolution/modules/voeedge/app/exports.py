@@ -23,14 +23,15 @@ from common.env import IOTEDGE_CONNECTION_STRING
 class VideoSnippetStatus(str, Enum):
     WAITING = 'WAITING'
     RECORDING = 'RECORDING'
-    EXPORTING = 'EXPORTING'    
+    EXPORTING = 'EXPORTING'
+
 
 class VideoSnippetExport(Export):
     def __init__(self, filename_prefix, recording_duration=1, insights_overlay=True, delay_buffer=1, module_name='',
-                    instance_displayname='instance', skill_displayname='skill', device_displayname='device'):
+                 instance_displayname='instance', skill_displayname='skill', device_displayname='device'):
         super().__init__()
 
-        #FIXME
+        # FIXME
         if insights_overlay == 'false':
             insights_overlay = False
         elif insights_overlay == 'true':
@@ -40,12 +41,11 @@ class VideoSnippetExport(Export):
         self.skill_displayname = skill_displayname
         self.device_displayname = device_displayname
 
-
         self.filename_prefix = filename_prefix
         self.recording_duration = float(recording_duration)
         print('--> recoring duration', self.recording_duration, flush=True)
         self.insights_overlay = insights_overlay
-        self.delay_buffer = float(delay_buffer) # in minutes        
+        self.delay_buffer = float(delay_buffer)  # in minutes
 
         self.last_timestamp = -1
 
@@ -53,24 +53,22 @@ class VideoSnippetExport(Export):
         self.imgs = []
         self.exporting_thread = None
 
-
     def _append_image(self, frame):
         img = frame.image.image_pointer.copy()
         if self.insights_overlay:
             utils.insights_overlay(img, frame)
         self.imgs.append(img)
 
-
     def _export_video(self):
 
         def _export_video_func():
 
             if len(self.imgs) > 0:
-                #FIXME fps
+                # FIXME fps
                 fps = len(self.imgs) / self.recording_duration
                 h, w, _ = self.imgs[0].shape
 
-                # timestamp of (2100-01-01 - timestamp) * 1000 
+                # timestamp of (2100-01-01 - timestamp) * 1000
                 ID = str(int((4102416000 - time.time()) * 1000))
 
                 basename_ori = f"{self.filename_prefix}-{ID}-{datetime.datetime.fromtimestamp(time.time()).isoformat()}-ori.mp4"
@@ -86,10 +84,12 @@ class VideoSnippetExport(Export):
                     out.write(img)
                 out.release()
 
-                subprocess.check_output(['ffmpeg', '-i', local_filename_ori, local_filename])
+                subprocess.check_output(
+                    ['ffmpeg', '-i', local_filename_ori, local_filename])
 
                 # Upload to azure blob storage's container
-                print('VideoSnippetExport: uploading video snippet to blobstorage', flush=True)
+                print(
+                    'VideoSnippetExport: uploading video snippet to blobstorage', flush=True)
                 client = get_blob_client(blob_filename)
                 with open(local_filename, 'rb') as f:
                     client.upload_blob(f)
@@ -103,24 +103,20 @@ class VideoSnippetExport(Export):
         self.exporting_thread = threading.Thread(target=_export_video_func)
         self.exporting_thread.start()
 
-        
-
-
     def process(self, frame):
 
         cur_timestamp = time.time()
-        #print(len(self.imgs))
+        # print(len(self.imgs))
 
         # current logic is that we start recording while there's any objects is detected
         if self.status is VideoSnippetStatus.WAITING:
             if cur_timestamp > self.last_timestamp + self.delay_buffer*60:
                 if len(frame.insights_meta.objects_meta) > 0:
-                    
+
                     print('start recording')
                     self.status = VideoSnippetStatus.RECORDING
                     self.last_timestamp = cur_timestamp
-                    self._append_image(frame)                    
-
+                    self._append_image(frame)
 
         # if it's recording, check whether its duration is over; if so, process it
         elif self.status is VideoSnippetStatus.RECORDING:
@@ -128,22 +124,27 @@ class VideoSnippetExport(Export):
                 self.status = VideoSnippetStatus.EXPORTING
                 self._export_video()
             else:
-                self._append_image(frame)                    
+                self._append_image(frame)
 
-if IOTEDGE_CONNECTION_STRING:
-    iot = IoTHubModuleClient.create_from_connection_string(IOTEDGE_CONNECTION_STRING)
-else:
-    iot = IoTHubModuleClient.create_from_edge_environment()
+
+try:
+    if IOTEDGE_CONNECTION_STRING:
+        iot = IoTHubModuleClient.create_from_connection_string(
+            IOTEDGE_CONNECTION_STRING)
+    else:
+        iot = IoTHubModuleClient.create_from_edge_environment()
+except Exception as e:
+    print(f"Iotedge config error: {e}", flush=True)
+
 
 class IothubExport(Export):
     def __init__(self, delay_buffer=6, **kwargs):
         super().__init__()
         self.delay_buffer = float(delay_buffer)
-        
+
         self.last_timestamp = -1
 
         self._export_q = queue.Queue(30)
-        
 
         def _exporter():
             while True:
@@ -152,11 +153,11 @@ class IothubExport(Export):
                     print('IotHubExport: send a message to metrics')
                     iot.send_message_to_output(j, 'metrics')
                 except Exception as e:
-                    print(f"IotHubExport: An error occurred while sending message to metrics: {e}.")
+                    print(
+                        f"IotHubExport: An error occurred while sending message to metrics: {e}.")
 
         self._export_thread = threading.Thread(target=_exporter)
         self._export_thread.start()
-
 
     def process(self, frame):
 
@@ -188,13 +189,11 @@ class IotedgeExport(Export):
                     print('IotEdgeExport: send a message to localmetrics')
                     iot.send_message_to_output(j, 'localmetrics')
                 except Exception as e:
-                    print(f"IotEdgeExport: An error occurred while sending message to localmetrics: {e}.")        
-
+                    print(
+                        f"IotEdgeExport: An error occurred while sending message to localmetrics: {e}.")
 
         self._export_thread = threading.Thread(target=_exporter)
         self._export_thread.start()
-
-    
 
     def process(self, frame):
         cur_timestamp = time.time()
@@ -208,15 +207,12 @@ class IotedgeExport(Export):
                 self.last_timestamp = cur_timestamp
 
 
-
-
 class HttpExport(Export):
-    
-    def __init__(self, url):  
+
+    def __init__(self, url):
         super().__init__()
         self.url = url
 
-        
         self._export_q = queue.Queue(30)
 
         def _exporter():
@@ -226,21 +222,18 @@ class HttpExport(Export):
                     print('HttpExport: send a request to ', self.url)
                     httpx.post(self.url, json=j)
                 except httpx.RequestError as exc:
-                    print(f"An error occurred while requesting {exc.request.url!r}.")
+                    print(
+                        f"An error occurred while requesting {exc.request.url!r}.")
 
-        
         self._export_thread = threading.Thread(target=_exporter)
         self._export_thread.start()
-        
 
     def process(self, frame):
-    
+
         if not self._export_q.full():
             self._export_q.put(frame.json())
         else:
             print(f'HttpExport: drop result since queue is full', flush=True)
-        
-    
 
 
 class Cv2ImshowExport(Export):
@@ -253,9 +246,8 @@ class Cv2ImshowExport(Export):
         elif insights_overlay == 'true':
             insights_overlay = True
 
-
         self.insights_overlay = insights_overlay
-    
+
     def process(self, frame):
 
         img = frame.image.image_pointer.copy()

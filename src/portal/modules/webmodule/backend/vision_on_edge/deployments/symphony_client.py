@@ -34,6 +34,7 @@ class SymphonyInstanceClient(SymphonyClient):
                 "labels": labels
             },
             "spec": {
+                "scope": "poss",
                 "displayName": display_name,
                 "parameters": params,
                 "solution": solution,

@@ -63,7 +63,7 @@ const getDisplayFPS = (
   skillList: AiSkill[],
   configureCameraList: DeploymentConfigureCamera[],
   fpsObj: DeploymentFPS,
-) => {
+): { name: string; fps: string }[] => {
   const result = Object.entries(fpsObj).reduce((acc, [symphonyId, fps]) => {
     const matchSkill = getUsedSkillList(skillList, configureCameraList).find(
       (skill) => skill.symphony_id === symphonyId,
@@ -78,13 +78,13 @@ const getDisplayFPS = (
 const DeploymentSkillList = () => {
   const { id } = useParams<{ id: string }>();
 
-  const [localConfigureCamera, setLocalConfigureCamera] = useState<ConfigureSkill[]>([]);
-
   const deployment = useSelector((state: RootState) => selectDeploymentById(state, id));
   const locationList = useSelector((state: RootState) => selectAllLocations(state));
   const cameraList = useSelector((state: RootState) => selectAllCameras(state));
   const skillList = useSelector((state: RootState) => selectAllCascades(state));
   const device = useSelector((state: RootState) => selectComputeDeviceById(state, deployment.compute_device));
+
+  const [localConfigureCamera, setLocalConfigureCamera] = useState<ConfigureSkill[]>([]);
 
   const footerClasses = getFooterClasses();
   const history = useHistory();
@@ -271,7 +271,7 @@ const DeploymentSkillList = () => {
                 <>
                   {Object.keys(deployment.status.fps).length > 0 &&
                     getDisplayFPS(skillList, deployment.configure, deployment.status.fps).map(
-                      ([name, fps], idx) => <Text key={idx}>{`${name} : ${fps}`}</Text>,
+                      ({ name, fps }, idx) => <Text key={idx}>{`${name} : ${fps}`}</Text>,
                     )}
                 </>
               }

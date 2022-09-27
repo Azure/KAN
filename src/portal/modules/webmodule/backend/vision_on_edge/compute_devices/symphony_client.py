@@ -23,6 +23,8 @@ class SymphonyTargetClient(SymphonyClient):
         display_name = self.args.get("display_name", "")
         solution_id = self.args.get("solution_id", "")
         tag_list = self.args.get("tag_list", "")
+        is_k8s = self.args.get("is_k8s", False)
+        cluster_type = self.args.get("cluster_type", "current")
         # connection_str = os.getenv('IOTHUB_CONNECTION_STRING')
         tenant_id = os.getenv('TENANT_ID')
         client_id = os.getenv('CLIENT_ID')
@@ -34,25 +36,43 @@ class SymphonyTargetClient(SymphonyClient):
 
         service_api = self.get_service_client()
         res = service_api.read_namespaced_service(
-            name='symphony-service-ext', namespace='default')
+            name='symphony-service-ext', namespace='symphony-k8s-system')
         symphony_ip = res.status.load_balancer.ingress[0].ip
         symphony_url = "http://" + symphony_ip + ":8080/v1alpha2/agent/references"
-
-        # get iothub connection string
-        res = subprocess.check_output(
-            ['az', 'iot', 'hub', 'connection-string', 'show', '--hub-name', iothub, '-o', 'tsv'])
-        connection_str = res.decode('utf8').strip()
-
-        iot_info = {}
-        for kv in connection_str.split(';'):
-            key = kv.split('=')[0]
-            val = kv[len(key)+1:]
-            iot_info[key] = val
 
         labels = {}
         if tag_list:
             for tag in json.loads(tag_list):
                 labels[tag["name"]] = tag["value"]
+
+        if is_k8s:
+            provider = "providers.target.k8s"
+            if cluster_type == "current":
+                config = {"inCluster": 'true'}
+            else:
+                # TODO to be modified to provided config
+                config = {"inCluster": 'false'}
+        else:
+            # get iothub connection string
+            res = subprocess.check_output(
+                ['az', 'iot', 'hub', 'connection-string', 'show', '--hub-name', iothub, '-o', 'tsv'])
+            connection_str = res.decode('utf8').strip()
+
+            iot_info = {}
+            for kv in connection_str.split(';'):
+                key = kv.split('=')[0]
+                val = kv[len(key)+1:]
+                iot_info[key] = val
+
+            provider = "providers.target.azure.iotedge"
+            config = {
+                "name": "iot-edge",
+                "keyName": iot_info['SharedAccessKeyName'] if iot_info else None,
+                "key": iot_info["SharedAccessKey"] if iot_info else None,
+                "iotHub": iot_info["HostName"] if iot_info else None,
+                "apiVersion": "2020-05-31-preview",
+                "deviceName": str(iotedge_device),
+            }
 
         config_json = {
             "apiVersion": "fabric.symphony/v1",
@@ -64,6 +84,12 @@ class SymphonyTargetClient(SymphonyClient):
             "spec": {
                 "name": name,
                 "displayName": display_name,
+                "metadata": {
+                    "deployment.replicas": "#1",
+                    "service.ports": "JA.[{\"name\":\"port8088\",\"port\": 8088}]",
+                    "service.type": "ClusterIP",
+                    "service.name": "symphony-agent"
+                },
                 "components": [
                     {
                         "name": "symphony-agent",
@@ -89,15 +115,8 @@ class SymphonyTargetClient(SymphonyClient):
                         "bindings": [
                             {
                                 "role": "instance",
-                                "provider": "providers.target.azure.iotedge",
-                                "config": {
-                                    "name": "iot-edge",
-                                    "keyName": iot_info['SharedAccessKeyName'] if iot_info else None,
-                                    "key": iot_info["SharedAccessKey"] if iot_info else None,
-                                    "iotHub": iot_info["HostName"] if iot_info else None,
-                                    "apiVersion": "2020-05-31-preview",
-                                    "deviceName": str(iotedge_device),
-                                }
+                                "provider": provider,
+                                "config": config
                             }
                         ]
                     }
@@ -163,9 +182,19 @@ class SymphonyTargetClient(SymphonyClient):
                     0]
                 iotedge_device = target['spec']['topologies'][0]['bindings'][0]['config'].get(
                     'deviceName', "")
-                architecture = target['spec']['properties'].get('cpu', "")
-                acceleration = target['spec']['properties'].get('acceleration', "")
-                solution_id = target['spec']['properties'].get('solutionId', "")
+                architecture = target['spec'].get("properties", {}).get('cpu', "")
+                acceleration = target['spec'].get(
+                    "properties", {}).get('acceleration', "")
+                solution_id = target['spec'].get("properties", {}).get('solutionId', "")
+
+                is_k8s = "k8s" in target['spec']['topologies'][0]['bindings'][0]["provider"]
+                if is_k8s:
+                    if target['spec']['topologies'][0]['bindings'][0]["config"]["inCluster"] == "true":
+                        cluster_type = "current"
+                    else:
+                        cluster_type = "other"
+                else:
+                    cluster_type = "current"
 
                 labels = target['metadata'].get('labels')
                 if labels:
@@ -184,6 +213,8 @@ class SymphonyTargetClient(SymphonyClient):
                         "symphony_id": symphony_id,
                         "solution_id": solution_id,
                         "tag_list": tag_list,
+                        "is_k8s": is_k8s,
+                        "cluster_type": cluster_type
                     },
                 )
                 logger.info("ComputeDevice: %s %s.", compute_device_obj,
@@ -226,6 +257,13 @@ class SymphonySolutionClient(SymphonyClient):
         iotedge_device = self.args.get("iotedge_device", "")
         module_routes = self.args.get("module_routes", "")
 
+        # workaround for synphony 0.39.7
+        is_k8s = self.args.get("is_k8s", False)
+        if is_k8s:
+            symphony_agent_address = "symphony-agent.default.svc.cluster.local"
+        else:
+            symphony_agent_address = "target-runtime-symphony-agent"
+
         image_suffix = ""
         create_options = "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}"
         if 'igpu' in acceleration.lower():
@@ -247,10 +285,13 @@ class SymphonySolutionClient(SymphonyClient):
             ['az', 'storage', 'account', 'show-connection-string', '--name', storage_account, '--resource-group', storage_resource_group, '-o', 'tsv'])
         storage_conn_str = res.decode('utf8').strip()
 
-        # get iotedge device connection string
-        res = subprocess.check_output(['az', 'iot', 'hub', 'device-identity', 'connection-string',
-                                       'show', '--device-id', iotedge_device, '--hub-name', iothub, '-o', 'tsv'])
-        iotedge_connection_str = res.decode('utf8').strip()
+        if not is_k8s and iotedge_device and iothub:
+            # get iotedge device connection string
+            res = subprocess.check_output(['az', 'iot', 'hub', 'device-identity', 'connection-string',
+                                           'show', '--device-id', iotedge_device, '--hub-name', iothub, '-o', 'tsv'])
+            iotedge_connection_str = res.decode('utf8').strip()
+        else:
+            iotedge_connection_str = ""
 
         # routes
         routes = []
@@ -274,10 +315,11 @@ class SymphonySolutionClient(SymphonyClient):
                 })
 
         # container image
-        container_version = "0.38.1"
-        managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
-        streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
-        predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"
+        container_version = "0.38.1-dev.1"
+        # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
+        # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
+        # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"
+        voeedge_image = f"p4etest.azurecr.io/voe/voeedge:{container_version}-{image_suffix}amd64"
 
         if 'arm' in architecture.lower():
             managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-jetson"
@@ -292,43 +334,62 @@ class SymphonySolutionClient(SymphonyClient):
             },
             "spec": {
                 "components": [
+                    # {
+                    #     "name": "managermodule",
+                    #     "properties": {
+                    #         "container.createOptions": "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
+                    #         "container.image": managermodule_image,
+                    #         "container.restartPolicy": "always",
+                    #         "container.type": "docker",
+                    #         "container.version": container_version,
+                    #         "env.AISKILLS": skills,
+                    #         "env.INSTANCE": "$instance()",
+                    #         "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
+                    #     }
+                    # },
+                    # {
+                    #     "name": "streamingmodule",
+                    #     "properties": {
+                    #         "container.createOptions": "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
+                    #         "container.image": streamingmodule_image,
+                    #         "container.restartPolicy": "always",
+                    #         "container.type": "docker",
+                    #         "container.version": container_version,
+                    #         "env.INSTANCE": "$instance()",
+                    #         "env.BLOB_STORAGE_CONNECTION_STRING": storage_conn_str,
+                    #         "env.BLOB_STORAGE_CONTAINER": storage_container,
+                    #         "env.WEBMODULE_URL": webmodule_url,
+                    #         "env.IOTEDGE_CONNECTION_STRING": iotedge_connection_str,
+                    #         "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
+                    #     },
+                    #     "routes": routes
+                    # },
+                    # {
+                    #     "name": "predictmodule",
+                    #     "properties": {
+                    #         "container.createOptions": create_options,
+                    #         "container.image": predictmodule_image,
+                    #         "container.restartPolicy": "always",
+                    #         "container.type": "docker",
+                    #         "container.version": container_version,
+                    #         "env.INSTANCE": "$instance()"
+                    #     }
+                    # },
                     {
-                        "name": "managermodule",
+                        "name": "voeedge",
                         "properties": {
-                            "container.createOptions": "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
-                            "container.image": managermodule_image,
-                            "container.restartPolicy": "always",
-                            "container.type": "docker",
-                            "container.version": container_version,
-                            "env.AISKILLS": skills,
-                            "env.INSTANCE": "$instance()"
-                        }
-                    },
-                    {
-                        "name": "streamingmodule",
-                        "properties": {
-                            "container.createOptions": "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
-                            "container.image": streamingmodule_image,
+                            "container.createOptions": create_options,
+                            "container.image": voeedge_image,
                             "container.restartPolicy": "always",
                             "container.type": "docker",
                             "container.version": container_version,
                             "env.INSTANCE": "$instance()",
+                            "env.AISKILLS": skills,
                             "env.BLOB_STORAGE_CONNECTION_STRING": storage_conn_str,
                             "env.BLOB_STORAGE_CONTAINER": storage_container,
                             "env.WEBMODULE_URL": webmodule_url,
-                            "env.IOTEDGE_CONNECTION_STRING": iotedge_connection_str
-                        },
-                        "routes": routes
-                    },
-                    {
-                        "name": "predictmodule",
-                        "properties": {
-                            "container.createOptions": create_options,
-                            "container.image": predictmodule_image,
-                            "container.restartPolicy": "always",
-                            "container.type": "docker",
-                            "container.version": container_version,
-                            "env.INSTANCE": "$instance()"
+                            "env.IOTEDGE_CONNECTION_STRING": iotedge_connection_str,
+                            "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
                         }
                     }
                 ],

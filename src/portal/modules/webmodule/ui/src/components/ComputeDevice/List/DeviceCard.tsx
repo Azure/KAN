@@ -46,7 +46,7 @@ const DeviceCard = (props: Props) => {
           <Stack>
             <Label>{device.name}</Label>
             <Label styles={{ root: { color: theme.palette.neutralSecondaryAlt, fontSize: '12px' } }}>
-              IoT Edge Compute Device
+              {device.is_k8s ? 'Kubernetes Device' : 'IoT Edge Compute Device'}
             </Label>
           </Stack>
         </Stack>

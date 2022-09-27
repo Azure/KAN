@@ -2,13 +2,17 @@
 
 Azure Percept for Open-Source Project (POSS) is a framework for creating, deploying, and operating Edge artificial intelligence (AI) solutions at scale with the control and flexibility of open-source natively on your environment. It is fully open-sourced and leverages the open-source software (OSS) community to deliver enhanced experiences. And, as a self-managed solution, you can host the experience on your own Kubernetes clusters.
 
-This article provides you with a deep understanding of Azure Percept for Open-Source Project portal concepts; We’ll cover the following five key concepts:
+This article provides you with a deep understanding of Azure Percept for Open-Source Project portal concepts; We’ll cover the following six key concepts:
 
 1.  Compute Devices
 2.  Cameras
 3.  Models
 4.  AI Skills
 5.  Deployments
+6.  Architectural Concepts
+    1. Solutions 
+    2.  Targets
+    3.  Solution Instances
 
 ![](./media/13fc6b9fb936ac86d478fecb8e519eca.png)
 
@@ -103,6 +107,21 @@ This screenshot displays some of the nodes Azure Percept for Open-Source Project
 ## 5. Deployments
 
 After defining your compute devices, cameras, models, and AI skills, your next step is to package and deploy them to your target device via the portal. When a deployment is live, you can monitor camera feeds and recordings, gather inference results from a feed, and reconfigure your deployment as needed to get the information you need.
+
+## Architectural Concepts
+
+###  1. Solutions
+A Solution is the combination of an AI skill and custom containers (business logic), expressing the functional solution to your use case. Because your inputs to the portal ultimately run on a Kubernetes cluster (k8s), a solution is deployed from the k8s control plane to k8s nodes or a target. 
+
+![image](https://user-images.githubusercontent.com/10191339/192595220-7c429607-8921-492a-be5d-d175d65faa47.png)
+
+
+###  2. Targets
+You defined the target (compute device) in the first step. This is your edge VM. In a future release you will be able to define your own k8s cluster as part of the target should you choose.
+ 
+###  3. Solution Instances
+A solution instance is simply the combination of a solution and a target. From the portal perspective this is a deployment.
+
 
 ## Next steps
 

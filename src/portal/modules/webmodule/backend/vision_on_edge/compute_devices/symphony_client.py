@@ -315,10 +315,11 @@ class SymphonySolutionClient(SymphonyClient):
                 })
 
         # container image
-        container_version = "0.38.1"
-        managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
-        streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
-        predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"
+        container_version = "0.38.1.dev"
+        # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
+        # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
+        # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"
+        voeedge_image = f"p4etest.azurecr.io/voe/voeedge:{container_version}-{image_suffix}amd64"
 
         if 'arm' in architecture.lower():
             managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-jetson"
@@ -333,45 +334,62 @@ class SymphonySolutionClient(SymphonyClient):
             },
             "spec": {
                 "components": [
+                    # {
+                    #     "name": "managermodule",
+                    #     "properties": {
+                    #         "container.createOptions": "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
+                    #         "container.image": managermodule_image,
+                    #         "container.restartPolicy": "always",
+                    #         "container.type": "docker",
+                    #         "container.version": container_version,
+                    #         "env.AISKILLS": skills,
+                    #         "env.INSTANCE": "$instance()",
+                    #         "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
+                    #     }
+                    # },
+                    # {
+                    #     "name": "streamingmodule",
+                    #     "properties": {
+                    #         "container.createOptions": "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
+                    #         "container.image": streamingmodule_image,
+                    #         "container.restartPolicy": "always",
+                    #         "container.type": "docker",
+                    #         "container.version": container_version,
+                    #         "env.INSTANCE": "$instance()",
+                    #         "env.BLOB_STORAGE_CONNECTION_STRING": storage_conn_str,
+                    #         "env.BLOB_STORAGE_CONTAINER": storage_container,
+                    #         "env.WEBMODULE_URL": webmodule_url,
+                    #         "env.IOTEDGE_CONNECTION_STRING": iotedge_connection_str,
+                    #         "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
+                    #     },
+                    #     "routes": routes
+                    # },
+                    # {
+                    #     "name": "predictmodule",
+                    #     "properties": {
+                    #         "container.createOptions": create_options,
+                    #         "container.image": predictmodule_image,
+                    #         "container.restartPolicy": "always",
+                    #         "container.type": "docker",
+                    #         "container.version": container_version,
+                    #         "env.INSTANCE": "$instance()"
+                    #     }
+                    # },
                     {
-                        "name": "managermodule",
+                        "name": "voeedge",
                         "properties": {
-                            "container.createOptions": "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
-                            "container.image": managermodule_image,
+                            "container.createOptions": create_options,
+                            "container.image": voeedge_image,
                             "container.restartPolicy": "always",
                             "container.type": "docker",
                             "container.version": container_version,
+                            "env.INSTANCE": "$instance()",
                             "env.AISKILLS": skills,
-                            "env.INSTANCE": "$instance()",
-                            "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
-                        }
-                    },
-                    {
-                        "name": "streamingmodule",
-                        "properties": {
-                            "container.createOptions": "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
-                            "container.image": streamingmodule_image,
-                            "container.restartPolicy": "always",
-                            "container.type": "docker",
-                            "container.version": container_version,
-                            "env.INSTANCE": "$instance()",
                             "env.BLOB_STORAGE_CONNECTION_STRING": storage_conn_str,
                             "env.BLOB_STORAGE_CONTAINER": storage_container,
                             "env.WEBMODULE_URL": webmodule_url,
                             "env.IOTEDGE_CONNECTION_STRING": iotedge_connection_str,
                             "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
-                        },
-                        "routes": routes
-                    },
-                    {
-                        "name": "predictmodule",
-                        "properties": {
-                            "container.createOptions": create_options,
-                            "container.image": predictmodule_image,
-                            "container.restartPolicy": "always",
-                            "container.type": "docker",
-                            "container.version": container_version,
-                            "env.INSTANCE": "$instance()"
                         }
                     }
                 ],

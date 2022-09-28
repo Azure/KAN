@@ -260,7 +260,7 @@ class SymphonySolutionClient(SymphonyClient):
         # workaround for synphony 0.39.7
         is_k8s = self.args.get("is_k8s", False)
         if is_k8s:
-            symphony_agent_address = "symphony-agent.default.svc.cluster.local"
+            symphony_agent_address = "target-runtime.default.svc.cluster.local"
         else:
             symphony_agent_address = "target-runtime-symphony-agent"
 

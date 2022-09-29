@@ -260,7 +260,7 @@ class SymphonySolutionClient(SymphonyClient):
         # workaround for synphony 0.39.7
         is_k8s = self.args.get("is_k8s", False)
         if is_k8s:
-            symphony_agent_address = "symphony-agent.default.svc.cluster.local"
+            symphony_agent_address = "target-runtime.default.svc.cluster.local"
         else:
             symphony_agent_address = "target-runtime-symphony-agent"
 
@@ -322,6 +322,7 @@ class SymphonySolutionClient(SymphonyClient):
         voeedge_image = f"p4etest.azurecr.io/voe/voeedge:{container_version}-{image_suffix}amd64"
 
         if 'arm' in architecture.lower():
+            voeedge_image = f"p4etest.azurecr.io/voe/voeedge:{container_version}-jetson"
             managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-jetson"
             streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-jetson"
             predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-jetson"

@@ -36,7 +36,8 @@ COPY voeedge/app/*.py /app/
 COPY voeedge/app/customvision /app/customvision
 COPY voeedge/app/downloaders /app/downloaders
 
-RUN rm /app/openvino_classification.py RUN rm /app/openvino_object_detection.py
+RUN rm /app/openvino_classification.py 
+RUN rm /app/openvino_object_detection.py
 
 
 WORKDIR /app/

@@ -10,7 +10,7 @@ RUN apt install wget zip unzip -y
 ### Install requirements ###
 
 # Install onnxruntime
-#COPY predictmodule/onnxruntime_gpu-1.12.0-cp38-cp38-linux_aarch64.whl /app/
+#COPY voeedge/onnxruntime_gpu-1.12.0-cp38-cp38-linux_aarch64.whl /app/
 RUN mkdir -p /app
 RUN wget https://nvidia.box.com/shared/static/v59xkrnvederwewo2f1jtv6yurl92xso.whl -O /app/onnxruntime_gpu-1.12.0-cp38-cp38-linux_aarch64.whl
 RUN pip install /app/onnxruntime_gpu-1.12.0-cp38-cp38-linux_aarch64.whl
@@ -20,7 +20,7 @@ COPY common/requirements.txt /app/requirements-common.txt
 RUN pip install -r /app/requirements-common.txt
 
 # this module
-COPY predictmodule/requirements-jetson.txt /app/
+COPY voeedge/requirements-jetson.txt /app/
 RUN pip install -r /app/requirements-jetson.txt
 
 
@@ -31,16 +31,14 @@ RUN pip install -r /app/requirements-jetson.txt
 COPY common/common /app/common
 
 # this module
-COPY predictmodule/app/main.py /app/
-COPY predictmodule/app/core.py /app/
-COPY predictmodule/app/customvision_object_detection.py /app/
-#COPY predictmodule/app/models/*.py /app/models/
-COPY predictmodule/app/customvision /app/customvision
-COPY predictmodule/app/downloaders /app/downloaders
+COPY voeedge/app/*.py /app/
+#COPY voeedge/app/models/*.py /app/models/
+COPY voeedge/app/customvision /app/customvision
+COPY voeedge/app/downloaders /app/downloaders
 
+RUN rm /app/openvino_classification.py RUN rm /app/openvino_object_detection.py
 
 
 WORKDIR /app/
 
-CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5004"]
-
+CMD ["python3", "main.py"]

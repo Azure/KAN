@@ -1,6 +1,13 @@
 FastAPI
 python-multipart
+opencv-python
 uvicorn
 numpy
 pillow
 onnx
+pydantic
+networkx==2.8.5
+requests
+httpx
+azure-iot-device
+pytz

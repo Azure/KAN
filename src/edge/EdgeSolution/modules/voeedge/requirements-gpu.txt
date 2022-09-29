@@ -7,3 +7,9 @@ numpy
 pillow
 onnx
 onnxruntime-gpu
+pydantic
+networkx==2.8.5
+requests
+httpx
+azure-iot-device
+pytz

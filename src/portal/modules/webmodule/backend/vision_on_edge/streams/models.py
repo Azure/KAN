@@ -67,7 +67,7 @@ class Stream:
                 if self.rtsp == "":
                     self.rtsp = self.get_snapshop_url()
                 else:
-                    slef.cap.release()
+                    self.cap.release()
                     raise StreamOpenRTSPError
             has_img, img = self.cap.read()
             # Need to add the video flag FIXME

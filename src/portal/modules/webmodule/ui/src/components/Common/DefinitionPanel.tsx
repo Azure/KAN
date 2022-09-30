@@ -16,24 +16,24 @@ import { getDeploymentDefinition } from '../../store/deploymentSlice';
 interface Props {
   onPanelClose: () => void;
   pageType: PageType;
-  selectedTargetId: number;
+  selectedTargetId: number | string;
   onDeleteModalOpen: () => void;
 }
 
-const getRequestMethod = (pageType: PageType, id: number) => {
+const getRequestMethod = (pageType: PageType, id: number | string) => {
   switch (pageType) {
     case 'deivce':
-      return getComputeDeviceDefinition(id);
+      return getComputeDeviceDefinition(id as string);
     case 'camera':
-      return getCameraDefinition(id);
+      return getCameraDefinition(id as string);
     case 'model':
-      return getCustomVisionProjectDefinition(id);
+      return getCustomVisionProjectDefinition(+id);
     case 'skill':
-      return getAiSkillDefinition(id);
+      return getAiSkillDefinition(+id);
     case 'deployment':
-      return getDeploymentDefinition(id);
+      return getDeploymentDefinition(+id);
     default:
-      return getDeploymentDefinition(id);
+      return getDeploymentDefinition(+id);
   }
 };
 
@@ -68,7 +68,8 @@ const DefinitionPanel = (props: Props) => {
       setIsFetching(true);
 
       const response = (await dispatch(getRequestMethod(pageType, selectedTargetId))) as any;
-      setLocqlPorperty(response.payload);
+
+      setLocqlPorperty(JSON.stringify(response.payload, undefined, 2));
 
       setIsFetching(false);
     })();
@@ -93,18 +94,7 @@ const DefinitionPanel = (props: Props) => {
       isFooterAtBottom={true}
       onOuterClick={() => null}
     >
-      {isFetching ? (
-        <ProgressIndicator />
-      ) : (
-        <Stack
-          styles={{
-            root: classes.root,
-          }}
-          tokens={{ childrenGap: 15 }}
-        >
-          {localProperty}
-        </Stack>
-      )}
+      {isFetching ? <ProgressIndicator /> : <pre>{localProperty}</pre>}
     </Panel>
   );
 };

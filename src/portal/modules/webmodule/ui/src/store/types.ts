@@ -1,4 +1,3 @@
-import { StringDecoder } from 'string_decoder';
 import { Acceleration } from '../components/constant';
 
 // Slice Types
@@ -24,8 +23,7 @@ export type ComputeDevice = {
 export type AiSkill = {
   id: number;
   name: string;
-  flow: string;
-  raw_data: string;
+  flow: any;
   screenshot: string;
   tag_list: { name: string; value: string }[];
   symphony_id: string;
@@ -109,8 +107,6 @@ export type TrainingProject = {
   inputs: ModelHandler[];
   outputs: ModelHandler[];
   nodeType: ModelNodeType;
-  // demultiply_count: number;
-  // params: Params | string;
   combined: string;
   openvino_library_name: string;
   openvino_model_name: string;
@@ -127,6 +123,12 @@ export type TrainingProject = {
 
 // Payload Types
 // Device
+
+export type GetSingleComputeDeivcePayload = {
+  id: number;
+  symphony_id: string;
+};
+
 export type CreateComputeDevicePayload = {
   name: string;
   iothub: string;
@@ -140,6 +142,7 @@ export type CreateComputeDevicePayload = {
 
 export type UpdateComputeDevicePayload = {
   id: number;
+  symphony_id: string;
   body: {
     architecture: string;
     acceleration: string;
@@ -147,6 +150,12 @@ export type UpdateComputeDevicePayload = {
     cluster_type: string;
     is_k8s: boolean;
   };
+};
+
+export type DeleteComputeDevicePayload = {
+  id: number;
+  symphony_id: string;
+  resolve?: () => void;
 };
 
 // Camera
@@ -203,7 +212,6 @@ export type AddExistingCustomVisionModelPayload = {
 export type CreateAiSkillPayload = {
   name: string;
   flow: string;
-  raw_data: string;
   screenshot: string;
   tag_list: string;
   fps: string;
@@ -212,12 +220,17 @@ export type CreateAiSkillPayload = {
 
 export type UpdateAiSkillPayload = {
   id: number;
+  symphony_id: string;
   body: {
     flow: string;
-    raw_data: string;
     screenshot: string;
     tag_list: string;
   };
+};
+
+export type DeleteAiSkillPayload = {
+  id: number;
+  symphony_id: string;
 };
 
 // Deployment
@@ -225,7 +238,7 @@ export type UpdateAiSkillPayload = {
 // configure: {
 //   camera: symphony_id: string;
 //   skills: {
-//     id: number;
+//     id: symphony_id: string;;
 //     configured: boolean;
 //   }[];
 // }[];

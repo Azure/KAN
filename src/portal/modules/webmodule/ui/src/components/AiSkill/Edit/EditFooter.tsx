@@ -15,7 +15,8 @@ import { getFilteredTagList } from '../../Common/TagTab';
 import { Url } from '../../../constant';
 
 interface Props {
-  aiSkillId: string;
+  id: number;
+  symphony_id: string;
   currentStep: PivotTabKey;
   onLinkClick: (key: PivotTabKey) => void;
   localFormData: UpdateAiSkillFormData;
@@ -36,8 +37,8 @@ const EditFooter = (props: Props) => {
     // onFormDataChange,
     onCreatingChange,
     isCreating,
-    aiSkillId,
-    // onCascadeValidate,
+    id,
+    symphony_id,
     onValidationRedirect,
     hasUseAiSkill,
   } = props;
@@ -51,9 +52,9 @@ const EditFooter = (props: Props) => {
     onCreatingChange(true);
 
     const payload: UpdateAiSkillPayload = {
-      id: +aiSkillId,
+      id,
+      symphony_id,
       body: {
-        raw_data: localFormData.raw_data,
         flow: localFormData.cascade.flow,
         screenshot: localFormData.screenshot,
         tag_list:
@@ -71,7 +72,7 @@ const EditFooter = (props: Props) => {
     await dispatch(updateAiSkill(payload));
 
     history.push(Url.AI_SKILL);
-  }, [localFormData, aiSkillId, dispatch, history, onCreatingChange]);
+  }, [localFormData, dispatch, history, onCreatingChange, id, symphony_id]);
 
   return (
     <Stack

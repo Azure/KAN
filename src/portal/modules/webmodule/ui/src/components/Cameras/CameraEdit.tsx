@@ -31,7 +31,7 @@ const CameraCreate = () => {
     name: '',
     media_type: 'Camera',
     videoType: 'link',
-    location: -1,
+    location: '',
     rtsp: '',
     media_source: '',
     tag_list: [{ name: '', value: '', errorMessage: '' }],
@@ -40,6 +40,8 @@ const CameraCreate = () => {
     password: '',
   });
   const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(step);
+
+  console.log('localFormData', localFormData);
 
   useEffect(() => {
     if (!camera) return;

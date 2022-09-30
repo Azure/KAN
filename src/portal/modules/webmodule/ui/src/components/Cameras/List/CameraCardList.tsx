@@ -78,7 +78,7 @@ const CameraList = (props: Props) => {
       {selectedDefinition && (
         <DefinitionPanel
           onPanelClose={() => setSelectedDefinition(null)}
-          selectedTargetId={selectedDefinition.id}
+          selectedTargetId={selectedDefinition.symphony_id}
           pageType="camera"
           onDeleteModalOpen={() => setDeletedCamera(selectedDefinition)}
         />

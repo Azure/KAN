@@ -49,7 +49,11 @@ const DeploymentSkillCamera = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      await dispatch(getSingleComputeDevice(deployment.compute_device));
+
+      await dispatch(
+        getSingleComputeDevice({ id: deployment.compute_device, symphony_id: deployment.symphony_id }),
+      );
+
       setIsLoading(false);
     })();
   }, [dispatch, deployment]);

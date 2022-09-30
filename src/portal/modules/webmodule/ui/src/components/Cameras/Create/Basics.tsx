@@ -72,7 +72,7 @@ const Basics = (props: Props) => {
     async (name: string) => {
       const res = (await dispatch(postLocation({ name }))) as any;
 
-      onFormDataChange({ ...localFormData, location: res.payload.id });
+      onFormDataChange({ ...localFormData, location: res.payload.name });
     },
     [dispatch, localFormData, onFormDataChange],
   );

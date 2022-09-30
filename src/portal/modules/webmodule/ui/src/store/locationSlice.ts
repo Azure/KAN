@@ -27,6 +27,7 @@ export const postLocation = createWrappedAsync(
   'locations/post',
   async (newLocation: Omit<Location, 'id'>) => {
     const response = await rootRquest.post(`/api/locations/`, newLocation);
+
     return response.data;
   },
 );

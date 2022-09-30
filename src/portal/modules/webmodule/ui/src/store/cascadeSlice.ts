@@ -1,10 +1,11 @@
 import { createSlice, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
+import { max } from 'ramda';
 
 import { State } from 'RootStateType';
 import rootRquest from './rootRquest';
 import { createWrappedAsync } from './shared/createWrappedAsync';
 
-import { CreateAiSkillPayload, AiSkill, UpdateAiSkillPayload } from './types';
+import { CreateAiSkillPayload, AiSkill, UpdateAiSkillPayload, DeleteAiSkillPayload } from './types';
 
 export type Cascade = {
   id: number;
@@ -34,10 +35,8 @@ export type UpdateCascadePayload = {
 };
 
 type AiSkillFromServer = {
-  id: number;
   name: string;
   flow: string;
-  raw_data: string;
   screenshot: string;
   tag_list: string;
   symphony_id: string;
@@ -45,20 +44,29 @@ type AiSkillFromServer = {
   acceleration: string;
 };
 
-const normalizeAiSkill = (aiSkill: AiSkillFromServer): AiSkill => {
+const getArrayObject = (tagList: string) => {
+  try {
+    return JSON.parse(tagList);
+  } catch (e) {
+    return [];
+  }
+};
+
+const normalizeAiSkill = (aiSkill: AiSkillFromServer, id: number): AiSkill => {
   return {
     ...aiSkill,
-    tag_list: aiSkill.tag_list !== '' ? JSON.parse(aiSkill.tag_list) : [],
+    id,
+    tag_list: getArrayObject(aiSkill.tag_list),
     fps: parseInt(aiSkill.fps, 10),
   };
 };
 
 const cascadesAdapter = createEntityAdapter<AiSkill>();
 
-export const getAiSkillList = createWrappedAsync('AI-Skill/GetList', async () => {
-  const response = await rootRquest.get(`/api/cascades`);
+export const getAiSkillList = createWrappedAsync('AI-Skill/Get', async () => {
+  const response = await rootRquest.get(`/api/cascades/get_symphony_objects`);
 
-  return response.data.map((aiSkill) => normalizeAiSkill(aiSkill));
+  return response.data.map((aiSkill, idx) => normalizeAiSkill(aiSkill, idx + 1));
 });
 
 export const getAiSkillDefinition = createWrappedAsync<any, number>('AI-Skill/GetDefinition', async (id) => {
@@ -75,11 +83,16 @@ export const createCascade = createWrappedAsync<any, CreateCascadePayload>(
   },
 );
 
-export const createAiSkill = createWrappedAsync<any, CreateAiSkillPayload>(
+export const createAiSkill = createWrappedAsync<any, CreateAiSkillPayload, { state: State }>(
   'AI-Skill/Create',
-  async (payload) => {
-    const response = await rootRquest.post(`/api/cascades/`, payload);
-    return normalizeAiSkill(response.data);
+  async (payload, { getState }) => {
+    const maxId = getState().cascade.ids.reduce((m, id) => {
+      return max(m, id);
+    }, 0);
+
+    const response = await rootRquest.post(`/api/cascades/create_symphony_object`, payload);
+
+    return normalizeAiSkill(response.data, +maxId + 1);
   },
 );
 
@@ -96,12 +109,13 @@ export const updateCascade = createWrappedAsync<any, UpdateCascadePayload>(
 
 export const updateAiSkill = createWrappedAsync<any, UpdateAiSkillPayload>(
   'AI-Skill/Update',
-  async (payload) => {
-    const { id, body } = payload;
+  async ({ id, symphony_id, body }) => {
+    const response = await rootRquest.patch(
+      `/api/cascades/update_symphony_object?symphony_id=${symphony_id}`,
+      body,
+    );
 
-    const response = await rootRquest.patch(`/api/cascades/${id}`, body);
-
-    return normalizeAiSkill(response.data);
+    return normalizeAiSkill(response.data, id);
   },
 );
 
@@ -110,10 +124,14 @@ export const deleteCascade = createWrappedAsync<any, number>('cascade/Delete', a
   return id;
 });
 
-export const deleteAiSkill = createWrappedAsync<any, number>('AiSkill/Delete', async (id: number) => {
-  await rootRquest.delete(`/api/cascades/${id}/`);
-  return id;
-});
+export const deleteAiSkill = createWrappedAsync<any, DeleteAiSkillPayload>(
+  'AiSkill/Delete',
+  async ({ id, symphony_id }) => {
+    await rootRquest.delete(`/api/cascades/delete_symphony_object?symphony_id=${symphony_id}`);
+
+    return id;
+  },
+);
 
 const cascadeSlice = createSlice({
   name: 'cascades',

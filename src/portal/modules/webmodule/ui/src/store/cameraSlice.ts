@@ -257,8 +257,8 @@ export const getSingleCamera = createWrappedAsync<any, GetSingleCameraPayload, {
   // },
 );
 
-export const getCameraDefinition = createWrappedAsync<any, number>('Cameras/getDefinition', async (id) => {
-  const response = await rootRquest.get(`/api/cameras/${id}/get_properties`);
+export const getCameraDefinition = createWrappedAsync<any, string>('Cameras/getDefinition', async (symphony_id) => {
+  const response = await rootRquest.get(`/api/cameras/get_properties?symphony_id=${symphony_id}`);
 
   return response.data;
 });
@@ -355,11 +355,9 @@ const slice = createSlice({
       .addCase(postRTSPCamera.fulfilled, entityAdapter.addOne)
       .addCase(putRTSPCamera.fulfilled, entityAdapter.upsertOne)
       // .addCase(updateCamera.fulfilled, entityAdapter.upsertOne)
-      .addCase(updateCamera.fulfilled, (state, action) => {
-        // @ts-ignore
-        entityAdapter.upsertOne(state, action.payload.entities.cameras[action.payload.result[0]]);
-      })
-      .addCase(deleteCameras.fulfilled, entityAdapter.removeMany);
+      .addCase(updateCamera.fulfilled, entityAdapter.upsertOne)
+      // entityAdapter.upsertOne(state, action.payload.entities.cameras[action.payload.result[0]]);
+      .addCase(deleteCameras.fulfilled, entityAdapter.removeOne);
     // .addCase(toggleShowAOI.pending, (state, action) => {
     //   const { checked, cameraId } = action.meta.arg;
     //   state.entities[cameraId].useAOI = checked;

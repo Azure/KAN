@@ -32,7 +32,7 @@ export type UpdateCameraFormData = {
   name: string;
   media_type: MediaType;
   videoType: VideoType;
-  location: number | string;
+  location: string;
   rtsp: string;
   media_source: string;
   selectedDeviceList: string[];

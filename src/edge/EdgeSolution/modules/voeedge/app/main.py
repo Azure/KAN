@@ -226,6 +226,10 @@ if __name__ == '__main__':
     print('Initializing streaming module', flush=True)
     client.post_instance_status(instance_name, STATUS_INITIALIZING_STREAMINGMODULE, "initialzing streaming module")
     streaming_module.start(streamingmodule_setting)
+
+    print('Running', flush=True)
+    client.post_instance_status(instance_name, STATUS_RUNNING, "running")
+
     streaming_module.join()
     
     """

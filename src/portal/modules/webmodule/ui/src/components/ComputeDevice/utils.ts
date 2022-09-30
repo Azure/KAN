@@ -1,6 +1,12 @@
 import { pick, groupBy, mapObjIndexed } from 'ramda';
 
 import { ComputeDevice } from '../../store/types';
+import {
+  DeviceCreateType,
+  k8sAccelerationOptions,
+  x64AccelerationOptions,
+  arm64AccelerationOptions,
+} from './types';
 
 export type DeviceFieldKey = keyof Pick<ComputeDevice, 'acceleration' | 'architecture'>;
 export type DeviceFieldMap = Record<DeviceFieldKey, number[]>;
@@ -49,4 +55,10 @@ export const getMinContentList = (deviceList: ComputeDevice[], fieldMap: DeviceF
 
   if (minFilterFieldList.length === 0) return deviceList;
   return deviceList.filter((device) => minFilterFieldList.includes(device.id));
+};
+
+export const getAccelerationOptions = (architecture: string, createType: DeviceCreateType) => {
+  if (createType === 'k8s') return k8sAccelerationOptions;
+  if (architecture === 'X64') return x64AccelerationOptions;
+  return arm64AccelerationOptions;
 };

@@ -1,16 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useCallback } from 'react';
-import { Stack, Text, Label, IDropdownOption } from '@fluentui/react';
+import React from 'react';
+import { Stack, Text, Label } from '@fluentui/react';
 
-import {
-  UpdateComputeDeviceFromData,
-  CPUArchitecture,
-  cpuArchitectureOptions,
-  clusterOptions,
-} from '../types';
-import { x64AccelerationOptions, arm64AccelerationOptions } from '../../constant';
+import { UpdateComputeDeviceFromData, cpuArchitectureOptions, clusterOptions } from '../types';
+import { getAccelerationOptions } from '../utils';
 
 import HorizontalTextField from '../../Common/HorizontalTextField';
 import HorizontalDropdown from '../../Common/HorizontalDropdown';
@@ -102,7 +97,7 @@ const Basics = (props: Props) => {
         />
         <HorizontalDropdown
           selectedKey={localFormData.acceleration}
-          options={localFormData.architecture === 'X64' ? x64AccelerationOptions : arm64AccelerationOptions}
+          options={getAccelerationOptions(localFormData.architecture, localFormData.is_k8s ? 'k8s' : 'iot')}
           label="Acceleration"
           required
           disabled

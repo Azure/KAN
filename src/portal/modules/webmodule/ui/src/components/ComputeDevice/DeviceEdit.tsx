@@ -33,7 +33,7 @@ const DeviceEdit = () => {
     acceleration: '',
     architecture: '',
     tag_list: [],
-    is_k8s: true,
+    is_k8s: false,
     cluster_type: '',
   });
   const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(step);

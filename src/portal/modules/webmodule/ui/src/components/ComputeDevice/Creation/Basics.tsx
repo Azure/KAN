@@ -31,7 +31,11 @@ const Basics = (props: Props) => {
         <KeuernetesInfo localFormData={localFormData} onFormDataChange={onFormDataChange} />
       )}
 
-      <DeviceSpecs localFormData={localFormData} onFormDataChange={onFormDataChange} />
+      <DeviceSpecs
+        localFormData={localFormData}
+        onFormDataChange={onFormDataChange}
+        createType={createType}
+      />
     </Stack>
   );
 };

@@ -21,6 +21,7 @@ from rest_framework.response import Response
 from ...azure_iot.utils import inference_module_url
 from ...azure_parts.models import Part
 from ...cameras.models import Camera
+from ...cameras.symphony_client import SymphonyDeviceClient
 from ...general.api.serializers import (
     MSStyleErrorResponseSerializer,
     SimpleOKSerializer,
@@ -43,6 +44,8 @@ logger = logging.getLogger(__name__)
 
 if "runserver" in sys.argv:
     stream_manager = StreamManager()
+
+device_client = SymphonyDeviceClient()
 
 
 @swagger_auto_schema(
@@ -83,12 +86,15 @@ def connect_stream(request):
         except ObjectDoesNotExist:
             raise StreamPartIdNotFound
         part_id = int(part_id)
-    if not Camera.objects.filter(pk=camera_id).exists():
+    # if not Camera.objects.filter(pk=camera_id).exists():
+    device_obj = device_client.get_object(camera_id)
+    if not device_obj:
         raise StreamRtspCameraNotFound
-    camera_obj = Camera.objects.get(pk=camera_id)
-    rtsp = f"rtsp://{camera_obj.username}:{camera_obj.password}@{camera_obj.rtsp.split('rtsp://')[1]}"
+    # camera_obj = Camera.objects.get(pk=camera_id)
+
+    rtsp = f"rtsp://{device_obj['username']}:{device_obj['password']}@{device_obj['rtsp'].split('rtsp://')[1]}"
     stream_obj = Stream(rtsp=rtsp, camera_id=camera_id,
-                        symphony_id=camera_obj.symphony_id, part_id=part_id)
+                        symphony_id=camera_id, part_id=part_id)
     stream_manager.add(stream_obj)
     response_data = {"status": "ok", "stream_id": stream_obj.id}
     serializer = StreamConnectResponseSerializer(data=response_data)

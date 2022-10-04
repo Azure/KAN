@@ -80,7 +80,7 @@ class Cascade(models.Model):
 
         if created:
             # create
-            skill_client.deploy_config(group="ai.symphony", plural="skills")
+            skill_client.deploy_config()
         else:
             # update
             # get affected solution: deployment -> target -> solution
@@ -93,8 +93,7 @@ class Cascade(models.Model):
                             affected_solutions.append(
                                 instance_obj.compute_device.solution_id)
 
-            skill_client.patch_config(
-                group="ai.symphony", plural="skills", name=instance.symphony_id)
+            skill_client.patch_config(name=instance.symphony_id)
 
             logger.warning(f"Updating affected solutions: {affected_solutions}")
             for solution_id in affected_solutions:
@@ -117,8 +116,7 @@ class Cascade(models.Model):
     @staticmethod
     def post_delete(**kwargs):
         instance = kwargs["instance"]
-        skill_client.remove_config(
-            group="ai.symphony", plural="skills", name=instance.symphony_id)
+        skill_client.remove_config(name=instance.symphony_id)
 
 
 post_save.connect(Cascade.post_create, Cascade, dispatch_uid="Cascade_post")

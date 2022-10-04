@@ -22,6 +22,8 @@ class SymphonyClient:
 
     def __init__(self, **kwargs):
         self.args = {}
+        self.group = ""
+        self.plural = ""
         for k, v in kwargs.items():
             self.args[k] = v
 
@@ -62,23 +64,76 @@ class SymphonyClient:
     def load_symphony_objects(self):
         raise NotImplementedError
 
+    def process_data(self, obj, multi=False):
+        '''transform symphony object into key-value json
+        '''
+        raise NotImplementedError
+
     def get_config(self):
         raise NotImplementedError
 
     def get_patch_config(self):
         raise NotImplementedError
 
-    def deploy_config(self, group, plural):
+    def get_config_from_symphony(self, name):
+
+        api = self.get_client()
+
+        if api:
+            try:
+                symphony_object = api.get_namespaced_custom_object(
+                    group=self.group,
+                    version="v1",
+                    namespace="default",
+                    plural=self.plural,
+                    name=name
+                )
+                return symphony_object
+            except Exception as e:
+                logger.warning(e)
+                return {}
+        else:
+            return {}
+
+    def get_object(self, name):
+
+        symphony_object = self.get_config_from_symphony(name)
+        if symphony_object:
+            return(self.process_data(symphony_object, multi=False))
+        else:
+            return {}
+
+    def get_objects(self):
+        api = self.get_client()
+        if api:
+            res = api.list_namespaced_custom_object(
+                group=self.group,
+                version="v1",
+                namespace="default",
+                plural=self.plural
+            )
+            symphony_objects = res['items']
+
+            res = []
+            for symphony_object in symphony_objects:
+                res.append(self.process_data(symphony_object, multi=True))
+
+            return res
+        else:
+            logger.warning("No symphony detected")
+            return []
+
+    def deploy_config(self):
         api = self.get_client()
         if api:
             resource_json = self.get_config()
             logger.warning(resource_json)
             try:
                 api.create_namespaced_custom_object(
-                    group=group,
+                    group=self.group,
                     version="v1",
                     namespace="default",
-                    plural=plural,
+                    plural=self.plural,
                     body=resource_json,
                 )
             except Exception as e:
@@ -87,16 +142,16 @@ class SymphonyClient:
         else:
             logger.warning("not deployed")
 
-    def update_config(self, group, plural, name):
+    def update_config(self, name):
         api = self.get_client()
         if api:
             resource_json = self.get_config()
             try:
                 api.patch_namespaced_custom_object(
-                    group=group,
+                    group=self.group,
                     version="v1",
                     namespace="default",
-                    plural=plural,
+                    plural=self.plural,
                     name=name,
                     body=resource_json,
                 )
@@ -106,7 +161,7 @@ class SymphonyClient:
         else:
             logger.warning("not deployed")
 
-    def patch_config(self, group, plural, name):
+    def patch_config(self, name):
         '''patch k8s object using api_call directly to set the patch strategy 
         '''
 
@@ -115,10 +170,10 @@ class SymphonyClient:
             try:
                 query_params = []
                 path_params = {
-                    "group": group,
+                    "group": self.group,
                     "version": "v1",
                     "namespace": "default",
-                    "plural": plural,
+                    "plural": self.plural,
                     "name": name
                 }
                 header_params = {
@@ -127,6 +182,7 @@ class SymphonyClient:
                 }
                 auth_settings = ['BearerToken']
                 patch_config = self.get_patch_config()
+                logger.warning(patch_config)
                 api.api_client.call_api('/apis/{group}/{version}/namespaces/{namespace}/{plural}/{name}', 'PATCH',
                                         path_params, query_params, header_params, body=patch_config, auth_settings=auth_settings)
             except Exception as e:
@@ -135,15 +191,15 @@ class SymphonyClient:
         else:
             logger.warning("not patched")
 
-    def remove_config(self, group, plural, name):
+    def remove_config(self, name):
         api = self.get_client()
         if api:
             try:
                 api.delete_namespaced_custom_object(
-                    group=group,
+                    group=self.group,
                     version="v1",
                     namespace="default",
-                    plural=plural,
+                    plural=self.plural,
                     name=name,
                 )
             except Exception as e:

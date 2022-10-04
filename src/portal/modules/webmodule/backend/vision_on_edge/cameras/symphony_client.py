@@ -17,17 +17,19 @@ class SymphonyDeviceClient(SymphonyClient):
     def __init__(self):
         super().__init__()
         self.blob_client = AzureBlobClient()
+        self.group = "fabric.symphony"
+        self.plural = "devices"
 
     def get_config(self):
 
         name = self.args.get("name", "")
-        allowed_devices = self.args.get("allowed_devices", "")
+        allowed_devices = self.args.get("allowed_devices", "[]")
         rtsp = self.args.get("rtsp", "")
         username = self.args.get("username", "")
         password = self.args.get("password", "")
         location = self.args.get("location", "")
         display_name = self.args.get("display_name", "")
-        tag_list = self.args.get("tag_list", "")
+        tag_list = self.args.get("tag_list", "[]")
 
         device_list = json.loads(allowed_devices)
         labels = {k: "true" for k in device_list}
@@ -57,12 +59,11 @@ class SymphonyDeviceClient(SymphonyClient):
 
     def get_patch_config(self):
 
-        allowed_devices = self.args.get("allowed_devices", "")
-        rtsp = self.args.get("rtsp", "")
+        allowed_devices = self.args.get("allowed_devices", "[]")
         username = self.args.get("username", "")
         password = self.args.get("password", "")
         location = self.args.get("location", "")
-        tag_list = self.args.get("tag_list", "")
+        tag_list = self.args.get("tag_list", "[]")
 
         device_list = json.loads(allowed_devices)
         labels = {k: "true" for k in device_list}
@@ -73,7 +74,6 @@ class SymphonyDeviceClient(SymphonyClient):
 
         patch_config = [
             {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
-            {'op': 'replace', 'path': '/spec/properties/ip', 'value': rtsp},
             {'op': 'replace', 'path': '/spec/properties/user', 'value': username},
             {'op': 'replace', 'path': '/spec/properties/password', 'value': password},
             {'op': 'replace', 'path': '/spec/properties/location', 'value': location},
@@ -119,22 +119,6 @@ class SymphonyDeviceClient(SymphonyClient):
                 return status['properties']
             else:
                 return ""
-        else:
-            return ""
-
-    def get_config_from_symphony(self, name):
-
-        api = self.get_client()
-
-        if api:
-            instance = api.get_namespaced_custom_object(
-                group="fabric.symphony",
-                version="v1",
-                namespace="default",
-                plural="devices",
-                name=name
-            )
-            return instance
         else:
             return ""
 
@@ -194,3 +178,83 @@ class SymphonyDeviceClient(SymphonyClient):
                             "created" if created else "updated")
         else:
             logger.warning("Not loading symphony devices")
+
+    def process_data(self, device, multi):
+
+        from ..locations.models import Location
+
+        name = device['spec']['displayName']
+        symphony_id = device['metadata']['name']
+        rtsp = device['spec']['properties'].get('ip', "")
+        username = device['spec']['properties'].get('user', "")
+        password = device['spec']['properties'].get('password', "")
+        location = device['spec']['properties'].get('location', "")
+        if location:
+            location_obj, created = Location.objects.get_or_create(
+                name=location)
+        else:
+            location_obj = None
+        labels = device['metadata'].get('labels')
+        if labels:
+            device_list = [k for k, v in labels.items() if v == "true"]
+            tags = [{"name": k, "value": v} for k, v in labels.items()]
+        else:
+            device_list = []
+            tags = []
+        allowed_devices = json.dumps(device_list)
+        tag_list = json.dumps(tags)
+
+        try:
+            snapshot_url = device['status']['properties']['snapshot']
+        except KeyError:
+            snapshot_url = ""
+        if snapshot_url:
+            blob_sas = self.blob_client.generate_sas_token(name+'-snapshot.jpg')
+            blob_url = f"{snapshot_url}?{blob_sas}"
+        else:
+            blob_url = ""
+
+        res = {
+            "name": name,
+            "rtsp": rtsp,
+            "username": username,
+            "password": password,
+            "area": "",
+            "lines": "",
+            "location": location_obj.name,
+            "allowed_devices": allowed_devices,
+            "symphony_id": symphony_id,
+            "tag_list": tag_list,
+            "snapshot": blob_url
+        }
+
+        if not multi:
+            status = device.get("status", "")
+            if status:
+                processed_status = self.process_status(status['properties'])
+            else:
+                processed_status = ""
+            res["status"] = processed_status
+
+        return res
+
+    def process_status(self, status):
+        from ..compute_devices.symphony_client import SymphonyTargetClient
+        target_client = SymphonyTargetClient()
+
+        compute_device_table = {i["symphony_id"]: i["name"]
+                                for i in target_client.get_objects()}
+
+        status_table = {}
+
+        for key in status.keys():
+            compute_device = key.split('.')[0]
+            if compute_device in compute_device_table.keys():
+                if status[key] == "connected":
+                    status_table[compute_device_table[compute_device]] = "connected"
+                else:
+                    if compute_device not in status_table.keys():
+                        status_table[compute_device_table[compute_device]
+                                     ] = "disconnected"
+
+        return json.dumps(status_table)

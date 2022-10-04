@@ -12,6 +12,11 @@ logger = logging.getLogger(__name__)
 
 class SymphonyModelClient(SymphonyClient):
 
+    def __init__(self):
+        super().__init__()
+        self.group = "ai.symphony"
+        self.plural = "models"
+
     def get_config(self):
 
         name = self.args.get("name", "")
@@ -22,7 +27,7 @@ class SymphonyModelClient(SymphonyClient):
         model_type = self.args.get("model_type", "")
         iteration_id = self.args.get("iteration_id", "")
         tags = self.args.get("tags", "")
-        tag_list = self.args.get("tag_list", "")
+        tag_list = self.args.get("tag_list", "[]")
 
         labels = {}
         if tag_list:
@@ -54,7 +59,7 @@ class SymphonyModelClient(SymphonyClient):
 
     def get_patch_config(self):
 
-        tag_list = self.args.get("tag_list", "")
+        tag_list = self.args.get("tag_list", "[]")
 
         labels = {}
         if tag_list:
@@ -66,22 +71,6 @@ class SymphonyModelClient(SymphonyClient):
             {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
         ]
         return patch_config
-
-    def get_config_from_symphony(self, name):
-
-        api = self.get_client()
-
-        if api:
-            instance = api.get_namespaced_custom_object(
-                group="ai.symphony",
-                version="v1",
-                namespace="default",
-                plural="models",
-                name=name
-            )
-            return instance
-        else:
-            return ""
 
     def load_symphony_objects(self):
         from .models import Project

@@ -54,37 +54,6 @@ class Camera(models.Model):
         except Exception:
             return []
 
-    def get_client(self):
-        try:
-            config.load_incluster_config()
-            api = client.CustomObjectsApi()
-        except:
-            logger.warning("Cannot load k8s config")
-            api = None
-
-        return api
-
-    def get_config(self):
-        device_list = json.loads(self.allowed_devices)
-        labels = {k: "true" for k in device_list}
-        config_json = {
-            "apiVersion": "fabric.symphony/v1",
-            "kind": "Device",
-            "metadata": {
-                "name": self.name,
-                "labels": labels
-            },
-            "spec": {
-                "properties": {
-                    "ip": self.rtsp,
-                    "user": self.username,
-                    "password": self.password,
-                    "location": self.location.name if self.location else ""
-                }
-            },
-        }
-        return config_json
-
     def get_snapshot_url(self):
         return device_client.get_snapshot_url(self.symphony_id)
 
@@ -177,17 +146,15 @@ class Camera(models.Model):
 
         if created:
             # create
-            device_client.deploy_config(group="fabric.symphony", plural="devices")
+            device_client.deploy_config()
         else:
             # update
-            device_client.patch_config(
-                group="fabric.symphony", plural="devices", name=instance.symphony_id)
+            device_client.patch_config(name=instance.symphony_id)
 
     @staticmethod
     def post_delete(**kwargs):
         instance = kwargs["instance"]
-        device_client.remove_config(group="fabric.symphony",
-                                    plural="devices", name=instance.symphony_id)
+        device_client.remove_config(name=instance.symphony_id)
 
 
 pre_save.connect(Camera.pre_save, Camera, dispatch_uid="Camera_pre")

@@ -436,5 +436,5 @@ export const belongDeviceCameraSelectorFactory = (symphonyId: string) =>
 
 export const selectCameraBySymphonyId = (symphonyId: string) =>
   createSelector(selectAllCameras, (cameraList) =>
-    cameraList.filter((camera) => camera.symphony_id === symphonyId),
+    cameraList.find((camera) => camera.symphony_id === symphonyId),
   );

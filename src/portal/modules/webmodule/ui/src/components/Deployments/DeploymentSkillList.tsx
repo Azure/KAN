@@ -23,7 +23,7 @@ import { selectDeploymentById } from '../../store/deploymentSlice';
 import { selectAllCameras } from '../../store/cameraSlice';
 import { selectAllLocations } from '../../store/locationSlice';
 import { selectAllCascades } from '../../store/cascadeSlice';
-import { selectDeviceSymphonyIdsFactory } from '../../store/computeDeviceSlice';
+import { selectDeviceSymphonyByIdSelectorFactory } from '../../store/computeDeviceSlice';
 import { wrapperPadding } from './styles';
 import { getFooterClasses } from '../Common/styles';
 import { commonCommandBarItems } from '../utils';
@@ -56,7 +56,7 @@ const getClasses = () =>
 const getUsedSkillList = (skillList: AiSkill[], configureCameraList: DeploymentConfigureCamera[]) => {
   const usedSkillIDs = configureCameraList.map((c) => c.skills.map((s) => s.id)).flat(1);
 
-  return skillList.filter((skill) => usedSkillIDs.includes(skill.id));
+  return skillList.filter((skill) => usedSkillIDs.includes(skill.symphony_id));
 };
 
 const getDisplayFPS = (
@@ -82,7 +82,7 @@ const DeploymentSkillList = () => {
   const locationList = useSelector((state: RootState) => selectAllLocations(state));
   const cameraList = useSelector((state: RootState) => selectAllCameras(state));
   const skillList = useSelector((state: RootState) => selectAllCascades(state));
-  const device = useSelector(() => selectDeviceSymphonyIdsFactory(deployment.compute_device));
+  const device = useSelector(selectDeviceSymphonyByIdSelectorFactory(deployment.compute_device));
 
   const [localConfigureCamera, setLocalConfigureCamera] = useState<ConfigureSkill[]>([]);
 
@@ -96,8 +96,11 @@ const DeploymentSkillList = () => {
     const cameraLocationNameMap = cameraList.reduce((accMap, camera) => {
       const matchLocation = locationList.find((location) => location.name === camera.location);
 
-      if (!accMap[camera.id])
-        return { ...accMap, [camera.id]: { cameraName: camera.name, locationName: matchLocation.name } };
+      if (!accMap[camera.symphony_id])
+        return {
+          ...accMap,
+          [camera.symphony_id]: { cameraName: camera.name, locationName: matchLocation.name },
+        };
       return accMap;
     }, {});
 
@@ -114,6 +117,10 @@ const DeploymentSkillList = () => {
 
       return newAccMap;
     }, {});
+
+    console.log('deployment.configure', deployment.configure);
+    console.log('cameraLocationNameMap', cameraLocationNameMap);
+    console.log('deploySkillMap', deploySkillMap);
 
     const configureSkill = Object.keys(deploySkillMap).map((id) => {
       return {

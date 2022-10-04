@@ -24,7 +24,9 @@ const List = (props: Props) => {
 
   const [deletedSkill, setDeletedSkill] = useState<AiSkill | null>(null);
   const [selectedDefinition, setSelectedDefinition] = useState<AiSkill | null>(null);
-  const hasAiSkillDeployment = useSelector(selectHasUseAiSkillSelectoryFactory(deletedSkill?.id ?? 0));
+  const hasAiSkillDeployment = useSelector(
+    selectHasUseAiSkillSelectoryFactory(deletedSkill?.symphony_id ?? ''),
+  );
 
   const onSingleCascadeDelete = useCallback(async () => {
     await dispatch(deleteAiSkill({ id: deletedSkill.id, symphony_id: deletedSkill.symphony_id }));

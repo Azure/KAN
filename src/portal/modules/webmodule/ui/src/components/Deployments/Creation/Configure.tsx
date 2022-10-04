@@ -55,7 +55,7 @@ const Configure = (props: Props) => {
   );
 
   const onConfigureAdd = useCallback(
-    (selectedCameras: string[], selectedCascades: { id: number; name: string }[]) => {
+    (selectedCameras: string[], selectedCascades: { id: string; name: string }[]) => {
       let newCameraList = [] as ConfigureCamera[];
 
       localFormData.cameraList.forEach((camera) => {
@@ -99,7 +99,7 @@ const Configure = (props: Props) => {
   }, [localFormData, localCameraList, onFormDataChange]);
 
   const onConfigureCascadeDelete = useCallback(
-    (camera: string, cascadeId: number) => {
+    (camera: string, cascadeId: string) => {
       let newCameraList = [] as ConfigureCamera[];
 
       localFormData.cameraList.forEach((cam) => {

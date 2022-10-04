@@ -49,7 +49,7 @@ const DeploymentEdit = () => {
   useEffect(() => {
     if (!deployment || !cameraList.length || !deviceList.length || !skillList.length) return;
 
-    const matchedDevice = deviceList.find((device) => device.id === deployment.compute_device);
+    const matchedDevice = deviceList.find((device) => device.symphony_id === deployment.compute_device);
     const cameraMap = cameraList.reduce((accMap, camera) => {
       if (!accMap[camera.id]) return { ...accMap, [camera.symphony_id]: camera.name };
       return { ...accMap };
@@ -252,7 +252,8 @@ const DeploymentEdit = () => {
         </Switch>
       </Stack>
       <EditFooter
-        deploymentId={id}
+        deploymentId={deployment.id}
+        symphony_id={deployment.symphony_id}
         currentStep={localPivotKey}
         onLinkClick={onLinkClick}
         localFormData={localFormData}

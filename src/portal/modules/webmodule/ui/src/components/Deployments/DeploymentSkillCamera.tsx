@@ -50,9 +50,7 @@ const DeploymentSkillCamera = () => {
     (async () => {
       setIsLoading(true);
 
-      await dispatch(
-        getSingleComputeDevice({ id: deployment.compute_device, symphony_id: deployment.symphony_id }),
-      );
+      await dispatch(getSingleComputeDevice({ id: deployment.id, symphony_id: deployment.symphony_id }));
 
       setIsLoading(false);
     })();

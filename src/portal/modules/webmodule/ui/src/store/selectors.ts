@@ -118,7 +118,7 @@ export const isLabeledImagesSelector = (projectId: number) =>
       }));
   });
 
-export const matchDeviceAccelerationSelectorFactory = (deivceId: number) =>
+export const matchDeviceAccelerationSelectorFactory = (deivceId: string) =>
   createSelector([selectAllCascades, selectAllComputeDevices], (aiSkillList, deiceList) => {
     const matchDevice = deiceList.find((device) => device.symphony_id === deivceId);
 
@@ -147,11 +147,8 @@ export const formattedDeploymentSelectorFactory = createSelector(
     return deploymentList.map((deployment) => ({
       ...deployment,
       deviceName: deviceList.find((device) => device.symphony_id === deployment.compute_device).name,
-      // deviceEntities[deployment.compute_device].name,
-      skillNameList: deployment.configure
-        .map((con) => con.skills.map((skill) => skill.id))
-        .flat()
-        .map((id) => aiSkillList.find((skill) => skill.symphony_id === id)),
+      skillNameList: deployment.configure.map((con) => con.skills.map((skill) => skill.id)).flat(),
+      // .map((id) => aiSkillList.find((skill) => skill.symphony_id === id)),
     }));
   },
 );

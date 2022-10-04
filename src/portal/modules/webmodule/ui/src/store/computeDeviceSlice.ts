@@ -1,14 +1,22 @@
 import { createSlice, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
+import { max } from 'ramda';
 
 import { State as RootState } from 'RootStateType';
 import rootRquest from './rootRquest';
 import { createWrappedAsync } from './shared/createWrappedAsync';
-import { ComputeDevice, CreateComputeDevicePayload, UpdateComputeDevicePayload, ClusterType } from './types';
+import {
+  ComputeDevice,
+  CreateComputeDevicePayload,
+  UpdateComputeDevicePayload,
+  DeleteComputeDevicePayload,
+  ClusterType,
+  GetSingleComputeDeivcePayload,
+} from './types';
 
 const computeDeviceAdapter = createEntityAdapter<ComputeDevice>();
 
 type ComputeDeviceFromServer = {
-  id: number;
+  // id: number;
   name: string;
   iothub: string;
   iotedge_device: string;
@@ -38,32 +46,36 @@ const getStatus = (value: string) => {
   }
 };
 
-const normalizeComputeDevice = (response: ComputeDeviceFromServer): ComputeDevice => ({
+const normalizeComputeDevice = (response: ComputeDeviceFromServer, id: number): ComputeDevice => ({
   ...response,
+  id,
   tag_list: getArrayObject(response.tag_list),
   status: getStatus(response.status),
   cluster_type: response.cluster_type as ClusterType,
 });
 
 export const getComputeDeviceList = createWrappedAsync('ComputeDevice/Get', async () => {
-  const response = await rootRquest.get(`/api/compute_devices`);
+  const response = await rootRquest.get(`/api/compute_devices/get_symphony_objects`);
 
-  return response.data.map((da) => normalizeComputeDevice(da));
+  return response.data.map((da, i) => normalizeComputeDevice(da, i + 1));
 });
 
-export const getSingleComputeDevice = createWrappedAsync<any, number, { state: RootState }>(
-  'ComputeDevice/GetSingle',
-  async (id) => {
-    const response = await rootRquest.get(`/api/compute_devices/${id}/update_status`);
+export const getSingleComputeDevice = createWrappedAsync<
+  any,
+  GetSingleComputeDeivcePayload,
+  { state: RootState }
+>('ComputeDevice/GetSingle', async ({ id, symphony_id }) => {
+  const response = await rootRquest.get(
+    `/api/compute_devices/get_symphony_object?symphony_id=${symphony_id}`,
+  );
 
-    return normalizeComputeDevice(response.data);
-  },
-);
+  return normalizeComputeDevice(response.data, id);
+});
 
-export const getComputeDeviceDefinition = createWrappedAsync<any, number, { state: RootState }>(
+export const getComputeDeviceDefinition = createWrappedAsync<any, string, { state: RootState }>(
   'ComputeDevice/getDefinition',
-  async (id) => {
-    const response = await rootRquest.get(`/api/compute_devices/${id}/get_properties`);
+  async (symphony_id) => {
+    const response = await rootRquest.get(`/api/compute_devices/get_properties?symphony_id=${symphony_id}`);
 
     return response.data;
   },
@@ -71,27 +83,33 @@ export const getComputeDeviceDefinition = createWrappedAsync<any, number, { stat
 
 export const createComputeDevice = createWrappedAsync<any, CreateComputeDevicePayload, { state: RootState }>(
   'ComputeDevice/Create',
-  async (payload) => {
-    const response = await rootRquest.post(`/api/compute_devices`, payload);
+  async (payload, { getState }) => {
+    const maxId = getState().computeDevice.ids.reduce((m, id) => {
+      return max(m, id);
+    }, 0);
 
-    return normalizeComputeDevice(response.data);
+    const response = await rootRquest.post(`/api/compute_devices/create_symphony_object`, payload);
+
+    return normalizeComputeDevice(response.data, +maxId + 1);
   },
 );
 
 export const updateComputeDevice = createWrappedAsync<any, UpdateComputeDevicePayload>(
   'ComputeDevice/Update',
-  async (payload) => {
-    const { id, body } = payload;
-    const response = await rootRquest.patch(`/api/compute_devices/${id}`, body);
+  async ({ id, symphony_id, body }) => {
+    const response = await rootRquest.patch(
+      `/api/compute_devices/update_symphony_object?symphony_id=${symphony_id}`,
+      body,
+    );
 
-    return normalizeComputeDevice(response.data);
+    return normalizeComputeDevice(response.data, id);
   },
 );
 
-export const deleteComputeDevice = createWrappedAsync<any, { ids: number[]; resolve?: () => void }>(
+export const deleteComputeDevice = createWrappedAsync<any, DeleteComputeDevicePayload>(
   'ComputeDevice/Delete',
-  async ({ ids, resolve }) => {
-    const url = `/api/compute_devices/bulk-delete?${ids.map((id) => `id=${id}`).join('&')}`;
+  async ({ id, symphony_id, resolve }) => {
+    const url = `/api/compute_devices/delete_symphony_object?symphony_id=${symphony_id}`;
 
     await rootRquest.delete(url);
 
@@ -99,7 +117,7 @@ export const deleteComputeDevice = createWrappedAsync<any, { ids: number[]; reso
       resolve();
     }
 
-    return ids;
+    return id;
   },
 );
 
@@ -113,7 +131,7 @@ const computeDeviceSlice = createSlice({
       .addCase(getSingleComputeDevice.fulfilled, computeDeviceAdapter.upsertOne)
       .addCase(createComputeDevice.fulfilled, computeDeviceAdapter.addOne)
       .addCase(updateComputeDevice.fulfilled, computeDeviceAdapter.upsertOne)
-      .addCase(deleteComputeDevice.fulfilled, computeDeviceAdapter.removeMany);
+      .addCase(deleteComputeDevice.fulfilled, computeDeviceAdapter.removeOne);
   },
 });
 

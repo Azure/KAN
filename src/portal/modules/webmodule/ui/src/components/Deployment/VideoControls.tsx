@@ -36,13 +36,16 @@ const getLabel = (inferenceMode: InferenceMode) => {
 export const VideoAnnosControls: React.FC<VideoAnnosControlsProps> = ({ cameraId }) => {
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line no-undef
-  const showAOI = useSelector<State, boolean>((state) => selectCameraById(state, cameraId)?.useAOI);
-  const showCountingLine = useSelector<State, boolean>(
-    (state) => selectCameraById(state, cameraId)?.useCountingLine,
-  );
-  const showDangerZone = useSelector<State, boolean>(
-    (state) => selectCameraById(state, cameraId)?.useDangerZone,
-  );
+  // const showAOI = useSelector<State, boolean>((state) => selectCameraById(state, cameraId)?.useAOI);
+  // const showCountingLine = useSelector<State, boolean>(
+  //   (state) => selectCameraById(state, cameraId)?.useCountingLine,
+  // );
+  // const showDangerZone = useSelector<State, boolean>(
+  //   (state) => selectCameraById(state, cameraId)?.useDangerZone,
+  // );
+  const showAOI = false;
+  const showCountingLine = false;
+  const showDangerZone = false;
   const videoAnnosSelector = useMemo(() => videoAnnosSelectorFactory(cameraId), [cameraId]);
   const videoAnnos = useSelector(videoAnnosSelector);
   const originVideoAnnosSelector = useMemo(() => originVideoAnnosSelectorFactory(cameraId), [cameraId]);

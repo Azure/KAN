@@ -7,7 +7,7 @@ import { selectCameraEntities, selectAllCameras } from './cameraSlice';
 import { selectAllAnno } from './annotationSlice';
 import { selectAllCascades, selectCascadeEntities } from './cascadeSlice';
 import { selectAllComputeDevices, selectComputeDeviceEntities } from './computeDeviceSlice';
-import { selectLocationEntities } from './locationSlice';
+import { selectLocationEntities, selectAllLocations } from './locationSlice';
 import { selectAllDeployments } from './deploymentSlice';
 import { selectAllTrainingProjects } from './trainingProjectSlice';
 
@@ -120,40 +120,38 @@ export const isLabeledImagesSelector = (projectId: number) =>
 
 export const matchDeviceAccelerationSelectorFactory = (deivceId: number) =>
   createSelector([selectAllCascades, selectAllComputeDevices], (aiSkillList, deiceList) => {
-    const matchDevice = deiceList.find((device) => device.id === deivceId);
+    const matchDevice = deiceList.find((device) => device.symphony_id === deivceId);
 
     return aiSkillList.filter((skill) => skill.acceleration === matchDevice.acceleration);
   });
 
-export const formattedCameraSelectoryFactory = createSelector(
-  [selectAllCameras, selectLocationEntities],
-  (cameraList, locationEntities) => {
-    if (cameraList.length === 0 || Object.entries(locationEntities).length === 0) return [];
+// export const formattedCameraSelectoryFactory = createSelector(
+//   [selectAllCameras, selectAllLocations],
+//   (cameraList, locationList) => {
+//     if (cameraList.length === 0 || locationList.length === 0) return [];
 
-    return cameraList.map((camera) => ({
-      ...camera,
-      locationName: locationEntities[camera.location].name,
-    }));
-  },
-);
+//     // const matchLocation = locationList.find((location) => location.name === camera.location);
+
+//     return cameraList.map((camera) => ({
+//       ...camera,
+//       locationName: locationList.find((location) => location.name === camera.location).name,
+//     }));
+//   },
+// );
 
 export const formattedDeploymentSelectorFactory = createSelector(
-  [selectAllDeployments, selectComputeDeviceEntities, selectCascadeEntities],
-  (deploymentList, deviceEntities, aiSkillEntities) => {
-    if (
-      deploymentList.length === 0 ||
-      Object.entries(deviceEntities).length === 0 ||
-      Object.entries(aiSkillEntities).length === 0
-    )
-      return [];
+  [selectAllDeployments, selectAllComputeDevices, selectAllCascades],
+  (deploymentList, deviceList, aiSkillList) => {
+    if (deploymentList.length === 0 || deviceList.length === 0 || aiSkillList.length === 0) return [];
 
     return deploymentList.map((deployment) => ({
       ...deployment,
-      deviceName: deviceEntities[deployment.compute_device].name,
+      deviceName: deviceList.find((device) => device.symphony_id === deployment.compute_device).name,
+      // deviceEntities[deployment.compute_device].name,
       skillNameList: deployment.configure
         .map((con) => con.skills.map((skill) => skill.id))
         .flat()
-        .map((id) => aiSkillEntities[id].name),
+        .map((id) => aiSkillList.find((skill) => skill.symphony_id === id)),
     }));
   },
 );

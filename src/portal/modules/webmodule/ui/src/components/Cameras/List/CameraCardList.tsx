@@ -35,7 +35,7 @@ const CameraList = (props: Props) => {
       setDeletedCamera(null);
     };
 
-    await dispatch(deleteCameras({ ids: [deletedCamera.id], resolve }));
+    await dispatch(deleteCameras({ id: deletedCamera.id, symphony_id: deletedCamera.symphony_id, resolve }));
   }, [dispatch, deletedCamera]);
 
   return (
@@ -60,7 +60,8 @@ const CameraList = (props: Props) => {
       </Stack>
       {localSelectedCamera && (
         <CameraSidePanel
-          selectedCameraId={localSelectedCamera.id}
+          camereId={localSelectedCamera.id}
+          symphonyId={localSelectedCamera.symphony_id}
           onPanelClose={() => setLocalSelectedCamera(null)}
           onDeleteModalOpen={() => setDeletedCamera(localSelectedCamera)}
         />
@@ -77,7 +78,7 @@ const CameraList = (props: Props) => {
       {selectedDefinition && (
         <DefinitionPanel
           onPanelClose={() => setSelectedDefinition(null)}
-          selectedTargetId={selectedDefinition.id}
+          selectedTargetId={selectedDefinition.symphony_id}
           pageType="camera"
           onDeleteModalOpen={() => setDeletedCamera(selectedDefinition)}
         />

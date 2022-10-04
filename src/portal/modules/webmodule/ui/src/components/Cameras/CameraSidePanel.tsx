@@ -18,14 +18,15 @@ import SidePanelStatus from '../Common/SidePanel/SidePanelStatus';
 
 interface Props {
   onPanelClose: () => void;
-  selectedCameraId: number;
+  camereId: number;
+  symphonyId: string;
   onDeleteModalOpen: () => void;
 }
 
 const CameraSidePanel = (props: Props) => {
-  const { onPanelClose, selectedCameraId, onDeleteModalOpen } = props;
+  const { onPanelClose, camereId, onDeleteModalOpen, symphonyId } = props;
 
-  const camera = useSelector((state: RootState) => selectCameraById(state, selectedCameraId));
+  const camera = useSelector((state: RootState) => selectCameraById(state, camereId));
   const locationList = useSelector((state: RootState) => selectAllLocations(state));
 
   const dispatch = useDispatch();
@@ -36,10 +37,12 @@ const CameraSidePanel = (props: Props) => {
   useEffect(() => {
     (async () => {
       setIsFetching(true);
-      await dispatch(getSingleCamera(selectedCameraId));
+
+      await dispatch(getSingleCamera({ id: camereId, symphony_id: symphonyId }));
+
       setIsFetching(false);
     })();
-  }, [dispatch, selectedCameraId]);
+  }, [dispatch, camereId, symphonyId]);
 
   const onRenderFooterContent = useCallback(
     () => (
@@ -76,7 +79,7 @@ const CameraSidePanel = (props: Props) => {
           <SidePanelLabel title="RTSP URL" content={camera.rtsp} />
           <SidePanelLabel
             title="Location"
-            content={locationList.find((location) => location.id === camera.location).name}
+            content={locationList.find((location) => location.name === camera.location).name}
           />
           <SidePanelTag tagList={camera.tag_list} />
           <SidePanelLabel

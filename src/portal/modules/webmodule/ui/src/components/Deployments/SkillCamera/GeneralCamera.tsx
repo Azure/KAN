@@ -41,7 +41,7 @@ const GeneralCamera = (props: Props) => {
   return (
     <Stack styles={{ root: classes.root }} tokens={{ childrenGap: 10 }}>
       <Stack styles={{ root: classes.cameraWrapper }}>
-        <RTSPVideo cameraId={camera.id} />
+        <RTSPVideo cameraId={camera.symphony_id} />
       </Stack>
       <Stack tokens={{ childrenGap: 20 }}>
         <Label styles={{ root: classes.infoHeader }}>Deployment AI Skill Reported Status</Label>

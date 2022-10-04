@@ -6,11 +6,10 @@ import { Stack, Text, Link } from '@fluentui/react';
 import { useSelector } from 'react-redux';
 
 import { State as RootState } from 'RootStateType';
-import { CreateDeploymentFormData, UpdateDeploymentFormData } from '../types';
+import { CreateDeploymentFormData, UpdateDeploymentFormData, PivotTabKey } from '../types';
 import { selectAllCameras } from '../../../store/cameraSlice';
 import { selectComputeDeviceById } from '../../../store/computeDeviceSlice';
 import { theme } from '../../../constant';
-import { PivotTabKey } from '../types';
 
 import PreviewLabel from '../../Common/PreviewLabel';
 import PreviewTag from '../../Common/PreviewTag';
@@ -36,7 +35,10 @@ const Preview = (props: Props) => {
       <PreviewLabel
         title="Linked cameras"
         content={localFormData.cameraList
-          .map((configureCamera) => cameraList.find((camera) => camera.id === configureCamera.camera).name)
+          .map(
+            (configureCamera) =>
+              cameraList.find((camera) => camera.symphony_id === configureCamera.camera).name,
+          )
           .join(', ')}
       />
       <PreviewTag tagList={localFormData.tag_list} />

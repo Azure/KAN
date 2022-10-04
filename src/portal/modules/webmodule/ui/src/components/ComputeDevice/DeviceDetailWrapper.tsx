@@ -18,7 +18,6 @@ import {
 import { useHistory, useLocation } from 'react-router-dom';
 import { isEmpty } from 'ramda';
 
-import { deleteComputeDevice } from '../../store/computeDeviceSlice';
 import { commonCommandBarItems } from '../utils';
 import { theme, Url } from '../../constant';
 import { ViewMode } from './types';
@@ -88,9 +87,9 @@ const ComputeDeviceDetail = (props: Props) => {
     setSelectedDeviceList(cameraIds);
   }, []);
 
-  const onDeviceDelete = useCallback(() => {
-    dispatch(deleteComputeDevice({ ids: selectedDeviceList }));
-  }, [dispatch, selectedDeviceList]);
+  // const onDeviceDelete = useCallback(() => {
+  //   dispatch(deleteComputeDevice({ ids: selectedDeviceList }));
+  // }, [dispatch, selectedDeviceList]);
 
   const onFilteredFieldApply = useCallback((ids: number[], target: DeviceFieldKey) => {
     setFilterFieldMap((prev) => ({ ...prev, [target]: ids }));

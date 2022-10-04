@@ -37,7 +37,7 @@ const DeploymentEdit = () => {
   const [localFormData, setLocalFormData] = useState<UpdateDeploymentFormData>({
     name: '',
     cameraList: [],
-    device: { key: -1, text: '', data: '' },
+    device: { key: '', text: '' },
     tag_list: [{ name: '', value: '', errorMessage: '' }],
     error: {
       cameraList: '',
@@ -51,7 +51,7 @@ const DeploymentEdit = () => {
 
     const matchedDevice = deviceList.find((device) => device.id === deployment.compute_device);
     const cameraMap = cameraList.reduce((accMap, camera) => {
-      if (!accMap[camera.id]) return { ...accMap, [camera.id]: camera.name };
+      if (!accMap[camera.id]) return { ...accMap, [camera.symphony_id]: camera.name };
       return { ...accMap };
     }, {});
     const skillMap = skillList.reduce((accMap, skill) => {
@@ -61,7 +61,7 @@ const DeploymentEdit = () => {
 
     setLocalFormData({
       name: deployment.name,
-      device: { key: matchedDevice.id, text: matchedDevice.name, data: matchedDevice.symphony_id },
+      device: { key: matchedDevice.symphony_id, text: matchedDevice.name },
       cameraList: deployment.configure.map((configureCamera) => {
         return {
           camera: configureCamera.camera,

@@ -50,7 +50,7 @@ const getLocalFormError = (form: CreateCameraFormData, existingNameList: string[
     error.mediaSource = getUrlMessage(form.media_source, form.media_type);
   }
   if (form.selectedDeviceList.length === 0) error.selectedDeviceList = ERROR_BLANK_VALUE;
-  if (form.location === -1) error.location = ERROR_BLANK_VALUE;
+  if (form.location === '') error.location = ERROR_BLANK_VALUE;
 
   return error;
 };
@@ -67,7 +67,7 @@ const CameraCreate = (props: Props) => {
     name: '',
     media_type: 'Camera',
     videoType: 'link',
-    location: -1,
+    location: '',
     rtsp: '',
     media_source: '',
     tag_list: [{ name: '', value: '', errorMessage: '' }],

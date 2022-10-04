@@ -13,11 +13,9 @@ const locationsAdapter = createEntityAdapter<Location>();
 
 export const getLocations = createWrappedAsync<any, boolean, { state: State }>(
   'locations/get',
-  async (isDemo) => {
-    const response = await rootRquest.get(
-      `/api/locations?is_demo=${Number(isDemo)}`,
-      // 'http://20.89.186.195/api/locations',
-    );
+  async () => {
+    const response = await rootRquest.get(`/api/locations`);
+
     return response.data;
   },
   {
@@ -29,6 +27,7 @@ export const postLocation = createWrappedAsync(
   'locations/post',
   async (newLocation: Omit<Location, 'id'>) => {
     const response = await rootRquest.post(`/api/locations/`, newLocation);
+
     return response.data;
   },
 );

@@ -6,7 +6,7 @@ import { Panel, Stack, PrimaryButton, DefaultButton, IDropdownOption, Text } fro
 import { useSelector } from 'react-redux';
 
 import { State as RootState } from 'RootStateType';
-import { selectNonDemoCameras, Camera } from '../../../store/cameraSlice';
+import { selectAllCameras } from '../../../store/cameraSlice';
 import { theme } from '../../../constant';
 import { matchDeviceAccelerationSelectorFactory } from '../../../store/selectors';
 
@@ -15,29 +15,29 @@ import TagLabel from '../../Common/TagLabel';
 
 interface Props {
   deivceId: number;
-  selectedCameras: number[];
+  selectedCameras: string[];
   onPanelClose: () => void;
-  onConfigureAdd: (cameras: number[], cascade: { id: number; name: string }[]) => void;
+  onConfigureAdd: (cameras: string[], cascade: { id: string; name: string }[]) => void;
 }
 
 const ConfigureSidePanel = (props: Props) => {
   const { onPanelClose, selectedCameras, onConfigureAdd, deivceId } = props;
 
-  const [localCascadeList, setLocalCascadeList] = useState<{ id: number; name: string }[]>([]);
+  const [localCascadeList, setLocalCascadeList] = useState<{ id: string; name: string }[]>([]);
 
-  const cameraList = useSelector((state: RootState) => selectNonDemoCameras(state)) as Camera[];
+  const cameraList = useSelector((state: RootState) => selectAllCameras(state));
   const matchedAiSkillList = useSelector(matchDeviceAccelerationSelectorFactory(deivceId));
 
   const cascadeListOptions: IDropdownOption[] = matchedAiSkillList.map((cascade) => ({
-    key: cascade.id,
+    key: cascade.symphony_id,
     text: cascade.name,
   }));
 
   const onSkillChange = useCallback((option: IDropdownOption) => {
     if (option.selected) {
-      setLocalCascadeList((prev) => [...prev, { id: +option.key as number, name: option.text }]);
+      setLocalCascadeList((prev) => [...prev, { id: option.key.toString(), name: option.text }]);
     } else {
-      setLocalCascadeList((prev) => prev.filter((cascade) => cascade.id !== +option.key));
+      setLocalCascadeList((prev) => prev.filter((cascade) => cascade.id !== option.key));
     }
   }, []);
 
@@ -65,9 +65,10 @@ const ConfigureSidePanel = (props: Props) => {
           <Text styles={{ root: { color: theme.palette.neutralSecondaryAlt, paddingBottom: '5px' } }}>
             Cameras
           </Text>
-          {selectedCameras.map((cameraId) => {
-            const selectedCamera = cameraList.find((camera) => camera.id === cameraId);
-            return <Text key={cameraId}>{selectedCamera.name}</Text>;
+          {selectedCameras.map((symphonyId) => {
+            const selectedCamera = cameraList.find((camera) => camera.symphony_id === symphonyId);
+
+            return <Text key={symphonyId}>{selectedCamera.name}</Text>;
           })}
         </Stack>
         {/* <SidePanelDropdown

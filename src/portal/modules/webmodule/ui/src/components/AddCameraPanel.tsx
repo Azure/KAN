@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/* eslint-disable @typescript-eslint/camelcase */
-
 import React, { useState, useCallback, useEffect } from 'react';
 import {
   Panel,
@@ -36,6 +34,17 @@ export enum PanelMode {
   Update,
 }
 
+type FormData<V> = {
+  value: V;
+  errMsg: string;
+};
+
+type Form = {
+  name: FormData<string>;
+  url: FormData<string>;
+  location: FormData<number>;
+};
+
 type OwnProps = {
   isOpen: boolean;
   onDissmiss: () => void;
@@ -46,17 +55,6 @@ type OwnProps = {
 
 type AddEditCameraPanelProps = OwnProps & {
   locationOptions: IDropdownOption[];
-};
-
-type FormData<V> = {
-  value: V;
-  errMsg: string;
-};
-
-type Form = {
-  name: FormData<string>;
-  url: FormData<string>;
-  location: FormData<number>;
 };
 
 const initialForm: Form = {
@@ -115,7 +113,7 @@ export const Component: React.FC<AddEditCameraPanelProps> = ({
         postRTSPCamera({
           name: formData.name.value,
           rtsp: formData.url.value,
-          location: formData.location.value,
+          location: formData.location.value.toString(),
           media_type: '',
           tag_list: '',
         }),
@@ -153,7 +151,7 @@ export const Component: React.FC<AddEditCameraPanelProps> = ({
         postMediaSourceCamera({
           name: formData.name.value,
           media_source: formData.url.value,
-          location: formData.location.value,
+          location: formData.location.value.toString(),
           media_type: '',
           tag_list: '',
         }),

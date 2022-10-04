@@ -120,13 +120,8 @@ const AiSkillEdit = () => {
       screenshot: '',
     });
 
-    if (skill.raw_data === '') {
-      const result = backToSkillRawElements(JSON.parse(skill.flow), modelList);
-
-      setElements(getLayoutedElements(result));
-    } else {
-      setElements(JSON.parse(skill.raw_data));
-    }
+    const result = backToSkillRawElements(skill.flow, modelList);
+    setElements(getLayoutedElements(result));
   }, [skill, modelList]);
 
   const onLinkClick = useCallback(
@@ -305,7 +300,8 @@ const AiSkillEdit = () => {
         </Switch>
       </Stack>
       <EditFooter
-        aiSkillId={id}
+        id={skill.id}
+        symphony_id={skill.symphony_id}
         currentStep={localPivotKey}
         onLinkClick={onLinkClick}
         localFormData={localFormData}

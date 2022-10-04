@@ -23,8 +23,7 @@ export type ComputeDevice = {
 export type AiSkill = {
   id: number;
   name: string;
-  flow: string;
-  raw_data: string;
+  flow: any;
   screenshot: string;
   tag_list: { name: string; value: string }[];
   symphony_id: string;
@@ -38,7 +37,7 @@ export type DeploymentConfigureSkill = {
 };
 
 export type DeploymentConfigureCamera = {
-  camera: number;
+  camera: string;
   skills: DeploymentConfigureSkill[];
 };
 
@@ -108,8 +107,6 @@ export type TrainingProject = {
   inputs: ModelHandler[];
   outputs: ModelHandler[];
   nodeType: ModelNodeType;
-  // demultiply_count: number;
-  // params: Params | string;
   combined: string;
   openvino_library_name: string;
   openvino_model_name: string;
@@ -125,28 +122,11 @@ export type TrainingProject = {
 };
 
 // Payload Types
-export type CreateCameraPayload = {
-  location: number;
-  name: string;
-  rtsp?: string;
-  media_source?: string;
-  media_type: string;
-  tag_list: string;
-  username?: string;
-  password?: string;
-  allowed_devices?: string;
-};
+// Device
 
-export type CreateLocationPayload = { name: string };
-
-export type UpdateCameraPayload = {
+export type GetSingleComputeDeivcePayload = {
   id: number;
-  body: {
-    location: number;
-    tag_list: string;
-    username?: string;
-    password?: string;
-  };
+  symphony_id: string;
 };
 
 export type CreateComputeDevicePayload = {
@@ -162,6 +142,7 @@ export type CreateComputeDevicePayload = {
 
 export type UpdateComputeDevicePayload = {
   id: number;
+  symphony_id: string;
   body: {
     architecture: string;
     acceleration: string;
@@ -171,13 +152,102 @@ export type UpdateComputeDevicePayload = {
   };
 };
 
+export type DeleteComputeDevicePayload = {
+  id: number;
+  symphony_id: string;
+  resolve?: () => void;
+};
+
+// Camera
+export type GetSingleCameraPayload = {
+  id: number;
+  symphony_id: string;
+};
+
+export type CreateCameraPayload = {
+  location: string;
+  name: string;
+  rtsp?: string;
+  media_source?: string;
+  media_type: string;
+  tag_list: string;
+  username?: string;
+  password?: string;
+  allowed_devices?: string;
+};
+
+export type UpdateCameraPayload = {
+  id: number;
+  symphony_id: string;
+  body: {
+    location: number | string;
+    tag_list: string;
+    username?: string;
+    password?: string;
+  };
+};
+
+export type DeleteCameraPayload = {
+  id: number;
+  symphony_id: string;
+  resolve?: () => void;
+};
+
+// Location
+export type CreateLocationPayload = { name: string };
+
+// Model
+export type CreateCustomVisionModelPayload = {
+  name: string;
+  tags: string[];
+  project_type: string;
+  classification_type: string;
+};
+
+export type AddExistingCustomVisionModelPayload = {
+  customVisionId: string;
+};
+
+// Ai Skill
+export type CreateAiSkillPayload = {
+  name: string;
+  flow: string;
+  screenshot: string;
+  tag_list: string;
+  fps: string;
+  acceleration: string;
+};
+
+export type UpdateAiSkillPayload = {
+  id: number;
+  symphony_id: string;
+  body: {
+    flow: string;
+    screenshot: string;
+    tag_list: string;
+  };
+};
+
+export type DeleteAiSkillPayload = {
+  id: number;
+  symphony_id: string;
+};
+
+// Deployment
+
 // configure: {
-//   camera: number;
+//   camera: symphony_id: string;
 //   skills: {
-//     id: number;
+//     id: symphony_id: string;;
 //     configured: boolean;
 //   }[];
 // }[];
+export type CreateDeploymentPayload = {
+  name: string;
+  compute_device: string;
+  tag_list: string;
+  configure: string;
+};
 
 export type GetDeploymentVideoRecordingsPayload = {
   deployment: number;
@@ -191,49 +261,12 @@ export type GetDeploymentInsightPayload = {
   camera_symphony_id: string;
 };
 
-export type CreateDeploymentPayload = {
-  name: string;
-  compute_device: number;
-  tag_list: string;
-  configure: string;
-};
-
 export type UpdateDeploymentPayload = {
   id: number;
+  symphony_id: string;
   body: {
     tag_list: string;
     configure: string;
-  };
-};
-
-export type CreateCustomVisionModelPayload = {
-  name: string;
-  tags: string[];
-  project_type: string;
-  classification_type: string;
-};
-
-export type AddExistingCustomVisionModelPayload = {
-  customVisionId: string;
-};
-
-export type CreateAiSkillPayload = {
-  name: string;
-  flow: string;
-  raw_data: string;
-  screenshot: string;
-  tag_list: string;
-  fps: string;
-  acceleration: string;
-};
-
-export type UpdateAiSkillPayload = {
-  id: number;
-  body: {
-    flow: string;
-    raw_data: string;
-    screenshot: string;
-    tag_list: string;
   };
 };
 

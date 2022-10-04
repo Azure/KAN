@@ -1,10 +1,15 @@
 import { createSlice, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
-
-import * as R from 'ramda';
+import { max } from 'ramda';
 import { State } from 'RootStateType';
 import { schema, normalize } from 'normalizr';
 
-import { CreateCameraPayload, UpdateCameraPayload, ConntectedStatus } from './types';
+import {
+  CreateCameraPayload,
+  UpdateCameraPayload,
+  ConntectedStatus,
+  GetSingleCameraPayload,
+  DeleteCameraPayload,
+} from './types';
 import { BoxLabel, PolygonLabel, LineLabel } from './type';
 import { toggleShowAOI, toggleShowCountingLines, toggleShowDangerZones } from './actions';
 import {
@@ -20,14 +25,14 @@ import { createWrappedAsync } from './shared/createWrappedAsync';
 import rootRquest from './rootRquest';
 
 type CameraFromServer = {
-  id: number;
+  // id: number;
   name: string;
   rtsp: string;
   area: string;
   lines: string;
-  danger_zones: string;
-  is_demo: boolean;
-  location: number;
+  // danger_zones: string;
+  // is_demo: boolean;
+  location: string;
   media_type: string;
   tag_list: string;
   username: string;
@@ -39,51 +44,51 @@ type CameraFromServer = {
   symphony_id: string;
 };
 
-type CameraFromServerWithSerializeArea = Omit<CameraFromServer, 'area' | 'line' | 'danger_zones'> & {
-  area: {
-    useAOI: boolean;
-    AOIs: [
-      {
-        id: string;
-        type: string;
-        label: BoxLabel | PolygonLabel;
-      },
-    ];
-  };
-  lines: {
-    useCountingLine: boolean;
-    countingLines: [
-      {
-        id: string;
-        type: string;
-        label: LineLabel;
-      },
-    ];
-  };
-  danger_zones: {
-    useDangerZone: boolean;
-    dangerZones: [
-      {
-        id: string;
-        type: string;
-        label: BoxLabel;
-      },
-    ];
-  };
-  tag_list: { name: string; value: string }[];
-  allowed_devices: string[];
-  status: [string, ConntectedStatus][];
-};
+// type CameraFromServerWithSerializeArea = Omit<CameraFromServer, 'area' | 'line' | 'danger_zones'> & {
+//   area: {
+//     useAOI: boolean;
+//     AOIs: [
+//       {
+//         id: string;
+//         type: string;
+//         label: BoxLabel | PolygonLabel;
+//       },
+//     ];
+//   };
+//   lines: {
+//     useCountingLine: boolean;
+//     countingLines: [
+//       {
+//         id: string;
+//         type: string;
+//         label: LineLabel;
+//       },
+//     ];
+//   };
+//   danger_zones: {
+//     useDangerZone: boolean;
+//     dangerZones: [
+//       {
+//         id: string;
+//         type: string;
+//         label: BoxLabel;
+//       },
+//     ];
+//   };
+//   tag_list: { name: string; value: string }[];
+//   allowed_devices: string[];
+//   status: [string, ConntectedStatus][];
+// };
 
 export type Camera = {
   id: number;
   name: string;
   rtsp: string;
-  area: string;
-  useAOI: boolean;
-  location: number;
-  useCountingLine: boolean;
-  useDangerZone: boolean;
+  // area: string;
+  // useAOI: boolean;
+  location: string;
+  // useCountingLine: boolean;
+  // useDangerZone: boolean;
   isDemo: boolean;
   media_type: string;
   tag_list: { name: string; value: string }[];
@@ -96,85 +101,85 @@ export type Camera = {
   symphony_id: string;
 };
 
-const mapPurpose = (purpose: Purpose, annos) => annos.map((a) => ({ ...a, purpose }));
+// const mapPurpose = (purpose: Purpose, annos) => annos.map((a) => ({ ...a, purpose }));
 
-const normalizeCameraShape = (response: CameraFromServerWithSerializeArea) => {
-  return {
-    id: response.id,
-    name: response.name,
-    rtsp: response.rtsp,
-    useAOI: response.area.useAOI,
-    useCountingLine: response.lines.useCountingLine,
-    useDangerZone: response.danger_zones.useDangerZone,
-    AOIs: [
-      ...mapPurpose(Purpose.AOI, response.area.AOIs),
-      ...mapPurpose(Purpose.Counting, response.lines.countingLines),
-      ...mapPurpose(Purpose.DangerZone, response.danger_zones.dangerZones),
-    ],
-    location: response.location,
-    isDemo: response.is_demo,
-    media_type: response.media_type,
-    snapshot: response.snapshot,
-    is_live: response.is_live,
-    username: response.username,
-    password: response.password,
-    tag_list: response.tag_list,
-    allowed_devices: response.allowed_devices,
-    status: response.status,
-    symphony_id: response.symphony_id,
-  };
-};
+// const normalizeCameraShape = (response: CameraFromServerWithSerializeArea) => {
+//   return {
+//     id: response.id,
+//     name: response.name,
+//     rtsp: response.rtsp,
+//     useAOI: response.area.useAOI,
+//     useCountingLine: response.lines.useCountingLine,
+//     useDangerZone: response.danger_zones.useDangerZone,
+//     AOIs: [
+//       ...mapPurpose(Purpose.AOI, response.area.AOIs),
+//       ...mapPurpose(Purpose.Counting, response.lines.countingLines),
+//       ...mapPurpose(Purpose.DangerZone, response.danger_zones.dangerZones),
+//     ],
+//     location: response.location,
+//     isDemo: response.is_demo,
+//     media_type: response.media_type,
+//     snapshot: response.snapshot,
+//     is_live: response.is_live,
+//     username: response.username,
+//     password: response.password,
+//     tag_list: response.tag_list,
+//     allowed_devices: response.allowed_devices,
+//     status: response.status,
+//     symphony_id: response.symphony_id,
+//   };
+// };
 
-const normalizeCamerasAndAOIsByNormalizr = (data: CameraFromServerWithSerializeArea[]) => {
-  const AOIs = new schema.Entity('AOIs', undefined, {
-    processStrategy: (value, parent) => {
-      return {
-        id: value.id,
-        type: value.type,
-        vertices: value.label,
-        camera: parent.id,
-        purpose: value.purpose,
-      };
-    },
-  });
+// const normalizeCamerasAndAOIsByNormalizr = (data: CameraFromServerWithSerializeArea[]) => {
+//   const AOIs = new schema.Entity('AOIs', undefined, {
+//     processStrategy: (value, parent) => {
+//       return {
+//         id: value.id,
+//         type: value.type,
+//         vertices: value.label,
+//         camera: parent.id,
+//         purpose: value.purpose,
+//       };
+//     },
+//   });
 
-  const cameras = new schema.Entity(
-    'cameras',
-    { AOIs: [AOIs] },
-    {
-      processStrategy: normalizeCameraShape,
-    },
-  );
+//   const cameras = new schema.Entity(
+//     'cameras',
+//     { AOIs: [AOIs] },
+//     {
+//       processStrategy: normalizeCameraShape,
+//     },
+//   );
 
-  return normalize(data, [cameras]);
-};
+//   return normalize(data, [cameras]);
+// };
 
-const getAreaData = (cameraArea: string) => {
-  try {
-    return JSON.parse(cameraArea);
-  } catch (e) {
-    return {
-      useAOI: false,
-      AOIs: [],
-    };
-  }
-};
+// const getAreaData = (cameraArea: string) => {
+//   try {
+//     return JSON.parse(cameraArea);
+//   } catch (e) {
+//     return {
+//       useAOI: false,
+//       AOIs: [],
+//     };
+//   }
+// };
 
-const getLineData = (countingLines: string) => {
-  try {
-    return JSON.parse(countingLines);
-  } catch (e) {
-    return { useCountingLine: false, countingLines: [] };
-  }
-};
+// const getLineData = (countingLines: string) => {
+//   try {
+//     return JSON.parse(countingLines);
+//   } catch (e) {
+//     return { useCountingLine: false, countingLines: [] };
+//   }
+// };
 
-const getDangerZoneData = (dangerZone: string) => {
-  try {
-    return JSON.parse(dangerZone);
-  } catch (e) {
-    return { useDangerZone: false, dangerZones: [] };
-  }
-};
+// const getDangerZoneData = (dangerZone: string) => {
+//   try {
+//     return JSON.parse(dangerZone);
+//   } catch (e) {
+//     return { useDangerZone: false, dangerZones: [] };
+//   }
+// };
 
 const getArrayObject = (tagList: string) => {
   try {
@@ -192,59 +197,85 @@ const getStatus = (value: string) => {
   }
 };
 
-const serializeJSONStr = R.map<CameraFromServer, CameraFromServerWithSerializeArea>((e) => ({
-  ...e,
-  area: getAreaData(e.area),
-  lines: getLineData(e.lines),
-  danger_zones: getDangerZoneData(e.danger_zones),
-  tag_list: getArrayObject(e.tag_list),
-  allowed_devices: getArrayObject(e.allowed_devices),
-  status: getStatus(e.status),
-}));
+// const serializeJSONStr = R.map<CameraFromServer, CameraFromServerWithSerializeArea>((e) => ({
+//   ...e,
+//   area: getAreaData(e.area),
+//   lines: getLineData(e.lines),
+//   danger_zones: getDangerZoneData(e.danger_zones),
+//   tag_list: getArrayObject(e.tag_list),
+//   allowed_devices: getArrayObject(e.allowed_devices),
+//   status: getStatus(e.status),
+// }));
 
-const normalizeCameras = R.compose(normalizeCamerasAndAOIsByNormalizr, serializeJSONStr);
+// const normalizeCameras = R.compose(normalizeCamerasAndAOIsByNormalizr, serializeJSONStr);
+const normalizeFromServer = (res: CameraFromServer, id: number): Camera => {
+  return {
+    id,
+    allowed_devices: getArrayObject(res.allowed_devices),
+    // area: '',
+    // lines: '',
+    location: res.location,
+    password: res.password,
+    rtsp: res.rtsp,
+    // symphony_id: '',
+    tag_list: getArrayObject(res.tag_list),
+    username: res.username,
+    snapshot: res.snapshot,
+    is_live: res.is_live,
+    status: getStatus(res.status),
+    media_type: 'Camera',
+    name: res.name,
+    isDemo: false,
+    symphony_id: res.symphony_id,
+  };
+};
 
 const entityAdapter = createEntityAdapter<Camera>();
 
 export const getCameras = createWrappedAsync<any, boolean, { state: State }>(
   'Cameras/get',
-  async (isDemo) => {
-    const response = await getSliceApiByDemo('cameras', isDemo);
-    return normalizeCameras(response.data);
-  },
-  {
-    condition: (isDemo, { getState }) => getConditionBySlice('camera', getState(), isDemo),
-  },
-);
+  async () => {
+    // const response = await getSliceApiByDemo('cameras', isDemo);
+    const response = await rootRquest.get('/api/cameras/get_symphony_objects');
 
-export const getSingleCamera = createWrappedAsync<any, number, { state: State }>(
-  'Cameras/getSingle',
-  async (id) => {
-    const response = await rootRquest.get(`/api/cameras/${id}/update_status`);
-
-    return normalizeCameras([response.data]);
+    return response.data.map((res, i) => normalizeFromServer(res, i + 1));
   },
   // {
   //   condition: (isDemo, { getState }) => getConditionBySlice('camera', getState(), isDemo),
   // },
 );
 
-export const getCameraDefinition = createWrappedAsync<any, number>('Cameras/getDefinition', async (id) => {
-  const response = await rootRquest.get(`/api/cameras/${id}/get_properties`);
+export const getSingleCamera = createWrappedAsync<any, GetSingleCameraPayload, { state: State }>(
+  'Cameras/getSingle',
+  async ({ id, symphony_id }) => {
+    const response = await rootRquest.get(`/api/cameras/get_symphony_object?symphony_id=${symphony_id}`);
 
-  return response.data;
-});
+    return normalizeFromServer(response.data, id);
+  },
+  // {
+  //   condition: (isDemo, { getState }) => getConditionBySlice('camera', getState(), isDemo),
+  // },
+);
 
-export const postRTSPCamera = createWrappedAsync(
+export const getCameraDefinition = createWrappedAsync<any, string>(
+  'Cameras/getDefinition',
+  async (symphony_id) => {
+    const response = await rootRquest.get(`/api/cameras/get_properties?symphony_id=${symphony_id}`);
+
+    return response.data;
+  },
+);
+
+export const postRTSPCamera = createWrappedAsync<any, CreateCameraPayload, { state: State }>(
   'Cameras/rtsp/post',
-  async (payload: CreateCameraPayload) => {
-    const response = await rootRquest.post(`/api/cameras/`, payload);
+  async (payload, { getState }) => {
+    const maxId = getState().camera.ids.reduce((m, id) => {
+      return max(m, id);
+    }, 0);
 
-    return {
-      ...response.data,
-      tag_list: response.data.tag_list !== '' ? JSON.parse(response.data.tag_list) : [],
-      allowed_devices: response.data.allowed_devices !== '' ? JSON.parse(response.data.allowed_devices) : [],
-    };
+    const response = await rootRquest.post(`/api/cameras/create_symphony_object`, payload);
+
+    return normalizeFromServer(response.data, +maxId + 1);
   },
 );
 
@@ -263,11 +294,17 @@ export const postMediaSourceCamera = createWrappedAsync(
   },
 );
 
-export const updateCamera = createWrappedAsync('Cameras/update', async (payload: UpdateCameraPayload) => {
-  const response = await rootRquest.patch(`/api/cameras/${payload.id}`, payload.body);
+export const updateCamera = createWrappedAsync<any, UpdateCameraPayload, { state: State }>(
+  'Cameras/update',
+  async ({ id, symphony_id, body }) => {
+    const response = await rootRquest.patch(
+      `/api/cameras/update_symphony_object?symphony_id=${symphony_id}`,
+      body,
+    );
 
-  return normalizeCameras([response.data]);
-});
+    return normalizeFromServer(response.data, id);
+  },
+);
 
 export const putMediaSourceCamera = createWrappedAsync('Cameras/mediaSource/put', async (newCamera: any) => {
   // Don't wait response, avoid timeout
@@ -275,17 +312,31 @@ export const putMediaSourceCamera = createWrappedAsync('Cameras/mediaSource/put'
   rootRquest.put(`/api/cameras/${newCamera.id}/`, newCamera);
 });
 
-export const deleteCameras = createWrappedAsync<any, { ids: number[]; resolve?: () => void }>(
+// export const deleteCameras = createWrappedAsync<any, { ids: number[]; resolve?: () => void }>(
+//   'Cameras/delete',
+//   async ({ ids, resolve }) => {
+//     const url = `/api/cameras/bulk-delete?${ids.map((id) => `id=${id}`).join('&')}`;
+
+//     if (resolve) {
+//       resolve();
+//     }
+
+//     await rootRquest.delete(url);
+//     return ids;
+//   },
+// );
+
+export const deleteCameras = createWrappedAsync<any, DeleteCameraPayload>(
   'Cameras/delete',
-  async ({ ids, resolve }) => {
-    const url = `/api/cameras/bulk-delete?${ids.map((id) => `id=${id}`).join('&')}`;
+  async ({ id, symphony_id, resolve }) => {
+    const url = `/api/cameras/delete_symphony_object?symphony_id=${symphony_id}`;
 
     if (resolve) {
       resolve();
     }
 
     await rootRquest.delete(url);
-    return ids;
+    return id;
   },
 );
 
@@ -295,45 +346,46 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getCameras.fulfilled, (state, action) =>
-        entityAdapter.setAll(state, action.payload.entities.cameras || {}),
-      )
+      // .addCase(getCameras.fulfilled, (state, action) =>
+      //   entityAdapter.setAll(state, action.payload.entities.cameras || {}),
+      // )
+      .addCase(getCameras.fulfilled, entityAdapter.setAll)
       .addCase(getSingleCamera.fulfilled, (state, action) => {
-        entityAdapter.upsertOne(state, action.payload.entities.cameras[action.payload.result[0]]);
+        console.log('action', action);
+
+        entityAdapter.upsertOne(state, action.payload);
       })
       .addCase(postRTSPCamera.fulfilled, entityAdapter.addOne)
       .addCase(putRTSPCamera.fulfilled, entityAdapter.upsertOne)
       // .addCase(updateCamera.fulfilled, entityAdapter.upsertOne)
-      .addCase(updateCamera.fulfilled, (state, action) => {
-        // @ts-ignore
-        entityAdapter.upsertOne(state, action.payload.entities.cameras[action.payload.result[0]]);
-      })
-      .addCase(deleteCameras.fulfilled, entityAdapter.removeMany)
-      .addCase(toggleShowAOI.pending, (state, action) => {
-        const { checked, cameraId } = action.meta.arg;
-        state.entities[cameraId].useAOI = checked;
-      })
-      .addCase(toggleShowAOI.rejected, (state, action) => {
-        const { checked, cameraId } = action.meta.arg;
-        state.entities[cameraId].useAOI = !checked;
-      })
-      .addCase(toggleShowCountingLines.pending, (state, action) => {
-        const { checked, cameraId } = action.meta.arg;
-        state.entities[cameraId].useCountingLine = checked;
-      })
-      .addCase(toggleShowCountingLines.rejected, (state, action) => {
-        const { checked, cameraId } = action.meta.arg;
-        state.entities[cameraId].useCountingLine = !checked;
-      })
-      .addCase(toggleShowDangerZones.pending, (state, action) => {
-        const { checked, cameraId } = action.meta.arg;
-        state.entities[cameraId].useDangerZone = checked;
-      })
-      .addCase(toggleShowDangerZones.rejected, (state, action) => {
-        const { checked, cameraId } = action.meta.arg;
-        state.entities[cameraId].useDangerZone = !checked;
-      })
-      .addMatcher(isCRDAction, insertDemoFields);
+      .addCase(updateCamera.fulfilled, entityAdapter.upsertOne)
+      // entityAdapter.upsertOne(state, action.payload.entities.cameras[action.payload.result[0]]);
+      .addCase(deleteCameras.fulfilled, entityAdapter.removeOne);
+    // .addCase(toggleShowAOI.pending, (state, action) => {
+    //   const { checked, cameraId } = action.meta.arg;
+    //   state.entities[cameraId].useAOI = checked;
+    // })
+    // .addCase(toggleShowAOI.rejected, (state, action) => {
+    //   const { checked, cameraId } = action.meta.arg;
+    //   state.entities[cameraId].useAOI = !checked;
+    // })
+    // .addCase(toggleShowCountingLines.pending, (state, action) => {
+    //   const { checked, cameraId } = action.meta.arg;
+    //   state.entities[cameraId].useCountingLine = checked;
+    // })
+    // .addCase(toggleShowCountingLines.rejected, (state, action) => {
+    //   const { checked, cameraId } = action.meta.arg;
+    //   state.entities[cameraId].useCountingLine = !checked;
+    // })
+    // .addCase(toggleShowDangerZones.pending, (state, action) => {
+    //   const { checked, cameraId } = action.meta.arg;
+    //   state.entities[cameraId].useDangerZone = checked;
+    // })
+    // .addCase(toggleShowDangerZones.rejected, (state, action) => {
+    //   const { checked, cameraId } = action.meta.arg;
+    //   state.entities[cameraId].useDangerZone = !checked;
+    // });
+    // .addMatcher(isCRDAction, insertDemoFields);
   },
 });
 
@@ -380,4 +432,9 @@ export const camerasSelectorFactory = (ids) =>
 export const belongDeviceCameraSelectorFactory = (symphonyId: string) =>
   createSelector(selectAllCameras, (cameraList) =>
     cameraList.filter((camera) => camera.allowed_devices.includes(symphonyId)),
+  );
+
+export const selectCameraBySymphonyId = (symphonyId: string) =>
+  createSelector(selectAllCameras, (cameraList) =>
+    cameraList.filter((camera) => camera.symphony_id === symphonyId),
   );

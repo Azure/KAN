@@ -17,27 +17,27 @@ interface Props {
   deivceId: number;
   selectedCameras: string[];
   onPanelClose: () => void;
-  onConfigureAdd: (cameras: string[], cascade: { id: number; name: string }[]) => void;
+  onConfigureAdd: (cameras: string[], cascade: { id: string; name: string }[]) => void;
 }
 
 const ConfigureSidePanel = (props: Props) => {
   const { onPanelClose, selectedCameras, onConfigureAdd, deivceId } = props;
 
-  const [localCascadeList, setLocalCascadeList] = useState<{ id: number; name: string }[]>([]);
+  const [localCascadeList, setLocalCascadeList] = useState<{ id: string; name: string }[]>([]);
 
   const cameraList = useSelector((state: RootState) => selectAllCameras(state));
   const matchedAiSkillList = useSelector(matchDeviceAccelerationSelectorFactory(deivceId));
 
   const cascadeListOptions: IDropdownOption[] = matchedAiSkillList.map((cascade) => ({
-    key: cascade.id,
+    key: cascade.symphony_id,
     text: cascade.name,
   }));
 
   const onSkillChange = useCallback((option: IDropdownOption) => {
     if (option.selected) {
-      setLocalCascadeList((prev) => [...prev, { id: +option.key as number, name: option.text }]);
+      setLocalCascadeList((prev) => [...prev, { id: option.key.toString(), name: option.text }]);
     } else {
-      setLocalCascadeList((prev) => prev.filter((cascade) => cascade.id !== +option.key));
+      setLocalCascadeList((prev) => prev.filter((cascade) => cascade.id !== option.key));
     }
   }, []);
 

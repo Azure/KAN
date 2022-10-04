@@ -30,7 +30,7 @@ const getBasicsError = (form: CreateDeploymentFormData, existingNameList: string
 
   if (isEmpty(form.name)) error.name = ERROR_NAME_BLANK;
   if (existingNameList.includes(form.name)) error.name = ERROR_NAME_BE_USED;
-  if (form.device.key === -1) error.device = ERROR_BLANK_VALUE;
+  if (form.device.key === '') error.device = ERROR_BLANK_VALUE;
   if (form.cameraList.length === 0) error.cameraList = ERROR_BLANK_VALUE;
 
   return error;
@@ -47,7 +47,7 @@ const DeploymentCreation = (props: Props) => {
   const [localFormData, setLocalFormData] = useState<CreateDeploymentFormData>({
     name: '',
     cameraList: [],
-    device: { key: -1, text: '', data: '' },
+    device: { key: '', text: '' },
     tag_list: [{ name: '', value: '', errorMessage: '' }],
     error: {
       name: '',

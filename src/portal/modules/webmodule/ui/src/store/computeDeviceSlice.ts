@@ -65,7 +65,9 @@ export const getSingleComputeDevice = createWrappedAsync<
   GetSingleComputeDeivcePayload,
   { state: RootState }
 >('ComputeDevice/GetSingle', async ({ id, symphony_id }) => {
-  const response = await rootRquest.get(`/api/compute_devices?symphony_id=${symphony_id}`);
+  const response = await rootRquest.get(
+    `/api/compute_devices/get_symphony_object?symphony_id=${symphony_id}`,
+  );
 
   return normalizeComputeDevice(response.data, id);
 });

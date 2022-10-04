@@ -24,7 +24,7 @@ export type ConfigureCamera = {
 
 export type CreateDeploymentFormData = {
   name: string;
-  device: { key: number; text: string; data: string };
+  device: { key: string; text: string };
   cameraList: ConfigureCamera[];
   tag_list: Tag[];
   error: {
@@ -37,7 +37,7 @@ export type CreateDeploymentFormData = {
 
 export type UpdateDeploymentFormData = {
   name: string;
-  device: { key: number; text: string; data: string };
+  device: { key: string; text: string };
   cameraList: ConfigureCamera[];
   tag_list: Tag[];
   error: {

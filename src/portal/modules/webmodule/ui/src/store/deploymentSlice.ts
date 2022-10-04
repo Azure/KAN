@@ -1,5 +1,5 @@
 import { createEntityAdapter, createSlice, createSelector } from '@reduxjs/toolkit';
-import { pick } from 'ramda';
+import { pick, max } from 'ramda';
 
 import { State } from 'RootStateType';
 import rootRquest from './rootRquest';
@@ -51,9 +51,10 @@ const getStatusObject = (status: string) => {
 
 const entityAdapter = createEntityAdapter<Deployment>();
 
-const normalizeDeployment = (deployment: DeploymentForServer): Deployment => {
+const normalizeDeployment = (deployment: DeploymentForServer, id: number): Deployment => {
   return {
     ...deployment,
+    id,
     compute_device: deployment.compute_device,
     tag_list: getArrayObject(deployment.tag_list),
     configure: getArrayObject(deployment.configure),
@@ -65,8 +66,9 @@ const normalizeDeployment = (deployment: DeploymentForServer): Deployment => {
 export const getDeployments = createWrappedAsync<any, undefined, { state: State }>(
   'Deployment/get',
   async () => {
-    const response = await rootRquest.get('/api/deployments/');
-    return response.data.map((result) => normalizeDeployment(result));
+    const response = await rootRquest.get('/api/deployments/get_symphony_objects');
+
+    return response.data.map((result, i) => normalizeDeployment(result, i + 1));
   },
 );
 
@@ -102,18 +104,25 @@ export const getDeploymentVideoRecordings = createWrappedAsync<
 
 export const createDeployment = createWrappedAsync<any, CreateDeploymentPayload, { state: State }>(
   'Deployment/create',
-  async (payload) => {
-    const response = await rootRquest.post('/api/deployments/', payload);
-    return normalizeDeployment(response.data);
+  async (payload, { getState }) => {
+    const maxId = getState().camera.ids.reduce((m, id) => {
+      return max(m, id);
+    }, 0);
+
+    const response = await rootRquest.post('/api/deployments/create_symphony_object', payload);
+    return normalizeDeployment(response.data, +maxId + 1);
   },
 );
 
 export const updateDeployment = createWrappedAsync<any, UpdateDeploymentPayload, { state: State }>(
   'deployment/patch',
-  async ({ body, id }) => {
-    const response = await rootRquest.patch(`/api/deployments/${id}/`, body);
+  async ({ body, id, symphony_id }) => {
+    const response = await rootRquest.patch(
+      `/api/deployments/update_symphony_object?symphony_id=${symphony_id}`,
+      body,
+    );
 
-    return normalizeDeployment(response.data);
+    return normalizeDeployment(response.data, id);
   },
 );
 

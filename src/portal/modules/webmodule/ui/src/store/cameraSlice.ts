@@ -257,11 +257,14 @@ export const getSingleCamera = createWrappedAsync<any, GetSingleCameraPayload, {
   // },
 );
 
-export const getCameraDefinition = createWrappedAsync<any, string>('Cameras/getDefinition', async (symphony_id) => {
-  const response = await rootRquest.get(`/api/cameras/get_properties?symphony_id=${symphony_id}`);
+export const getCameraDefinition = createWrappedAsync<any, string>(
+  'Cameras/getDefinition',
+  async (symphony_id) => {
+    const response = await rootRquest.get(`/api/cameras/get_properties?symphony_id=${symphony_id}`);
 
-  return response.data;
-});
+    return response.data;
+  },
+);
 
 export const postRTSPCamera = createWrappedAsync<any, CreateCameraPayload, { state: State }>(
   'Cameras/rtsp/post',
@@ -429,4 +432,9 @@ export const camerasSelectorFactory = (ids) =>
 export const belongDeviceCameraSelectorFactory = (symphonyId: string) =>
   createSelector(selectAllCameras, (cameraList) =>
     cameraList.filter((camera) => camera.allowed_devices.includes(symphonyId)),
+  );
+
+export const selectCameraBySymphonyId = (symphonyId: string) =>
+  createSelector(selectAllCameras, (cameraList) =>
+    cameraList.filter((camera) => camera.symphony_id === symphonyId),
   );

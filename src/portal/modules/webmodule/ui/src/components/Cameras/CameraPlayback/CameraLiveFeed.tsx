@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { CommandBar, ICommandBarItemProps } from '@fluentui/react';
 import { useHistory, generatePath } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import { Camera, deleteCameras } from '../../../store/cameraSlice';
+import { Camera, deleteCameras, getSingleCamera } from '../../../store/cameraSlice';
 import { Url } from '../../../constant';
 
 import { RTSPVideo } from '../../RTSPVideo';
@@ -22,9 +22,18 @@ const LiveFeed = (props: Props) => {
 
   const [localSelectedCamera, setLocalSelectedCamera] = useState<Camera | null>(null);
   const [deletedCamera, setDeletedCamera] = useState<Camera | null>(null);
+  const [loding, setLoading] = useState(false);
 
   const history = useHistory();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      await dispatch(getSingleCamera({ id: camera.id, symphony_id: camera.symphony_id }));
+      setLoading(false);
+    })();
+  }, [dispatch, camera.id, camera.symphony_id]);
 
   const onSingleCameraDelete = useCallback(async () => {
     await dispatch(deleteCameras({ id: deletedCamera.id, symphony_id: deletedCamera.symphony_id }));
@@ -55,6 +64,8 @@ const LiveFeed = (props: Props) => {
       onClick: () => history.push(generatePath(Url.CAMERAS_EDIT, { step: 'basics', id: camera.id })),
     },
   ];
+
+  if (loding) return <></>;
 
   return (
     <>

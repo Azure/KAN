@@ -244,7 +244,7 @@ export type DeleteAiSkillPayload = {
 // }[];
 export type CreateDeploymentPayload = {
   name: string;
-  compute_device: number;
+  compute_device: string;
   tag_list: string;
   configure: string;
 };
@@ -263,6 +263,7 @@ export type GetDeploymentInsightPayload = {
 
 export type UpdateDeploymentPayload = {
   id: number;
+  symphony_id: string;
   body: {
     tag_list: string;
     configure: string;

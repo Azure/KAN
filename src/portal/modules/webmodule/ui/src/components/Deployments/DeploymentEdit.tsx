@@ -37,7 +37,7 @@ const DeploymentEdit = () => {
   const [localFormData, setLocalFormData] = useState<UpdateDeploymentFormData>({
     name: '',
     cameraList: [],
-    device: { key: -1, text: '', data: '' },
+    device: { key: '', text: '' },
     tag_list: [{ name: '', value: '', errorMessage: '' }],
     error: {
       cameraList: '',
@@ -61,7 +61,7 @@ const DeploymentEdit = () => {
 
     setLocalFormData({
       name: deployment.name,
-      device: { key: matchedDevice.id, text: matchedDevice.name, data: matchedDevice.symphony_id },
+      device: { key: matchedDevice.symphony_id, text: matchedDevice.name },
       cameraList: deployment.configure.map((configureCamera) => {
         return {
           camera: configureCamera.camera,

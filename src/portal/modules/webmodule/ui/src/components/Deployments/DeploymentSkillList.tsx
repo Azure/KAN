@@ -23,7 +23,7 @@ import { selectDeploymentById } from '../../store/deploymentSlice';
 import { selectAllCameras } from '../../store/cameraSlice';
 import { selectAllLocations } from '../../store/locationSlice';
 import { selectAllCascades } from '../../store/cascadeSlice';
-import { selectComputeDeviceById } from '../../store/computeDeviceSlice';
+import { selectDeviceSymphonyIdsFactory } from '../../store/computeDeviceSlice';
 import { wrapperPadding } from './styles';
 import { getFooterClasses } from '../Common/styles';
 import { commonCommandBarItems } from '../utils';
@@ -82,7 +82,7 @@ const DeploymentSkillList = () => {
   const locationList = useSelector((state: RootState) => selectAllLocations(state));
   const cameraList = useSelector((state: RootState) => selectAllCameras(state));
   const skillList = useSelector((state: RootState) => selectAllCascades(state));
-  const device = useSelector((state: RootState) => selectComputeDeviceById(state, deployment.compute_device));
+  const device = useSelector(() => selectDeviceSymphonyIdsFactory(deployment.compute_device));
 
   const [localConfigureCamera, setLocalConfigureCamera] = useState<ConfigureSkill[]>([]);
 

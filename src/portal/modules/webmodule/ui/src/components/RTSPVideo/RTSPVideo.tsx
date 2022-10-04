@@ -9,7 +9,7 @@ import { State as RootState } from 'RootStateType';
 import rootRquest from '../../store/rootRquest';
 import { useInterval } from '../../hooks/useInterval';
 import { handleAxiosError } from '../../utils/handleAxiosError';
-import { selectCameraById } from '../../store/cameraSlice';
+import { selectCameraBySymphonyId } from '../../store/cameraSlice';
 
 type RTSPVideoProps = {
   cameraId: string;
@@ -22,7 +22,7 @@ export const RTSPVideoComponent: React.FC<RTSPVideoProps> = ({
   onStreamCreated,
   partId = null,
 }) => {
-  const camera = useSelector((state: RootState) => selectCameraById(state, cameraId));
+  const camera = useSelector(() => selectCameraBySymphonyId(cameraId));
 
   const [streamId, setStreamId] = useState<string>('');
 

@@ -24,7 +24,7 @@ const Basics = (props: Props) => {
 
   const deviceList = useSelector((state: RootState) => selectAllComputeDevices(state));
   const belongCameraSelector = useMemo(
-    () => belongDeviceCameraSelectorFactory(localFormData.device.data),
+    () => belongDeviceCameraSelectorFactory(localFormData.device.key),
     [localFormData],
   );
   const belongCameraList = useSelector(belongCameraSelector);
@@ -34,9 +34,8 @@ const Basics = (props: Props) => {
   const deviceOptions: IDropdownOption[] = useMemo(
     () =>
       deviceList.map((device) => ({
-        key: device.id,
+        key: device.symphony_id,
         text: device.name,
-        data: device.symphony_id,
       })),
     [deviceList],
   );
@@ -97,7 +96,7 @@ const Basics = (props: Props) => {
             onChange={(_, option) =>
               onFormDataChange({
                 ...localFormData,
-                device: { key: +option.key, text: option.text, data: option.data },
+                device: { key: option.key.toString(), text: option.text },
                 cameraList: [],
                 error: { ...localFormData.error, device: '' },
               })

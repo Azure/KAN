@@ -41,8 +41,6 @@ const Configure = (props: Props) => {
   const [localCameraList, setLocalCameraList] = useState<string[]>([]);
   const [localConfigureCascade, setLocalConfigureCascade] = useState<ConfigureSkill | null>(null);
 
-  console.log('localCameraList', localCameraList);
-
   const selection = useMemo(
     () =>
       new Selection({

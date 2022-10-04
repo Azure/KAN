@@ -69,7 +69,7 @@ const DefinitionPanel = (props: Props) => {
 
       const response = (await dispatch(getRequestMethod(pageType, selectedTargetId))) as any;
 
-      setLocqlPorperty(JSON.stringify(response.payload, undefined, 2));
+      setLocqlPorperty(response.payload);
 
       setIsFetching(false);
     })();
@@ -94,7 +94,18 @@ const DefinitionPanel = (props: Props) => {
       isFooterAtBottom={true}
       onOuterClick={() => null}
     >
-      {isFetching ? <ProgressIndicator /> : <pre>{localProperty}</pre>}
+      {isFetching ? (
+        <ProgressIndicator />
+      ) : (
+        <Stack
+          styles={{
+            root: classes.root,
+          }}
+          tokens={{ childrenGap: 15 }}
+        >
+          {localProperty}
+        </Stack>
+      )}
     </Panel>
   );
 };

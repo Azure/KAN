@@ -15,7 +15,8 @@ import { getFilteredTagList } from '../../Common/TagTab';
 import { Url } from '../../../constant';
 
 interface Props {
-  deploymentId: string;
+  deploymentId: number;
+  symphony_id: string;
   currentStep: PivotTabKey;
   onLinkClick: (key: PivotTabKey) => void;
   localFormData: UpdateDeploymentFormData;
@@ -24,7 +25,15 @@ interface Props {
 }
 
 const EditFooter = (props: Props) => {
-  const { currentStep, onLinkClick, stepList, localFormData, deploymentId, onValidationRedirect } = props;
+  const {
+    currentStep,
+    onLinkClick,
+    stepList,
+    localFormData,
+    deploymentId,
+    onValidationRedirect,
+    symphony_id,
+  } = props;
 
   const classes = getFooterClasses();
   const dispatch = useDispatch();
@@ -32,7 +41,8 @@ const EditFooter = (props: Props) => {
 
   const onUpdateClick = useCallback(async () => {
     const payload: UpdateDeploymentPayload = {
-      id: +deploymentId,
+      id: deploymentId,
+      symphony_id,
       body: {
         configure: JSON.stringify(
           localFormData.cameraList.map((configureCamera) => {
@@ -58,7 +68,7 @@ const EditFooter = (props: Props) => {
 
     await dispatch(updateDeployment(payload));
     history.push(Url.DEPLOYMENT);
-  }, [localFormData, dispatch, history, deploymentId]);
+  }, [localFormData, dispatch, history, deploymentId, symphony_id]);
 
   return (
     <Stack

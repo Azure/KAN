@@ -19,7 +19,7 @@ type DeploymentForServer = {
   configure: string;
   tag_list: string;
   symphony_id: string;
-  compute_device: number;
+  compute_device: string;
   status: string;
   iothub_insights: string;
 };
@@ -156,7 +156,7 @@ export const {
   selectEntities: selectDeploymentEntities,
 } = entityAdapter.getSelectors<State>((state) => state.deployment);
 
-export const selectHasUseAiSkillSelectoryFactory = (skillId: number) =>
+export const selectHasUseAiSkillSelectoryFactory = (skillId: string) =>
   createSelector(selectAllDeployments, (deploymentList) => {
     if (deploymentList.length === 0) return false;
 

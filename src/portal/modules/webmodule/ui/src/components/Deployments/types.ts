@@ -11,7 +11,7 @@ export type FormattedDeployment = Deployment & {
 };
 
 export type ConfigureSkill = {
-  id: number;
+  id: string;
   name: string;
   configured: boolean;
 };

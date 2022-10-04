@@ -22,7 +22,7 @@ export const RTSPVideoComponent: React.FC<RTSPVideoProps> = ({
   onStreamCreated,
   partId = null,
 }) => {
-  const camera = useSelector(() => selectCameraBySymphonyId(cameraId));
+  const camera = useSelector(selectCameraBySymphonyId(cameraId));
 
   const [streamId, setStreamId] = useState<string>('');
 

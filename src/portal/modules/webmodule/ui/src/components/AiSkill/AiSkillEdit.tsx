@@ -80,7 +80,7 @@ const AiSkillEdit = () => {
 
   const skill = useSelector((state: RootState) => selectCascadeById(state, id));
   const modelList = useSelector((state: RootState) => selectAllTrainingProjects(state));
-  const hasAiSkillDeployment = useSelector(selectHasUseAiSkillSelectoryFactory(+id));
+  const hasAiSkillDeployment = useSelector(selectHasUseAiSkillSelectoryFactory(id));
 
   const reactFlowRef = useRef(null);
   const [elements, setElements] = useState<(Node | Edge)[]>([]);

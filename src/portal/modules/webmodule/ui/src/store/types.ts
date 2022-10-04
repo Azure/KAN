@@ -32,7 +32,7 @@ export type AiSkill = {
 };
 
 export type DeploymentConfigureSkill = {
-  id: number;
+  id: string;
   configured: boolean;
 };
 
@@ -56,7 +56,7 @@ export type Deployment = {
   configure: DeploymentConfigureCamera[];
   tag_list: { name: string; value: string }[];
   symphony_id: string;
-  compute_device: number;
+  compute_device: string;
   status: { status_code: string; status_description: string; fps: DeploymentFPS | null };
   iothub_insights: {
     frame_id: string;

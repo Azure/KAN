@@ -14,7 +14,7 @@ import SidePanelDropdown from '../../Common/SidePanel/SidePanelDropdown';
 import TagLabel from '../../Common/TagLabel';
 
 interface Props {
-  deivceId: number;
+  deivceId: string;
   selectedCameras: string[];
   onPanelClose: () => void;
   onConfigureAdd: (cameras: string[], cascade: { id: string; name: string }[]) => void;
@@ -89,7 +89,7 @@ const ConfigureSidePanel = (props: Props) => {
         />
         <Stack horizontal tokens={{ childrenGap: 7 }} styles={{ root: { flexWrap: 'wrap' } }}>
           {localCascadeList.map((cascade, idx) => (
-            <TagLabel key={idx} id={cascade.id} text={cascade.name} onDelete={(id) => null} />
+            <TagLabel key={idx} id={idx} text={cascade.name} onDelete={(id) => null} />
           ))}
         </Stack>
       </Stack>

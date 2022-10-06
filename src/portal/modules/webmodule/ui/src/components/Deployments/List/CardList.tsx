@@ -25,7 +25,7 @@ const ListManagement = (props: Props) => {
   const [selectedDefinition, setSelectedDefinition] = useState<FormattedDeployment | null>(null);
 
   const onSingleDeploymentDelete = useCallback(() => {
-    dispatch(deleteDeployment(deletedDeployment.id));
+    dispatch(deleteDeployment({ id: deletedDeployment.id, symphony_id: deletedDeployment.symphony_id }));
 
     setDeletedDeployment(null);
   }, [dispatch, deletedDeployment]);
@@ -59,7 +59,7 @@ const ListManagement = (props: Props) => {
       {selectedDefinition && (
         <DefinitionPanel
           onPanelClose={() => setSelectedDefinition(null)}
-          selectedTargetId={selectedDefinition.id}
+          selectedTargetId={selectedDefinition.symphony_id}
           onDeleteModalOpen={() => setDeletedDeployment(selectedDefinition)}
           pageType="deployment"
         />

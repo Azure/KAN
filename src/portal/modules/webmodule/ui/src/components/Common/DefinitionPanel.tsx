@@ -2,8 +2,10 @@
 // Licensed under the MIT License.
 
 import React, { useCallback, useState, useEffect } from 'react';
-import { Panel, Stack, DefaultButton, ProgressIndicator } from '@fluentui/react';
+import { Panel, Stack, DefaultButton, ProgressIndicator, PanelType } from '@fluentui/react';
 import { useDispatch } from 'react-redux';
+import Highlight from 'react-highlight';
+import 'highlight.js/styles/stackoverflow-light.css';
 
 import { PageType } from '../constant';
 import { getPropertyClasses } from './styles';
@@ -29,11 +31,11 @@ const getRequestMethod = (pageType: PageType, id: number | string) => {
     case 'model':
       return getCustomVisionProjectDefinition(+id);
     case 'skill':
-      return getAiSkillDefinition(+id);
+      return getAiSkillDefinition(id as string);
     case 'deployment':
-      return getDeploymentDefinition(+id);
+      return getDeploymentDefinition(id as string);
     default:
-      return getDeploymentDefinition(+id);
+      return getDeploymentDefinition(id as string);
   }
 };
 
@@ -93,6 +95,7 @@ const DefinitionPanel = (props: Props) => {
       onRenderFooterContent={onRenderFooterContent}
       isFooterAtBottom={true}
       onOuterClick={() => null}
+      type={PanelType.medium}
     >
       {isFetching ? (
         <ProgressIndicator />
@@ -103,7 +106,7 @@ const DefinitionPanel = (props: Props) => {
           }}
           tokens={{ childrenGap: 15 }}
         >
-          {localProperty}
+          <Highlight language="mk">{localProperty}</Highlight>
         </Stack>
       )}
     </Panel>

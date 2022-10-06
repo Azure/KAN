@@ -36,25 +36,9 @@ const SkillCameraDetail = (props: Props) => {
   return (
     <>
       <Pivot selectedKey={selectedKey} onLinkClick={(item: PivotItem) => setSelectedKey(item.props.itemKey)}>
-        <PivotItem headerText="General" itemKey="general">
-          {/* <GeneralCamera
-            camera={localCamera}
-            status={isEmpty(status[camera.name]) ? 'disconnected' : status[camera.name]}
-            fps={deployment.status.fps[skill.symphony_id]}
-            acceleration={skill.acceleration}
-          /> */}
-        </PivotItem>
-        <PivotItem headerText="Insights" itemKey="insight">
-          {/* <Insights
-            deployment={deployment.id}
-            skill_symphony_id={skill.symphony_id}
-            camera_symphony_id={localCamera.symphony_id}
-            status={deployment.iothub_insights}
-          /> */}
-        </PivotItem>
-        <PivotItem headerText="Video Recordings" itemKey="video">
-          {/* <VidoeRecroding deployment={deployment.id} skillName={skill.name} cameraName={localCamera.name} /> */}
-        </PivotItem>
+        <PivotItem headerText="General" itemKey="general" />
+        <PivotItem headerText="Insights" itemKey="insight" />
+        <PivotItem headerText="Video Recordings" itemKey="video" />
       </Pivot>
       {selectedKey === 'general' && (
         <GeneralCamera
@@ -66,14 +50,18 @@ const SkillCameraDetail = (props: Props) => {
       )}
       {selectedKey === 'insight' && (
         <Insights
-          deployment={deployment.id}
-          skill_symphony_id={skill.symphony_id}
-          camera_symphony_id={localCamera.symphony_id}
+          deploymentSymphonyId={deployment.symphony_id}
+          skillSymphonyId={skill.symphony_id}
+          cameraSymphonyId={localCamera.symphony_id}
           status={deployment.iothub_insights}
         />
       )}
       {selectedKey === 'video' && (
-        <VidoeRecroding deployment={deployment.id} skillName={skill.name} cameraName={localCamera.name} />
+        <VidoeRecroding
+          deploymentName={deployment.name}
+          skillName={skill.name}
+          cameraName={localCamera.name}
+        />
       )}
     </>
   );

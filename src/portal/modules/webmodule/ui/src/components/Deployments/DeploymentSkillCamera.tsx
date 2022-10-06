@@ -22,10 +22,13 @@ import { Url } from '../../constant';
 import { commonCommandBarItems } from '../utils';
 import { selectDeploymentById } from '../../store/deploymentSlice';
 import { selectAllCameras, Camera } from '../../store/cameraSlice';
-import { selectCascadeById } from '../../store/cascadeSlice';
+import { selectAiSkillBySymphonyIdSelectorFactory } from '../../store/cascadeSlice';
 import { wrapperPadding } from './styles';
 import { getFooterClasses } from '../Common/styles';
-import { getSingleComputeDevice, selectComputeDeviceById } from '../../store/computeDeviceSlice';
+import {
+  getSingleComputeDevice,
+  selectDeviceBySymphonyIdSelectorFactory,
+} from '../../store/computeDeviceSlice';
 
 import SkillCameraDetail from './SkillCameraDetail';
 import PageLoading from '../Common/PageLoading';
@@ -38,9 +41,9 @@ const DeploymentSkillCamera = () => {
   const dispatch = useDispatch();
 
   const deployment = useSelector((state: RootState) => selectDeploymentById(state, deploymentId));
-  const skill = useSelector((state: RootState) => selectCascadeById(state, skillId));
   const cameraList = useSelector((state: RootState) => selectAllCameras(state));
-  const device = useSelector((state: RootState) => selectComputeDeviceById(state, deployment.compute_device));
+  const device = useSelector(selectDeviceBySymphonyIdSelectorFactory(deployment.compute_device));
+  const skill = useSelector(selectAiSkillBySymphonyIdSelectorFactory(skillId));
 
   const [selectedCamera, setseLectedCamera] = useState<Camera | null>(null);
   const [filterInput, setFilterInput] = useState('');
@@ -92,7 +95,7 @@ const DeploymentSkillCamera = () => {
 
   const onCameraOptionsChange = useCallback(
     (optoption?: IChoiceGroupOption) => {
-      const matchCamera = cameraList.find((camera) => camera.id === +optoption.key);
+      const matchCamera = cameraList.find((camera) => camera.symphony_id === optoption.key);
 
       setseLectedCamera(matchCamera);
     },

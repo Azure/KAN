@@ -250,15 +250,15 @@ export type CreateDeploymentPayload = {
 };
 
 export type GetDeploymentVideoRecordingsPayload = {
-  deployment: number;
+  deploymentName: string;
   skillName: string;
   cameraName: string;
 };
 
 export type GetDeploymentInsightPayload = {
-  deployment: number;
-  skill_symphony_id: string;
-  camera_symphony_id: string;
+  deploymentSymphonyId: string;
+  skillSymphonyId: string;
+  cameraSymphonyId: string;
 };
 
 export type UpdateDeploymentPayload = {
@@ -268,6 +268,11 @@ export type UpdateDeploymentPayload = {
     tag_list: string;
     configure: string;
   };
+};
+
+export type DeleteDeploymentPayload = {
+  id: number;
+  symphony_id: string;
 };
 
 // Formatted

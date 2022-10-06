@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ComputeDevice } from '../../../store/types';
 import { deleteComputeDevice } from '../../../store/computeDeviceSlice';
-import { selectHasDeviceDeploymentSelectoryFactory } from '../../../store/deploymentSlice';
+import { selectHasDeviceDeploymentSelectorFactory } from '../../../store/deploymentSlice';
 
 import DeviceCard from './DeviceCard';
 import DeviceSidePanel from '../DeviceSidePanel';
@@ -27,7 +27,9 @@ const CardList = (props: Props) => {
   const [localSelectedDevice, setLocalSelectedDevice] = useState<ComputeDevice | null>(null);
   const [deletedDeivce, setDeletedDeivce] = useState<ComputeDevice | null>(null);
   const [selectedDefinition, setSelectedDefinition] = useState<ComputeDevice | null>(null);
-  const hasDeviceDeploy = useSelector(selectHasDeviceDeploymentSelectoryFactory(deletedDeivce?.id ?? 0));
+  const hasDeviceDeploy = useSelector(
+    selectHasDeviceDeploymentSelectorFactory(deletedDeivce?.symphony_id ?? ''),
+  );
 
   // const onDeviceDelete = useCallback(async () => {
   //   await dispatch(deleteComputeDevice({ ids: [localSelectedDevice.id] }));

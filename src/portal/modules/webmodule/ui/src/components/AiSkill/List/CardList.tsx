@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { AiSkill } from '../../../store/types';
 import { deleteAiSkill } from '../../../store/cascadeSlice';
-import { selectHasUseAiSkillSelectoryFactory } from '../../../store/deploymentSlice';
+import { selectHasUseAiSkillSelectorFactory } from '../../../store/deploymentSlice';
 
 import Card from './Card';
 import DeleteModal from '../../Common/DeleteModal';
@@ -25,7 +25,7 @@ const List = (props: Props) => {
   const [deletedSkill, setDeletedSkill] = useState<AiSkill | null>(null);
   const [selectedDefinition, setSelectedDefinition] = useState<AiSkill | null>(null);
   const hasAiSkillDeployment = useSelector(
-    selectHasUseAiSkillSelectoryFactory(deletedSkill?.symphony_id ?? ''),
+    selectHasUseAiSkillSelectorFactory(deletedSkill?.symphony_id ?? ''),
   );
 
   const onSingleCascadeDelete = useCallback(async () => {
@@ -62,7 +62,7 @@ const List = (props: Props) => {
       {selectedDefinition && (
         <DefinitionPanel
           onPanelClose={() => setSelectedDefinition(null)}
-          selectedTargetId={selectedDefinition.id}
+          selectedTargetId={selectedDefinition.symphony_id}
           pageType="skill"
           onDeleteModalOpen={() => setDeletedSkill(selectedDefinition)}
         />

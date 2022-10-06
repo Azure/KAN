@@ -10,13 +10,13 @@ import { VideoRecroding } from '../../../store/types';
 import { theme } from '../../../constant';
 
 interface Props {
-  deployment: number;
+  deploymentName: string;
   skillName: string;
   cameraName: string;
 }
 
 const VidoeRecroding = (props: Props) => {
-  const { deployment, skillName, cameraName } = props;
+  const { deploymentName, skillName, cameraName } = props;
 
   const dispatch = useDispatch();
 
@@ -28,12 +28,12 @@ const VidoeRecroding = (props: Props) => {
 
     (async () => {
       const respose: any = await dispatch(
-        getDeploymentVideoRecordings({ deployment, skillName, cameraName }),
+        getDeploymentVideoRecordings({ deploymentName, skillName, cameraName }),
       );
 
       setLocalVideoRecording(respose.payload);
     })();
-  }, [dispatch, deployment, skillName, cameraName, localVideoRecording]);
+  }, [dispatch, deploymentName, skillName, cameraName, localVideoRecording]);
 
   const columns: IColumn[] = [
     {

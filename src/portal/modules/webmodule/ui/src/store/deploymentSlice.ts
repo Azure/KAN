@@ -11,6 +11,7 @@ import {
   GetDeploymentVideoRecordingsPayload,
   DeploymentFPS,
   GetDeploymentInsightPayload,
+  DeleteDeploymentPayload,
 } from './types';
 
 type DeploymentForServer = {
@@ -74,18 +75,18 @@ export const getDeployments = createWrappedAsync<any, undefined, { state: State 
 
 export const getDeploymentInsight = createWrappedAsync<any, GetDeploymentInsightPayload, { state: State }>(
   'Deployment/getDeploymentInsight',
-  async ({ deployment, skill_symphony_id, camera_symphony_id }) => {
+  async ({ deploymentSymphonyId, skillSymphonyId, cameraSymphonyId }) => {
     const response = await rootRquest.get(
-      `/api/deployments/${deployment}/list_deployment_insights?skill_symphony_id=${skill_symphony_id}&device_symphony_id=${camera_symphony_id}`,
+      `/api/deployments/list_deployment_insights?instance_symphony_id=${deploymentSymphonyId}&skill_symphony_id=${skillSymphonyId}&device_symphony_id=${cameraSymphonyId}`,
     );
     return response.data;
   },
 );
 
-export const getDeploymentDefinition = createWrappedAsync<any, number>(
+export const getDeploymentDefinition = createWrappedAsync<any, string>(
   'Deployment/getDeploymentDefinition',
-  async (id) => {
-    const response = await rootRquest.get(`/api/deployments/${id}/get_properties`);
+  async (symphony_id) => {
+    const response = await rootRquest.get(`/api/deployments/get_properties?symphony_id=${symphony_id}`);
 
     return response.data;
   },
@@ -95,10 +96,11 @@ export const getDeploymentVideoRecordings = createWrappedAsync<
   any,
   GetDeploymentVideoRecordingsPayload,
   { state: State }
->('Deployment/getCameraVideoRecording', async ({ deployment, skillName, cameraName }) => {
+>('Deployment/getCameraVideoRecording', async ({ deploymentName, skillName, cameraName }) => {
   const response = await rootRquest.get(
-    `/api/deployments/${deployment}/list_deployment_videos?skill_displayname=${skillName}&device_displayname=${cameraName}`,
+    `/api/deployments/list_deployment_videos?instance_displayname=${deploymentName}&skill_displayname=${skillName}&device_displayname=${cameraName}`,
   );
+
   return response.data;
 });
 
@@ -126,10 +128,11 @@ export const updateDeployment = createWrappedAsync<any, UpdateDeploymentPayload,
   },
 );
 
-export const deleteDeployment = createWrappedAsync<any, number, { state: State }>(
+export const deleteDeployment = createWrappedAsync<any, DeleteDeploymentPayload, { state: State }>(
   'deployment/delete',
-  async (id) => {
-    await rootRquest.delete(`/api/deployments/${id}/`);
+  async ({ id, symphony_id }) => {
+    await rootRquest.delete(`/api/deployments/delete_symphony_object?symphony_id=${symphony_id}`);
+
     return id;
   },
 );
@@ -156,36 +159,36 @@ export const {
   selectEntities: selectDeploymentEntities,
 } = entityAdapter.getSelectors<State>((state) => state.deployment);
 
-export const selectHasUseAiSkillSelectoryFactory = (skillId: string) =>
+export const selectHasUseAiSkillSelectorFactory = (skillSymphonyId: string) =>
   createSelector(selectAllDeployments, (deploymentList) => {
     if (deploymentList.length === 0) return false;
 
     const result = deploymentList
       .map((deployment) => deployment.configure.map((configure) => configure.skills.map((skill) => skill.id)))
       .flat(2)
-      .some((skill) => skill === skillId);
+      .some((skill) => skill === skillSymphonyId);
 
     return result;
   });
 
-export const selectHasCameraDeploymentSelectoryFactory = (cameraId: number) =>
+export const selectHasCameraDeploymentSelectorFactory = (cameraSymphonId: string) =>
   createSelector(selectAllDeployments, (deploymentList) => {
     if (deploymentList.length === 0) return false;
 
     const result = deploymentList
       .reduce((acc, deployment) => [...acc, ...deployment.configure.map((configure) => configure.camera)], [])
-      .some((camera) => camera === cameraId);
+      .some((camera) => camera === cameraSymphonId);
 
     return result;
   });
 
-export const selectHasDeviceDeploymentSelectoryFactory = (deviceId: number) =>
+export const selectHasDeviceDeploymentSelectorFactory = (deviceSymphonyId: string) =>
   createSelector(selectAllDeployments, (deploymentList) => {
     if (deploymentList.length === 0) return false;
 
     const result = deploymentList
       .reduce((acc, deployment) => [...acc, deployment.compute_device], [])
-      .some((device) => device === deviceId);
+      .some((device) => device === deviceSymphonyId);
 
     return result;
   });

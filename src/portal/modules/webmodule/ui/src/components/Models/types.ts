@@ -4,7 +4,7 @@ import { TrainStatus } from '../../constant';
 
 export type ModelType = 'custom' | 'own' | 'ovms';
 export type PivotTabKey = 'basics' | 'preview' | 'tag' | 'configure';
-export type CreateType = '' | 'yes' | 'no' | 'own';
+export type CreateType = '' | 'yes' | 'no';
 
 export type CreateModelFormData = {
   createType: CreateType;
@@ -13,10 +13,6 @@ export type CreateModelFormData = {
   type: '' | ProjectType;
   classification: ClassificationType;
   objects: string[];
-  modelFormat: string;
-  modelFile: string;
-  labelFile: string;
-  description: string;
   tag_list: Tag[];
   error: {
     name: string;
@@ -25,10 +21,6 @@ export type CreateModelFormData = {
     type: string;
     classification: string;
     objects: string;
-    modelFormat: string;
-    modelFile: string;
-    labelFile: string;
-    description: string;
   };
 };
 

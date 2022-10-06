@@ -28,14 +28,6 @@ export const accelerationOptions: IDropdownOption[] = [
   { key: iGPU, text: iGPU },
 ];
 
-export const x64AccelerationOptions = accelerationOptions.filter((option) =>
-  ['-', 'Nvidia dGPU', 'CPU', 'Intel iGPU'].includes(option.key as string),
-);
-
-export const arm64AccelerationOptions = accelerationOptions.filter((option) =>
-  ['-', 'Nvidia Jetson (Jetpack 5)'].includes(option.key as string),
-);
-
 export const FEEDBACK_URL = 'https://go.microsoft.com/fwlink/?linkid=2205447';
 export const TROUBLE_SHOOTING_URL = 'https://go.microsoft.com/fwlink/?linkid=2205255';
 

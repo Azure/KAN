@@ -1,6 +1,7 @@
 import { IChoiceGroupOption } from '@fluentui/react';
 
 import { ComputeDevice } from '../../store/types';
+import { accelerationOptions } from '../constant';
 import { Tag } from '../Common/TagTab';
 
 export type PivotTabKey = 'basics' | 'preview' | 'tag';
@@ -39,9 +40,28 @@ export const cpuArchitectureOptions: IChoiceGroupOption[] = [
   },
 ];
 
+export const k8sCpuArchitectureOptions: IChoiceGroupOption[] = [
+  {
+    key: 'X64',
+    text: 'X64',
+  },
+];
+
 export const clusterOptions: IChoiceGroupOption[] = [
   {
     key: 'current',
     text: 'Current cluster',
   },
 ];
+
+export const x64AccelerationOptions = accelerationOptions.filter((option) =>
+  ['-', 'Nvidia dGPU', 'CPU', 'Intel iGPU'].includes(option.key as string),
+);
+
+export const k8sAccelerationOptions = accelerationOptions.filter((option) =>
+  ['-', 'Nvidia dGPU', 'CPU'].includes(option.key as string),
+);
+
+export const arm64AccelerationOptions = accelerationOptions.filter((option) =>
+  ['-', 'Nvidia Jetson (Jetpack 5)'].includes(option.key as string),
+);

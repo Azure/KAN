@@ -160,7 +160,8 @@ class SymphonyInstanceClient(SymphonyClient):
             "symphony_id": symphony_id,
             "configure": json.dumps(configure),
             "compute_device": target_symphony_id,
-            "status": processed_status
+            "status": processed_status,
+            "tag_list": tag_list
         }
 
     def process_status(self, status):

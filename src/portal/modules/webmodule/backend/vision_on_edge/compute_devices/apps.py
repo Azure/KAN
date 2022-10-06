@@ -39,7 +39,7 @@ class ComputeDeviceConfig(AppConfig):
             else:
                 logger.warning("Cannot login azure, missing service principal")
 
-            target_client = SymphonyTargetClient()
-            target_client.load_symphony_objects()
+            # target_client = SymphonyTargetClient()
+            # target_client.load_symphony_objects()
 
             logger.info("App ready end while running server")

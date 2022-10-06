@@ -248,9 +248,8 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
 
         if symphony_id:
             logger.warning(f"Retrieving instance [{symphony_id}] config.")
-            instance = instance_client.get_object(symphony_id)
 
-            return Response(target)
+            return Response(instance_client.get_object(symphony_id))
         else:
             raise ValidationError("Not providing symphony_id")
 
@@ -332,7 +331,6 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
         skill_params["configure_data"] = json.dumps(configure_data)
 
         # update solution to the target
-        target_obj = target_client.get_object(request.data.get("compute_device"))
         solution_client.set_attr(
             {
                 "name": target_obj["solution_id"],
@@ -378,7 +376,7 @@ def process_configure(configure, displayname):
     module_routes = []
     for cam in configure:
         device_obj = device_client.get_object(cam['camera'])
-        configure_data[device_obj["name"]] = []
+        configure_data[device_obj["symphony_id"]] = []
         for skill in cam['skills']:
             skill_obj = skill_client.get_object(skill['id'])
             skill_alias = str(uuid.uuid4())[-4:]
@@ -390,7 +388,7 @@ def process_configure(configure, displayname):
             skill_params[f"skill-{skill_alias}.instance_displayname"] = displayname
             skill_params[f"skill-{skill_alias}.device_displayname"] = device_obj["name"]
             skill_params[f"skill-{skill_alias}.skill_displayname"] = skill_obj["name"]
-            configure_data[device_obj["name"]].append(skill_obj["name"])
+            configure_data[device_obj["symphony_id"]].append(skill_obj["symphony_id"])
 
             # check whether there is iotedge_export node and set route
             spec = skill_obj["flow"]

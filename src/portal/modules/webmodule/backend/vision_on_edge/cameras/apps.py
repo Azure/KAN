@@ -31,7 +31,7 @@ class CamerasConfig(AppConfig):
             if get_create_demo():
                 create_demo_objects()
 
-            device_client = SymphonyDeviceClient()
-            device_client.load_symphony_objects()
+            # device_client = SymphonyDeviceClient()
+            # device_client.load_symphony_objects()
 
             logger.info("App ready end while running server")

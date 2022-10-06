@@ -131,10 +131,11 @@ const DeploymentSkillCamera = () => {
             {!!selectedCamera && (
               <SkillCameraDetail
                 camera={selectedCamera}
+                deviceId={device.id}
+                deviceSymphonyId={device.symphony_id}
                 deployment={deployment}
                 skill={skill}
                 tabKey="general"
-                status={device.status}
               />
             )}
           </Stack>

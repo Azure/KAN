@@ -33,7 +33,7 @@ export type Params = { confidence_threshold: string; filter_label_id: string };
 export type NodeType = 'source' | 'openvino_model' | 'openvino_library' | 'sink' | 'customvision_model';
 // type TrainingProjectCategory = 'customvision' | 'openvino';
 export type MetadataType = 'image' | 'bounding_box' | 'classification' | 'regression';
-export type ProjectType = 'ObjectDetection' | 'Classification';
+export type ProjectType = 'ObjectDetection' | 'Classification' | 'Segmentation';
 export type ClassificationType = '' | 'Multiclass' | 'Multilabel';
 
 export type Metadata = {
@@ -43,36 +43,6 @@ export type Metadata = {
   color_format: string;
   labels?: string[];
 };
-
-// export type TrainingProject = {
-//   id: number;
-//   name: string;
-//   customVisionId: string;
-//   isDemo: boolean;
-//   isPredicationModel: boolean;
-//   predictionUri: string;
-//   predictionHeader: string;
-//   category: ModelCategory;
-//   projectType: ProjectType;
-//   isCascade: boolean;
-//   inputs: ModelHandler[];
-//   outputs: ModelHandler[];
-//   nodeType: ModelNodeType;
-//   // demultiply_count: number;
-//   // params: Params | string;
-//   combined: string;
-//   openvino_library_name: string;
-//   openvino_model_name: string;
-//   download_uri_openvino: string;
-//   classification_type: ClassificationType;
-//   is_trained: boolean;
-//   symphony_id: string;
-//   tag_list: { name: string; value: string }[];
-//   accelerationList: Acceleration[];
-//   displayName: string;
-//   displayType: string;
-//   trainStatus: string;
-// };
 
 export type CreatOwnModelPayload = {
   is_prediction_module: boolean;

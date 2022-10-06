@@ -69,7 +69,7 @@ export const CameraDetails: React.FC = () => {
           // eslint-disable-next-line no-restricted-globals
           if (!confirm('Sure you want to delete?')) return;
 
-          await dispatch(deleteCameras({ ids: [cameraId] }));
+          await dispatch(deleteCameras({ id: cameraId, symphony_id: 'testing' }));
           history.push('/cameras');
         })();
       },
@@ -126,7 +126,7 @@ export const CameraDetails: React.FC = () => {
         initialValue={{
           name: { value: camera.name, errMsg: '' },
           url: { value: camera.rtsp, errMsg: '' },
-          location: { value: camera.location, errMsg: '' },
+          location: { value: +camera.location, errMsg: '' },
         }}
         cameraId={cameraId}
       />

@@ -11,23 +11,20 @@ export type FormattedDeployment = Deployment & {
 };
 
 export type ConfigureSkill = {
-  id: number;
+  id: string;
   name: string;
-  // threshold: number;
-  // storageLocation: number;
-  // xyz: number;
   configured: boolean;
 };
 
 export type ConfigureCamera = {
-  camera: number;
+  camera: string;
   name: string;
   skillList: ConfigureSkill[];
 };
 
 export type CreateDeploymentFormData = {
   name: string;
-  device: { key: number; text: string; data: string };
+  device: { key: string; text: string };
   cameraList: ConfigureCamera[];
   tag_list: Tag[];
   error: {
@@ -40,7 +37,7 @@ export type CreateDeploymentFormData = {
 
 export type UpdateDeploymentFormData = {
   name: string;
-  device: { key: number; text: string; data: string };
+  device: { key: string; text: string };
   cameraList: ConfigureCamera[];
   tag_list: Tag[];
   error: {

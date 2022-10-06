@@ -3,11 +3,8 @@
 
 import React from 'react';
 import { Stack } from '@fluentui/react';
-import { useSelector } from 'react-redux';
 
-import { State as RootState } from 'RootStateType';
 import { CreateCameraFormData, PivotTabKey, UpdateCameraFormData } from '../types';
-import { selectAllLocations } from '../../../store/locationSlice';
 
 import PreviewTag from '../../Common/PreviewTag';
 import PreviewLabel from '../../Common/PreviewLabel';
@@ -20,8 +17,6 @@ interface Props {
 
 const Preview = (props: Props) => {
   const { localFormData, onLinkClick } = props;
-
-  const locationList = useSelector((state: RootState) => selectAllLocations(state));
 
   return (
     <Stack styles={{ root: { paddingTop: '40px' } }} tokens={{ childrenGap: 15 }}>
@@ -40,14 +35,7 @@ const Preview = (props: Props) => {
       ) : (
         <PreviewLabel title="URL" content={localFormData.media_source} />
       )}
-      <PreviewLabel
-        title="Location"
-        content={
-          locationList.find((location) => location.id === localFormData.location)
-            ? locationList.find((location) => location.id === localFormData.location).name
-            : ''
-        }
-      />
+      <PreviewLabel title="Location" content={localFormData.location} />
       <PreviewTag tagList={localFormData.tag_list} />
       <PreviewLink title="Edit Camera" onClick={() => onLinkClick('basics')} />
     </Stack>

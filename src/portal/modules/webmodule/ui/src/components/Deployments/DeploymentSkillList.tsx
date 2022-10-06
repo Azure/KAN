@@ -23,7 +23,7 @@ import { selectDeploymentById } from '../../store/deploymentSlice';
 import { selectAllCameras } from '../../store/cameraSlice';
 import { selectAllLocations } from '../../store/locationSlice';
 import { selectAllCascades } from '../../store/cascadeSlice';
-import { selectComputeDeviceById } from '../../store/computeDeviceSlice';
+import { selectDeviceBySymphonyIdSelectorFactory } from '../../store/computeDeviceSlice';
 import { wrapperPadding } from './styles';
 import { getFooterClasses } from '../Common/styles';
 import { commonCommandBarItems } from '../utils';
@@ -33,7 +33,7 @@ import { AiSkill, DeploymentConfigureCamera, DeploymentFPS } from '../../store/t
 import SidePanelLabel from '../Common/SidePanel/SidePanelLabel';
 
 type ConfigureSkill = {
-  skill: number;
+  skill: string;
   skillName: string;
   skillFPS: number;
   formatedCameraList: {
@@ -56,7 +56,7 @@ const getClasses = () =>
 const getUsedSkillList = (skillList: AiSkill[], configureCameraList: DeploymentConfigureCamera[]) => {
   const usedSkillIDs = configureCameraList.map((c) => c.skills.map((s) => s.id)).flat(1);
 
-  return skillList.filter((skill) => usedSkillIDs.includes(skill.id));
+  return skillList.filter((skill) => usedSkillIDs.includes(skill.symphony_id));
 };
 
 const getDisplayFPS = (
@@ -72,6 +72,8 @@ const getDisplayFPS = (
     if (matchSkill) return [...acc, { name: matchSkill.name, fps }];
   }, []);
 
+  console.log('result', result);
+
   return result;
 };
 
@@ -82,9 +84,11 @@ const DeploymentSkillList = () => {
   const locationList = useSelector((state: RootState) => selectAllLocations(state));
   const cameraList = useSelector((state: RootState) => selectAllCameras(state));
   const skillList = useSelector((state: RootState) => selectAllCascades(state));
-  const device = useSelector((state: RootState) => selectComputeDeviceById(state, deployment.compute_device));
+  const device = useSelector(selectDeviceBySymphonyIdSelectorFactory(deployment.compute_device));
 
   const [localConfigureCamera, setLocalConfigureCamera] = useState<ConfigureSkill[]>([]);
+
+  console.log('localConfigureCamera', localConfigureCamera);
 
   const footerClasses = getFooterClasses();
   const history = useHistory();
@@ -94,10 +98,13 @@ const DeploymentSkillList = () => {
     if (!deployment || !cameraList.length || !skillList.length || !locationList.length) return;
 
     const cameraLocationNameMap = cameraList.reduce((accMap, camera) => {
-      const matchLocation = locationList.find((location) => location.id === camera.location);
+      const matchLocation = locationList.find((location) => location.name === camera.location);
 
-      if (!accMap[camera.id])
-        return { ...accMap, [camera.id]: { cameraName: camera.name, locationName: matchLocation.name } };
+      if (!accMap[camera.symphony_id])
+        return {
+          ...accMap,
+          [camera.symphony_id]: { cameraName: camera.name, locationName: matchLocation.name },
+        };
       return accMap;
     }, {});
 
@@ -115,12 +122,14 @@ const DeploymentSkillList = () => {
       return newAccMap;
     }, {});
 
-    const configureSkill = Object.keys(deploySkillMap).map((id) => {
+    const configureSkill = Object.keys(deploySkillMap).map((symId) => {
+      const matchSkill = skillList.find((skill) => skill.symphony_id === symId);
+
       return {
-        skill: +id,
-        skillName: skillList.find((skill) => skill.id === +id).name,
-        skillFPS: skillList.find((skill) => skill.id === +id).fps,
-        formatedCameraList: deploySkillMap[id],
+        skill: symId,
+        skillName: matchSkill.name,
+        skillFPS: matchSkill.fps,
+        formatedCameraList: deploySkillMap[symId],
       };
     });
 

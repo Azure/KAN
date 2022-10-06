@@ -12,13 +12,18 @@ logger = logging.getLogger(__name__)
 
 class SymphonyInstanceClient(SymphonyClient):
 
+    def __init__(self):
+        super().__init__()
+        self.group = "solution.symphony"
+        self.plural = "instances"
+
     def get_config(self):
 
         name = self.args.get("name", "")
         params = self.args.get("params", {})
         solution = self.args.get("solution", "")
         target = self.args.get("target", "")
-        tag_list = self.args.get("tag_list", "")
+        tag_list = self.args.get("tag_list", "[]")
         display_name = self.args.get("display_name", "")
 
         labels = {}
@@ -48,7 +53,7 @@ class SymphonyInstanceClient(SymphonyClient):
     def get_patch_config(self):
 
         params = self.args.get("params", {})
-        tag_list = self.args.get("tag_list", "")
+        tag_list = self.args.get("tag_list", "[]")
 
         labels = {}
         if tag_list:
@@ -60,22 +65,6 @@ class SymphonyInstanceClient(SymphonyClient):
             {'op': 'replace', 'path': '/spec/parameters', 'value': params}
         ]
         return patch_config
-
-    def get_config_from_symphony(self, name):
-
-        api = self.get_client()
-
-        if api:
-            instance = api.get_namespaced_custom_object(
-                group="solution.symphony",
-                version="v1",
-                namespace="default",
-                plural="instances",
-                name=name
-            )
-            return instance
-        else:
-            return ""
 
     def load_symphony_objects(self):
         from .models import Deployment
@@ -131,6 +120,52 @@ class SymphonyInstanceClient(SymphonyClient):
                             "created" if created else "updated")
         else:
             logger.warning("Not loading symphony skills")
+
+    def process_data(self, instance, multi):
+
+        name = instance['spec']['displayName']
+        symphony_id = instance['metadata']['name']
+        configure_data = json.loads(instance['spec']['parameters']['configure_data'])
+        target_symphony_id = instance['spec']['target']['name']
+
+        labels = instance['metadata'].get('labels')
+        if labels:
+            tags = [{"name": k, "value": v} for k, v in labels.items()]
+        else:
+            tags = []
+        tag_list = json.dumps(tags)
+
+        configure = []
+        for cam in configure_data.keys():
+            cam_data = {
+                "camera": cam,
+                "skills": []
+            }
+            for skill in configure_data[cam]:
+                cam_data["skills"].append({
+                    "id": skill,
+                    "configured": "true"
+                })
+            configure.append(cam_data)
+
+        # status
+        status = instance.get("status", "")
+        if status:
+            processed_status = self.process_status(status['properties'])
+        else:
+            processed_status = ""
+
+        return {
+            "name": name,
+            "symphony_id": symphony_id,
+            "configure": json.dumps(configure),
+            "compute_device": target_symphony_id,
+            "status": processed_status,
+            "tag_list": tag_list
+        }
+
+    def process_status(self, status):
+        return json.dumps(status)
 
     def get_status(self, name):
 

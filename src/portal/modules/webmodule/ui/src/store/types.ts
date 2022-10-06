@@ -23,8 +23,7 @@ export type ComputeDevice = {
 export type AiSkill = {
   id: number;
   name: string;
-  flow: string;
-  raw_data: string;
+  flow: any;
   screenshot: string;
   tag_list: { name: string; value: string }[];
   symphony_id: string;
@@ -33,12 +32,12 @@ export type AiSkill = {
 };
 
 export type DeploymentConfigureSkill = {
-  id: number;
+  id: string;
   configured: boolean;
 };
 
 export type DeploymentConfigureCamera = {
-  camera: number;
+  camera: string;
   skills: DeploymentConfigureSkill[];
 };
 
@@ -57,7 +56,7 @@ export type Deployment = {
   configure: DeploymentConfigureCamera[];
   tag_list: { name: string; value: string }[];
   symphony_id: string;
-  compute_device: number;
+  compute_device: string;
   status: { status_code: string; status_description: string; fps: DeploymentFPS | null };
   iothub_insights: {
     frame_id: string;
@@ -108,8 +107,6 @@ export type TrainingProject = {
   inputs: ModelHandler[];
   outputs: ModelHandler[];
   nodeType: ModelNodeType;
-  // demultiply_count: number;
-  // params: Params | string;
   combined: string;
   openvino_library_name: string;
   openvino_model_name: string;
@@ -125,28 +122,11 @@ export type TrainingProject = {
 };
 
 // Payload Types
-export type CreateCameraPayload = {
-  location: number;
-  name: string;
-  rtsp?: string;
-  media_source?: string;
-  media_type: string;
-  tag_list: string;
-  username?: string;
-  password?: string;
-  allowed_devices?: string;
-};
+// Device
 
-export type CreateLocationPayload = { name: string };
-
-export type UpdateCameraPayload = {
+export type GetSingleComputeDeivcePayload = {
   id: number;
-  body: {
-    location: number;
-    tag_list: string;
-    username?: string;
-    password?: string;
-  };
+  symphony_id: string;
 };
 
 export type CreateComputeDevicePayload = {
@@ -162,6 +142,7 @@ export type CreateComputeDevicePayload = {
 
 export type UpdateComputeDevicePayload = {
   id: number;
+  symphony_id: string;
   body: {
     architecture: string;
     acceleration: string;
@@ -171,41 +152,51 @@ export type UpdateComputeDevicePayload = {
   };
 };
 
-// configure: {
-//   camera: number;
-//   skills: {
-//     id: number;
-//     configured: boolean;
-//   }[];
-// }[];
-
-export type GetDeploymentVideoRecordingsPayload = {
-  deployment: number;
-  skillName: string;
-  cameraName: string;
-};
-
-export type GetDeploymentInsightPayload = {
-  deployment: number;
-  skill_symphony_id: string;
-  camera_symphony_id: string;
-};
-
-export type CreateDeploymentPayload = {
-  name: string;
-  compute_device: number;
-  tag_list: string;
-  configure: string;
-};
-
-export type UpdateDeploymentPayload = {
+export type DeleteComputeDevicePayload = {
   id: number;
+  symphony_id: string;
+  resolve?: () => void;
+};
+
+// Camera
+export type GetSingleCameraPayload = {
+  id: number;
+  symphony_id: string;
+};
+
+export type CreateCameraPayload = {
+  location: string;
+  name: string;
+  rtsp?: string;
+  media_source?: string;
+  media_type: string;
+  tag_list: string;
+  username?: string;
+  password?: string;
+  allowed_devices?: string;
+};
+
+export type UpdateCameraPayload = {
+  id: number;
+  symphony_id: string;
   body: {
+    location: number | string;
     tag_list: string;
-    configure: string;
+    username?: string;
+    password?: string;
   };
 };
 
+export type DeleteCameraPayload = {
+  id: number;
+  symphony_id: string;
+  resolve?: () => void;
+};
+
+// Location
+export type CreateLocationPayload = { name: string };
+
+// Model
 export type CreateCustomVisionModelPayload = {
   name: string;
   tags: string[];
@@ -217,10 +208,10 @@ export type AddExistingCustomVisionModelPayload = {
   customVisionId: string;
 };
 
+// Ai Skill
 export type CreateAiSkillPayload = {
   name: string;
   flow: string;
-  raw_data: string;
   screenshot: string;
   tag_list: string;
   fps: string;
@@ -229,12 +220,59 @@ export type CreateAiSkillPayload = {
 
 export type UpdateAiSkillPayload = {
   id: number;
+  symphony_id: string;
   body: {
     flow: string;
-    raw_data: string;
     screenshot: string;
     tag_list: string;
   };
+};
+
+export type DeleteAiSkillPayload = {
+  id: number;
+  symphony_id: string;
+};
+
+// Deployment
+
+// configure: {
+//   camera: symphony_id: string;
+//   skills: {
+//     id: symphony_id: string;;
+//     configured: boolean;
+//   }[];
+// }[];
+export type CreateDeploymentPayload = {
+  name: string;
+  compute_device: string;
+  tag_list: string;
+  configure: string;
+};
+
+export type GetDeploymentVideoRecordingsPayload = {
+  deploymentName: string;
+  skillName: string;
+  cameraName: string;
+};
+
+export type GetDeploymentInsightPayload = {
+  deploymentSymphonyId: string;
+  skillSymphonyId: string;
+  cameraSymphonyId: string;
+};
+
+export type UpdateDeploymentPayload = {
+  id: number;
+  symphony_id: string;
+  body: {
+    tag_list: string;
+    configure: string;
+  };
+};
+
+export type DeleteDeploymentPayload = {
+  id: number;
+  symphony_id: string;
 };
 
 // Formatted

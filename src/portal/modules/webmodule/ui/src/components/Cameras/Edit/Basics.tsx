@@ -31,7 +31,7 @@ const Basics = (props: Props) => {
   const locationOptions: IDropdownOption[] = useMemo(
     () =>
       locationList.map((l) => ({
-        key: l.id,
+        key: l.name,
         text: l.name,
       })),
     [locationList],
@@ -41,7 +41,7 @@ const Basics = (props: Props) => {
     async (name: string) => {
       const res = (await dispatch(postLocation({ name }))) as any;
 
-      onFormDataChange({ ...localFormData, location: res.payload.id });
+      onFormDataChange({ ...localFormData, location: res.payload.name });
     },
     [dispatch, localFormData, onFormDataChange],
   );
@@ -110,7 +110,7 @@ const Basics = (props: Props) => {
             options={locationOptions}
             required
             onChange={(_, option: IDropdownOption) =>
-              onFormDataChange({ ...localFormData, location: +option.key })
+              onFormDataChange({ ...localFormData, location: option.key.toString() })
             }
           />
           <Link

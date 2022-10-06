@@ -15,6 +15,7 @@ import { getFooterClasses } from '../../Common/styles';
 
 interface Props {
   id: number;
+  symphony_id: string;
   currentStep: PivotTabKey;
   onLinkClick: (key: PivotTabKey) => void;
   localFormData: UpdateComputeDeviceFromData;
@@ -28,6 +29,7 @@ interface Props {
 const EditFooter = (props: Props) => {
   const {
     id,
+    symphony_id,
     currentStep,
     onValidationRedirect,
     localFormData,
@@ -50,6 +52,7 @@ const EditFooter = (props: Props) => {
     dispatch(
       updateComputeDevice({
         id,
+        symphony_id,
         body: {
           architecture: localFormData.architecture,
           acceleration: localFormData.acceleration,
@@ -69,7 +72,16 @@ const EditFooter = (props: Props) => {
     );
 
     history.push(Url.COMPUTE_DEVICE);
-  }, [history, localFormData, dispatch, onFormDateValidate, currentStep, onIsCreatingChange, id]);
+  }, [
+    history,
+    localFormData,
+    dispatch,
+    onFormDateValidate,
+    currentStep,
+    onIsCreatingChange,
+    id,
+    symphony_id,
+  ]);
 
   return (
     <Stack

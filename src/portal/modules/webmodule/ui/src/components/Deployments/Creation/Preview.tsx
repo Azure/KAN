@@ -6,11 +6,10 @@ import { Stack, Text, Link } from '@fluentui/react';
 import { useSelector } from 'react-redux';
 
 import { State as RootState } from 'RootStateType';
-import { CreateDeploymentFormData, UpdateDeploymentFormData } from '../types';
+import { CreateDeploymentFormData, UpdateDeploymentFormData, PivotTabKey } from '../types';
 import { selectAllCameras } from '../../../store/cameraSlice';
-import { selectComputeDeviceById } from '../../../store/computeDeviceSlice';
+import { selectDeviceBySymphonyIdSelectorFactory } from '../../../store/computeDeviceSlice';
 import { theme } from '../../../constant';
-import { PivotTabKey } from '../types';
 
 import PreviewLabel from '../../Common/PreviewLabel';
 import PreviewTag from '../../Common/PreviewTag';
@@ -19,24 +18,25 @@ import PreviewLink from '../../Common/PreviewLink';
 interface Props {
   localFormData: CreateDeploymentFormData | UpdateDeploymentFormData;
   onLinkClick: (key: PivotTabKey) => void;
-  // onTagRedirect: () => void;
-  // onConfigureRedirect: () => void;
 }
 
 const Preview = (props: Props) => {
   const { localFormData, onLinkClick } = props;
 
-  const device = useSelector((state: RootState) => selectComputeDeviceById(state, localFormData.device.key));
+  // const device = useSelector(selectDeviceBySymphonyIdSelectorFactory(localFormData.device.key));
   const cameraList = useSelector((state: RootState) => selectAllCameras(state));
 
   return (
     <Stack styles={{ root: { paddingTop: '40px' } }} tokens={{ childrenGap: 15 }}>
       <PreviewLabel title="Deployment name" content={localFormData.name} />
-      <PreviewLabel title="Linked compute device" content={device ? device.name : ''} />
+      <PreviewLabel title="Linked compute device" content={localFormData.device.text} />
       <PreviewLabel
         title="Linked cameras"
         content={localFormData.cameraList
-          .map((configureCamera) => cameraList.find((camera) => camera.id === configureCamera.camera).name)
+          .map(
+            (configureCamera) =>
+              cameraList.find((camera) => camera.symphony_id === configureCamera.camera).name,
+          )
           .join(', ')}
       />
       <PreviewTag tagList={localFormData.tag_list} />

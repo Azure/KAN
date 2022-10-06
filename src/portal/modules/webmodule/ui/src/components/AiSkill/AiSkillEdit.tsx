@@ -15,7 +15,7 @@ import { PivotTabKey, UpdateAiSkillFormData, STEP_ORDER } from './types';
 import { Url, theme } from '../../constant';
 import { selectCascadeById } from '../../store/cascadeSlice';
 import { selectAllTrainingProjects } from '../../store/trainingProjectSlice';
-import { selectHasUseAiSkillSelectoryFactory } from '../../store/deploymentSlice';
+import { selectHasUseAiSkillSelectorFactory } from '../../store/deploymentSlice';
 import {
   getCascadeErrorMessage,
   convertElementsPayload,
@@ -80,7 +80,7 @@ const AiSkillEdit = () => {
 
   const skill = useSelector((state: RootState) => selectCascadeById(state, id));
   const modelList = useSelector((state: RootState) => selectAllTrainingProjects(state));
-  const hasAiSkillDeployment = useSelector(selectHasUseAiSkillSelectoryFactory(+id));
+  const hasAiSkillDeployment = useSelector(selectHasUseAiSkillSelectorFactory(id));
 
   const reactFlowRef = useRef(null);
   const [elements, setElements] = useState<(Node | Edge)[]>([]);
@@ -120,13 +120,8 @@ const AiSkillEdit = () => {
       screenshot: '',
     });
 
-    if (skill.raw_data === '') {
-      const result = backToSkillRawElements(JSON.parse(skill.flow), modelList);
-
-      setElements(getLayoutedElements(result));
-    } else {
-      setElements(JSON.parse(skill.raw_data));
-    }
+    const result = backToSkillRawElements(skill.flow, modelList);
+    setElements(getLayoutedElements(result));
   }, [skill, modelList]);
 
   const onLinkClick = useCallback(
@@ -305,7 +300,8 @@ const AiSkillEdit = () => {
         </Switch>
       </Stack>
       <EditFooter
-        aiSkillId={id}
+        id={skill.id}
+        symphony_id={skill.symphony_id}
         currentStep={localPivotKey}
         onLinkClick={onLinkClick}
         localFormData={localFormData}

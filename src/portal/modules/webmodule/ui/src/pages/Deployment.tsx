@@ -36,6 +36,8 @@ const DEPLOYMENT = () => {
 
   const formattedDeploymentList = useSelector(formattedDeploymentSelectorFactory);
 
+  console.log('formattedDeploymentList', formattedDeploymentList);
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

@@ -9,14 +9,14 @@ import { JSONTree } from 'react-json-tree';
 import { getDeploymentInsight } from '../../../store/deploymentSlice';
 
 interface Props {
-  deployment: number;
-  skill_symphony_id: string;
-  camera_symphony_id: string;
+  deploymentSymphonyId: string;
+  skillSymphonyId: string;
+  cameraSymphonyId: string;
   status?: any;
 }
 
 const Insight = (props: Props) => {
-  const { deployment, skill_symphony_id, camera_symphony_id } = props;
+  const { deploymentSymphonyId, skillSymphonyId, cameraSymphonyId } = props;
 
   const dispatch = useDispatch();
 
@@ -29,13 +29,13 @@ const Insight = (props: Props) => {
     (async () => {
       setIsFetching(true);
       const response = (await dispatch(
-        getDeploymentInsight({ deployment, skill_symphony_id, camera_symphony_id }),
+        getDeploymentInsight({ deploymentSymphonyId, skillSymphonyId, cameraSymphonyId }),
       )) as any;
 
       setLocalInsight(response.payload);
       setIsFetching(false);
     })();
-  }, [dispatch, deployment, skill_symphony_id, camera_symphony_id, localInsight]);
+  }, [dispatch, deploymentSymphonyId, skillSymphonyId, cameraSymphonyId, localInsight]);
 
   // console.log('localInsight', JSON.stringify(localInsight));
   // console.log('insightList', insightList);

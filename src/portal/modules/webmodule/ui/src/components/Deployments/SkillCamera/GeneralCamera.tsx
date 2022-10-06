@@ -3,11 +3,8 @@
 
 import React from 'react';
 import { Stack, Icon, Text, mergeStyleSets, Label } from '@fluentui/react';
-import { useSelector } from 'react-redux';
 
-import { State as RootState } from 'RootStateType';
 import { Camera } from '../../../store/cameraSlice';
-import { selectLocationById } from '../../../store/locationSlice';
 import { ConntectedStatus } from '../../../store/types';
 import { theme } from '../../../constant';
 
@@ -35,13 +32,12 @@ const getClasses = () =>
 const GeneralCamera = (props: Props) => {
   const { camera, status, fps, acceleration } = props;
 
-  const location = useSelector((state: RootState) => selectLocationById(state, camera.location));
   const classes = getClasses();
 
   return (
     <Stack styles={{ root: classes.root }} tokens={{ childrenGap: 10 }}>
       <Stack styles={{ root: classes.cameraWrapper }}>
-        <RTSPVideo cameraId={camera.id} />
+        <RTSPVideo cameraId={camera.symphony_id} />
       </Stack>
       <Stack tokens={{ childrenGap: 20 }}>
         <Label styles={{ root: classes.infoHeader }}>Deployment AI Skill Reported Status</Label>
@@ -61,7 +57,7 @@ const GeneralCamera = (props: Props) => {
           <Stack horizontal verticalAlign="center" tokens={{ childrenGap: 5 }}>
             <Text styles={{ root: classes.inftoTitle }}>Location</Text>
             <Text>:</Text>
-            <Text styles={{ root: classes.info }}>{location.name}</Text>
+            <Text styles={{ root: classes.info }}>{camera.location}</Text>
           </Stack>
           <Stack horizontal verticalAlign="center" tokens={{ childrenGap: 5 }}>
             <Text styles={{ root: classes.inftoTitle }}>Acceleration</Text>

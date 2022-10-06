@@ -24,26 +24,27 @@ const Basics = (props: Props) => {
 
   const deviceList = useSelector((state: RootState) => selectAllComputeDevices(state));
   const belongCameraSelector = useMemo(
-    () => belongDeviceCameraSelectorFactory(localFormData.device.data),
+    () => belongDeviceCameraSelectorFactory(localFormData.device.key),
     [localFormData],
   );
   const belongCameraList = useSelector(belongCameraSelector);
 
+  console.log('belongCameraList', belongCameraList);
+
   const deviceOptions: IDropdownOption[] = useMemo(
     () =>
       deviceList.map((device) => ({
-        key: device.id,
+        key: device.symphony_id,
         text: device.name,
-        data: device.symphony_id,
       })),
     [deviceList],
   );
 
   const cameraOptions: IDropdownOption[] = useMemo(
     () =>
-      belongCameraList.map((l) => ({
-        key: l.id,
-        text: l.name,
+      belongCameraList.map((camera) => ({
+        key: camera.symphony_id,
+        text: camera.name,
       })),
     [belongCameraList],
   );
@@ -53,7 +54,7 @@ const Basics = (props: Props) => {
       onFormDataChange({
         ...localFormData,
         cameraList: option.selected
-          ? [...localFormData.cameraList, { camera: +option.key, name: option.text, skillList: [] }]
+          ? [...localFormData.cameraList, { camera: option.key.toString(), name: option.text, skillList: [] }]
           : [...localFormData.cameraList].filter((camera) => camera.camera !== option.key),
         error: { ...localFormData.error, cameraList: '' },
       });
@@ -95,7 +96,7 @@ const Basics = (props: Props) => {
             onChange={(_, option) =>
               onFormDataChange({
                 ...localFormData,
-                device: { key: +option.key, text: option.text, data: option.data },
+                device: { key: option.key.toString(), text: option.text },
                 cameraList: [],
                 error: { ...localFormData.error, device: '' },
               })
@@ -129,7 +130,7 @@ const Basics = (props: Props) => {
             {localFormData.cameraList.map((camera, idx) => (
               <TagLabel
                 key={idx}
-                id={camera.camera}
+                id={idx}
                 text={camera.name}
                 onDelete={(id: number) =>
                   onFormDataChange({

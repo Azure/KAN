@@ -488,17 +488,15 @@ class Project(models.Model):
 
             if created:
                 # create
-                model_client.deploy_config(group="ai.symphony", plural="models")
+                model_client.deploy_config()
             else:
                 # update
-                model_client.patch_config(
-                    group="ai.symphony", plural="models", name=instance.symphony_id)
+                model_client.patch_config(name=instance.symphony_id)
 
     @staticmethod
     def post_delete(**kwargs):
         instance = kwargs["instance"]
-        model_client.remove_config(
-            group="ai.symphony", plural="models", name=instance.symphony_id)
+        model_client.remove_config(name=instance.symphony_id)
 
 
 class Task(models.Model):

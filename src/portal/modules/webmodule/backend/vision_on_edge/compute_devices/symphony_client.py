@@ -14,6 +14,11 @@ logger = logging.getLogger(__name__)
 
 class SymphonyTargetClient(SymphonyClient):
 
+    def __init__(self):
+        super().__init__()
+        self.group = "fabric.symphony"
+        self.plural = "targets"
+
     def get_config(self):
         name = self.args.get("name", "")
         iothub = self.args.get("iothub", "")
@@ -22,7 +27,7 @@ class SymphonyTargetClient(SymphonyClient):
         acceleration = self.args.get("acceleration", "")
         display_name = self.args.get("display_name", "")
         solution_id = self.args.get("solution_id", "")
-        tag_list = self.args.get("tag_list", "")
+        tag_list = self.args.get("tag_list", "[]")
         is_k8s = self.args.get("is_k8s", False)
         cluster_type = self.args.get("cluster_type", "current")
         # connection_str = os.getenv('IOTHUB_CONNECTION_STRING')
@@ -133,7 +138,7 @@ class SymphonyTargetClient(SymphonyClient):
 
     def get_patch_config(self):
 
-        tag_list = self.args.get("tag_list", "")
+        tag_list = self.args.get("tag_list", "[]")
 
         labels = {}
         if tag_list:
@@ -145,22 +150,6 @@ class SymphonyTargetClient(SymphonyClient):
             {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
         ]
         return patch_config
-
-    def get_config_from_symphony(self, name):
-
-        api = self.get_client()
-
-        if api:
-            instance = api.get_namespaced_custom_object(
-                group="fabric.symphony",
-                version="v1",
-                namespace="default",
-                plural="targets",
-                name=name
-            )
-            return instance
-        else:
-            return ""
 
     def load_symphony_objects(self):
         from .models import ComputeDevice
@@ -222,6 +211,78 @@ class SymphonyTargetClient(SymphonyClient):
         else:
             logger.warning("Not loading symphony targets")
 
+    def process_data(self, target, multi):
+
+        name = target['spec']['displayName']
+        symphony_id = target['metadata']['name']
+        iothub = target['spec']['topologies'][0]['bindings'][0]['config'].get(
+            'iotHub', "").split('.')[0]
+        iotedge_device = target['spec']['topologies'][0]['bindings'][0]['config'].get(
+            'deviceName', "")
+        architecture = target['spec'].get("properties", {}).get('cpu', "")
+        acceleration = target['spec'].get("properties", {}).get('acceleration', "")
+        solution_id = target['spec'].get("properties", {}).get('solutionId', "")
+
+        is_k8s = "k8s" in target['spec']['topologies'][0]['bindings'][0]["provider"]
+        if is_k8s:
+            if target['spec']['topologies'][0]['bindings'][0]["config"]["inCluster"] == "true":
+                cluster_type = "current"
+            else:
+                cluster_type = "other"
+        else:
+            cluster_type = "current"
+
+        labels = target['metadata'].get('labels')
+        if labels:
+            tags = [{"name": k, "value": v} for k, v in labels.items()]
+        else:
+            tags = []
+        tag_list = json.dumps(tags)
+
+        res = {
+            "name": name,
+            "iothub": iothub,
+            "iotedge_device": iotedge_device,
+            "architecture": architecture,
+            "acceleration": acceleration,
+            "symphony_id": symphony_id,
+            "solution_id": solution_id,
+            "tag_list": tag_list,
+            "is_k8s": is_k8s,
+            "cluster_type": cluster_type,
+        }
+
+        # status
+        if not multi:
+            status = target.get("status", "")
+            if status:
+                processed_status = self.process_status(status['properties'])
+            else:
+                processed_status = ""
+            res["status"] = processed_status
+
+        return res
+
+    def process_status(self, status):
+        from ..cameras.symphony_client import SymphonyDeviceClient
+        device_client = SymphonyDeviceClient()
+
+        camera_table = {i["symphony_id"]: i["name"]
+                        for i in device_client.get_objects()}
+
+        status_table = {}
+
+        for key in status.keys():
+            cam = key.split('.')[0]
+            if cam and cam in camera_table.keys():
+                if status[key] == "connected":
+                    status_table[camera_table[cam]] = "connected"
+                else:
+                    if cam not in status_table.keys():
+                        status_table[camera_table[cam]] = "disconnected"
+
+        return json.dumps(status_table)
+
     def get_status(self, name):
 
         api = self.get_client()
@@ -242,8 +303,28 @@ class SymphonyTargetClient(SymphonyClient):
         else:
             return ""
 
+    def get_solution_id(self, name):
+        api = self.get_client()
+
+        if api:
+            target = api.get_namespaced_custom_object(
+                group="fabric.symphony",
+                version="v1",
+                namespace="default",
+                plural="targets",
+                name=name
+            )
+            return target['spec'].get("properties", {}).get('solutionId', "")
+        else:
+            return ""
+
 
 class SymphonySolutionClient(SymphonyClient):
+
+    def __init__(self):
+        super().__init__()
+        self.group = "solution.symphony"
+        self.plural = "solutions"
 
     def get_config(self):
 

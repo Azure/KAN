@@ -12,11 +12,16 @@ logger = logging.getLogger(__name__)
 
 class SymphonySkillClient(SymphonyClient):
 
+    def __init__(self):
+        super().__init__()
+        self.group = "ai.symphony"
+        self.plural = "skills"
+
     def get_config(self):
 
         name = self.args.get("name", "")
-        tag_list = self.args.get("tag_list", "")
-        spec = self.args.get("spec", "")
+        tag_list = self.args.get("tag_list", "[]")
+        spec = self.args.get("spec", "{}")
 
         labels = {}
         if tag_list:
@@ -36,8 +41,8 @@ class SymphonySkillClient(SymphonyClient):
 
     def get_patch_config(self):
 
-        tag_list = self.args.get("tag_list", "")
-        spec = self.args.get("spec", "")
+        tag_list = self.args.get("tag_list", "[]")
+        spec = self.args.get("spec", "{}")
 
         labels = {}
         if tag_list:
@@ -46,25 +51,11 @@ class SymphonySkillClient(SymphonyClient):
 
         patch_config = [
             {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
-            {'op': 'replace', 'path': '/spec', 'value': spec},
+            # separate the columns to preserve the parameters
+            {'op': 'replace', 'path': '/spec/edges', 'value': spec.get("edges", "[]")},
+            {'op': 'replace', 'path': '/spec/nodes', 'value': spec.get("nodes", "[]")},
         ]
         return patch_config
-
-    def get_config_from_symphony(self, name):
-
-        api = self.get_client()
-
-        if api:
-            instance = api.get_namespaced_custom_object(
-                group="ai.symphony",
-                version="v1",
-                namespace="default",
-                plural="skills",
-                name=name
-            )
-            return instance
-        else:
-            return ""
 
     def load_symphony_objects(self):
         from .models import Cascade
@@ -100,3 +91,26 @@ class SymphonySkillClient(SymphonyClient):
                             "created" if created else "updated")
         else:
             logger.warning("Not loading symphony skills")
+
+    def process_data(self, skill, multi):
+
+        name = skill['spec']['displayName']
+        symphony_id = skill['metadata']['name']
+        spec = skill['spec']
+        fps = skill['spec']['parameters'].get("fpsRetrieve", "")
+        acceleration = skill['spec']['parameters'].get("accelerationRetrieve", "")
+        labels = skill['metadata'].get('labels')
+        if labels:
+            tags = [{"name": k, "value": v} for k, v in labels.items()]
+        else:
+            tags = []
+        tag_list = json.dumps(tags)
+
+        return {
+            "name": name,
+            "symphony_id": symphony_id,
+            "flow": spec,
+            "acceleration": acceleration,
+            "fps": fps,
+            "tag_list": tag_list
+        }

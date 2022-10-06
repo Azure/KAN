@@ -138,15 +138,12 @@ class Deployment(models.Model):
 
         if created:
             # create
-            solution_client.update_config(
-                group="solution.symphony", plural="solutions", name=instance.compute_device.solution_id)
-            instance_client.deploy_config(group="solution.symphony", plural="instances")
+            solution_client.update_config(name=instance.compute_device.solution_id)
+            instance_client.deploy_config()
         else:
             # update
-            solution_client.update_config(
-                group="solution.symphony", plural="solutions", name=instance.compute_device.solution_id)
-            instance_client.patch_config(
-                group="solution.symphony", plural="instances", name=instance.symphony_id)
+            solution_client.update_config(name=instance.compute_device.solution_id)
+            instance_client.patch_config(name=instance.symphony_id)
 
         # monitor iothub messages
         iothub = instance.compute_device.iothub
@@ -180,8 +177,7 @@ class Deployment(models.Model):
     @staticmethod
     def post_delete(**kwargs):
         instance = kwargs["instance"]
-        instance_client.remove_config(
-            group="solution.symphony", plural="instances", name=instance.symphony_id)
+        instance_client.remove_config(name=instance.symphony_id)
 
 
 post_save.connect(Deployment.post_save, Deployment, dispatch_uid="Deployment_post")

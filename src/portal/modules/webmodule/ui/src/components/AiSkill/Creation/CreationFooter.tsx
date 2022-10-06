@@ -47,7 +47,6 @@ const CreationFooter = (props: Props) => {
     await dispatch(
       createAiSkill({
         name: localFormData.name,
-        raw_data: localFormData.raw_data,
         flow: localFormData.cascade.flow,
         screenshot: localFormData.screenshot,
         fps: localFormData.fps.toString(),

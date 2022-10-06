@@ -124,9 +124,9 @@ const slice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getCameras.fulfilled, (state, action) => {
-      entityAdapter.setAll(state, action.payload.entities.AOIs || {});
-    });
+    // builder.addCase(getCameras.fulfilled, (state, action) => {
+    //   entityAdapter.setAll(state, action.payload.entities.AOIs || {});
+    // });
   },
 });
 
@@ -137,33 +137,28 @@ const { reducer } = slice;
 const addOriginEntitiesReducer: Reducer<
   ReturnType<typeof reducer> & { originEntities: Record<string, VideoAnno> }
 > = (state, action) => {
-  if (getCameras.fulfilled.match(action)) {
-    return { ...reducer(state, action), originEntities: R.clone(action.payload.entities.AOIs) || {} };
-  }
-  if (toggleShowAOI.fulfilled.match(action) || toggleShowCountingLines.fulfilled.match(action)) {
-    if (!action.meta.arg.checked)
-      return {
-        ...state,
-        ...reducer(state, action),
-        ids: Object.keys(state.originEntities),
-        entities: R.clone(state.originEntities),
-      };
-  }
-  if (updateCameraArea.fulfilled.match(action)) {
-    return { ...reducer(state, action), originEntities: R.clone(state.entities) };
-  }
+  // if (getCameras.fulfilled.match(action)) {
+  //   return { ...reducer(state, action), originEntities: R.clone(action.payload.entities.AOIs) || {} };
+  // }
+  // if (toggleShowAOI.fulfilled.match(action) || toggleShowCountingLines.fulfilled.match(action)) {
+  //   if (!action.meta.arg.checked)
+  //     return {
+  //       ...state,
+  //       ...reducer(state, action),
+  //       ids: Object.keys(state.originEntities),
+  //       entities: R.clone(state.originEntities),
+  //     };
+  // }
+  // if (updateCameraArea.fulfilled.match(action)) {
+  //   return { ...reducer(state, action), originEntities: R.clone(state.entities) };
+  // }
   return { ...state, ...reducer(state, action) };
 };
 
 export default addOriginEntitiesReducer;
 
-export const {
-  updateVideoAnno,
-  onCreatingPoint,
-  removeVideoAnno,
-  onCreateVideoAnnoBtnClick,
-  finishLabel,
-} = slice.actions;
+export const { updateVideoAnno, onCreatingPoint, removeVideoAnno, onCreateVideoAnnoBtnClick, finishLabel } =
+  slice.actions;
 
 export const { selectAll: selectAllVideoAnnos } = entityAdapter.getSelectors<State>(
   (state) => state.videoAnnos,

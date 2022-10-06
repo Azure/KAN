@@ -12,7 +12,7 @@ export type CreateCameraFormData = {
   name: string;
   media_type: MediaType;
   videoType: VideoType;
-  location: number;
+  location: string;
   rtsp: string;
   media_source: string;
   tag_list: Tag[];
@@ -32,7 +32,7 @@ export type UpdateCameraFormData = {
   name: string;
   media_type: MediaType;
   videoType: VideoType;
-  location: number;
+  location: string;
   rtsp: string;
   media_source: string;
   selectedDeviceList: string[];

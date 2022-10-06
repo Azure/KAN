@@ -7,7 +7,7 @@ import { useHistory, generatePath } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { deleteTrainingProject } from '../../../store/trainingProjectSlice';
-import { selectHasUseAiSkillSelectoryFactory } from '../../../store/cascadeSlice';
+import { selectHasUseAiSkillSelectorFactory } from '../../../store/cascadeSlice';
 import { FormattedModel } from '../../../store/types';
 import { theme, Url } from '../../../constant';
 
@@ -31,7 +31,7 @@ const CustomVisionVModelDashboard = (props: Props) => {
   const [deleteModel, setDeleteModel] = useState<FormattedModel | null>(null);
   const [selectedDefinition, setSelectedDefinition] = useState<FormattedModel | null>(null);
 
-  const hasModelUsed = useSelector(selectHasUseAiSkillSelectoryFactory(deleteModel?.symphony_id ?? ''));
+  const hasModelUsed = useSelector(selectHasUseAiSkillSelectorFactory(deleteModel?.symphony_id ?? ''));
 
   const history = useHistory();
   const dispatch = useDispatch();

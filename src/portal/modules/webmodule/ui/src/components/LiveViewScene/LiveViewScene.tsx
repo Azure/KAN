@@ -67,18 +67,21 @@ type LiveViewProps = OwnProps & StateProps & DispatchProps;
 const mapState = (state: State, { cameraId }: OwnProps): StateProps => ({
   videoAnnos: videoAnnosSelectorFactory(cameraId)(state),
   creatingShape: state.videoAnnos.shape,
-  AOIVisible: Boolean(selectCameraById(state, cameraId)?.useAOI),
-  countingLineVisible:
-    selectCameraById(state, cameraId)?.useCountingLine &&
-    [InferenceMode.PartCounting, InferenceMode.DefectDetection].includes(state.project.data.inferenceMode),
-  dangerZoneVisible:
-    selectCameraById(state, cameraId)?.useDangerZone &&
-    [
-      InferenceMode.EmployeeSafety,
-      InferenceMode.EmptyShelfAlerts,
-      InferenceMode.TotalCustomerCounting,
-      InferenceMode.CrowdedQueueAlert,
-    ].includes(state.project.data.inferenceMode),
+  AOIVisible: false,
+  countingLineVisible: false,
+  dangerZoneVisible: false,
+  // AOIVisible: Boolean(selectCameraById(state, cameraId)?.useAOI),
+  // countingLineVisible:
+  //   selectCameraById(state, cameraId)?.useCountingLine &&
+  //   [InferenceMode.PartCounting, InferenceMode.DefectDetection].includes(state.project.data.inferenceMode),
+  // dangerZoneVisible:
+  //   selectCameraById(state, cameraId)?.useDangerZone &&
+  //   [
+  //     InferenceMode.EmployeeSafety,
+  //     InferenceMode.EmptyShelfAlerts,
+  //     InferenceMode.TotalCustomerCounting,
+  //     InferenceMode.CrowdedQueueAlert,
+  //   ].includes(state.project.data.inferenceMode),
   creatingState: state.videoAnnos.creatingState,
   disableVideoFeed: state.project.data.disableVideoFeed,
 });

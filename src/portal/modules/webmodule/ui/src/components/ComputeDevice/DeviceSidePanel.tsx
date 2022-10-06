@@ -17,14 +17,15 @@ import SidePanelStatus from '../Common/SidePanel/SidePanelStatus';
 
 interface Props {
   onPanelClose: () => void;
-  selectedDeviceId: number;
+  deivceId: number;
+  symphony_id: string;
   onDeleteModalOpen: () => void;
 }
 
 const DeviceSidePanel = (props: Props) => {
-  const { onPanelClose, selectedDeviceId, onDeleteModalOpen } = props;
+  const { onPanelClose, deivceId, symphony_id, onDeleteModalOpen } = props;
 
-  const device = useSelector((state: RootState) => selectComputeDeviceById(state, selectedDeviceId));
+  const device = useSelector((state: RootState) => selectComputeDeviceById(state, deivceId));
 
   const history = useHistory();
   const [isFetching, setIsFetching] = useState(false);
@@ -34,10 +35,12 @@ const DeviceSidePanel = (props: Props) => {
   useEffect(() => {
     (async () => {
       setIsFetching(true);
-      await dispatch(getSingleComputeDevice(selectedDeviceId));
+
+      await dispatch(getSingleComputeDevice({ id: deivceId, symphony_id }));
+
       setIsFetching(false);
     })();
-  }, [dispatch, selectedDeviceId]);
+  }, [dispatch, deivceId, symphony_id]);
 
   const onRenderFooterContent = useCallback(
     () => (

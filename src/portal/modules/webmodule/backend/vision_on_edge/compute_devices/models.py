@@ -112,12 +112,11 @@ class ComputeDevice(models.Model):
         }
         if created:
             # create
-            target_client.deploy_config(group="fabric.symphony", plural="targets")
-            solution_client.deploy_config(group="solution.symphony", plural="solutions")
+            target_client.deploy_config()
+            solution_client.deploy_config()
         else:
             # update
-            target_client.patch_config(
-                group="fabric.symphony", plural="targets", name=instance.symphony_id)
+            target_client.patch_config(name=instance.symphony_id)
         az_logger.warning(
             "create_compute_device",
             extra=properties,
@@ -126,10 +125,8 @@ class ComputeDevice(models.Model):
     @staticmethod
     def post_delete(**kwargs):
         instance = kwargs["instance"]
-        target_client.remove_config(group="fabric.symphony",
-                                    plural="targets", name=instance.symphony_id)
-        solution_client.remove_config(group="solution.symphony",
-                                      plural="solutions", name=instance.solution_id)
+        target_client.remove_config(name=instance.symphony_id)
+        solution_client.remove_config(name=instance.solution_id)
 
 
 pre_save.connect(ComputeDevice.pre_save, ComputeDevice,

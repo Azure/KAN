@@ -81,7 +81,7 @@ export const Component = (props: Props) => {
       streamId: streamIdRef.current,
       imageIds: [],
       shouldOpenLabelingPage: false,
-      projectId: projectId,
+      projectId,
     });
     const { payload } = action as any;
     if (payload) capturedImgs.current.push(parseInt(Object.keys(payload.images)[0], 10));
@@ -138,7 +138,7 @@ export const Component = (props: Props) => {
           <Stack horizontal tokens={{ childrenGap: 30 }}>
             <Stack styles={{ root: { width: '75%', height: '500px', position: 'relative' } }}>
               <RTSPVideo
-                cameraId={selectedCameraId}
+                cameraId={selectedCameraId.toString()}
                 onStreamCreated={(streamId) => {
                   streamIdRef.current = streamId;
                 }}

@@ -29,7 +29,18 @@ const ModelDetail = () => {
         iconName: 'CircleAddition',
       },
       onClick: () => {
-        history.push(Url.MODELS_CREATION_BASIC);
+        history.push({ pathname: Url.MODELS_CREATION_BASIC, search: '?type=custom' });
+        setIsFilter(false);
+      },
+    },
+    {
+      key: 'byom',
+      text: 'Add External Model',
+      iconProps: {
+        iconName: 'Add',
+      },
+      onClick: () => {
+        history.push({ pathname: Url.MODELS_CREATION_BASIC, search: '?type=own' });
         setIsFilter(false);
       },
     },

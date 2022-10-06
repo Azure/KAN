@@ -6,7 +6,7 @@ import { Stack } from '@fluentui/react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Camera, deleteCameras } from '../../../store/cameraSlice';
-import { selectHasCameraDeploymentSelectoryFactory } from '../../../store/deploymentSlice';
+import { selectHasCameraDeploymentSelectorFactory } from '../../../store/deploymentSlice';
 
 import CameraCard from './CameraCard';
 import CameraSidePanel from '../CameraSidePanel';
@@ -27,7 +27,9 @@ const CameraList = (props: Props) => {
   const [localSelectedCamera, setLocalSelectedCamera] = useState<Camera | null>(null);
   const [deletedCamera, setDeletedCamera] = useState<Camera | null>(null);
   const [selectedDefinition, setSelectedDefinition] = useState<Camera | null>(null);
-  const hasCameraDeployment = useSelector(selectHasCameraDeploymentSelectoryFactory(deletedCamera?.id ?? 0));
+  const hasCameraDeployed = useSelector(
+    selectHasCameraDeploymentSelectorFactory(deletedCamera?.symphony_id ?? ''),
+  );
 
   const onSingleCameraDelete = useCallback(async () => {
     const resolve = () => {
@@ -72,7 +74,7 @@ const CameraList = (props: Props) => {
           name={deletedCamera.name}
           onDelte={onSingleCameraDelete}
           onClose={() => setDeletedCamera(null)}
-          isUsed={hasCameraDeployment}
+          isUsed={hasCameraDeployed}
         />
       )}
       {selectedDefinition && (

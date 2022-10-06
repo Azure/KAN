@@ -145,7 +145,7 @@ export const {
   selectEntities: selectComputeDeviceEntities,
 } = computeDeviceAdapter.getSelectors<RootState>((state) => state.computeDevice);
 
-export const selectDeviceSymphonyByIdSelectorFactory = (id: string) =>
+export const selectDeviceBySymphonyIdSelectorFactory = (id: string) =>
   createSelector(selectAllComputeDevices, (deviceList) =>
     deviceList.find((device) => device.symphony_id === id),
   );

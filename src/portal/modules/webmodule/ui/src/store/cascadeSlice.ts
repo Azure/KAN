@@ -69,8 +69,8 @@ export const getAiSkillList = createWrappedAsync('AI-Skill/Get', async () => {
   return response.data.map((aiSkill, idx) => normalizeAiSkill(aiSkill, idx + 1));
 });
 
-export const getAiSkillDefinition = createWrappedAsync<any, number>('AI-Skill/GetDefinition', async (id) => {
-  const response = await rootRquest.get(`/api/cascades/${id}/get_properties`);
+export const getAiSkillDefinition = createWrappedAsync<any, string>('AI-Skill/GetDefinition', async (symphony_id) => {
+  const response = await rootRquest.get(`/api/cascades/get_properties?symphony_id=${symphony_id}`);
 
   return response.data;
 });
@@ -156,17 +156,24 @@ export const {
   selectEntities: selectCascadeEntities,
 } = cascadesAdapter.getSelectors<State>((state) => state.cascade);
 
-export const selectHasUseAiSkillSelectoryFactory = (modelSymphonyId: string) =>
+export const selectHasUseAiSkillSelectorFactory = (modelSymphonyId: string) =>
   createSelector(selectAllCascades, (skillList) => {
     if (skillList.length === 0) return false;
 
     const isUsed = skillList
-      .reduce((accModelList, skill) => {
-        const test = JSON.parse(skill.flow);
-
-        return [...accModelList, ...test.nodes.filter((node) => node.type === 'model')];
-      }, [])
+      .reduce(
+        (accModelList, skill) => [
+          ...accModelList,
+          ...skill.flow.nodes.filter((node) => node.type === 'model'),
+        ],
+        [],
+      )
       .some((model) => model.name === modelSymphonyId);
 
     return isUsed;
   });
+
+export const selectAiSkillBySymphonyIdSelectorFactory = (symphonyId: string) =>
+  createSelector(selectAllCascades, (skillList) =>
+    skillList.find((skill) => skill.symphony_id === symphonyId),
+  );

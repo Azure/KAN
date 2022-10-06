@@ -147,8 +147,10 @@ export const formattedDeploymentSelectorFactory = createSelector(
     return deploymentList.map((deployment) => ({
       ...deployment,
       deviceName: deviceList.find((device) => device.symphony_id === deployment.compute_device).name,
-      skillNameList: deployment.configure.map((con) => con.skills.map((skill) => skill.id)).flat(),
-      // .map((id) => aiSkillList.find((skill) => skill.symphony_id === id)),
+      skillNameList: deployment.configure
+        .map((con) => con.skills.map((skill) => skill.id))
+        .flat()
+        .map((id) => aiSkillList.find((skill) => skill.symphony_id === id).name),
     }));
   },
 );

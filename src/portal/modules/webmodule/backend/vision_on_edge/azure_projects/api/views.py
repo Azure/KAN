@@ -32,6 +32,7 @@ from ...general.api.serializers import (
 from ...general.shortcuts import drf_get_object_or_404
 from ..exceptions import ProjectWithoutSettingError
 from ..models import Project, Task
+from ..symphony_client import SymphonyModelClient
 from ..utils import TRAINING_MANAGER, pull_cv_project_helper, create_cv_project_helper, update_tags_helper
 from .serializers import (
     IterationPerformanceSerializer,
@@ -47,6 +48,8 @@ logger = logging.getLogger(__name__)
 
 PROJECT_RELABEL_TIME_THRESHOLD = 30  # Seconds
 
+model_client = SymphonyModelClient()
+
 
 class ProjectViewSet(FiltersMixin, viewsets.ModelViewSet):
     """Project ModelViewSet
@@ -59,6 +62,13 @@ class ProjectViewSet(FiltersMixin, viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     filter_backends = (filters.OrderingFilter, )
     filter_mappings = {"is_demo": "is_demo"}
+
+    def get_queryset(self):
+
+        queryset = super().get_queryset()
+        model_client.load_symphony_objects()
+
+        return queryset
 
     @swagger_auto_schema(operation_summary="Keep relabel alive.")
     @action(detail=True, methods=["post"])

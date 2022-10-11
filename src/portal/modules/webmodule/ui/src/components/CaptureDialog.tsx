@@ -71,9 +71,7 @@ export const Component = (props: Props) => {
     onDismiss();
   };
 
-  const onDropdownChange = (_, opt: IDropdownOption) => {
-    setSelectedCameraId(opt.key as number);
-  };
+  const onDropdownChange = (_, opt: IDropdownOption) => setSelectedCameraId(opt.key as string);
 
   const onCaptureClick = async () => {
     setStatus(Status.Capturing);
@@ -138,7 +136,7 @@ export const Component = (props: Props) => {
           <Stack horizontal tokens={{ childrenGap: 30 }}>
             <Stack styles={{ root: { width: '75%', height: '500px', position: 'relative' } }}>
               <RTSPVideo
-                cameraId={selectedCameraId.toString()}
+                cameraId={selectedCameraId}
                 onStreamCreated={(streamId) => {
                   streamIdRef.current = streamId;
                 }}

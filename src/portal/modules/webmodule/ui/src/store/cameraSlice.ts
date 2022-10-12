@@ -404,7 +404,7 @@ export const cameraOptionsSelector = createSelector(selectAllCameras, (cameras) 
   cameras
     .filter((e) => !e.isDemo)
     .map((e) => ({
-      key: e.id,
+      key: e.symphony_id,
       text: e.name,
     })),
 );

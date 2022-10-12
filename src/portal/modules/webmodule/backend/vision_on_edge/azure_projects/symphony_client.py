@@ -88,6 +88,10 @@ class SymphonyModelClient(SymphonyClient):
             )
             targets = res['items']
 
+            # record to-delete model
+            model_table = {model[0]: model[1] for model in Project.objects.filter(
+                node_type="model").values_list('name', 'pk')}
+
             for target in targets:
                 symphony_id = target['metadata']['name']
                 project_type = target['spec']['properties'].get("model.subtype", "").split('.')[
@@ -97,6 +101,11 @@ class SymphonyModelClient(SymphonyClient):
                 display_name = target['spec'].get("displayName", symphony_id)
                 category = target['spec']['properties'].get("model.type", "")
                 project = target['spec']['properties'].get("model.project", "")
+
+                if display_name in model_table.keys():
+                    logger.warning(f'Project {display_name} already exists.. ')
+                    model_table.pop(display_name)
+                    continue
 
                 setting_obj = Setting.objects.first()
                 logger.warning(f"Creating project: {display_name}")
@@ -129,5 +138,11 @@ class SymphonyModelClient(SymphonyClient):
                         ]),
                     )
                     logger.info("Project: %s.", project_obj)
+
+            to_delete = list(model_table.values())
+            logger.warning(f"Models to delete: {model_table.keys()}")
+            # this would not trigger pre/post delete, get instance and delete if needed
+            Project.objects.filter(id__in=to_delete).all().delete()
+
         else:
             logger.warning("Not loading symphony models")

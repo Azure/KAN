@@ -25,7 +25,7 @@ export const accelerationOptions: IDropdownOption[] = [
   { key: dGPU, text: dGPU },
   { key: CPU, text: CPU },
   { key: NvidiaJetson, text: NvidiaJetson },
-  { key: iGPU, text: iGPU },
+  { key: iGPU, text: 'Intel iGPU (EFLOW only)' },
 ];
 
 export const FEEDBACK_URL = 'https://go.microsoft.com/fwlink/?linkid=2205447';

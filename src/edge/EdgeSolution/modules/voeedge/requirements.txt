@@ -1,0 +1,15 @@
+openvino==2022.1.0
+FastAPI
+python-multipart
+opencv-python
+uvicorn
+numpy
+pillow
+onnx
+onnxruntime
+pydantic
+networkx==2.8.5
+requests
+httpx
+azure-iot-device
+pytz

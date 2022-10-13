@@ -29,12 +29,20 @@ def is_symphony():
 def get_instance_name():
     return os.environ['INSTANCE']
 
+def get_symphony_agent_host():
+    return os.environ['SYMPHONY_AGENT_ADDRESS']
 
 class SymphonyAgent:
 
     Url = 'http://localhost:8088' if is_local() else 'http://target-runtime-symphony-agent:8088'
-    Url = 'http://target-runtime-symphony-agent:8088'
+    Url = f'http://{get_symphony_agent_host()}:8088'
 
+#class SymphonyAgent:
+#
+#    Url = 'http://localhost:8088' if is_local() else 'http://target-runtime-symphony-agent:8088'
+#    Url = 'http://target-runtime-symphony-agent:8088'
+
+    
 class StreamingModule:
 
     Url = 'http://streamingmodule:5002'
@@ -49,6 +57,8 @@ class StreamingModule:
     class Setting(BaseModel):
         cascade_configs: List[CascadeConfig]
 
+class StreamingModuleSetting(BaseModel):
+    cascade_configs: List[CascadeConfig]
 
 
 class PredictModule:
@@ -64,3 +74,6 @@ class PredictModule:
 
     class Setting(BaseModel):
         model_configs: List[ModelConfig]
+
+class PredictModuleSetting(BaseModel):
+    model_configs: List[ModelConfig]

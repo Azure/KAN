@@ -1,0 +1,6 @@
+FastAPI
+python-multipart
+opencv-python
+uvicorn
+numpy
+pillow

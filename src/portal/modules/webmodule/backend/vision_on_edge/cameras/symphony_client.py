@@ -209,7 +209,7 @@ class SymphonyDeviceClient(SymphonyClient):
         except KeyError:
             snapshot_url = ""
         if snapshot_url:
-            blob_sas = self.blob_client.generate_sas_token(name+'-snapshot.jpg')
+            blob_sas = self.blob_client.generate_sas_token(symphony_id+'-snapshot.jpg')
             blob_url = f"{snapshot_url}?{blob_sas}"
         else:
             blob_url = ""

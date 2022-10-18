@@ -264,10 +264,10 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
 
         configure = json.loads(request.data.get("configure"))
 
-        skill_env, skill_params, configure_data, module_routes = process_configure(
+        pipelines, configure_data, module_routes = process_configure(
             configure, request.data.get("name"))
 
-        skill_params["configure_data"] = json.dumps(configure_data)
+        params = {"configure_data": json.dumps(configure_data)}
 
         # update solution to the target
         target_obj = target_client.get_object(request.data.get("compute_device"))
@@ -275,7 +275,7 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
             {
                 "name": target_obj["solution_id"],
                 "display_name": target_obj["solution_id"] + '-' + str(uuid.uuid4())[-4:],
-                "skills": json.dumps(skill_env),
+                # "skills": json.dumps(skill_env),
                 "acceleration": target_obj["acceleration"],
                 "architecture": target_obj["architecture"],
                 "instance": symphony_id,
@@ -292,7 +292,8 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
             "display_name": request.data.get("name"),
             "target": target_obj["symphony_id"],
             "solution": target_obj["solution_id"],
-            "params": skill_params,
+            "pipelines": pipelines,
+            "params": params,
             "tag_list": request.data.get("tag_list", "[]"),
         })
 
@@ -325,17 +326,17 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
 
         configure = json.loads(request.data.get("configure"))
 
-        skill_env, skill_params, configure_data, module_routes = process_configure(
+        pipelines, configure_data, module_routes = process_configure(
             configure, instance_obj["name"])
 
-        skill_params["configure_data"] = json.dumps(configure_data)
+        params = {"configure_data": json.dumps(configure_data)}
 
         # update solution to the target
         solution_client.set_attr(
             {
                 "name": target_obj["solution_id"],
                 "display_name": target_obj["solution_id"] + '-' + str(uuid.uuid4())[-4:],
-                "skills": json.dumps(skill_env),
+                # "skills": json.dumps(skill_env),
                 "acceleration": target_obj["acceleration"],
                 "architecture": target_obj["architecture"],
                 "instance": symphony_id,
@@ -348,7 +349,8 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
 
         # create/update instance
         instance_client.set_attr({
-            "params": skill_params,
+            "pipelines": pipelines,
+            "params": params,
             "tag_list": request.data.get("tag_list", "[]"),
         })
 
@@ -374,21 +376,37 @@ def process_configure(configure, displayname):
     # for recovering data from symphony -> {"camera_name": [skill_names]}
     configure_data = {}
     module_routes = []
+    pipelines = []
+    pipeline_index = 0
     for cam in configure:
         device_obj = device_client.get_object(cam['camera'])
         configure_data[device_obj["symphony_id"]] = []
         for skill in cam['skills']:
             skill_obj = skill_client.get_object(skill['id'])
-            skill_alias = str(uuid.uuid4())[-4:]
-            skill_env.append(f"{skill_obj['symphony_id']} as skill-{skill_alias}")
-            skill_params[
-                f"skill-{skill_alias}.rtsp"] = f"rtsp://{device_obj['username']}:{device_obj['password']}@{device_obj['rtsp'].split('rtsp://')[1]}"
-            skill_params[f"skill-{skill_alias}.fps"] = skill_obj["fps"]
-            skill_params[f"skill-{skill_alias}.device_id"] = device_obj["symphony_id"]
-            skill_params[f"skill-{skill_alias}.instance_displayname"] = displayname
-            skill_params[f"skill-{skill_alias}.device_displayname"] = device_obj["name"]
-            skill_params[f"skill-{skill_alias}.skill_displayname"] = skill_obj["name"]
+            # skill_alias = str(uuid.uuid4())[-4:]
+            # skill_env.append(f"{skill_obj['symphony_id']} as skill-{skill_alias}")
+            # skill_params[
+            #     f"skill-{skill_alias}.rtsp"] = f"rtsp://{device_obj['username']}:{device_obj['password']}@{device_obj['rtsp'].split('rtsp://')[1]}"
+            # skill_params[f"skill-{skill_alias}.fps"] = skill_obj["fps"]
+            # skill_params[f"skill-{skill_alias}.device_id"] = device_obj["symphony_id"]
+            # skill_params[f"skill-{skill_alias}.instance_displayname"] = displayname
+            # skill_params[f"skill-{skill_alias}.device_displayname"] = device_obj["name"]
+            # skill_params[f"skill-{skill_alias}.skill_displayname"] = skill_obj["name"]
             configure_data[device_obj["symphony_id"]].append(skill_obj["symphony_id"])
+
+            pipelines.append({
+                "name": f"pipeline{pipeline_index}",
+                "skill": skill['id'],
+                "parameters": {
+                    "rtsp": f"rtsp://{device_obj['username']}:{device_obj['password']}@{device_obj['rtsp'].split('rtsp://')[1]}",
+                    "fps": skill_obj["fps"],
+                    "device_id": device_obj["symphony_id"],
+                    "instance_displayname": displayname,
+                    "device_displayname": device_obj["name"],
+                    "skill_displayname": skill_obj["name"]
+                }
+            })
+            pipeline_index += 1
 
             # check whether there is iotedge_export node and set route
             spec = skill_obj["flow"]
@@ -398,4 +416,4 @@ def process_configure(configure, displayname):
                         "module_name": node["configurations"]["module_name"],
                         "module_input": node["configurations"]["module_input"]
                     })
-    return skill_env, skill_params, configure_data, module_routes
+    return pipelines, configure_data, module_routes

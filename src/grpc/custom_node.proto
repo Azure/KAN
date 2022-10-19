@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package custom_node;
+
+service CustomNodeHandler {
+    rpc ProcessFrame (ProcessFrameRequest) returns (ProcessFrameResponse) {}
+}
+
+message Frame {
+    float  timestamp   = 3;
+    string frame_id    = 4;
+    string instance_id = 5;
+    string skill_id    = 6;
+    string device_id   = 7;
+    string datetime    = 8;
+}
+
+message ProcessFrameRequest {
+    Frame frame = 1;
+}
+
+message ProcessFrameResponse {
+    Frame frame = 1;
+}
+

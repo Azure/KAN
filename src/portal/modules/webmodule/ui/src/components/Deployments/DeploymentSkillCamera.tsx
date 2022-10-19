@@ -68,13 +68,6 @@ const DeploymentSkillCamera = () => {
       },
       onClick: () => history.go(0),
     },
-    {
-      key: 'filter',
-      text: 'Filter',
-      iconProps: {
-        iconName: 'Filter',
-      },
-    },
     ...commonCommandBarItems,
   ];
 

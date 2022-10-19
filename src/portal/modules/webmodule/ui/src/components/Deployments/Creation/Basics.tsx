@@ -29,8 +29,6 @@ const Basics = (props: Props) => {
   );
   const belongCameraList = useSelector(belongCameraSelector);
 
-  console.log('belongCameraList', belongCameraList);
-
   const deviceOptions: IDropdownOption[] = useMemo(
     () =>
       deviceList.map((device) => ({

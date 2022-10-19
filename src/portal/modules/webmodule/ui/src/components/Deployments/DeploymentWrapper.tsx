@@ -181,7 +181,7 @@ const DeploymentDetail = (props: Props) => {
                 alt="deployment"
                 style={{ marginTop: '20px', width: '140px', height: '140px' }}
               />
-              <Stack tokens={{ childrenGap: 5 }}>
+              <Stack tokens={{ childrenGap: 5 }} horizontalAlign="center">
                 <Label styles={{ root: { fontSize: '16px', lineHeight: '22px' } }}>No Deployments</Label>
                 <Text styles={{ root: { fontSize: '13px', lineHeight: '18px' } }}>
                   Would you like to add one?

@@ -46,7 +46,7 @@ const messageList: {
     iconSrc: '/icons/computeDevice/deviceCreate.png',
     tipOne: 'Successfully added a compute device !',
     tipTwo:
-      'Successfully added a compute device ! Now that you have added a device, you can use add a camera to capture images and tag objects for your model. Simply select your devices below to continue.',
+      'Now that you have added a device, you can use add a camera to capture images and tag objects for your model. Simply select the cameras blade on the left navigation panel.',
   },
   {
     type: 'camera',

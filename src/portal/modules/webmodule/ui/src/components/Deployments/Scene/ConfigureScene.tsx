@@ -89,8 +89,6 @@ const ConfigureScene = (props: Props) => {
 
   const onAnnUpdate = useCallback(
     (id, changes) => {
-      console.log('onAnnUpdate');
-
       dispatch(updateVideoAnno({ id, changes }));
     },
     [dispatch],

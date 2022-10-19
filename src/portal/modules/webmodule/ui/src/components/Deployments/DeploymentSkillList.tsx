@@ -72,8 +72,6 @@ const getDisplayFPS = (
     if (matchSkill) return [...acc, { name: matchSkill.name, fps }];
   }, []);
 
-  console.log('result', result);
-
   return result;
 };
 
@@ -87,8 +85,6 @@ const DeploymentSkillList = () => {
   const device = useSelector(selectDeviceBySymphonyIdSelectorFactory(deployment.compute_device));
 
   const [localConfigureCamera, setLocalConfigureCamera] = useState<ConfigureSkill[]>([]);
-
-  console.log('localConfigureCamera', localConfigureCamera);
 
   const footerClasses = getFooterClasses();
   const history = useHistory();
@@ -162,13 +158,6 @@ const DeploymentSkillList = () => {
         root: { borderLeft: '1px solid #C8C6C4' },
       },
       onClick: () => history.go(0),
-    },
-    {
-      key: 'filter',
-      text: 'Filter',
-      iconProps: {
-        iconName: 'Filter',
-      },
     },
     ...commonCommandBarItems,
   ];

@@ -5,10 +5,13 @@
 """
 import subprocess
 import os
+import logging
 
 from azure.storage.blob import BlobServiceClient, BlobSasPermissions, generate_blob_sas
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
+
+logger = logging.getLogger(__name__)
 
 
 class AzureBlobClient:
@@ -44,6 +47,8 @@ class AzureBlobClient:
             storage_info[key] = val
         account_key = storage_info.get('AccountKey', "")
 
+        logger.warning(
+            f"Generating sas token with account=[{self.storage_account}], container=[{self.storage_container}, blob=[{blob_name}]]")
         return generate_blob_sas(
             self.storage_account,
             self.storage_container,

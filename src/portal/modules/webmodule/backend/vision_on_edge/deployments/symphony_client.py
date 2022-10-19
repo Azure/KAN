@@ -21,6 +21,7 @@ class SymphonyInstanceClient(SymphonyClient):
 
         name = self.args.get("name", "")
         params = self.args.get("params", {})
+        pipelines = self.args.get("pipelines", {})
         solution = self.args.get("solution", "")
         target = self.args.get("target", "")
         tag_list = self.args.get("tag_list", "[]")
@@ -41,6 +42,7 @@ class SymphonyInstanceClient(SymphonyClient):
             "spec": {
                 "scope": "poss",
                 "displayName": display_name,
+                "pipelines": pipelines,
                 "parameters": params,
                 "solution": solution,
                 "target": {
@@ -52,6 +54,7 @@ class SymphonyInstanceClient(SymphonyClient):
 
     def get_patch_config(self):
 
+        pipelines = self.args.get("pipelines", {})
         params = self.args.get("params", {})
         tag_list = self.args.get("tag_list", "[]")
 
@@ -62,6 +65,7 @@ class SymphonyInstanceClient(SymphonyClient):
 
         patch_config = [
             {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
+            {'op': 'replace', 'path': '/spec/pipelines', 'value': pipelines},
             {'op': 'replace', 'path': '/spec/parameters', 'value': params}
         ]
         return patch_config

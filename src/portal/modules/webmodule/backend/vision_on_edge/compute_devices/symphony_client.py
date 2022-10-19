@@ -380,7 +380,7 @@ class SymphonySolutionClient(SymphonyClient):
             "route": "InferenceToIoTHub",
             "type": "iothub",
             "properties": {
-                "definition": f"FROM /messages/modules/{instance}-streamingmodule/metrics INTO $upstream"
+                "definition": f"FROM /messages/modules/{instance}-voeedge/metrics INTO $upstream"
             }
 
         })
@@ -390,13 +390,13 @@ class SymphonySolutionClient(SymphonyClient):
                     "route": f"InferenceTo{module_route['module_name']}",
                     "type": "iothub",
                     "properties": {
-                        "definition": f"FROM /messages/modules/{instance}-streamingmodule/localmetrics INTO BrokeredEndpoint(\"/modules/{module_route['module_name']}/inputs/{module_route['module_input']}\")"
+                        "definition": f"FROM /messages/modules/{instance}-voeedge/localmetrics INTO BrokeredEndpoint(\"/modules/{module_route['module_name']}/inputs/{module_route['module_input']}\")"
                     }
 
                 })
 
         # container image
-        container_version = "0.38.1-dev.2"
+        container_version = "0.39.0-dev.3"
         # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
         # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
         # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"
@@ -466,13 +466,14 @@ class SymphonySolutionClient(SymphonyClient):
                             "container.type": "docker",
                             "container.version": container_version,
                             "env.INSTANCE": "$instance()",
-                            "env.AISKILLS": skills,
+                            # "env.AISKILLS": skills,
                             "env.BLOB_STORAGE_CONNECTION_STRING": storage_conn_str,
                             "env.BLOB_STORAGE_CONTAINER": storage_container,
                             "env.WEBMODULE_URL": webmodule_url,
                             "env.IOTEDGE_CONNECTION_STRING": iotedge_connection_str,
-                            "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
-                        }
+                            # "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
+                        },
+                        "routes": routes
                     }
                 ],
                 "displayName": display_name

@@ -371,11 +371,12 @@ export const backToSkillRawElements = (
     }
 
     if (node.type === 'transform') {
-      data.configurations = node.configurations;
-      // data.configurations.confidence_threshold = node.configurations.confidence_threshold;
-      data.configurations.error = {
-        labels: '',
-        confidence_threshold: '',
+      data.configurations = {
+        ...node.configurations,
+        error: {
+          labels: '',
+          confidence_threshold: '',
+        },
       };
     }
 

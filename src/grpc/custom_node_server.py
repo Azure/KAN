@@ -8,6 +8,9 @@ class CustomNode:
     def __init__(self):
         pass
 
+    def StartSession(self, request: custom_node_pb2.StartSessionRequest, context) -> custom_node_pb2.StartSessionResponse:
+        return custom_node_pb2.StartSessionResponse(ack=request.seq)
+
     def ProcessFrame(self, request: custom_node_pb2.ProcessFrameRequest, context) -> custom_node_pb2.ProcessFrameResponse:
         raise NotImplementedError
 
@@ -34,6 +37,7 @@ class CustomNodeServer:
 if __name__ == '__main__':
 
     class PingPong(CustomNode):
+
         def ProcessFrame(self, request: custom_node_pb2.ProcessFrameRequest, context) -> custom_node_pb2.ProcessFrameResponse:
             print('processing ...')
             frame = custom_node_pb2.Frame(
@@ -44,7 +48,7 @@ if __name__ == '__main__':
                 device_id=request.frame.device_id,
                 datetime=request.frame.datetime,
             )
-            return custom_node_pb2.ProcessFrameResponse(frame=frame)
+            return custom_node_pb2.ProcessFrameResponse(ack=request.seq, frame=frame)
 
     
     server = CustomNodeServer(6677, PingPong())

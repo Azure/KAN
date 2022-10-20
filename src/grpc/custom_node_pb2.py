@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x11\x63ustom_node.proto\x12\x0b\x63ustom_node\"x\n\x05\x46rame\x12\x11\n\ttimestamp\x18\x03 \x01(\x02\x12\x10\n\x08\x66rame_id\x18\x04 \x01(\t\x12\x13\n\x0binstance_id\x18\x05 \x01(\t\x12\x10\n\x08skill_id\x18\x06 \x01(\t\x12\x11\n\tdevice_id\x18\x07 \x01(\t\x12\x10\n\x08\x64\x61tetime\x18\x08 \x01(\t\"8\n\x13ProcessFrameRequest\x12!\n\x05\x66rame\x18\x01 \x01(\x0b\x32\x12.custom_node.Frame\"9\n\x14ProcessFrameResponse\x12!\n\x05\x66rame\x18\x01 \x01(\x0b\x32\x12.custom_node.Frame2j\n\x11\x43ustomNodeHandler\x12U\n\x0cProcessFrame\x12 .custom_node.ProcessFrameRequest\x1a!.custom_node.ProcessFrameResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x11\x63ustom_node.proto\x12\x0b\x63ustom_node\"x\n\x05\x46rame\x12\x11\n\ttimestamp\x18\x03 \x01(\x02\x12\x10\n\x08\x66rame_id\x18\x04 \x01(\t\x12\x13\n\x0binstance_id\x18\x05 \x01(\t\x12\x10\n\x08skill_id\x18\x06 \x01(\t\x12\x11\n\tdevice_id\x18\x07 \x01(\t\x12\x10\n\x08\x64\x61tetime\x18\x08 \x01(\t\"\"\n\x13StartSessionRequest\x12\x0b\n\x03seq\x18\x01 \x01(\x03\"#\n\x14StartSessionResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\x03\"E\n\x13ProcessFrameRequest\x12\x0b\n\x03seq\x18\x01 \x01(\x03\x12!\n\x05\x66rame\x18\x02 \x01(\x0b\x32\x12.custom_node.Frame\"F\n\x14ProcessFrameResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\x03\x12!\n\x05\x66rame\x18\x02 \x01(\x0b\x32\x12.custom_node.Frame2\xc1\x01\n\x11\x43ustomNodeHandler\x12U\n\x0cStartSession\x12 .custom_node.StartSessionRequest\x1a!.custom_node.StartSessionResponse\"\x00\x12U\n\x0cProcessFrame\x12 .custom_node.ProcessFrameRequest\x1a!.custom_node.ProcessFrameResponse\"\x00\x62\x06proto3'
 )
 
 
@@ -92,18 +92,18 @@ _FRAME = _descriptor.Descriptor(
 )
 
 
-_PROCESSFRAMEREQUEST = _descriptor.Descriptor(
-  name='ProcessFrameRequest',
-  full_name='custom_node.ProcessFrameRequest',
+_STARTSESSIONREQUEST = _descriptor.Descriptor(
+  name='StartSessionRequest',
+  full_name='custom_node.StartSessionRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='frame', full_name='custom_node.ProcessFrameRequest.frame', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='seq', full_name='custom_node.StartSessionRequest.seq', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -120,21 +120,60 @@ _PROCESSFRAMEREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=156,
-  serialized_end=212,
+  serialized_end=190,
 )
 
 
-_PROCESSFRAMERESPONSE = _descriptor.Descriptor(
-  name='ProcessFrameResponse',
-  full_name='custom_node.ProcessFrameResponse',
+_STARTSESSIONRESPONSE = _descriptor.Descriptor(
+  name='StartSessionResponse',
+  full_name='custom_node.StartSessionResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='frame', full_name='custom_node.ProcessFrameResponse.frame', index=0,
-      number=1, type=11, cpp_type=10, label=1,
+      name='ack', full_name='custom_node.StartSessionResponse.ack', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=192,
+  serialized_end=227,
+)
+
+
+_PROCESSFRAMEREQUEST = _descriptor.Descriptor(
+  name='ProcessFrameRequest',
+  full_name='custom_node.ProcessFrameRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='seq', full_name='custom_node.ProcessFrameRequest.seq', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='frame', full_name='custom_node.ProcessFrameRequest.frame', index=1,
+      number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -151,13 +190,54 @@ _PROCESSFRAMERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=214,
-  serialized_end=271,
+  serialized_start=229,
+  serialized_end=298,
+)
+
+
+_PROCESSFRAMERESPONSE = _descriptor.Descriptor(
+  name='ProcessFrameResponse',
+  full_name='custom_node.ProcessFrameResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ack', full_name='custom_node.ProcessFrameResponse.ack', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='frame', full_name='custom_node.ProcessFrameResponse.frame', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=300,
+  serialized_end=370,
 )
 
 _PROCESSFRAMEREQUEST.fields_by_name['frame'].message_type = _FRAME
 _PROCESSFRAMERESPONSE.fields_by_name['frame'].message_type = _FRAME
 DESCRIPTOR.message_types_by_name['Frame'] = _FRAME
+DESCRIPTOR.message_types_by_name['StartSessionRequest'] = _STARTSESSIONREQUEST
+DESCRIPTOR.message_types_by_name['StartSessionResponse'] = _STARTSESSIONRESPONSE
 DESCRIPTOR.message_types_by_name['ProcessFrameRequest'] = _PROCESSFRAMEREQUEST
 DESCRIPTOR.message_types_by_name['ProcessFrameResponse'] = _PROCESSFRAMERESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -168,6 +248,20 @@ Frame = _reflection.GeneratedProtocolMessageType('Frame', (_message.Message,), {
   # @@protoc_insertion_point(class_scope:custom_node.Frame)
   })
 _sym_db.RegisterMessage(Frame)
+
+StartSessionRequest = _reflection.GeneratedProtocolMessageType('StartSessionRequest', (_message.Message,), {
+  'DESCRIPTOR' : _STARTSESSIONREQUEST,
+  '__module__' : 'custom_node_pb2'
+  # @@protoc_insertion_point(class_scope:custom_node.StartSessionRequest)
+  })
+_sym_db.RegisterMessage(StartSessionRequest)
+
+StartSessionResponse = _reflection.GeneratedProtocolMessageType('StartSessionResponse', (_message.Message,), {
+  'DESCRIPTOR' : _STARTSESSIONRESPONSE,
+  '__module__' : 'custom_node_pb2'
+  # @@protoc_insertion_point(class_scope:custom_node.StartSessionResponse)
+  })
+_sym_db.RegisterMessage(StartSessionResponse)
 
 ProcessFrameRequest = _reflection.GeneratedProtocolMessageType('ProcessFrameRequest', (_message.Message,), {
   'DESCRIPTOR' : _PROCESSFRAMEREQUEST,
@@ -192,13 +286,23 @@ _CUSTOMNODEHANDLER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=273,
-  serialized_end=379,
+  serialized_start=373,
+  serialized_end=566,
   methods=[
+  _descriptor.MethodDescriptor(
+    name='StartSession',
+    full_name='custom_node.CustomNodeHandler.StartSession',
+    index=0,
+    containing_service=None,
+    input_type=_STARTSESSIONREQUEST,
+    output_type=_STARTSESSIONRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
   _descriptor.MethodDescriptor(
     name='ProcessFrame',
     full_name='custom_node.CustomNodeHandler.ProcessFrame',
-    index=0,
+    index=1,
     containing_service=None,
     input_type=_PROCESSFRAMEREQUEST,
     output_type=_PROCESSFRAMERESPONSE,

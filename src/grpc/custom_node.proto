@@ -3,6 +3,7 @@ syntax = "proto3";
 package custom_node;
 
 service CustomNodeHandler {
+    rpc StartSession(StartSessionRequest) returns (StartSessionResponse) {}
     rpc ProcessFrame (ProcessFrameRequest) returns (ProcessFrameResponse) {}
 }
 
@@ -15,11 +16,22 @@ message Frame {
     string datetime    = 8;
 }
 
+
+message StartSessionRequest {
+    int64 seq = 1;
+}
+
+message StartSessionResponse {
+    int64 ack = 1;
+}
+
 message ProcessFrameRequest {
-    Frame frame = 1;
+    int64 seq = 1;
+    Frame frame = 2;
 }
 
 message ProcessFrameResponse {
-    Frame frame = 1;
+    int64 ack = 1;
+    Frame frame = 2;
 }
 

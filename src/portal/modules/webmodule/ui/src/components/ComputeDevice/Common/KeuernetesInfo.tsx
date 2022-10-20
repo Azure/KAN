@@ -49,7 +49,7 @@ const KeuernetesInfo = (props: Props) => {
       e.stopPropagation();
       setDragActive(false);
       if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-        const file = (await toBase64(e.target.files[0])) as string;
+        const file = (await toBase64(e.dataTransfer.files[0])) as string;
         onFormDataChange({
           ...localFormData,
           config_data: toImageContent(file),

@@ -13,12 +13,14 @@ export type CreateComputeDeviceFormData = Pick<
   ComputeDevice,
   'name' | 'iothub' | 'iotedge_device' | 'architecture' | 'acceleration' | 'cluster_type' | 'is_k8s'
 > & {
+  config_data: string;
   tag_list: Tag[];
   error: {
     name: string;
     iotHub: string;
     iotedge_device: string;
     acceleration: string;
+    config_data: string;
   };
 };
 
@@ -51,6 +53,10 @@ export const clusterOptions: IChoiceGroupOption[] = [
   {
     key: 'current',
     text: 'Current cluster',
+  },
+  {
+    key: 'other',
+    text: 'Other cluster',
   },
 ];
 

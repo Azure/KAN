@@ -7,6 +7,7 @@
 import logging
 import uuid
 import yaml
+import base64
 
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -118,6 +119,10 @@ class ComputeDeviceViewSet(viewsets.ModelViewSet):
         target_symphony_id = 'target-' + str(uuid.uuid4())
         solution_symphony_id = 'solution-' + str(uuid.uuid4())
 
+        # config_data: k8s config (base64 encoded)
+        config_data = base64.b64decode(
+            request.data.get("config_data", "")).decode('utf8')
+
         target_client.set_attr({
             "name": target_symphony_id,
             "iothub": request.data.get("iothub", ""),
@@ -126,6 +131,7 @@ class ComputeDeviceViewSet(viewsets.ModelViewSet):
             "acceleration": request.data.get("acceleration", ""),
             "is_k8s": request.data.get("is_k8s", False),
             "cluster_type": request.data.get("cluster_type", "current"),
+            "config_data": config_data,
             "solution_id": solution_symphony_id,
             "display_name": request.data.get("name", ""),
             "tag_list": request.data.get("tag_list", "[]"),

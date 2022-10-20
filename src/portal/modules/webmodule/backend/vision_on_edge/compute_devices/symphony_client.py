@@ -30,6 +30,7 @@ class SymphonyTargetClient(SymphonyClient):
         tag_list = self.args.get("tag_list", "[]")
         is_k8s = self.args.get("is_k8s", False)
         cluster_type = self.args.get("cluster_type", "current")
+        config_data = self.args.get("config_data", "")
         # connection_str = os.getenv('IOTHUB_CONNECTION_STRING')
         tenant_id = os.getenv('TENANT_ID')
         client_id = os.getenv('CLIENT_ID')
@@ -56,7 +57,11 @@ class SymphonyTargetClient(SymphonyClient):
                 config = {"inCluster": 'true'}
             else:
                 # TODO to be modified to provided config
-                config = {"inCluster": 'false'}
+                config = {
+                    "inCluster": "false",
+                    "configType": "bytes",
+                    "configData": config_data
+                }
         else:
             # get iothub connection string
             res = subprocess.check_output(

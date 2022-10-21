@@ -3,6 +3,7 @@
 
 import React, { useRef, useCallback, useState } from 'react';
 import { Stack, Text, Label, Icon, Link } from '@fluentui/react';
+import { isEmpty } from 'ramda';
 
 import { CreateComputeDeviceFormData, clusterOptions } from '../types';
 import { ClusterType } from '../../../store/types';
@@ -147,7 +148,26 @@ const KeuernetesInfo = (props: Props) => {
               )}
             </form>
             {!!localFormData.error.config_data && (
-              <Text className={classes.errorMessage}>{localFormData.error.config_data}</Text>
+              <Stack
+                horizontal
+                tokens={{ childrenGap: 8 }}
+                verticalAlign="center"
+                className={classes.errorWrapper}
+              >
+                <Icon iconName="StatusErrorFull" className={classes.errorIcon} />
+                <Text className={classes.errorMessage}>{localFormData.error.config_data}</Text>
+              </Stack>
+            )}
+            {!isEmpty(localFormData.config_data) && (
+              <Stack
+                horizontal
+                tokens={{ childrenGap: 8 }}
+                verticalAlign="center"
+                className={classes.errorWrapper}
+              >
+                <Icon iconName="CompletedSolid" className={classes.successIcon} />
+                <Text className={classes.successMessage}>Uploaded!</Text>
+              </Stack>
             )}
           </Stack>
         </Stack>

@@ -21,7 +21,7 @@ interface Props {
   existingNameList: string[];
 }
 
-const ERROR_FILE_BLANK = 'Config File should not be empty.';
+const ERROR_FILE_BLANK = 'Config file cannot be empty.';
 
 const getLocalFormError = (form: CreateComputeDeviceFormData, existingNameList: string[]) => {
   const error = {

@@ -33,10 +33,16 @@ export const getKeuernetesInfoClasses = () =>
       lineHeight: '18px',
       margin: 0,
     },
+    errorWrapper: {
+      paddingTop: '5px',
+    },
     errorMessage: {
       color: theme.palette.redDark,
       fontSize: '12px',
-      paddingTop: '5px',
+    },
+    successMessage: {
+      color: '#57A300',
+      fontSize: '12px',
     },
     linkText: {
       fontSize: '13px',
@@ -53,5 +59,13 @@ export const getKeuernetesInfoClasses = () =>
       right: '0px',
       bottom: '0px',
       left: '0px',
+    },
+    errorIcon: {
+      fontSize: '16px',
+      color: theme.palette.redDark,
+    },
+    successIcon: {
+      fontSize: '16px',
+      color: '#57A300',
     },
   });

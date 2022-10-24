@@ -23,7 +23,6 @@ import { State } from 'RootStateType';
 import { useQuery } from '../../hooks/useQuery';
 import { selectPartById, getParts, deletePart } from '../../store/partSlice';
 import { selectTrainingProjectById } from '../../store/trainingProjectSlice';
-import { thunkGetProject } from '../../store/project/projectActions';
 import { EmptyAddIcon } from '../EmptyAddIcon';
 import { postImages, getImages } from '../../store/imageSlice';
 import { partImageItemSelectorFactory } from '../../store/selectors';
@@ -80,7 +79,6 @@ export const PartDetails: React.FC = () => {
 
   useEffect(() => {
     dispatch(getParts());
-    dispatch(thunkGetProject());
   }, [dispatch]);
 
   if (isNil(part) || isNil(project)) return <Spinner label="Loading" />;

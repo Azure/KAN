@@ -23,12 +23,7 @@ import * as R from 'ramda';
 
 import { State } from 'RootStateType';
 import { InferenceSource, Project, Status } from '../../store/project/projectTypes';
-import {
-  thunkGetProject,
-  updateProjectData,
-  updateProbThreshold,
-  updateMaxPeople,
-} from '../../store/project/projectActions';
+import { updateProjectData, updateProbThreshold, updateMaxPeople } from '../../store/project/projectActions';
 import { ConfigurationInfo } from '../ConfigurationInfo/ConfigurationInfo';
 import { camerasSelectorFactory } from '../../store/cameraSlice';
 import { partNamesSelectorFactory, partOptionsSelectorFactory } from '../../store/partSlice';
@@ -225,15 +220,6 @@ const Deployment = R.compose(
         useBoolean(false);
 
       const { data: projectData } = useSelector<State, Project>((state) => state.project);
-
-      const dispatch = useDispatch();
-
-      useEffect(() => {
-        (async () => {
-          const hasConfigured = await dispatch(thunkGetProject());
-          if (!hasConfigured) onOpenCreatePanel();
-        })();
-      }, [dispatch, onOpenCreatePanel]);
 
       return (
         <>

@@ -23,11 +23,8 @@ import { useBoolean } from '@uifabric/react-hooks';
 import { State } from 'RootStateType';
 import { useQuery } from '../../hooks/useQuery';
 import { selectCameraById, getCameras, deleteCameras } from '../../store/cameraSlice';
-import { thunkGetProject } from '../../store/project/projectActions';
 import AddCameraPanel, { PanelMode } from '../AddCameraPanel';
 import { selectLocationById } from '../../store/locationSlice';
-// import LabelingPage from '../../components/LabelingPage/LabelingPage';
-// import { captureImage } from '../../store/imageSlice';
 import { maskRtsp } from '../../utils/maskRTSP';
 
 import CameraLiveFeed from './CameraLiveFeed';
@@ -78,7 +75,6 @@ export const CameraDetails: React.FC = () => {
 
   useEffect(() => {
     dispatch(getCameras(false));
-    dispatch(thunkGetProject());
   }, [dispatch]);
 
   // const onCaptureBtnClick = (streamId) => {

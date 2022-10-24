@@ -1,6 +1,4 @@
-# Azure Percept Open Source Project (POSS): Table of contents
-
-[POSS Overview](/main/README.md)
+# Azure Percept Open Source Project (POSS) Documentation
 
 [POSS Setup Guide](/docs/tutorial/setup-guide.md)
 
@@ -13,13 +11,13 @@
 [Create a custom model with Azure Percept Open-Source Project](/docs/tutorial/Create-a-custom-model.md)
 
 
-## API docs
+### API docs
 
-  [POSS API overview](/docs/api#poss-api)
+  [POSS API overview](/docs/api.md#poss-api)
 
 ### Quickstarts for Symphony
 
-  [Symphony Quickstart](/docs/api/quick_st)
+  [Symphony Quickstart](/docs/api/quick_start/quick_start.md)
   
   [Deploying a simulated temperature sensor Solution to an Azure IoT Edge device](/docs/api/quick_start/deploy_solution_to_azure_iot_edge.md)
   

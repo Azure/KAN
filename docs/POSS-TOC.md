@@ -1,19 +1,19 @@
-# Azure Percept Open Source Project (POSS) Documentation
+# Azure Percept Open Source Project (POSS) documentation
 
-[POSS Setup Guide](/docs/tutorial/setup-guide.md)
+[Introduction to Azure Percept for Open-Source Project: Core concepts](/docs/tutorial/concepts-azure-percept-for-open-source%20.md)
 
-[Introduction to Azure Percept for Open-Source Project Core Concepts](/docs/tutorial/concepts-azure-percept-for-open-source%20.md)
+[Azure Percept for Open-Source Project: Setup guide](/docs/tutorial/setup-guide.md)
 
 [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)
 
-[Create a complex AI skill](/docs/tutorial/Create-a-complex-AI-skill.md)
+[Tutorial: Create a complex AI skill with Azure Percept Open-Source Project](/docs/tutorial/Create-a-complex-AI-skill.md)
 
-[Create a custom model with Azure Percept Open-Source Project](/docs/tutorial/Create-a-custom-model.md)
+[Tutorial: Create a custom model with Azure Percept Open-Source Project](/docs/tutorial/Create-a-custom-model.md)
 
 
 ### API docs
 
-  [POSS API overview](/docs/api.md#poss-api)
+  [Azure Percept for Open-Source Project: API overview](/docs/api.md#poss-api)
 
 ### Quickstarts for Symphony
 

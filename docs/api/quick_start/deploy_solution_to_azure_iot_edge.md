@@ -157,6 +157,7 @@ kubectl get instances
 ```
 
 On the IoT Hub page, verify all IoT Edge modules are up and running:
+
 ![IoT Edge](../images/iot-edge.png)
 
 ## 8. Clean up Symphony objects

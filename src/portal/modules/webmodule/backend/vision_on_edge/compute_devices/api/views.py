@@ -140,6 +140,7 @@ class ComputeDeviceViewSet(viewsets.ModelViewSet):
         solution_client.set_attr({
             "name": solution_symphony_id,
             "acceleration": request.data.get("acceleration", ""),
+            "architecture": request.data.get("architecture", ""),
             "iothub": request.data.get("iothub", ""),
             "iotedge_device": request.data.get("iotedge_device", ""),
             "is_k8s": request.data.get("is_k8s", False)

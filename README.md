@@ -30,7 +30,8 @@ POSS has a no- to low-code portal experience as well as APIs that can be used to
 # Get Started
 Follow [this document](docs/tutorial/setup-guide.md) to get started in minutes. 
 
-Please note! The experiences in this repository should be considered to be in preview/alpha. Significant portions of these experiences are subject to change without warning.
+> [!NOTE]
+> The experiences in this repository should be considered to be in preview/alpha. Significant portions of these experiences are subject to change without warning.
 
 # How It Works
 
@@ -42,11 +43,15 @@ POSS has three high-level components: portal, controller-API and agent. You can 
 * **Controller-API** is a Kubernetes operator that manages states of objects of a POSS object model (code named Symphony). Read more about POSS API [here](./docs/api/README.md).
 * **Agent** offers a number of services to edge payloads, such as retrieving new AI skill definitions and reporting object states.
 
+# POSS and API documentation
+
+To view a list of links to information about POSS and the APIs, go to [Azure Percept Open Source Project (POSS) documentation](./docs/POSS-TOC.md).
+
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+the rights to use your contribution. For details, visit [Contributor License Agreements](https://cla.opensource.microsoft.com).
 
 When you submit a pull request, a CLA bot will automatically determine whether you need to provide
 a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
@@ -75,8 +80,7 @@ Any use of third-party trademarks or logos are subject to those third-party's po
 The software may collect information about your use of the software and send it to Microsoft.
 Microsoft may use this information to provide services and improve our products and services.
 You may turn off the telemetry as described in the repository or clicking settings on top right
-corner. Our privacy statement is located at [https://go.microsoft.com/fwlink/?LinkID=824704](https://go.microsoft.com/fwlink/?LinkID=824704)
-. You can learn more about data collection and use in the help documentation and our privacy
+corner. Our privacy statement is located at [Microsoft Privacy Statement](https://go.microsoft.com/fwlink/?LinkID=824704). You can learn more about data collection and use in the help documentation and our privacy
 statement. Your use of the software operates as your consent to these practices.
 
 

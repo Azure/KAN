@@ -138,6 +138,7 @@ export type CreateComputeDevicePayload = {
   tag_list: string;
   cluster_type: string;
   is_k8s: boolean;
+  config_data: string;
 };
 
 export type UpdateComputeDevicePayload = {

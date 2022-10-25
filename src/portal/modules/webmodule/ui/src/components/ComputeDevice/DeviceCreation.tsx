@@ -21,6 +21,8 @@ interface Props {
   existingNameList: string[];
 }
 
+const ERROR_FILE_BLANK = 'Config file cannot be empty.';
+
 const getLocalFormError = (form: CreateComputeDeviceFormData, existingNameList: string[]) => {
   const error = {
     name: '',
@@ -28,6 +30,7 @@ const getLocalFormError = (form: CreateComputeDeviceFormData, existingNameList: 
     iotedge_device: '',
     acceleration: '',
     cluster_type: '',
+    config_data: '',
   };
 
   if (isEmpty(form.name)) error.name = ERROR_NAME_BLANK;
@@ -37,6 +40,9 @@ const getLocalFormError = (form: CreateComputeDeviceFormData, existingNameList: 
     if (isEmpty(form.iothub)) error.iotHub = ERROR_BLANK_VALUE;
     if (isEmpty(form.iotedge_device)) error.iotedge_device = ERROR_BLANK_VALUE;
   }
+
+  if (form.is_k8s && form.cluster_type === 'other' && isEmpty(form.config_data))
+    error.config_data = ERROR_FILE_BLANK;
 
   if (form.acceleration === '-') error.acceleration = ERROR_BLANK_VALUE;
   return error;
@@ -60,11 +66,13 @@ const ComputeDeviceCreation = (props: Props) => {
     tag_list: [{ name: '', value: '', errorMessage: '' }],
     cluster_type: 'current',
     is_k8s: createType === 'k8s',
+    config_data: '',
     error: {
       name: '',
       iotHub: '',
       iotedge_device: '',
       acceleration: '',
+      config_data: '',
     },
   });
   const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(step);

@@ -159,23 +159,6 @@ const Basics = (props: Props) => {
                   Create one
                 </Link>
               </Stack>
-              {/* <Stack horizontal tokens={{ childrenGap: 8 }}>
-                {localFormData.selectedDeviceList.map((device, idx) => (
-                  <TagLabel
-                    key={idx}
-                    id={device.key}
-                    text={device.text}
-                    onDelete={(id: number) =>
-                      onFormDataChange({
-                        ...localFormData,
-                        selectedDeviceList: localFormData.selectedDeviceList.filter(
-                          (device) => +device.key !== id,
-                        ),
-                      })
-                    }
-                  />
-                ))}
-              </Stack> */}
             </Stack>
           </Stack>
         ) : (

@@ -145,4 +145,5 @@ status:
 
 # Next step
 
-* [Symphony Quickstart: Deploying a simulated temperature sensor solution to an Azure IoT Edge device](/deploy_solution_to_azure_iot_edge.md)
+* [Symphony Quickstart: Deploying a simulated temperature sensor solution to an Azure IoT Edge device](/docs/api/quick_start/deploy_solution_to_azure_iot_edge.md)
+

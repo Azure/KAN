@@ -48,7 +48,7 @@ class AzureBlobClient:
         account_key = storage_info.get('AccountKey', "")
 
         logger.warning(
-            f"Generating sas token with account=[{self.storage_account}], container=[{self.storage_container}, blob=[{blob_name}]]")
+            f"Generating sas token with account=[{self.storage_account}], container=[{self.storage_container}], blob=[{blob_name}]]")
         return generate_blob_sas(
             self.storage_account,
             self.storage_container,

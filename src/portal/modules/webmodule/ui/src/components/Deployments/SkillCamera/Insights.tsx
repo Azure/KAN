@@ -37,9 +37,6 @@ const Insight = (props: Props) => {
     })();
   }, [dispatch, deploymentSymphonyId, skillSymphonyId, cameraSymphonyId, localInsight]);
 
-  // console.log('localInsight', JSON.stringify(localInsight));
-  // console.log('insightList', insightList);
-
   return (
     <Stack styles={{ root: { padding: '25px 30px' } }} tokens={{ childrenGap: 10 }}>
       <Text>The following metadata has been taken from your IoT Hub.</Text>

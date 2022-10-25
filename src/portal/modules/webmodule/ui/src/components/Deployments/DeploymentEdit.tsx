@@ -59,9 +59,6 @@ const DeploymentEdit = () => {
       return { ...accMap };
     }, {});
 
-    console.log('matchedDevice', matchedDevice)
-    console.log('cameraMap', cameraMap)
-
     setLocalFormData({
       name: deployment.name,
       device: { key: matchedDevice.symphony_id, text: matchedDevice.name },

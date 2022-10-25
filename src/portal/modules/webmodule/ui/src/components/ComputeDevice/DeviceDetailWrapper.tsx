@@ -38,6 +38,9 @@ interface Props {
   deviceList: ComputeDevice[];
 }
 
+const IotTitle = 'Add an IoT Edge Device';
+const k8sTitle = 'Add a Kubernetes Device';
+
 const SubMenuButton = (item: IContextualMenuItem) => (
   <CompoundButton
     styles={{ root: { width: '270px' } }}
@@ -103,6 +106,14 @@ const ComputeDeviceDetail = (props: Props) => {
     });
   }, []);
 
+  const onIotRedirect = useCallback(() => {
+    history.push({ pathname: Url.COMPUTE_DEVICE_CREATION_BASIC, search: '?type=iot' });
+  }, [history]);
+
+  const onK8sRedirect = useCallback(() => {
+    history.push({ pathname: Url.COMPUTE_DEVICE_CREATION_BASIC, search: '?type=k8s' });
+  }, [history]);
+
   const commandBarItems: ICommandBarItemProps[] = [
     {
       key: 'add',
@@ -124,17 +135,17 @@ const ComputeDeviceDetail = (props: Props) => {
         items: [
           {
             key: 'iot',
-            text: 'Add an IoT Edge Device',
+            text: IotTitle,
             data: 'Provide your Azure Service and IoT Hub credentials',
             onRender: SubMenuButton,
-            onClick: () => history.push({ pathname: Url.COMPUTE_DEVICE_CREATION_BASIC, search: '?type=iot' }),
+            onClick: onIotRedirect,
           },
           {
             key: 'k8s',
-            text: 'Add a Kubernetes Device',
+            text: k8sTitle,
             data: 'Link your existing device on Kubernetes',
             onRender: SubMenuButton,
-            onClick: () => history.push({ pathname: Url.COMPUTE_DEVICE_CREATION_BASIC, search: '?type=k8s' }),
+            onClick: onK8sRedirect,
           },
         ],
       },
@@ -268,7 +279,8 @@ const ComputeDeviceDetail = (props: Props) => {
                 Would you like to add one?
               </Text>
             </Stack>
-            <PrimaryButton onClick={() => history.push(Url.COMPUTE_DEVICE_CREATION_BASIC)}>Add</PrimaryButton>
+            <PrimaryButton onClick={onIotRedirect}>{IotTitle}</PrimaryButton>
+            <PrimaryButton onClick={onK8sRedirect}>{k8sTitle}</PrimaryButton>
           </Stack>
         </Stack>
       )}

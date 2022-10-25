@@ -1,16 +1,16 @@
-# AI Skills
+# AI skills
 
 ```skill.ai.symphony``` defines a processing graph that is comprised of ```edges``` and ```nodes```. 
 
 ## Schema
 | Field | Type | Description |
 |--------|--------|--------|
-| ```Bindings```| ```[]BindingSpec``` | A list of [bindings](binding.md) that represent actions allowed on the AI skill | 
-| ```DisplayName``` | ```string``` | A user friendly name |
-| ```Edges``` | ```[]EdgeSpec``` | graph edges |
-| ```Nodes``` | ```[]NodeSpec``` | graph nodes |
-| ```Parameters``` | ```map[string]string``` | Parameters. A parameter can be used anywhere in the skill definition. See the [parameters](#parameters) sections below |
-| ```Properties``` | ```map[string]string``` | A property bag |
+| ```Bindings```| ```[]BindingSpec``` | A list of [bindings](binding.md) that represent actions allowed on the AI skill. | 
+| ```DisplayName``` | ```string``` | A user friendly name. |
+| ```Edges``` | ```[]EdgeSpec``` | Graph edges. |
+| ```Nodes``` | ```[]NodeSpec``` | Graph nodes. |
+| ```Parameters``` | ```map[string]string``` | Parameters. A parameter can be used anywhere in the skill definition. For more information, see the [parameters](#parameters) sections below. |
+| ```Properties``` | ```map[string]string``` | A property bag, |
 
 ## Parameters
 You can define any number of parameters in the ```parameters``` section. All parameters are ```string``` typed. And you specify a default for the parameter when declaring it.
@@ -32,8 +32,8 @@ nodes:
     insights_overlay: "$param(model_platform)"
     delay_buffer: "$param(delay_buffer)"  
 ```
-## Overwrite Parameters
-A ```instance.solution.symphony``` object can overwrite AI skill parameter values in its own ```paramters``` section.
+## Overwrite parameters
+A ```instance.solution.symphony``` object can overwrite AI skill parameter values in its own ```parameters``` section.
 
 ```yaml
 parameters:

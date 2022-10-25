@@ -6,7 +6,7 @@ Models are machine learning (ML) algorithms for object identification or classif
 
 In this article, we’ll guide you through the process of adding and training custom models. You can create your own custom model easily by supplying any 15 images based on your customer's use case, labeling them via a interface, and training based on our base models.
 
-For our example use case we will add a custom model that detects when a store has low stock levels for its products based on images of the store shelves. This model provides real time evaluation that can be used to trigger business logic. An example is just-in-time1 supply chains that save significant costs on excess stock and storage overhead.
+For our example use case, we will add a custom model that detects when a store has low stock levels for its products based on images of the store shelves. This model provides real time evaluation that can be used to trigger business logic. An example is [just-in-time supply chains](https://www.liveabout.com/just-in-time-jit-2221262#:\~:text=A%20just%2Din%2Dtime%20supply%20chain%20is%20one%20that%20moves%20synchronized%20with%20the%20subsequent%20operations) that save significant costs on excess stock and storage overhead.
 
 ## Add a model in POSS
 
@@ -16,7 +16,7 @@ The **Model** blade on the left navigation displays two options for adding model
 
 1.  From the left navigation, select **Models**.
 2.  To add a prebuilt model, select **Create Custom Model**.
-3.  To reuse an existing Azure Custom Vision (ACV) model2, or to create one from scratch, select **Create Custom Model**.
+3.  To reuse an existing [Azure Custom Vision (ACV) mode](https://docs.microsoft.com/en-us/azure/cognitive-services/custom-vision-service/overview), or to create one from scratch, select **Create Custom Model**.
 
     When prompted, choose whether the model is based on an existing model or not.
 
@@ -24,9 +24,9 @@ The **Model** blade on the left navigation displays two options for adding model
 
 4.  If you select **Yes,** a dropdown list appears allowing you to choose from available models.
 
-![](./media/213d25b05e45e2786acbc49403b7bc5b.png)
+    ![](./media/213d25b05e45e2786acbc49403b7bc5b.png)
 
-5.  If you select **No**, you can create your own model. Enter **Model Name**, **Type**, and **Objects**.
+    If you select **No**, you can create your own model. Then enter the **Model Name**, **Type**, and **Objects**.
 
 ![](./media/47e4b4825eca44d66ef76dd5e54bc220.png)
 
@@ -34,12 +34,12 @@ The **Model** blade on the left navigation displays two options for adding model
 
 6.  Select **Objects** and enter at least one tag for the detection model to identify. Objects should be in quotes and separated by commas.
 
-![](./media/ce1cc6e2e3dd4846f6ae958051c39511.png)
+    ![](./media/ce1cc6e2e3dd4846f6ae958051c39511.png)
 
-These tags will be used later when you’re training the model to identify and label objects from the camera feeds.
+    These tags will be used later when you’re training the model to identify and label objects from the camera feeds.
 
 7.  Select **Review + Create** or **Next** to move to the **Tags** page.
-8.  When you have finished adding tags, select **Review + Create** to move to the next .
+8.  When you've finished adding tags, select **Review + Create** to move to the next page.
 
 ![](./media/efdff115ebd1ac5988e09d7cd1aefac2.png)
 
@@ -75,7 +75,7 @@ Training the model consists of identifying the objects to be detected or classif
 
 ![](./media/2cd7bb47072416fae27893e9ac52c07c.png)
 
-6.  Select **Go to Tagging**
+6.  Select **Go to Tagging**.
 
 ![](./media/e58489f222cc1130967db12b2ff090a0.png)
 
@@ -87,17 +87,15 @@ Training the model consists of identifying the objects to be detected or classif
 
 9.  To see the tagged image library, select **Done**.
 
-![](./media/7cb3690038117d24797fb2307ea32f23.png)
+    ![](./media/7cb3690038117d24797fb2307ea32f23.png)
 
-The model requires at least fifteen images for training. More images will improve the model’s performance. You can continue to improve the model over time by adding more images and tagging them. Note that the **Tagged** slider turns blue to reflect the status of the image.
+    The model requires at least fifteen images for training. More images will improve the model’s performance. You can continue to improve the model over time by adding more images and tagging them. Note that the **Tagged** slider turns blue to reflect the status of the image.
 
 10.  To add images, select **Capture from camera**.
 
 ![](./media/2041854d4094a8f5dfc0039a29ac8356.png)
 
-11.  Now that there are enough tagged images, select **Train.**
-
-    It may take time to train the model.
+11.  Now that there are enough tagged images, select **Train.** It may take time to train the model.
 
 ![](./media/47a0517359d08420236a0b5745e0b3ba.png)
 
@@ -105,11 +103,5 @@ When **Successfully trained Model!** displays, the model is ready to be added to
 
 ## Next steps
 
-Now that you understand what models are and how to add them from your model gallery, your next step is:
+Now that you understand what models are and how to add them from your model gallery, your next step is to go to the **AI Skills** page to connect your models in a cascade which can chain models and business logic together.
 
--   Go to the AI Skills page to connect your models in a cascade which can chain models and business logic together.
-
-## Footnotes
-
-1.  https://www.thebalancesmb.com/just-in-time-jit-2221262\#:\~:text=A%20just%2Din%2Dtime%20supply%20chain%20is%20one%20that%20moves,synchronized%20with%20the%20subsequent%20operations.
-2.  https://docs.microsoft.com/en-us/azure/cognitive-services/custom-vision-service/overview

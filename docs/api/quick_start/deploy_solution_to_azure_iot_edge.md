@@ -190,3 +190,7 @@ helm registry login symphonyk8s.azurecr.io   --username $USER_NAME --password $P
 # install using Helm chart
 helm install symphony oci://symphonyk8s.azurecr.io/helm/symphony --version 0.1.22
 ```
+
+# Next step
+
+* [Symphony Quickstart - Managing RTSP cameras connected to a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)

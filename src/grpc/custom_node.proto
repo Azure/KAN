@@ -2,27 +2,56 @@ syntax = "proto3";
 
 package custom_node;
 
+enum ColorFormat {
+    COLOR_FORMAT_BGR = 0;
+    COLOR_FORMAT_RGB = 1;
+}
+
+message ImageProperties {
+    int64 height = 1;
+    int64 width  = 2;
+    ColorFormat color_format = 3;
+}
+
+message Image {
+    bytes image_pointer        = 1;
+    ImageProperties properties = 2;
+
+}
+
+//message InsightMeta {
+
+//}
+
+message Frame {
+    Image image              = 1;
+    //InsightMeta insight_meta = 2;
+    float timestamp          = 3;
+    string frame_id          = 4;
+    //Roi rot                  = 5;
+    string datetime          = 6;
+}
+
 service CustomNodeHandler {
     rpc StartSession(StartSessionRequest) returns (StartSessionResponse) {}
     rpc ProcessFrame (ProcessFrameRequest) returns (ProcessFrameResponse) {}
 }
 
-message Frame {
-    float  timestamp   = 3;
-    string frame_id    = 4;
-    string instance_id = 5;
-    string skill_id    = 6;
-    string device_id   = 7;
-    string datetime    = 8;
-}
-
-
 message StartSessionRequest {
     int64 seq = 1;
+    string instance_id = 2;
+    string skill_id    = 3;
+    string device_id   = 4;
+}
+
+enum ImageType {
+    IMAGE_TYPE_NUMPY = 0;
+    IMAGE_TYPE_RAW   = 1;
 }
 
 message StartSessionResponse {
     int64 ack = 1;
+    ImageType image_type = 2; // numpy , raw
 }
 
 message ProcessFrameRequest {

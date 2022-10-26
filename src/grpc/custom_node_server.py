@@ -9,7 +9,8 @@ class CustomNode:
         pass
 
     def StartSession(self, request: custom_node_pb2.StartSessionRequest, context) -> custom_node_pb2.StartSessionResponse:
-        return custom_node_pb2.StartSessionResponse(ack=request.seq)
+        print('s')
+        return custom_node_pb2.StartSessionResponse(ack=request.seq, image_type=custom_node_pb2.IMAGE_TYPE_NUMPY)
 
     def ProcessFrame(self, request: custom_node_pb2.ProcessFrameRequest, context) -> custom_node_pb2.ProcessFrameResponse:
         raise NotImplementedError
@@ -41,11 +42,9 @@ if __name__ == '__main__':
         def ProcessFrame(self, request: custom_node_pb2.ProcessFrameRequest, context) -> custom_node_pb2.ProcessFrameResponse:
             print('processing ...')
             frame = custom_node_pb2.Frame(
+                image=request.frame.image,
                 timestamp=request.frame.timestamp,
                 frame_id=request.frame.frame_id,
-                instance_id=request.frame.instance_id,
-                skill_id=request.frame.skill_id,
-                device_id=request.frame.device_id,
                 datetime=request.frame.datetime,
             )
             return custom_node_pb2.ProcessFrameResponse(ack=request.seq, frame=frame)

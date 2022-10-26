@@ -47,3 +47,10 @@ server = CustomNodeServer(6677, PingPong())
 server.serve()
 ```
 
+
+### Others
+
+to generate py codes
+```python
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. custom_node.proto
+```

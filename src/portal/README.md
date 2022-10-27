@@ -8,7 +8,7 @@ A script for building/pushing portal modules
 ## Prerequisites
 Maintain a .env file under **portal** which contains environment variables as shown below:
 
-- Container registry name:
+- Container registry:
 ```
     CONTAINER_REGISTRY_NAME="testvoe.azurecr.io"
 ``` 

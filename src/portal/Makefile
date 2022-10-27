@@ -1,4 +1,4 @@
-include .env.dev
+include .env
 
 PWD = $(shell pwd)
 WEBMODULE_PATH = $(PWD)/modules/webmodule

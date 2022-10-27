@@ -34,7 +34,9 @@ To begin the setup process:
 
 ![image](https://user-images.githubusercontent.com/10191339/186480918-c366a912-c036-4ee7-ada8-d7ca4ad4d054.png)
 
-3. Run the following two commands; one at a time, and in the order shown here. In your Azure Cloud CLI environment (note run in home, not in a subdirectory), update the Helm version of your environment as there is an issue with the current version of Helm installed as part of Azure Cloud CLI environment:
+3. Run the following two commands; one at a time, and in the order shown here. 
+
+   In your Azure Cloud CLI environment (note run in home, not in a subdirectory), update the Helm version of your environment as there is an issue with the current version of Helm installed as part of Azure Cloud CLI environment:
 
 ```
     wget -O fix-helm-issue.sh "https://possfiles.blob.core.windows.net/setup/Private-Alpha/fix-helm-issue.sh"
@@ -42,7 +44,7 @@ To begin the setup process:
     source fix-helm-issue.sh
 ```
 
-4. Run the following command to download the setup installer while substituting <download-url> with the required download URL corresponding to a specific version of installer and POSS release using the table below:
+4. Run the following command to download the setup installer. Substitute <download-url> with the required download URL corresponding to a specific version of installer and POSS release using the table below:
 
 ```
     wget -O poss-installer.sh "download-url"
@@ -71,64 +73,65 @@ To begin the setup process:
 
 6. When you're asked to select whether you want to install POSS onto an AKS cluster or your existing K8s cluster which is included in your kubeconfig context. 
     
-    1. If you would like to install on AKS select **1**, otherwise select **2**. 
+    1. If you want to install on AKS select **1**, otherwise select **2**. 
     
        For this guide, select **1** to use an AKS cluster. 
     
     2. After you select **1**, a list of AKS clusters appears under your subscription. 
     
-       Select the AKS cluster that you would like to install POSS on.
+       Select the AKS cluster that you want to install POSS on.
 
 ![image](https://user-images.githubusercontent.com/10191339/186487409-c325c76c-0771-409c-9c4a-4babb666d9de.png)
     
-7. Next you're asked whether you would like to create a new storage account or use an already existing one. 
-    - If you choose to create a new one, you're asked to select from list of resource groups available under your subscription and then a name for your storage account. 
+7. Next you're asked whether you want to create a new storage account or use an already existing one. 
+  
+    - To create a new one, make a selection from the list of resource groups available under your subscription and then enter a name for your storage account. 
     
-     - If you select to choose from already existing storage accounts, you're shown a list of storage accounts under your subscription to select from.
+    - To choose an already existing storage accounts, make a selection from the list of storage accounts under your subscription.
 
 ![image](https://user-images.githubusercontent.com/10191339/186487829-cda5b6db-85c2-49af-9c3f-0f97cef4b019.png)
 
-8. Next you're asked whether you would like to create a new blob container within your storage account or use an already existing one. 
+8. Next you're asked whether you want to create a new blob container within your storage account or use an already existing one. 
     
-    - If you choose to create a new one, you're asked to provide a name for your blob container within your storage account. 
+    - To create a new one, you're asked to provide a name for your blob container within your storage account. 
     
-    - If you select to choose from already existing blob container, you're shown a list of storage accounts under your storage account to select from.
+    - To choose from already existing blob container, make a selection from the list of storage accounts under your storage account.
 
 ![image](https://user-images.githubusercontent.com/10191339/186488033-4bd85dfc-550e-4320-b242-30013828aefe.png)
 
-9. Next you're asked whether you would like to create a new custom vision account or use an already existing one. 
+9. Next you're asked whether you want to create a new custom vision account or use an already existing one. 
     
-    - If you choose to create a new one, you're asked to select from list of resource groups available under your subscription and then a name for your custom vision account. 
+    - To create a new one, make a selection from the displayed list of resource groups available under your subscription and then enter a name for your custom vision account. 
     
-    - If you select to choose from already existing custom vision accounts, you're shown a list of custom vision accounts under your subscription to select from.
+    - If you want to select from already existing custom vision accounts, make a selection from the displayed list of custom vision accounts under your subscription.
 
 ![image](https://user-images.githubusercontent.com/10191339/186488323-da75715d-9128-4bff-821e-d88547abc77c.png)
 
-10. Next you are asked whether you would like to create a service principal or use an already existing one. 
+10. Next you're asked whether you want to create a service principal or use an already existing one. 
     
-    - If you choose to create a new one, you're asked to select a name for your service principal. 
+    - To create a new one, select a name for your service principal. 
     
-    - If you select to choose from already existing one, you have the option to select from a list of existing service principals or to provide the name of your existing service principal directly. (This option is recommended as there can be too many service principals to show with the first option).
+    - To choose an already existing one, make a selection from the list of existing service principals or provide the name of your existing service principal directly. (This option is recommended as there can be too many service principals to show with the first option).
 
  ![image](https://user-images.githubusercontent.com/10191339/186488469-ff1ae26e-2674-482e-a2f8-0717860fdad2.png)
 
-11. Lastly, the installer asks you to confirm your choices. You can confirm the selection by answering **y** to the question.
+11. Lastly, the installer asks you to confirm your choices. Confirm your selections by answering **y** to the question.
 
 ![image](https://user-images.githubusercontent.com/10191339/186488549-4c74bbc5-4f49-4bb7-a103-18e6452adfca.png)
 
 
-The installation will take a few minutes. 
+The installation may take a few minutes. 
     
 > [!NOTE]
 > If you face any issues towards the end of the installation to download our Helm charts to install either **symphony** or **voe**, uninstall the experience using the commands below and retry running the installer script in a couple of minutes. 
 >
-> Azure is currently facing some issues with the Azure Container Registry not handling all download requests successfully due to high load so trying again in a couple of minutes can solve your issue.  
+> Azure is currently facing some issues with the Azure Container Registry not handling all download requests successfully due to high load. Trying again in a few minutes may resolve the issue.  
     
-Once completed you can find the IP address of the portal to access it by running the following command in your Azure Cloud CLI command line: 
+12. When the installation has completed, you can find the IP address of the portal to access it by running the following command in your Azure Cloud CLI command line: 
 
-``kubectl get svc -A``
+   ``kubectl get svc -A``
 
-Use the LoadBalancer IP address as shown below:
+   Use the LoadBalancer IP address as shown below:
 
 ![image](https://user-images.githubusercontent.com/10191339/186488705-03d3af9b-4536-4575-afe8-978b8a692a73.png)
 
@@ -137,16 +140,19 @@ Use the LoadBalancer IP address as shown below:
 Once you have the LoadBalancer IP address as shown above:
 1. Open the resource group associated with your AKS cluster (not the AKS cluster itself).
 2. Open the network security (NSG) resource.
-3. For each line that references the LoadBalancer IP address, select the inbound security rule, change the source IP address range to the network you want to allow access to the portal, for example your home or corporate IP address space in CIDR notation.
-4. In your Azure Cloud CLI instance run the following two commands, in the order shown below, to uninstall POSS:
+3. For each line that references the LoadBalancer IP address:
+  
+   1. Select the inbound security rule.
+   2. Change the source IP address range to the network you want to allow access to the portal. For example, your home or corporate IP address space in CIDR notation.
+  
+4. To uninstall POSS, in your Azure Cloud CLI instance, run the following two commands in the order shown below:
 
     1. `helm uninstall voe`
     2. `helm uninstall symphony`
-
-    
+ 
 ## Reporting Issues and Bugs
     
-Please report any issues or bugs you face using the [repository's issues page](https://github.com/Azure/perceptoss/issues).
+Report any issues or bugs you face using the [repository's issues page](https://github.com/Azure/perceptoss/issues).
 
 ## Next steps
 

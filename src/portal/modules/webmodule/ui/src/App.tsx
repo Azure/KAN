@@ -12,7 +12,6 @@ import RootRouter from './routes/RootRouter';
 import TelemetryProvider from './components/TelemetryProvider';
 import { useWebSocket } from './hooks/useWebSocket';
 import { thunkGetSettingAndAppInsightKey } from './store/setting/settingAction';
-import { thunkGetProject } from './store/project/projectActions';
 import { getTrainingProject } from './store/trainingProjectSlice';
 import { clearRejectMsg } from './store/rejectedReducer';
 
@@ -28,11 +27,7 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      await Promise.all([
-        dispatch(thunkGetSettingAndAppInsightKey()),
-        dispatch(thunkGetProject()),
-        dispatch(getTrainingProject(false)),
-      ]);
+      await Promise.all([dispatch(thunkGetSettingAndAppInsightKey()), dispatch(getTrainingProject(false))]);
       setloading(false);
     })();
   }, [dispatch]);

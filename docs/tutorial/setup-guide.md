@@ -145,7 +145,9 @@ Once you have the LoadBalancer IP address as shown above:
    1. Select the inbound security rule.
    2. Change the source IP address range to the network you want to allow access to the portal. For example, your home or corporate IP address space in CIDR notation.
   
-4. To uninstall POSS, in your Azure Cloud CLI instance, run the following two commands in the order shown below:
+
+## Uninstall POSS
+To uninstall POSS, in your Azure Cloud CLI instance, run the following two commands in the order shown below:
 
     1. `helm uninstall voe`
     2. `helm uninstall symphony`

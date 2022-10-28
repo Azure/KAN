@@ -5,6 +5,6 @@
 ## Schema
 | Field | Type | Description |
 |--------|--------|--------|
-| ```Bindings```| ```[]BindingSpec``` | A list of [bindings](binding.md) that represent actions allowed on the AI skill | 
-| ```DisplayName``` | ```string``` | A user friendly name |
-| ```Properties``` | ```map[string]string``` | A property bag |
+| ```Bindings```| ```[]BindingSpec``` | A list of [bindings](binding.md) that represent actions allowed on the AI skill. | 
+| ```DisplayName``` | ```string``` | A user friendly name. |
+| ```Properties``` | ```map[string]string``` | A property bag. |

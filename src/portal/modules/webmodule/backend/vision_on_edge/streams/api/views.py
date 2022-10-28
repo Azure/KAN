@@ -181,7 +181,7 @@ def capture(request, stream_id):
         part_id = request.query_params.get("part_id") or stream.part_id
         camera_id = stream.camera_id
         img_obj = Image(image=img, part_id=part_id,
-                        camera_id=camera_id, project=project)
+                        camera=camera_id, project=project)
         img_obj.save()
         img_serializer = ImageSerializer(img_obj, context={"request": request})
         response_data = {"status": "ok", "image": img_serializer.data}

@@ -1,8 +1,8 @@
-# Create a complex AI skill with Azure Percept Open-Source Project
+# Create a complex AI skill with Azure Percept Open-Source Portal
 
 ## Overview
 
-Azure Percept (P) skills are deployable packages to Edge devices. These packages are a cascade of stages or *nodes* where the video feed is consumed by an Edge device, inferences are calculated, results are filtered, and results and video clips are exported for further business logic processing or storage. 
+Azure Percept Open-Source skills are deployable packages to Edge devices. These packages are a cascade of stages or *nodes* where the video feed is consumed by an Edge device, inferences are calculated, results are filtered, and results and video clips are exported for further business logic processing or storage. 
 
 There are three groups of nodes that comprise AI skills:
 

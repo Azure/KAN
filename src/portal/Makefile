@@ -1,4 +1,4 @@
-include .env
+include .env.dev
 
 PWD = $(shell pwd)
 WEBMODULE_PATH = $(PWD)/modules/webmodule
@@ -25,7 +25,7 @@ build: check-env ## build webmodule image
 
 .PHONY: push
 push: check-env ## push webmodule image
-	@docker push $(CONTAINER_REGISTRY_NAME)/webmodule:$(MODULE_VERSION)amd64
+	@docker push $(CONTAINER_REGISTRY_NAME)/webmodule:$(MODULE_VERSION)-amd64
 
 .PHONY: version
 version: ## check webmodule version

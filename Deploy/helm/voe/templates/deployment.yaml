@@ -21,7 +21,7 @@ spec:
       serviceAccountName: symphony-user
       containers:
       - name: webmodule
-        image: {{.Values.image.image}}:{{.Values.image.tag}}
+        image: {{.Values.image.image}}:{{.Values.image.tag | default .Chart.Version}}
         imagePullPolicy: {{.Values.image.pullPolicy}}
         ports:
         - containerPort: 8000

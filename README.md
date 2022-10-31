@@ -7,7 +7,7 @@ Azure Percept Open-Source Project is a framework for creating, deploying, and op
 POSS has a no- to low-code portal experience as well as APIs that can be used to build custom Edge AI applications. It supports running Edge AI apps by utilizing cameras and Edge devices with different Edge runtimes and accelerators across multiple locations at scale. Since it is designed with machine learning operations (MLOps) in mind, it provides support for active learning, continuous training, and data gathering using your machine learning (ML) models running at the edge.
 
 <p align="center">
-<img src="docs/images/POSS Portal.gif" width="900"/>
+<img src="docs/images/POSS Portal.gif" width="650"/>
 </p>
 
 # Characteristics

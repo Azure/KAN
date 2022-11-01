@@ -17,7 +17,6 @@ from rest_framework import status
 
 from ..azure_parts.models import Part
 from ..azure_projects.models import Project
-from ..cameras.models import Camera
 from .exceptions import ImageGetRemoteImageRequestsError
 
 logger = logging.getLogger(__name__)
@@ -31,7 +30,7 @@ class Image(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
     part = models.ForeignKey(Part, on_delete=models.SET_NULL, null=True)
     part_ids = models.CharField(max_length=1000, null=True)
-    camera = models.ForeignKey(Camera, on_delete=models.SET_NULL, null=True)
+    camera = models.CharField(max_length=1000, null=True)
     image = models.ImageField(upload_to="images/")
     labels = models.CharField(max_length=1000, null=True)
     is_relabel = models.BooleanField(default=False)

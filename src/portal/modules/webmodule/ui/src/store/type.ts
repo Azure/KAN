@@ -51,7 +51,7 @@ export type Image = {
   confidence: number;
   hasRelabeled: boolean;
   timestamp: string;
-  camera: number;
+  camera: string; // sym_id
   uploaded: boolean;
   manualChecked: boolean;
   labels: string[];

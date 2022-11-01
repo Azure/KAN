@@ -31,7 +31,7 @@ type ImageFromServer = {
   part: number;
   project: number;
   timestamp: string;
-  camera: number;
+  camera: string;
   manual_checked: boolean;
   part_ids: string;
 };

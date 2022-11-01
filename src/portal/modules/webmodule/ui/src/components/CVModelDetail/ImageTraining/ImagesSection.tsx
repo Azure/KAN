@@ -14,13 +14,13 @@ import {
 } from '@fluentui/react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { State as RootState } from 'RootStateType';
 import {
   imageItemSelectorFactory,
   relabelImageSelector,
   selectProjectPartsFactory,
 } from '../../../store/selectors';
 import { selectNonDemoCameras } from '../../../store/cameraSlice';
-import { State } from 'RootStateType';
 import { postImages } from '../../../store/imageSlice';
 
 import { FilteredImgList } from '../../FilteredImgList';
@@ -49,7 +49,7 @@ const onToggleFilterItem = (targetItem: number) => (allItems: Record<number, boo
  * @param selector The redux selector of the item
  */
 function useFilterItems<T extends { id: number; name: string }>(
-  selector: (state: State) => T[],
+  selector: (state: RootState) => T[],
 ): [ICommandBarItemProps[], string[]] {
   const [filterItems, setFilterItems] = useState({});
   const itemsInStore = useSelector(selector);

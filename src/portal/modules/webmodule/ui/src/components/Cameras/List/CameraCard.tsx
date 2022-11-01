@@ -3,11 +3,8 @@
 
 import React from 'react';
 import { Stack, Label, ActionButton, Text } from '@fluentui/react';
-import { useSelector } from 'react-redux';
 import { isEmpty } from 'ramda';
 
-import { State as RootState } from 'RootStateType';
-import { selectLocationById } from '../../../store/locationSlice';
 import { Camera } from '../../../store/cameraSlice';
 import { theme } from '../../../constant';
 import { cardBorderStyle } from '../../constant';
@@ -26,8 +23,6 @@ interface Props {
 
 const CameraCard = (props: Props) => {
   const { camera, onLiveFeedRedirect, onCameraSelected, onDeleteModalOpen, onDefinitionOpen } = props;
-
-  console.log('camera', camera);
 
   return (
     <Stack

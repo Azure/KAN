@@ -3,11 +3,10 @@ import { createSelector } from '@reduxjs/toolkit';
 import { selectAllImages } from './imageSlice';
 import { selectPartEntities, selectAllParts } from './partSlice';
 import { Item as ImageListItem } from '../components/ImageList';
-import { selectCameraEntities, selectAllCameras } from './cameraSlice';
+import { selectAllCameras, Camera } from './cameraSlice';
 import { selectAllAnno } from './annotationSlice';
-import { selectAllCascades, selectCascadeEntities } from './cascadeSlice';
-import { selectAllComputeDevices, selectComputeDeviceEntities } from './computeDeviceSlice';
-import { selectLocationEntities, selectAllLocations } from './locationSlice';
+import { selectAllCascades } from './cascadeSlice';
+import { selectAllComputeDevices } from './computeDeviceSlice';
 import { selectAllDeployments } from './deploymentSlice';
 import { selectAllTrainingProjects } from './trainingProjectSlice';
 
@@ -18,17 +17,17 @@ import { Acceleration } from '../components/constant';
 const getImgListItem = (
   img: Image,
   partEntities,
-  cameraEntities,
+  cameraList: Camera[],
   annotations: Annotation[],
 ): ImageListItem => {
   const part = partEntities[img.part];
-  const camera = cameraEntities[img.camera];
+  const camera = cameraList.find((c) => c.symphony_id === img.camera);
 
   const parts = img.labels
     .map((id) => annotations.find((anno) => anno.id === id).part)
-    .filter((part) => part)
+    .filter((_part) => _part)
     .map((partId) => partEntities[partId])
-    .map((part) => ({ id: part.id, name: part.name }));
+    .map((_part) => ({ id: _part.id, name: _part.name }));
 
   return {
     id: img.id,
@@ -47,48 +46,6 @@ const getImgListItem = (
   };
 };
 
-/**
- * Get the part-image selector by passing the part ID
- * @param partId
- */
-export const partImageItemSelectorFactory = (partId) =>
-  createSelector(
-    [partsImagesSelectorFactory, selectPartEntities, selectCameraEntities, selectAllAnno],
-    (partAllImages, partEntities, cameraEntities, annotations) => {
-      return partAllImages
-        .filter((img) => !img.isRelabel && img.parts.includes(partId))
-        .map((img) => getImgListItem(img, partEntities, cameraEntities, annotations));
-    },
-  );
-
-/**
- * Create a memoize image item selector by passing untagged
- * @param unTagged If the selector need to select untagged image
- */
-export const imageItemSelectorFactory = (unTagged: boolean) =>
-  createSelector(
-    [selectAllImages, selectPartEntities, selectCameraEntities, selectAllAnno],
-    (images, partEntities, cameraEntities, annotations) => {
-      return images
-        .filter((img) => {
-          if (unTagged) return !img.manualChecked && !img.isRelabel;
-          return img.manualChecked;
-        })
-        .map((img) => getImgListItem(img, partEntities, cameraEntities, annotations));
-    },
-  );
-
-export const relabelImageSelector = createSelector(
-  [selectAllImages, selectPartEntities, selectCameraEntities, selectAllAnno],
-  (images, partEntities, cameraEntities, annotations) => {
-    return images
-      .filter((img) => img.isRelabel && !img.manualChecked)
-      .map((img) => getImgListItem(img, partEntities, cameraEntities, annotations));
-  },
-);
-
-export const selectNonDemoPart = createSelector([selectAllParts], (parts) => parts);
-
 export const partsImagesSelectorFactory = createSelector(
   [selectAllImages, selectAllAnno],
   (images, annotations) =>
@@ -99,6 +56,48 @@ export const partsImagesSelectorFactory = createSelector(
         .filter((part) => part),
     })),
 );
+
+/**
+ * Get the part-image selector by passing the part ID
+ * @param partId
+ */
+export const partImageItemSelectorFactory = (partId) =>
+  createSelector(
+    [partsImagesSelectorFactory, selectPartEntities, selectAllCameras, selectAllAnno],
+    (partAllImages, partEntities, cameraList, annotations) => {
+      return partAllImages
+        .filter((img) => !img.isRelabel && img.parts.includes(partId))
+        .map((img) => getImgListItem(img, partEntities, cameraList, annotations));
+    },
+  );
+
+/**
+ * Create a memoize image item selector by passing untagged
+ * @param unTagged If the selector need to select untagged image
+ */
+export const imageItemSelectorFactory = (unTagged: boolean) =>
+  createSelector(
+    [selectAllImages, selectPartEntities, selectAllCameras, selectAllAnno],
+    (images, partEntities, cameraList, annotations) => {
+      return images
+        .filter((img) => {
+          if (unTagged) return !img.manualChecked && !img.isRelabel;
+          return img.manualChecked;
+        })
+        .map((img) => getImgListItem(img, partEntities, cameraList, annotations));
+    },
+  );
+
+export const relabelImageSelector = createSelector(
+  [selectAllImages, selectPartEntities, selectAllCameras, selectAllAnno],
+  (images, partEntities, cameraList, annotations) => {
+    return images
+      .filter((img) => img.isRelabel && !img.manualChecked)
+      .map((img) => getImgListItem(img, partEntities, cameraList, annotations));
+  },
+);
+
+export const selectNonDemoPart = createSelector([selectAllParts], (parts) => parts);
 
 export const selectProjectPartsFactory = (projectId: number) =>
   createSelector([selectAllParts], (parts) => parts.filter((part) => part.trainingProject === projectId));
@@ -124,20 +123,6 @@ export const matchDeviceAccelerationSelectorFactory = (deivceId: string) =>
 
     return aiSkillList.filter((skill) => skill.acceleration === matchDevice.acceleration);
   });
-
-// export const formattedCameraSelectoryFactory = createSelector(
-//   [selectAllCameras, selectAllLocations],
-//   (cameraList, locationList) => {
-//     if (cameraList.length === 0 || locationList.length === 0) return [];
-
-//     // const matchLocation = locationList.find((location) => location.name === camera.location);
-
-//     return cameraList.map((camera) => ({
-//       ...camera,
-//       locationName: locationList.find((location) => location.name === camera.location).name,
-//     }));
-//   },
-// );
 
 export const formattedDeploymentSelectorFactory = createSelector(
   [selectAllDeployments, selectAllComputeDevices, selectAllCascades],

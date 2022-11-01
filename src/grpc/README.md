@@ -6,12 +6,13 @@ we have a simple request/response rpc for communication between voeedge(client) 
 
 ```
 service CustomNodeHandler {
-    rpc ProcessFrame (ProcessFrameRequest) returns (ProcessFrameResponse) {}
+	rpc Handshake(HandshakeRequest) returns (HandshakeResponse) {}
+    rpc Process (ProcessRequest) returns (ProcessResponse) {}
 }
 ```
 
-For each frame, voedge will invoke `ProcessFrame` and send the a `ProcessFrameRequest` to the custom node.
-The Custom node need to implement `ProcessFrame` and respond `ProcessFrameResponse` back to the voeedge
+For each frame, voedge will invoke `Process` and send the a `ProcessRequest` to the custom node.
+The Custom node need to implement `Process` and respond `ProcessResponse` back to the voeedge
 
 
 ## Build your own custom node
@@ -22,19 +23,35 @@ The Custom node need to implement `ProcessFrame` and respond `ProcessFrameRespon
 
 from custom_node_server import CustomNode
 
-class PingPong(CustomNode):
-        def ProcessFrame(self, request: custom_node_pb2.ProcessFrameRequest, context) -> custom_node_pb2.ProcessFrameResponse:
-            print('processing ...')
-            frame = custom_node_pb2.Frame(
-                timestamp=request.frame.timestamp,
-                frame_id=request.frame.frame_id,
-                instance_id=request.frame.instance_id,
-                skill_id=request.frame.skill_id,
-                device_id=request.frame.device_id,
-                datetime=request.frame.datetime,
-            )
-            return custom_node_pb2.ProcessFrameResponse(frame=frame)
+class FakeDetection(CustomNode):
+
+
+	def Handshake(self, request: custom_node_pb2.HandshakeRequest, context) -> custom_node_pb2.HandshakeResponse:
+		return custom_node_pb2.HandshakeResponse(
+			ack=request.seq, 
+			image_type=custom_node_pb2.ImageType.IMAGE_TYPE_NUMPY,
+			process_request_type=custom_node_pb2.ProcessRequestType.FRAME_WITH_IMAGE,
+			process_response_type=custom_node_pb2.ProcessResponseType.INSIGHTS_META_ONLY,
+		)
+
+
+	def Process(self, request: custom_node_pb2.ProcessRequest, context) -> custom_node_pb2.ProcessResponse:
+		print('processing ...')
+		insights_meta = custom_node_pb2.InsightsMeta(
+			objects_meta=[
+				custom_node_pb2.ObjectMeta(    
+					timestamp=request.frame.timestamp,
+					label='car',
+					confidence=0.9,
+					inference_id='inference_1',
+					bbox=custom_node_pb2.BBox(l=0.1, t=0.2, w=0.3, h=0.4)
+				)
+			]
+		)
+
+		return custom_node_pb2.ProcessResponse(ack=request.seq, insights_meta=insights_meta)
 ```
+
 
 
 ### Build Custom Node grpc server
@@ -43,7 +60,7 @@ class PingPong(CustomNode):
 
 from custom_node_server import CustomNodeServer
 
-server = CustomNodeServer(6677, PingPong())
+server = CustomNodeServer(6677, FakeDetection())
 server.serve()
 ```
 

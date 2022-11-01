@@ -20,9 +20,97 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x11\x63ustom_node.proto\x12\x0b\x63ustom_node\"`\n\x0fImageProperties\x12\x0e\n\x06height\x18\x01 \x01(\x03\x12\r\n\x05width\x18\x02 \x01(\x03\x12.\n\x0c\x63olor_format\x18\x03 \x01(\x0e\x32\x18.custom_node.ColorFormat\"P\n\x05Image\x12\x15\n\rimage_pointer\x18\x01 \x01(\x0c\x12\x30\n\nproperties\x18\x02 \x01(\x0b\x32\x1c.custom_node.ImageProperties\"a\n\x05\x46rame\x12!\n\x05image\x18\x01 \x01(\x0b\x32\x12.custom_node.Image\x12\x11\n\ttimestamp\x18\x03 \x01(\x02\x12\x10\n\x08\x66rame_id\x18\x04 \x01(\t\x12\x10\n\x08\x64\x61tetime\x18\x06 \x01(\t\"\\\n\x13StartSessionRequest\x12\x0b\n\x03seq\x18\x01 \x01(\x03\x12\x13\n\x0binstance_id\x18\x02 \x01(\t\x12\x10\n\x08skill_id\x18\x03 \x01(\t\x12\x11\n\tdevice_id\x18\x04 \x01(\t\"O\n\x14StartSessionResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\x03\x12*\n\nimage_type\x18\x02 \x01(\x0e\x32\x16.custom_node.ImageType\"E\n\x13ProcessFrameRequest\x12\x0b\n\x03seq\x18\x01 \x01(\x03\x12!\n\x05\x66rame\x18\x02 \x01(\x0b\x32\x12.custom_node.Frame\"F\n\x14ProcessFrameResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\x03\x12!\n\x05\x66rame\x18\x02 \x01(\x0b\x32\x12.custom_node.Frame*9\n\x0b\x43olorFormat\x12\x14\n\x10\x43OLOR_FORMAT_BGR\x10\x00\x12\x14\n\x10\x43OLOR_FORMAT_RGB\x10\x01*5\n\tImageType\x12\x14\n\x10IMAGE_TYPE_NUMPY\x10\x00\x12\x12\n\x0eIMAGE_TYPE_RAW\x10\x01\x32\xc1\x01\n\x11\x43ustomNodeHandler\x12U\n\x0cStartSession\x12 .custom_node.StartSessionRequest\x1a!.custom_node.StartSessionResponse\"\x00\x12U\n\x0cProcessFrame\x12 .custom_node.ProcessFrameRequest\x1a!.custom_node.ProcessFrameResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x11\x63ustom_node.proto\x12\x0b\x63ustom_node\"Y\n\x10HandshakeRequest\x12\x0b\n\x03seq\x18\x01 \x01(\x03\x12\x13\n\x0binstance_id\x18\x02 \x01(\t\x12\x10\n\x08skill_id\x18\x03 \x01(\t\x12\x11\n\tdevice_id\x18\x04 \x01(\t\"\xcc\x01\n\x11HandshakeResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\x03\x12*\n\nimage_type\x18\x02 \x01(\x0e\x32\x16.custom_node.ImageType\x12=\n\x14process_request_type\x18\x03 \x01(\x0e\x32\x1f.custom_node.ProcessRequestType\x12?\n\x15process_response_type\x18\x04 \x01(\x0e\x32 .custom_node.ProcessResponseType\"@\n\x0eProcessRequest\x12\x0b\n\x03seq\x18\x01 \x01(\x03\x12!\n\x05\x66rame\x18\x02 \x01(\x0b\x32\x12.custom_node.Frame\"s\n\x0fProcessResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\x03\x12!\n\x05image\x18\x02 \x01(\x0b\x32\x12.custom_node.Image\x12\x30\n\rinsights_meta\x18\x03 \x01(\x0b\x32\x19.custom_node.InsightsMeta\"\xb2\x01\n\x05\x46rame\x12!\n\x05image\x18\x01 \x01(\x0b\x32\x12.custom_node.Image\x12\x30\n\rinsights_meta\x18\x02 \x01(\x0b\x32\x19.custom_node.InsightsMeta\x12\x11\n\ttimestamp\x18\x03 \x01(\x02\x12\x1d\n\x03roi\x18\x04 \x01(\x0b\x32\x10.custom_node.Roi\x12\x10\n\x08\x66rame_id\x18\x05 \x01(\t\x12\x10\n\x08\x64\x61tetime\x18\x06 \x01(\t\"P\n\x05Image\x12\x15\n\rimage_pointer\x18\x01 \x01(\x0c\x12\x30\n\nproperties\x18\x02 \x01(\x0b\x32\x1c.custom_node.ImageProperties\"`\n\x0fImageProperties\x12\x0e\n\x06height\x18\x01 \x01(\x03\x12\r\n\x05width\x18\x02 \x01(\x03\x12.\n\x0c\x63olor_format\x18\x03 \x01(\x0e\x32\x18.custom_node.ColorFormat\"~\n\x0cInsightsMeta\x12-\n\x0cobjects_meta\x18\x01 \x03(\x0b\x32\x17.custom_node.ObjectMeta\x12+\n\x0b\x65vents_meta\x18\x02 \x03(\x0b\x32\x16.custom_node.EventMeta\x12\x12\n\nother_meta\x18\x03 \x03(\t\"\xe1\x01\n\nObjectMeta\x12\x11\n\ttimestamp\x18\x01 \x01(\x02\x12\r\n\x05label\x18\x02 \x01(\t\x12\x12\n\nconfidence\x18\x03 \x01(\x02\x12\x14\n\x0cinference_id\x18\x04 \x01(\t\x12\x34\n\nattributes\x18\x05 \x03(\x0b\x32 .custom_node.ObjectMetaAttribute\x12\x1f\n\x04\x62\x62ox\x18\x06 \x01(\x0b\x32\x11.custom_node.BBox\x12\x30\n\rtracking_info\x18\x07 \x01(\x0b\x32\x19.custom_node.TrackingInfo\"o\n\x13ObjectMetaAttribute\x12\x11\n\ttimestamp\x18\x01 \x01(\x02\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05label\x18\x03 \x01(\t\x12\x12\n\nconfidence\x18\x04 \x01(\x02\x12\x14\n\x0cinference_id\x18\x05 \x01(\t\"2\n\x04\x42\x42ox\x12\t\n\x01l\x18\x01 \x01(\x02\x12\t\n\x01t\x18\x02 \x01(\x02\x12\t\n\x01w\x18\x03 \x01(\x02\x12\t\n\x01h\x18\x04 \x01(\x02\"p\n\x0cTrackingInfo\x12\x11\n\ttimestamp\x18\x01 \x01(\x02\x12\x13\n\x0btracking_id\x18\x02 \x01(\t\x12\r\n\x05speed\x18\x03 \x01(\x02\x12)\n\tdirection\x18\x04 \x01(\x0b\x32\x16.custom_node.Direction\"!\n\tDirection\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\"\xc2\x01\n\tEventMeta\x12\x11\n\ttimestamp\x18\x01 \x01(\x02\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x10\n\x08\x65vent_id\x18\x03 \x01(\t\x12\x13\n\x0brelated_ids\x18\x04 \x03(\t\x12:\n\nproperties\x18\x05 \x03(\x0b\x32&.custom_node.EventMeta.PropertiesEntry\x1a\x31\n\x0fPropertiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"R\n\x03Roi\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\"\n\x04type\x18\x02 \x01(\x0e\x32\x14.custom_node.RoiType\x12\n\n\x02id\x18\x03 \x01(\t\x12\r\n\x05value\x18\x04 \x01(\t*J\n\tImageType\x12\x14\n\x10IMAGE_TYPE_NUMPY\x10\x00\x12\x12\n\x0eIMAGE_TYPE_BMP\x10\x01\x12\x13\n\x0fIMAGE_TYPE_JPEG\x10\x02*C\n\x12ProcessRequestType\x12\x14\n\x10\x46RAME_WITH_IMAGE\x10\x00\x12\x17\n\x13\x46RAME_WITHOUT_IMAGE\x10\x01*Z\n\x13ProcessResponseType\x12\x0e\n\nIMAGE_ONLY\x10\x00\x12\x16\n\x12INSIGHTS_META_ONLY\x10\x01\x12\x1b\n\x17IMAGE_AND_INSIGHTS_META\x10\x02*9\n\x0b\x43olorFormat\x12\x14\n\x10\x43OLOR_FORMAT_BGR\x10\x00\x12\x14\n\x10\x43OLOR_FORMAT_RGB\x10\x01* \n\x07RoiType\x12\x08\n\x04LINE\x10\x00\x12\x0b\n\x07POLYGON\x10\x01\x32\xa9\x01\n\x11\x43ustomNodeHandler\x12L\n\tHandshake\x12\x1d.custom_node.HandshakeRequest\x1a\x1e.custom_node.HandshakeResponse\"\x00\x12\x46\n\x07Process\x12\x1b.custom_node.ProcessRequest\x1a\x1c.custom_node.ProcessResponse\"\x00\x62\x06proto3'
 )
 
+_IMAGETYPE = _descriptor.EnumDescriptor(
+  name='ImageType',
+  full_name='custom_node.ImageType',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='IMAGE_TYPE_NUMPY', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='IMAGE_TYPE_BMP', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='IMAGE_TYPE_JPEG', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=1827,
+  serialized_end=1901,
+)
+_sym_db.RegisterEnumDescriptor(_IMAGETYPE)
+
+ImageType = enum_type_wrapper.EnumTypeWrapper(_IMAGETYPE)
+_PROCESSREQUESTTYPE = _descriptor.EnumDescriptor(
+  name='ProcessRequestType',
+  full_name='custom_node.ProcessRequestType',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='FRAME_WITH_IMAGE', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='FRAME_WITHOUT_IMAGE', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=1903,
+  serialized_end=1970,
+)
+_sym_db.RegisterEnumDescriptor(_PROCESSREQUESTTYPE)
+
+ProcessRequestType = enum_type_wrapper.EnumTypeWrapper(_PROCESSREQUESTTYPE)
+_PROCESSRESPONSETYPE = _descriptor.EnumDescriptor(
+  name='ProcessResponseType',
+  full_name='custom_node.ProcessResponseType',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='IMAGE_ONLY', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='INSIGHTS_META_ONLY', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='IMAGE_AND_INSIGHTS_META', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=1972,
+  serialized_end=2062,
+)
+_sym_db.RegisterEnumDescriptor(_PROCESSRESPONSETYPE)
+
+ProcessResponseType = enum_type_wrapper.EnumTypeWrapper(_PROCESSRESPONSETYPE)
 _COLORFORMAT = _descriptor.EnumDescriptor(
   name='ColorFormat',
   full_name='custom_node.ColorFormat',
@@ -43,43 +131,348 @@ _COLORFORMAT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=631,
-  serialized_end=688,
+  serialized_start=2064,
+  serialized_end=2121,
 )
 _sym_db.RegisterEnumDescriptor(_COLORFORMAT)
 
 ColorFormat = enum_type_wrapper.EnumTypeWrapper(_COLORFORMAT)
-_IMAGETYPE = _descriptor.EnumDescriptor(
-  name='ImageType',
-  full_name='custom_node.ImageType',
+_ROITYPE = _descriptor.EnumDescriptor(
+  name='RoiType',
+  full_name='custom_node.RoiType',
   filename=None,
   file=DESCRIPTOR,
   create_key=_descriptor._internal_create_key,
   values=[
     _descriptor.EnumValueDescriptor(
-      name='IMAGE_TYPE_NUMPY', index=0, number=0,
+      name='LINE', index=0, number=0,
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
-      name='IMAGE_TYPE_RAW', index=1, number=1,
+      name='POLYGON', index=1, number=1,
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=690,
-  serialized_end=743,
+  serialized_start=2123,
+  serialized_end=2155,
 )
-_sym_db.RegisterEnumDescriptor(_IMAGETYPE)
+_sym_db.RegisterEnumDescriptor(_ROITYPE)
 
-ImageType = enum_type_wrapper.EnumTypeWrapper(_IMAGETYPE)
+RoiType = enum_type_wrapper.EnumTypeWrapper(_ROITYPE)
+IMAGE_TYPE_NUMPY = 0
+IMAGE_TYPE_BMP = 1
+IMAGE_TYPE_JPEG = 2
+FRAME_WITH_IMAGE = 0
+FRAME_WITHOUT_IMAGE = 1
+IMAGE_ONLY = 0
+INSIGHTS_META_ONLY = 1
+IMAGE_AND_INSIGHTS_META = 2
 COLOR_FORMAT_BGR = 0
 COLOR_FORMAT_RGB = 1
-IMAGE_TYPE_NUMPY = 0
-IMAGE_TYPE_RAW = 1
+LINE = 0
+POLYGON = 1
 
+
+
+_HANDSHAKEREQUEST = _descriptor.Descriptor(
+  name='HandshakeRequest',
+  full_name='custom_node.HandshakeRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='seq', full_name='custom_node.HandshakeRequest.seq', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='instance_id', full_name='custom_node.HandshakeRequest.instance_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='skill_id', full_name='custom_node.HandshakeRequest.skill_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='device_id', full_name='custom_node.HandshakeRequest.device_id', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=34,
+  serialized_end=123,
+)
+
+
+_HANDSHAKERESPONSE = _descriptor.Descriptor(
+  name='HandshakeResponse',
+  full_name='custom_node.HandshakeResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ack', full_name='custom_node.HandshakeResponse.ack', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='image_type', full_name='custom_node.HandshakeResponse.image_type', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='process_request_type', full_name='custom_node.HandshakeResponse.process_request_type', index=2,
+      number=3, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='process_response_type', full_name='custom_node.HandshakeResponse.process_response_type', index=3,
+      number=4, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=126,
+  serialized_end=330,
+)
+
+
+_PROCESSREQUEST = _descriptor.Descriptor(
+  name='ProcessRequest',
+  full_name='custom_node.ProcessRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='seq', full_name='custom_node.ProcessRequest.seq', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='frame', full_name='custom_node.ProcessRequest.frame', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=332,
+  serialized_end=396,
+)
+
+
+_PROCESSRESPONSE = _descriptor.Descriptor(
+  name='ProcessResponse',
+  full_name='custom_node.ProcessResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ack', full_name='custom_node.ProcessResponse.ack', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='image', full_name='custom_node.ProcessResponse.image', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='insights_meta', full_name='custom_node.ProcessResponse.insights_meta', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=398,
+  serialized_end=513,
+)
+
+
+_FRAME = _descriptor.Descriptor(
+  name='Frame',
+  full_name='custom_node.Frame',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='image', full_name='custom_node.Frame.image', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='insights_meta', full_name='custom_node.Frame.insights_meta', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='custom_node.Frame.timestamp', index=2,
+      number=3, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='roi', full_name='custom_node.Frame.roi', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='frame_id', full_name='custom_node.Frame.frame_id', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='datetime', full_name='custom_node.Frame.datetime', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=516,
+  serialized_end=694,
+)
+
+
+_IMAGE = _descriptor.Descriptor(
+  name='Image',
+  full_name='custom_node.Image',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='image_pointer', full_name='custom_node.Image.image_pointer', index=0,
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='properties', full_name='custom_node.Image.properties', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=696,
+  serialized_end=776,
+)
 
 
 _IMAGEPROPERTIES = _descriptor.Descriptor(
@@ -123,30 +516,37 @@ _IMAGEPROPERTIES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=34,
-  serialized_end=130,
+  serialized_start=778,
+  serialized_end=874,
 )
 
 
-_IMAGE = _descriptor.Descriptor(
-  name='Image',
-  full_name='custom_node.Image',
+_INSIGHTSMETA = _descriptor.Descriptor(
+  name='InsightsMeta',
+  full_name='custom_node.InsightsMeta',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='image_pointer', full_name='custom_node.Image.image_pointer', index=0,
-      number=1, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
+      name='objects_meta', full_name='custom_node.InsightsMeta.objects_meta', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='properties', full_name='custom_node.Image.properties', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='events_meta', full_name='custom_node.InsightsMeta.events_meta', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='other_meta', full_name='custom_node.InsightsMeta.other_meta', index=2,
+      number=3, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -162,95 +562,419 @@ _IMAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=132,
-  serialized_end=212,
+  serialized_start=876,
+  serialized_end=1002,
 )
 
 
-_FRAME = _descriptor.Descriptor(
-  name='Frame',
-  full_name='custom_node.Frame',
+_OBJECTMETA = _descriptor.Descriptor(
+  name='ObjectMeta',
+  full_name='custom_node.ObjectMeta',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='image', full_name='custom_node.Frame.image', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='timestamp', full_name='custom_node.Frame.timestamp', index=1,
-      number=3, type=2, cpp_type=6, label=1,
+      name='timestamp', full_name='custom_node.ObjectMeta.timestamp', index=0,
+      number=1, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='frame_id', full_name='custom_node.Frame.frame_id', index=2,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='datetime', full_name='custom_node.Frame.datetime', index=3,
-      number=6, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=214,
-  serialized_end=311,
-)
-
-
-_STARTSESSIONREQUEST = _descriptor.Descriptor(
-  name='StartSessionRequest',
-  full_name='custom_node.StartSessionRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='seq', full_name='custom_node.StartSessionRequest.seq', index=0,
-      number=1, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='instance_id', full_name='custom_node.StartSessionRequest.instance_id', index=1,
+      name='label', full_name='custom_node.ObjectMeta.label', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='skill_id', full_name='custom_node.StartSessionRequest.skill_id', index=2,
+      name='confidence', full_name='custom_node.ObjectMeta.confidence', index=2,
+      number=3, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='inference_id', full_name='custom_node.ObjectMeta.inference_id', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='attributes', full_name='custom_node.ObjectMeta.attributes', index=4,
+      number=5, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='bbox', full_name='custom_node.ObjectMeta.bbox', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='tracking_info', full_name='custom_node.ObjectMeta.tracking_info', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1005,
+  serialized_end=1230,
+)
+
+
+_OBJECTMETAATTRIBUTE = _descriptor.Descriptor(
+  name='ObjectMetaAttribute',
+  full_name='custom_node.ObjectMetaAttribute',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='custom_node.ObjectMetaAttribute.timestamp', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='custom_node.ObjectMetaAttribute.name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='label', full_name='custom_node.ObjectMetaAttribute.label', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='device_id', full_name='custom_node.StartSessionRequest.device_id', index=3,
+      name='confidence', full_name='custom_node.ObjectMetaAttribute.confidence', index=3,
+      number=4, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='inference_id', full_name='custom_node.ObjectMetaAttribute.inference_id', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1232,
+  serialized_end=1343,
+)
+
+
+_BBOX = _descriptor.Descriptor(
+  name='BBox',
+  full_name='custom_node.BBox',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='l', full_name='custom_node.BBox.l', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='t', full_name='custom_node.BBox.t', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='w', full_name='custom_node.BBox.w', index=2,
+      number=3, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='h', full_name='custom_node.BBox.h', index=3,
+      number=4, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1345,
+  serialized_end=1395,
+)
+
+
+_TRACKINGINFO = _descriptor.Descriptor(
+  name='TrackingInfo',
+  full_name='custom_node.TrackingInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='custom_node.TrackingInfo.timestamp', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='tracking_id', full_name='custom_node.TrackingInfo.tracking_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='speed', full_name='custom_node.TrackingInfo.speed', index=2,
+      number=3, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='direction', full_name='custom_node.TrackingInfo.direction', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1397,
+  serialized_end=1509,
+)
+
+
+_DIRECTION = _descriptor.Descriptor(
+  name='Direction',
+  full_name='custom_node.Direction',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='x', full_name='custom_node.Direction.x', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='y', full_name='custom_node.Direction.y', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1511,
+  serialized_end=1544,
+)
+
+
+_EVENTMETA_PROPERTIESENTRY = _descriptor.Descriptor(
+  name='PropertiesEntry',
+  full_name='custom_node.EventMeta.PropertiesEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='custom_node.EventMeta.PropertiesEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='custom_node.EventMeta.PropertiesEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b'8\001',
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1692,
+  serialized_end=1741,
+)
+
+_EVENTMETA = _descriptor.Descriptor(
+  name='EventMeta',
+  full_name='custom_node.EventMeta',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='custom_node.EventMeta.timestamp', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='type', full_name='custom_node.EventMeta.type', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='event_id', full_name='custom_node.EventMeta.event_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='related_ids', full_name='custom_node.EventMeta.related_ids', index=3,
+      number=4, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='properties', full_name='custom_node.EventMeta.properties', index=4,
+      number=5, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[_EVENTMETA_PROPERTIESENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1547,
+  serialized_end=1741,
+)
+
+
+_ROI = _descriptor.Descriptor(
+  name='Roi',
+  full_name='custom_node.Roi',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='custom_node.Roi.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='type', full_name='custom_node.Roi.type', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='id', full_name='custom_node.Roi.id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='custom_node.Roi.value', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -268,157 +992,79 @@ _STARTSESSIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=313,
-  serialized_end=405,
+  serialized_start=1743,
+  serialized_end=1825,
 )
 
-
-_STARTSESSIONRESPONSE = _descriptor.Descriptor(
-  name='StartSessionResponse',
-  full_name='custom_node.StartSessionResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='ack', full_name='custom_node.StartSessionResponse.ack', index=0,
-      number=1, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='image_type', full_name='custom_node.StartSessionResponse.image_type', index=1,
-      number=2, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=407,
-  serialized_end=486,
-)
-
-
-_PROCESSFRAMEREQUEST = _descriptor.Descriptor(
-  name='ProcessFrameRequest',
-  full_name='custom_node.ProcessFrameRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='seq', full_name='custom_node.ProcessFrameRequest.seq', index=0,
-      number=1, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='frame', full_name='custom_node.ProcessFrameRequest.frame', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=488,
-  serialized_end=557,
-)
-
-
-_PROCESSFRAMERESPONSE = _descriptor.Descriptor(
-  name='ProcessFrameResponse',
-  full_name='custom_node.ProcessFrameResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='ack', full_name='custom_node.ProcessFrameResponse.ack', index=0,
-      number=1, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='frame', full_name='custom_node.ProcessFrameResponse.frame', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=559,
-  serialized_end=629,
-)
-
-_IMAGEPROPERTIES.fields_by_name['color_format'].enum_type = _COLORFORMAT
-_IMAGE.fields_by_name['properties'].message_type = _IMAGEPROPERTIES
+_HANDSHAKERESPONSE.fields_by_name['image_type'].enum_type = _IMAGETYPE
+_HANDSHAKERESPONSE.fields_by_name['process_request_type'].enum_type = _PROCESSREQUESTTYPE
+_HANDSHAKERESPONSE.fields_by_name['process_response_type'].enum_type = _PROCESSRESPONSETYPE
+_PROCESSREQUEST.fields_by_name['frame'].message_type = _FRAME
+_PROCESSRESPONSE.fields_by_name['image'].message_type = _IMAGE
+_PROCESSRESPONSE.fields_by_name['insights_meta'].message_type = _INSIGHTSMETA
 _FRAME.fields_by_name['image'].message_type = _IMAGE
-_STARTSESSIONRESPONSE.fields_by_name['image_type'].enum_type = _IMAGETYPE
-_PROCESSFRAMEREQUEST.fields_by_name['frame'].message_type = _FRAME
-_PROCESSFRAMERESPONSE.fields_by_name['frame'].message_type = _FRAME
-DESCRIPTOR.message_types_by_name['ImageProperties'] = _IMAGEPROPERTIES
-DESCRIPTOR.message_types_by_name['Image'] = _IMAGE
+_FRAME.fields_by_name['insights_meta'].message_type = _INSIGHTSMETA
+_FRAME.fields_by_name['roi'].message_type = _ROI
+_IMAGE.fields_by_name['properties'].message_type = _IMAGEPROPERTIES
+_IMAGEPROPERTIES.fields_by_name['color_format'].enum_type = _COLORFORMAT
+_INSIGHTSMETA.fields_by_name['objects_meta'].message_type = _OBJECTMETA
+_INSIGHTSMETA.fields_by_name['events_meta'].message_type = _EVENTMETA
+_OBJECTMETA.fields_by_name['attributes'].message_type = _OBJECTMETAATTRIBUTE
+_OBJECTMETA.fields_by_name['bbox'].message_type = _BBOX
+_OBJECTMETA.fields_by_name['tracking_info'].message_type = _TRACKINGINFO
+_TRACKINGINFO.fields_by_name['direction'].message_type = _DIRECTION
+_EVENTMETA_PROPERTIESENTRY.containing_type = _EVENTMETA
+_EVENTMETA.fields_by_name['properties'].message_type = _EVENTMETA_PROPERTIESENTRY
+_ROI.fields_by_name['type'].enum_type = _ROITYPE
+DESCRIPTOR.message_types_by_name['HandshakeRequest'] = _HANDSHAKEREQUEST
+DESCRIPTOR.message_types_by_name['HandshakeResponse'] = _HANDSHAKERESPONSE
+DESCRIPTOR.message_types_by_name['ProcessRequest'] = _PROCESSREQUEST
+DESCRIPTOR.message_types_by_name['ProcessResponse'] = _PROCESSRESPONSE
 DESCRIPTOR.message_types_by_name['Frame'] = _FRAME
-DESCRIPTOR.message_types_by_name['StartSessionRequest'] = _STARTSESSIONREQUEST
-DESCRIPTOR.message_types_by_name['StartSessionResponse'] = _STARTSESSIONRESPONSE
-DESCRIPTOR.message_types_by_name['ProcessFrameRequest'] = _PROCESSFRAMEREQUEST
-DESCRIPTOR.message_types_by_name['ProcessFrameResponse'] = _PROCESSFRAMERESPONSE
-DESCRIPTOR.enum_types_by_name['ColorFormat'] = _COLORFORMAT
+DESCRIPTOR.message_types_by_name['Image'] = _IMAGE
+DESCRIPTOR.message_types_by_name['ImageProperties'] = _IMAGEPROPERTIES
+DESCRIPTOR.message_types_by_name['InsightsMeta'] = _INSIGHTSMETA
+DESCRIPTOR.message_types_by_name['ObjectMeta'] = _OBJECTMETA
+DESCRIPTOR.message_types_by_name['ObjectMetaAttribute'] = _OBJECTMETAATTRIBUTE
+DESCRIPTOR.message_types_by_name['BBox'] = _BBOX
+DESCRIPTOR.message_types_by_name['TrackingInfo'] = _TRACKINGINFO
+DESCRIPTOR.message_types_by_name['Direction'] = _DIRECTION
+DESCRIPTOR.message_types_by_name['EventMeta'] = _EVENTMETA
+DESCRIPTOR.message_types_by_name['Roi'] = _ROI
 DESCRIPTOR.enum_types_by_name['ImageType'] = _IMAGETYPE
+DESCRIPTOR.enum_types_by_name['ProcessRequestType'] = _PROCESSREQUESTTYPE
+DESCRIPTOR.enum_types_by_name['ProcessResponseType'] = _PROCESSRESPONSETYPE
+DESCRIPTOR.enum_types_by_name['ColorFormat'] = _COLORFORMAT
+DESCRIPTOR.enum_types_by_name['RoiType'] = _ROITYPE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-ImageProperties = _reflection.GeneratedProtocolMessageType('ImageProperties', (_message.Message,), {
-  'DESCRIPTOR' : _IMAGEPROPERTIES,
+HandshakeRequest = _reflection.GeneratedProtocolMessageType('HandshakeRequest', (_message.Message,), {
+  'DESCRIPTOR' : _HANDSHAKEREQUEST,
   '__module__' : 'custom_node_pb2'
-  # @@protoc_insertion_point(class_scope:custom_node.ImageProperties)
+  # @@protoc_insertion_point(class_scope:custom_node.HandshakeRequest)
   })
-_sym_db.RegisterMessage(ImageProperties)
+_sym_db.RegisterMessage(HandshakeRequest)
 
-Image = _reflection.GeneratedProtocolMessageType('Image', (_message.Message,), {
-  'DESCRIPTOR' : _IMAGE,
+HandshakeResponse = _reflection.GeneratedProtocolMessageType('HandshakeResponse', (_message.Message,), {
+  'DESCRIPTOR' : _HANDSHAKERESPONSE,
   '__module__' : 'custom_node_pb2'
-  # @@protoc_insertion_point(class_scope:custom_node.Image)
+  # @@protoc_insertion_point(class_scope:custom_node.HandshakeResponse)
   })
-_sym_db.RegisterMessage(Image)
+_sym_db.RegisterMessage(HandshakeResponse)
+
+ProcessRequest = _reflection.GeneratedProtocolMessageType('ProcessRequest', (_message.Message,), {
+  'DESCRIPTOR' : _PROCESSREQUEST,
+  '__module__' : 'custom_node_pb2'
+  # @@protoc_insertion_point(class_scope:custom_node.ProcessRequest)
+  })
+_sym_db.RegisterMessage(ProcessRequest)
+
+ProcessResponse = _reflection.GeneratedProtocolMessageType('ProcessResponse', (_message.Message,), {
+  'DESCRIPTOR' : _PROCESSRESPONSE,
+  '__module__' : 'custom_node_pb2'
+  # @@protoc_insertion_point(class_scope:custom_node.ProcessResponse)
+  })
+_sym_db.RegisterMessage(ProcessResponse)
 
 Frame = _reflection.GeneratedProtocolMessageType('Frame', (_message.Message,), {
   'DESCRIPTOR' : _FRAME,
@@ -427,35 +1073,86 @@ Frame = _reflection.GeneratedProtocolMessageType('Frame', (_message.Message,), {
   })
 _sym_db.RegisterMessage(Frame)
 
-StartSessionRequest = _reflection.GeneratedProtocolMessageType('StartSessionRequest', (_message.Message,), {
-  'DESCRIPTOR' : _STARTSESSIONREQUEST,
+Image = _reflection.GeneratedProtocolMessageType('Image', (_message.Message,), {
+  'DESCRIPTOR' : _IMAGE,
   '__module__' : 'custom_node_pb2'
-  # @@protoc_insertion_point(class_scope:custom_node.StartSessionRequest)
+  # @@protoc_insertion_point(class_scope:custom_node.Image)
   })
-_sym_db.RegisterMessage(StartSessionRequest)
+_sym_db.RegisterMessage(Image)
 
-StartSessionResponse = _reflection.GeneratedProtocolMessageType('StartSessionResponse', (_message.Message,), {
-  'DESCRIPTOR' : _STARTSESSIONRESPONSE,
+ImageProperties = _reflection.GeneratedProtocolMessageType('ImageProperties', (_message.Message,), {
+  'DESCRIPTOR' : _IMAGEPROPERTIES,
   '__module__' : 'custom_node_pb2'
-  # @@protoc_insertion_point(class_scope:custom_node.StartSessionResponse)
+  # @@protoc_insertion_point(class_scope:custom_node.ImageProperties)
   })
-_sym_db.RegisterMessage(StartSessionResponse)
+_sym_db.RegisterMessage(ImageProperties)
 
-ProcessFrameRequest = _reflection.GeneratedProtocolMessageType('ProcessFrameRequest', (_message.Message,), {
-  'DESCRIPTOR' : _PROCESSFRAMEREQUEST,
+InsightsMeta = _reflection.GeneratedProtocolMessageType('InsightsMeta', (_message.Message,), {
+  'DESCRIPTOR' : _INSIGHTSMETA,
   '__module__' : 'custom_node_pb2'
-  # @@protoc_insertion_point(class_scope:custom_node.ProcessFrameRequest)
+  # @@protoc_insertion_point(class_scope:custom_node.InsightsMeta)
   })
-_sym_db.RegisterMessage(ProcessFrameRequest)
+_sym_db.RegisterMessage(InsightsMeta)
 
-ProcessFrameResponse = _reflection.GeneratedProtocolMessageType('ProcessFrameResponse', (_message.Message,), {
-  'DESCRIPTOR' : _PROCESSFRAMERESPONSE,
+ObjectMeta = _reflection.GeneratedProtocolMessageType('ObjectMeta', (_message.Message,), {
+  'DESCRIPTOR' : _OBJECTMETA,
   '__module__' : 'custom_node_pb2'
-  # @@protoc_insertion_point(class_scope:custom_node.ProcessFrameResponse)
+  # @@protoc_insertion_point(class_scope:custom_node.ObjectMeta)
   })
-_sym_db.RegisterMessage(ProcessFrameResponse)
+_sym_db.RegisterMessage(ObjectMeta)
+
+ObjectMetaAttribute = _reflection.GeneratedProtocolMessageType('ObjectMetaAttribute', (_message.Message,), {
+  'DESCRIPTOR' : _OBJECTMETAATTRIBUTE,
+  '__module__' : 'custom_node_pb2'
+  # @@protoc_insertion_point(class_scope:custom_node.ObjectMetaAttribute)
+  })
+_sym_db.RegisterMessage(ObjectMetaAttribute)
+
+BBox = _reflection.GeneratedProtocolMessageType('BBox', (_message.Message,), {
+  'DESCRIPTOR' : _BBOX,
+  '__module__' : 'custom_node_pb2'
+  # @@protoc_insertion_point(class_scope:custom_node.BBox)
+  })
+_sym_db.RegisterMessage(BBox)
+
+TrackingInfo = _reflection.GeneratedProtocolMessageType('TrackingInfo', (_message.Message,), {
+  'DESCRIPTOR' : _TRACKINGINFO,
+  '__module__' : 'custom_node_pb2'
+  # @@protoc_insertion_point(class_scope:custom_node.TrackingInfo)
+  })
+_sym_db.RegisterMessage(TrackingInfo)
+
+Direction = _reflection.GeneratedProtocolMessageType('Direction', (_message.Message,), {
+  'DESCRIPTOR' : _DIRECTION,
+  '__module__' : 'custom_node_pb2'
+  # @@protoc_insertion_point(class_scope:custom_node.Direction)
+  })
+_sym_db.RegisterMessage(Direction)
+
+EventMeta = _reflection.GeneratedProtocolMessageType('EventMeta', (_message.Message,), {
+
+  'PropertiesEntry' : _reflection.GeneratedProtocolMessageType('PropertiesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _EVENTMETA_PROPERTIESENTRY,
+    '__module__' : 'custom_node_pb2'
+    # @@protoc_insertion_point(class_scope:custom_node.EventMeta.PropertiesEntry)
+    })
+  ,
+  'DESCRIPTOR' : _EVENTMETA,
+  '__module__' : 'custom_node_pb2'
+  # @@protoc_insertion_point(class_scope:custom_node.EventMeta)
+  })
+_sym_db.RegisterMessage(EventMeta)
+_sym_db.RegisterMessage(EventMeta.PropertiesEntry)
+
+Roi = _reflection.GeneratedProtocolMessageType('Roi', (_message.Message,), {
+  'DESCRIPTOR' : _ROI,
+  '__module__' : 'custom_node_pb2'
+  # @@protoc_insertion_point(class_scope:custom_node.Roi)
+  })
+_sym_db.RegisterMessage(Roi)
 
 
+_EVENTMETA_PROPERTIESENTRY._options = None
 
 _CUSTOMNODEHANDLER = _descriptor.ServiceDescriptor(
   name='CustomNodeHandler',
@@ -464,26 +1161,26 @@ _CUSTOMNODEHANDLER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=746,
-  serialized_end=939,
+  serialized_start=2158,
+  serialized_end=2327,
   methods=[
   _descriptor.MethodDescriptor(
-    name='StartSession',
-    full_name='custom_node.CustomNodeHandler.StartSession',
+    name='Handshake',
+    full_name='custom_node.CustomNodeHandler.Handshake',
     index=0,
     containing_service=None,
-    input_type=_STARTSESSIONREQUEST,
-    output_type=_STARTSESSIONRESPONSE,
+    input_type=_HANDSHAKEREQUEST,
+    output_type=_HANDSHAKERESPONSE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
-    name='ProcessFrame',
-    full_name='custom_node.CustomNodeHandler.ProcessFrame',
+    name='Process',
+    full_name='custom_node.CustomNodeHandler.Process',
     index=1,
     containing_service=None,
-    input_type=_PROCESSFRAMEREQUEST,
-    output_type=_PROCESSFRAMERESPONSE,
+    input_type=_PROCESSREQUEST,
+    output_type=_PROCESSRESPONSE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

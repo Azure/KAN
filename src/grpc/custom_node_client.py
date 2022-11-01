@@ -13,37 +13,44 @@ class CustomNodeClient:
         self.seq = 1
         self.image_type = None
 
-        response = self.stub.StartSession(
-            custom_node_pb2.StartSessionRequest(seq=self.seq, instance_id=instance_id, skill_id=skill_id, device_id=device_id)
+        response = self.stub.Handshake(
+            custom_node_pb2.HandshakeRequest(seq=self.seq, instance_id=instance_id, skill_id=skill_id, device_id=device_id)
         )
 
         if response.ack == self.seq:
             self.seq += 1
-            if response.image_type == custom_node_pb2.IMAGE_TYPE_NUMPY:
+            if response.image_type == custom_node_pb2.ImageType.IMAGE_TYPE_NUMPY:
                 self.image_type = 'numpy'
+            elif response.image_type == custom_node_pb2.ImageType.IMAGE_TYPE_BMP:
+                self.image_type = '.bmp'
+            elif response.image_type == custom_node_pb2.ImageType.IMAGE_TYPE_JPEG:
+                self.image_type = '.jpeg'
             else:
-                self.image_type = 'raw'
+                raise Exception(f'Unknown Image Type {self.image_type}')
         else:
             raise Exception(f"Incorrect Ack, expect {self.seq} but got {response.ack}") 
 
-    def send(self, image, timestamp, frame_id, datetime):
+    def send(self, image):
 
+        # FIXME convert voeedge python/pydantic frame to grpc frame
 
         if self.image_type == 'numpy':
             image_pointer = image.tobytes()
         else:
-            image_pointer = cv2.imencode('.bmp', image)[1]
+            image_pointer = cv2.imencode(self.image_type, image)[1]
 
         height, width, _ = image.shape
 
-        response = self.stub.ProcessFrame(
-            custom_node_pb2.ProcessFrameRequest(
+        response = self.stub.Process(
+            custom_node_pb2.ProcessRequest(
                 seq =self.seq,
                 frame=custom_node_pb2.Frame(
                     image=custom_node_pb2.Image(image_pointer=image_pointer, properties=custom_node_pb2.ImageProperties(width=width, height=height, color_format=custom_node_pb2.COLOR_FORMAT_BGR)),
-                    timestamp=timestamp,
-                    frame_id=frame_id,
-                    datetime=datetime,
+                    insights_meta=None,
+                    timestamp=0,
+                    frame_id='0',
+                    roi=None,
+                    datetime='2000-01-01T00:00:00',
                 )
             )
         )
@@ -65,20 +72,28 @@ if __name__ == '__main__':
     import numpy as np
     img = np.arange(12).reshape((2, 2, 3)).astype('uint8')
     client = CustomNodeClient('localhost', 6677, '1', '2', '3')
-    response = client.send(img, 1, 'frame_id', 'datetime')
+
+    response = client.send(img)
     print(response)
-    if client.image_type == 'numpy':
-        print('image:')
-        image_pointer = response.frame.image.image_pointer
-        width = response.frame.image.properties.width
-        height = response.frame.image.properties.height
-        print(np.frombuffer(response.frame.image.image_pointer, dtype='uint8').reshape((height, width, 3)))
-    else:
-        print('image:')
-        image_pointer = response.frame.image.image_pointer
-        width = response.frame.image.properties.width
-        height = response.frame.image.properties.height
-        print(cv2.imdecode(image_pointer, cv2.IMREAD_COLOR))
+
+    response = client.send(img)
+    print(response)
+
+    response = client.send(img)
+    print(response)
+    
+    #if client.image_type == 'numpy':
+    #    print('image:')
+    #    image_pointer = response.frame.image.image_pointer
+    #    width = response.frame.image.properties.width
+    #    height = response.frame.image.properties.height
+    #    print(np.frombuffer(response.frame.image.image_pointer, dtype='uint8').reshape((height, width, 3)))
+    #else:
+    #    print('image:')
+    #    image_pointer = response.frame.image.image_pointer
+    #    width = response.frame.image.properties.width
+    #    height = response.frame.image.properties.height
+    #    print(cv2.imdecode(image_pointer, cv2.IMREAD_COLOR))
 
     #response = client.send(img, 1, 'frame_id', 'datetime')
     #print(response)

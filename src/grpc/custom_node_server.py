@@ -8,11 +8,10 @@ class CustomNode:
     def __init__(self):
         pass
 
-    def StartSession(self, request: custom_node_pb2.StartSessionRequest, context) -> custom_node_pb2.StartSessionResponse:
-        print('s')
-        return custom_node_pb2.StartSessionResponse(ack=request.seq, image_type=custom_node_pb2.IMAGE_TYPE_NUMPY)
+    def Handshake(self, request: custom_node_pb2.HandshakeRequest, context) -> custom_node_pb2.HandshakeResponse:
+        return NotImplementedError
 
-    def ProcessFrame(self, request: custom_node_pb2.ProcessFrameRequest, context) -> custom_node_pb2.ProcessFrameResponse:
+    def Process(self, request: custom_node_pb2.ProcessRequest, context) -> custom_node_pb2.ProcessResponse:
         raise NotImplementedError
 
 
@@ -37,18 +36,35 @@ class CustomNodeServer:
 
 if __name__ == '__main__':
 
-    class PingPong(CustomNode):
+    class FakeDetection(CustomNode):
 
-        def ProcessFrame(self, request: custom_node_pb2.ProcessFrameRequest, context) -> custom_node_pb2.ProcessFrameResponse:
-            print('processing ...')
-            frame = custom_node_pb2.Frame(
-                image=request.frame.image,
-                timestamp=request.frame.timestamp,
-                frame_id=request.frame.frame_id,
-                datetime=request.frame.datetime,
+
+        def Handshake(self, request: custom_node_pb2.HandshakeRequest, context) -> custom_node_pb2.HandshakeResponse:
+            return custom_node_pb2.HandshakeResponse(
+                ack=request.seq, 
+                image_type=custom_node_pb2.ImageType.IMAGE_TYPE_NUMPY,
+                process_request_type=custom_node_pb2.ProcessRequestType.FRAME_WITH_IMAGE,
+                process_response_type=custom_node_pb2.ProcessResponseType.INSIGHTS_META_ONLY,
             )
-            return custom_node_pb2.ProcessFrameResponse(ack=request.seq, frame=frame)
+
+
+        def Process(self, request: custom_node_pb2.ProcessRequest, context) -> custom_node_pb2.ProcessResponse:
+            print('processing ...')
+            insights_meta = custom_node_pb2.InsightsMeta(
+                objects_meta=[
+                    custom_node_pb2.ObjectMeta(    
+                        timestamp=request.frame.timestamp,
+                        label='car',
+                        confidence=0.9,
+                        inference_id='inference_1',
+                        bbox=custom_node_pb2.BBox(l=0.1, t=0.2, w=0.3, h=0.4)
+                    )
+                ]
+            )
+            print('ok')
+
+            return custom_node_pb2.ProcessResponse(ack=request.seq, insights_meta=insights_meta)
 
     
-    server = CustomNodeServer(6677, PingPong())
+    server = CustomNodeServer(6677, FakeDetection())
     server.serve()

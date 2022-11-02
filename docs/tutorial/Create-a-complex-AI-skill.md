@@ -31,7 +31,7 @@ AI skills are built in four steps:
 
 In this document, we will build an AI skill that detects vehicles and then classifies the vehicles by type.
 
-## Build an AI Skill
+## Build an AI skill
 
 1.  From the left navigation blades, select **AI Skills**, and then select **Create AI Skill**.
 
@@ -103,17 +103,16 @@ To recap, the AI skill at this point detects a person and passes the inference r
 
     Transform nodes allow you to filter the classes you want the skill to work on. If you have a model with numerous classes, you can create a subset of the data based on the object and the confidence threshold.
 
-3.  Drag the **Filter** node onto the canvas and connect it the same way you did with the detection node.
+2.  Drag the **Filter** node onto the canvas and connect it the same way you did with the detection node.
 
     ![](./media/410f22e98d47659c9484fdc0c42aa62a.png)
 
-4.  In the **Filter Transform** 
-, enter the names of the objects detected by your skill in the **Objects** field.
-5.  In the **Confidence Threshold** field, enter a number for the minimum **confidence threshold.** 
+3.  In the **Filter Transform**, enter the names of the objects detected by your skill in the **Objects** field.
+4.  In the **Confidence Threshold** field, enter a number for the minimum **confidence threshold.** 
 
     The threshold you select is determined by your use case. For more information, visit [Classification Algorithms parameters in Azure ML](https://social.technet.microsoft.com/wiki/contents/articles/33879.classification-algorithms-parameters-in-azure-ml.aspx).
     
-7.  Select **Done**.
+5.  Select **Done**.
 
 ## Add an Export node
 

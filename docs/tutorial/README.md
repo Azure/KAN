@@ -13,7 +13,7 @@ Welcome to our documentation page. There are several types of documents here so 
 
 ## Navigation
 
-To get a better understanding of POSS and find out how to proceed next, review the following articles: 
+To get a deeper understanding of POSS and find out how to proceed next, review the following articles: 
 
 - [Introduction to Azure Percept for Open-Source Project: Core concepts](concepts-azure-percept-for-open-source%20.md).
 - [Azure Percept Open-Source Project: Setup guide](setup-guide.md). 

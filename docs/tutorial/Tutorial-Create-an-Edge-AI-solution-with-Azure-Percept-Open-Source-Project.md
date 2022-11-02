@@ -158,7 +158,7 @@ Azure Percept Open-Source Project’s AI skill makes the inferences that power d
 
     A node is a draggable object that allows you to connect models and business logic easily without writing any code. There are three types of nodes:
 
-    1.  A **model node** is an ML algorithm like the Pedestrian and Vehicle Detector node you selected earlier in Step 3 of this tutorial, when you were adding a model. This model outputs x and y coordinates and a confidence threshold of the object’s identification. These coordinates are used to draw a bounding box around objects.
+    1.  A **model node** is an ML algorithm like the Pedestrian and Vehicle Detector node you selected earlier in Step 3 of this tutorial, when you were adding a model. This model outputs *x* and *y* coordinates and a confidence threshold of the object’s identification. These coordinates are used to draw a bounding box around objects.
     2.  A **transform node** takes the inference results based on the objects you detected from the model and filters them by confidence level.
     3.  An **export node** sends filtered results or video snippets to a location you define.
 

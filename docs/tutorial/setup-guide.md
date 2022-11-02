@@ -1,6 +1,6 @@
-# Azure Percept Open-Source Project - Setup guide
+# Azure Percept Open-Source Project: Setup guide
 
-## Pre-requisites
+## Prerequisites
 
 You need the following items before you start working with the self-hosting setup experience:
 
@@ -19,7 +19,7 @@ You need the following items before you start working with the self-hosting setu
   If you don't have the required role assignment, add a new role assignment to your subscription for **Storage account contributor** by following these steps: 
   
     1. Select your subscription. 
-    2. Select **Access control**, and then select  **Add role assignment** (see screenshot).
+    2. Select **Access control**, and then select **Add role assignment** (see screenshot).
     3. Search for **Storage account contributor** (not the classic one).
     4. Then select **Next**, select **Add member**, select your account, and then select **Review and assign**.
 
@@ -91,9 +91,9 @@ To begin the setup process:
 
 ![image](https://user-images.githubusercontent.com/10191339/186487829-cda5b6db-85c2-49af-9c3f-0f97cef4b019.png)
 
-8. Next you're asked whether you want to create a new blob container within your storage account or use an already existing one. 
+8. Next, you're asked whether you want to create a new blob container within your storage account or use an already existing one. 
     
-    - To create a new one, you're asked to provide a name for your blob container within your storage account. 
+    - To create a new one, enter a name for your blob container within your storage account. 
     
     - To choose from already existing blob container, make a selection from the list of storage accounts under your storage account.
 
@@ -107,9 +107,9 @@ To begin the setup process:
 
 ![image](https://user-images.githubusercontent.com/10191339/186488323-da75715d-9128-4bff-821e-d88547abc77c.png)
 
-10. Next you're asked whether you want to create a service principal or use an already existing one. 
+10. Next, you're asked whether you want to create a service principal or use an already existing one. 
     
-    - To create a new one, select a name for your service principal. 
+    - To create a new one, enter a name for your service principal. 
     
     - To choose an already existing one, make a selection from the list of existing service principals or provide the name of your existing service principal directly. (This option is recommended as there can be too many service principals to show with the first option).
 
@@ -123,7 +123,7 @@ To begin the setup process:
 The installation may take a few minutes. 
     
 > [!NOTE]
-> If you face any issues towards the end of the installation to download our Helm charts to install either **symphony** or **voe**, uninstall the experience using the commands below and retry running the installer script in a couple of minutes. 
+> If you face any issues towards the end of the installation to download our Helm charts to install either **symphony** or **voe**, uninstall the experience using the commands below and retry running the installer script in a few minutes. 
 >
 > Azure is currently facing some issues with the Azure Container Registry not handling all download requests successfully due to high load. Trying again in a few minutes may resolve the issue.  
     
@@ -161,4 +161,4 @@ Report any issues or bugs you face using the [repository's issues page](https://
 Now that you have successfully setup POSS experience onto your Kubernetes environment, we recommend continuing with the following resources:
 
 -   [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)
--   [Introduction to Azure Percept for Open-Source Project core concepts](concepts-azure-percept-for-open-source%20.md)
+-   [Introduction to Azure Percept for Open-Source Project: Core concepts](concepts-azure-percept-for-open-source%20.md)

@@ -165,6 +165,14 @@ You have now completed creating your AI skill library. All your configured skill
 
 Your AI skill is now ready to be added to a deployment.
 
-## Next step
+## Next steps
 
 Now that you understand what AI skills are and how to use models to build, transform, and export them, your next step is to go the **Deployments page** and connect your AI skills to your target device.
+
+We also recommend the following tutorials to increase your experience:
+
+- [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)
+
+- [Tutorial: Create a complex AI skill with Azure Percept Open-Source Project](/docs/tutorial/Create-a-complex-AI-skill.md)
+
+- [Tutorial: Create a custom model with Azure Percept Open-Source Project](/docs/tutorial/Create-a-custom-model.md)

@@ -47,7 +47,7 @@ class CustomNodeClient:
                 frame=custom_node_pb2.Frame(
                     image=custom_node_pb2.Image(image_pointer=image_pointer, properties=custom_node_pb2.ImageProperties(width=width, height=height, color_format=custom_node_pb2.COLOR_FORMAT_BGR)),
                     insights_meta=None,
-                    timestamp=0,
+                    timestamp=custom_node_pb2.Timestamp(seconds=0, nanos=0),
                     frame_id='0',
                     roi=None,
                     datetime='2000-01-01T00:00:00',

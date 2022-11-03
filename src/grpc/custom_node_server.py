@@ -53,7 +53,7 @@ if __name__ == '__main__':
             insights_meta = custom_node_pb2.InsightsMeta(
                 objects_meta=[
                     custom_node_pb2.ObjectMeta(    
-                        timestamp=request.frame.timestamp,
+                        timestamp=custom_node_pb2.Timestamp(seconds=10, nanos=100),
                         label='car',
                         confidence=0.9,
                         inference_id='inference_1',

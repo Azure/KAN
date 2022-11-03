@@ -17,8 +17,9 @@ service CustomNodeHandler {
 // Client ------------------------------------------> Server
 //        <------------------------------------------
 //             [Handshake Response]
-//                specify 1. ProcessRequestType
-//                        2. ProcessResponseType
+//                specify 1. ImageType
+//                        2. ProcessRequestType
+//                        3. ProcessResponseType
 //
 //
 //
@@ -89,6 +90,9 @@ enum ProcessResponseType {
 
     // Server returns Image and InsightsMeta to client
     IMAGE_AND_INSIGHTS_META = 2;
+
+    // Server returns Response without only ack
+    EMPTY = 3;
 }
 
 // This response should be filled according to ProcessResponseTYpe
@@ -105,7 +109,7 @@ message ProcessResponse {
 message Frame {
     Image        image         = 1;
     InsightsMeta insights_meta = 2;
-    float        timestamp     = 3;
+    Timestamp    timestamp     = 3;
     Roi          roi           = 4;
     string       frame_id      = 5;
     string       datetime      = 6;
@@ -131,11 +135,11 @@ enum ColorFormat {
 message InsightsMeta {
     repeated ObjectMeta objects_meta = 1;
     repeated EventMeta  events_meta = 2;
-    repeated string     other_meta  = 3;
+    map<string, string> other_meta  = 3;
 }
 
 message ObjectMeta {
-    float timestamp = 1;
+    Timestamp timestamp = 1;
     string label = 2;
     float confidence = 3;
     string inference_id = 4;
@@ -145,7 +149,7 @@ message ObjectMeta {
 }
 
 message ObjectMetaAttribute {
-    float timestamp = 1;
+    Timestamp timestamp = 1; 
     string name = 2;
     string label = 3;
     float confidence = 4;
@@ -160,7 +164,7 @@ message BBox {
 }
 
 message TrackingInfo {
-    float timestamp     = 1;
+    Timestamp timestamp     = 1;
     string tracking_id  = 2;
     float speed         = 3;
     Direction direction = 4;
@@ -171,13 +175,19 @@ message Direction {
     float y = 2;
 }
 
+
 message EventMeta {
-    float timestamp = 1;
+    Timestamp timestamp = 1; 
     string type = 2;
     string event_id = 3;
     repeated string related_ids = 4;
     map<string, string> properties = 5;
 
+}
+
+message Point {
+    float x = 1;
+    float y = 2;
 }
 
 message Roi {
@@ -191,3 +201,16 @@ enum RoiType {
     LINE = 0;
     POLYGON = 1;
 }
+
+message Timestamp {
+    // Represents seconds of UTC time since Unix epoch
+    // 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to
+    // 9999-12-31T23:59:59Z inclusive.
+    int64 seconds = 1;
+  
+    // Non-negative fractions of a second at nanosecond resolution. Negative
+    // second values with fractions must still have non-negative nanos values
+    // that count forward in time. Must be from 0 to 999,999,999
+    // inclusive.
+    int32 nanos = 2;
+  }

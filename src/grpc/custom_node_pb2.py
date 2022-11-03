@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x11\x63ustom_node.proto\x12\x0b\x63ustom_node\"Y\n\x10HandshakeRequest\x12\x0b\n\x03seq\x18\x01 \x01(\x03\x12\x13\n\x0binstance_id\x18\x02 \x01(\t\x12\x10\n\x08skill_id\x18\x03 \x01(\t\x12\x11\n\tdevice_id\x18\x04 \x01(\t\"\xcc\x01\n\x11HandshakeResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\x03\x12*\n\nimage_type\x18\x02 \x01(\x0e\x32\x16.custom_node.ImageType\x12=\n\x14process_request_type\x18\x03 \x01(\x0e\x32\x1f.custom_node.ProcessRequestType\x12?\n\x15process_response_type\x18\x04 \x01(\x0e\x32 .custom_node.ProcessResponseType\"@\n\x0eProcessRequest\x12\x0b\n\x03seq\x18\x01 \x01(\x03\x12!\n\x05\x66rame\x18\x02 \x01(\x0b\x32\x12.custom_node.Frame\"s\n\x0fProcessResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\x03\x12!\n\x05image\x18\x02 \x01(\x0b\x32\x12.custom_node.Image\x12\x30\n\rinsights_meta\x18\x03 \x01(\x0b\x32\x19.custom_node.InsightsMeta\"\xb2\x01\n\x05\x46rame\x12!\n\x05image\x18\x01 \x01(\x0b\x32\x12.custom_node.Image\x12\x30\n\rinsights_meta\x18\x02 \x01(\x0b\x32\x19.custom_node.InsightsMeta\x12\x11\n\ttimestamp\x18\x03 \x01(\x02\x12\x1d\n\x03roi\x18\x04 \x01(\x0b\x32\x10.custom_node.Roi\x12\x10\n\x08\x66rame_id\x18\x05 \x01(\t\x12\x10\n\x08\x64\x61tetime\x18\x06 \x01(\t\"P\n\x05Image\x12\x15\n\rimage_pointer\x18\x01 \x01(\x0c\x12\x30\n\nproperties\x18\x02 \x01(\x0b\x32\x1c.custom_node.ImageProperties\"`\n\x0fImageProperties\x12\x0e\n\x06height\x18\x01 \x01(\x03\x12\r\n\x05width\x18\x02 \x01(\x03\x12.\n\x0c\x63olor_format\x18\x03 \x01(\x0e\x32\x18.custom_node.ColorFormat\"~\n\x0cInsightsMeta\x12-\n\x0cobjects_meta\x18\x01 \x03(\x0b\x32\x17.custom_node.ObjectMeta\x12+\n\x0b\x65vents_meta\x18\x02 \x03(\x0b\x32\x16.custom_node.EventMeta\x12\x12\n\nother_meta\x18\x03 \x03(\t\"\xe1\x01\n\nObjectMeta\x12\x11\n\ttimestamp\x18\x01 \x01(\x02\x12\r\n\x05label\x18\x02 \x01(\t\x12\x12\n\nconfidence\x18\x03 \x01(\x02\x12\x14\n\x0cinference_id\x18\x04 \x01(\t\x12\x34\n\nattributes\x18\x05 \x03(\x0b\x32 .custom_node.ObjectMetaAttribute\x12\x1f\n\x04\x62\x62ox\x18\x06 \x01(\x0b\x32\x11.custom_node.BBox\x12\x30\n\rtracking_info\x18\x07 \x01(\x0b\x32\x19.custom_node.TrackingInfo\"o\n\x13ObjectMetaAttribute\x12\x11\n\ttimestamp\x18\x01 \x01(\x02\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05label\x18\x03 \x01(\t\x12\x12\n\nconfidence\x18\x04 \x01(\x02\x12\x14\n\x0cinference_id\x18\x05 \x01(\t\"2\n\x04\x42\x42ox\x12\t\n\x01l\x18\x01 \x01(\x02\x12\t\n\x01t\x18\x02 \x01(\x02\x12\t\n\x01w\x18\x03 \x01(\x02\x12\t\n\x01h\x18\x04 \x01(\x02\"p\n\x0cTrackingInfo\x12\x11\n\ttimestamp\x18\x01 \x01(\x02\x12\x13\n\x0btracking_id\x18\x02 \x01(\t\x12\r\n\x05speed\x18\x03 \x01(\x02\x12)\n\tdirection\x18\x04 \x01(\x0b\x32\x16.custom_node.Direction\"!\n\tDirection\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\"\xc2\x01\n\tEventMeta\x12\x11\n\ttimestamp\x18\x01 \x01(\x02\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x10\n\x08\x65vent_id\x18\x03 \x01(\t\x12\x13\n\x0brelated_ids\x18\x04 \x03(\t\x12:\n\nproperties\x18\x05 \x03(\x0b\x32&.custom_node.EventMeta.PropertiesEntry\x1a\x31\n\x0fPropertiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"R\n\x03Roi\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\"\n\x04type\x18\x02 \x01(\x0e\x32\x14.custom_node.RoiType\x12\n\n\x02id\x18\x03 \x01(\t\x12\r\n\x05value\x18\x04 \x01(\t*J\n\tImageType\x12\x14\n\x10IMAGE_TYPE_NUMPY\x10\x00\x12\x12\n\x0eIMAGE_TYPE_BMP\x10\x01\x12\x13\n\x0fIMAGE_TYPE_JPEG\x10\x02*C\n\x12ProcessRequestType\x12\x14\n\x10\x46RAME_WITH_IMAGE\x10\x00\x12\x17\n\x13\x46RAME_WITHOUT_IMAGE\x10\x01*Z\n\x13ProcessResponseType\x12\x0e\n\nIMAGE_ONLY\x10\x00\x12\x16\n\x12INSIGHTS_META_ONLY\x10\x01\x12\x1b\n\x17IMAGE_AND_INSIGHTS_META\x10\x02*9\n\x0b\x43olorFormat\x12\x14\n\x10\x43OLOR_FORMAT_BGR\x10\x00\x12\x14\n\x10\x43OLOR_FORMAT_RGB\x10\x01* \n\x07RoiType\x12\x08\n\x04LINE\x10\x00\x12\x0b\n\x07POLYGON\x10\x01\x32\xa9\x01\n\x11\x43ustomNodeHandler\x12L\n\tHandshake\x12\x1d.custom_node.HandshakeRequest\x1a\x1e.custom_node.HandshakeResponse\"\x00\x12\x46\n\x07Process\x12\x1b.custom_node.ProcessRequest\x1a\x1c.custom_node.ProcessResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x11\x63ustom_node.proto\x12\x0b\x63ustom_node\"Y\n\x10HandshakeRequest\x12\x0b\n\x03seq\x18\x01 \x01(\x03\x12\x13\n\x0binstance_id\x18\x02 \x01(\t\x12\x10\n\x08skill_id\x18\x03 \x01(\t\x12\x11\n\tdevice_id\x18\x04 \x01(\t\"\xcc\x01\n\x11HandshakeResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\x03\x12*\n\nimage_type\x18\x02 \x01(\x0e\x32\x16.custom_node.ImageType\x12=\n\x14process_request_type\x18\x03 \x01(\x0e\x32\x1f.custom_node.ProcessRequestType\x12?\n\x15process_response_type\x18\x04 \x01(\x0e\x32 .custom_node.ProcessResponseType\"@\n\x0eProcessRequest\x12\x0b\n\x03seq\x18\x01 \x01(\x03\x12!\n\x05\x66rame\x18\x02 \x01(\x0b\x32\x12.custom_node.Frame\"s\n\x0fProcessResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\x03\x12!\n\x05image\x18\x02 \x01(\x0b\x32\x12.custom_node.Image\x12\x30\n\rinsights_meta\x18\x03 \x01(\x0b\x32\x19.custom_node.InsightsMeta\"\xca\x01\n\x05\x46rame\x12!\n\x05image\x18\x01 \x01(\x0b\x32\x12.custom_node.Image\x12\x30\n\rinsights_meta\x18\x02 \x01(\x0b\x32\x19.custom_node.InsightsMeta\x12)\n\ttimestamp\x18\x03 \x01(\x0b\x32\x16.custom_node.Timestamp\x12\x1d\n\x03roi\x18\x04 \x01(\x0b\x32\x10.custom_node.Roi\x12\x10\n\x08\x66rame_id\x18\x05 \x01(\t\x12\x10\n\x08\x64\x61tetime\x18\x06 \x01(\t\"P\n\x05Image\x12\x15\n\rimage_pointer\x18\x01 \x01(\x0c\x12\x30\n\nproperties\x18\x02 \x01(\x0b\x32\x1c.custom_node.ImageProperties\"`\n\x0fImageProperties\x12\x0e\n\x06height\x18\x01 \x01(\x03\x12\r\n\x05width\x18\x02 \x01(\x03\x12.\n\x0c\x63olor_format\x18\x03 \x01(\x0e\x32\x18.custom_node.ColorFormat\"\xda\x01\n\x0cInsightsMeta\x12-\n\x0cobjects_meta\x18\x01 \x03(\x0b\x32\x17.custom_node.ObjectMeta\x12+\n\x0b\x65vents_meta\x18\x02 \x03(\x0b\x32\x16.custom_node.EventMeta\x12<\n\nother_meta\x18\x03 \x03(\x0b\x32(.custom_node.InsightsMeta.OtherMetaEntry\x1a\x30\n\x0eOtherMetaEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xf9\x01\n\nObjectMeta\x12)\n\ttimestamp\x18\x01 \x01(\x0b\x32\x16.custom_node.Timestamp\x12\r\n\x05label\x18\x02 \x01(\t\x12\x12\n\nconfidence\x18\x03 \x01(\x02\x12\x14\n\x0cinference_id\x18\x04 \x01(\t\x12\x34\n\nattributes\x18\x05 \x03(\x0b\x32 .custom_node.ObjectMetaAttribute\x12\x1f\n\x04\x62\x62ox\x18\x06 \x01(\x0b\x32\x11.custom_node.BBox\x12\x30\n\rtracking_info\x18\x07 \x01(\x0b\x32\x19.custom_node.TrackingInfo\"\x87\x01\n\x13ObjectMetaAttribute\x12)\n\ttimestamp\x18\x01 \x01(\x0b\x32\x16.custom_node.Timestamp\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05label\x18\x03 \x01(\t\x12\x12\n\nconfidence\x18\x04 \x01(\x02\x12\x14\n\x0cinference_id\x18\x05 \x01(\t\"2\n\x04\x42\x42ox\x12\t\n\x01l\x18\x01 \x01(\x02\x12\t\n\x01t\x18\x02 \x01(\x02\x12\t\n\x01w\x18\x03 \x01(\x02\x12\t\n\x01h\x18\x04 \x01(\x02\"\x88\x01\n\x0cTrackingInfo\x12)\n\ttimestamp\x18\x01 \x01(\x0b\x32\x16.custom_node.Timestamp\x12\x13\n\x0btracking_id\x18\x02 \x01(\t\x12\r\n\x05speed\x18\x03 \x01(\x02\x12)\n\tdirection\x18\x04 \x01(\x0b\x32\x16.custom_node.Direction\"!\n\tDirection\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\"\xda\x01\n\tEventMeta\x12)\n\ttimestamp\x18\x01 \x01(\x0b\x32\x16.custom_node.Timestamp\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x10\n\x08\x65vent_id\x18\x03 \x01(\t\x12\x13\n\x0brelated_ids\x18\x04 \x03(\t\x12:\n\nproperties\x18\x05 \x03(\x0b\x32&.custom_node.EventMeta.PropertiesEntry\x1a\x31\n\x0fPropertiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x1d\n\x05Point\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\"R\n\x03Roi\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\"\n\x04type\x18\x02 \x01(\x0e\x32\x14.custom_node.RoiType\x12\n\n\x02id\x18\x03 \x01(\t\x12\r\n\x05value\x18\x04 \x01(\t\"+\n\tTimestamp\x12\x0f\n\x07seconds\x18\x01 \x01(\x03\x12\r\n\x05nanos\x18\x02 \x01(\x05*J\n\tImageType\x12\x14\n\x10IMAGE_TYPE_NUMPY\x10\x00\x12\x12\n\x0eIMAGE_TYPE_BMP\x10\x01\x12\x13\n\x0fIMAGE_TYPE_JPEG\x10\x02*C\n\x12ProcessRequestType\x12\x14\n\x10\x46RAME_WITH_IMAGE\x10\x00\x12\x17\n\x13\x46RAME_WITHOUT_IMAGE\x10\x01*e\n\x13ProcessResponseType\x12\x0e\n\nIMAGE_ONLY\x10\x00\x12\x16\n\x12INSIGHTS_META_ONLY\x10\x01\x12\x1b\n\x17IMAGE_AND_INSIGHTS_META\x10\x02\x12\t\n\x05\x45MPTY\x10\x03*9\n\x0b\x43olorFormat\x12\x14\n\x10\x43OLOR_FORMAT_BGR\x10\x00\x12\x14\n\x10\x43OLOR_FORMAT_RGB\x10\x01* \n\x07RoiType\x12\x08\n\x04LINE\x10\x00\x12\x0b\n\x07POLYGON\x10\x01\x32\xa9\x01\n\x11\x43ustomNodeHandler\x12L\n\tHandshake\x12\x1d.custom_node.HandshakeRequest\x1a\x1e.custom_node.HandshakeResponse\"\x00\x12\x46\n\x07Process\x12\x1b.custom_node.ProcessRequest\x1a\x1c.custom_node.ProcessResponse\"\x00\x62\x06proto3'
 )
 
 _IMAGETYPE = _descriptor.EnumDescriptor(
@@ -48,8 +48,8 @@ _IMAGETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1827,
-  serialized_end=1901,
+  serialized_start=2118,
+  serialized_end=2192,
 )
 _sym_db.RegisterEnumDescriptor(_IMAGETYPE)
 
@@ -74,8 +74,8 @@ _PROCESSREQUESTTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1903,
-  serialized_end=1970,
+  serialized_start=2194,
+  serialized_end=2261,
 )
 _sym_db.RegisterEnumDescriptor(_PROCESSREQUESTTYPE)
 
@@ -102,11 +102,16 @@ _PROCESSRESPONSETYPE = _descriptor.EnumDescriptor(
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='EMPTY', index=3, number=3,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1972,
-  serialized_end=2062,
+  serialized_start=2263,
+  serialized_end=2364,
 )
 _sym_db.RegisterEnumDescriptor(_PROCESSRESPONSETYPE)
 
@@ -131,8 +136,8 @@ _COLORFORMAT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2064,
-  serialized_end=2121,
+  serialized_start=2366,
+  serialized_end=2423,
 )
 _sym_db.RegisterEnumDescriptor(_COLORFORMAT)
 
@@ -157,8 +162,8 @@ _ROITYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2123,
-  serialized_end=2155,
+  serialized_start=2425,
+  serialized_end=2457,
 )
 _sym_db.RegisterEnumDescriptor(_ROITYPE)
 
@@ -171,6 +176,7 @@ FRAME_WITHOUT_IMAGE = 1
 IMAGE_ONLY = 0
 INSIGHTS_META_ONLY = 1
 IMAGE_AND_INSIGHTS_META = 2
+EMPTY = 3
 COLOR_FORMAT_BGR = 0
 COLOR_FORMAT_RGB = 1
 LINE = 0
@@ -393,8 +399,8 @@ _FRAME = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
       name='timestamp', full_name='custom_node.Frame.timestamp', index=2,
-      number=3, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -432,7 +438,7 @@ _FRAME = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=516,
-  serialized_end=694,
+  serialized_end=718,
 )
 
 
@@ -470,8 +476,8 @@ _IMAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=696,
-  serialized_end=776,
+  serialized_start=720,
+  serialized_end=800,
 )
 
 
@@ -516,10 +522,48 @@ _IMAGEPROPERTIES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=778,
-  serialized_end=874,
+  serialized_start=802,
+  serialized_end=898,
 )
 
+
+_INSIGHTSMETA_OTHERMETAENTRY = _descriptor.Descriptor(
+  name='OtherMetaEntry',
+  full_name='custom_node.InsightsMeta.OtherMetaEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='custom_node.InsightsMeta.OtherMetaEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='custom_node.InsightsMeta.OtherMetaEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b'8\001',
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1071,
+  serialized_end=1119,
+)
 
 _INSIGHTSMETA = _descriptor.Descriptor(
   name='InsightsMeta',
@@ -545,7 +589,7 @@ _INSIGHTSMETA = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
       name='other_meta', full_name='custom_node.InsightsMeta.other_meta', index=2,
-      number=3, type=9, cpp_type=9, label=3,
+      number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -553,7 +597,7 @@ _INSIGHTSMETA = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[],
+  nested_types=[_INSIGHTSMETA_OTHERMETAENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -562,8 +606,8 @@ _INSIGHTSMETA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=876,
-  serialized_end=1002,
+  serialized_start=901,
+  serialized_end=1119,
 )
 
 
@@ -577,8 +621,8 @@ _OBJECTMETA = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='timestamp', full_name='custom_node.ObjectMeta.timestamp', index=0,
-      number=1, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -636,8 +680,8 @@ _OBJECTMETA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1005,
-  serialized_end=1230,
+  serialized_start=1122,
+  serialized_end=1371,
 )
 
 
@@ -651,8 +695,8 @@ _OBJECTMETAATTRIBUTE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='timestamp', full_name='custom_node.ObjectMetaAttribute.timestamp', index=0,
-      number=1, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -696,8 +740,8 @@ _OBJECTMETAATTRIBUTE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1232,
-  serialized_end=1343,
+  serialized_start=1374,
+  serialized_end=1509,
 )
 
 
@@ -749,8 +793,8 @@ _BBOX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1345,
-  serialized_end=1395,
+  serialized_start=1511,
+  serialized_end=1561,
 )
 
 
@@ -764,8 +808,8 @@ _TRACKINGINFO = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='timestamp', full_name='custom_node.TrackingInfo.timestamp', index=0,
-      number=1, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -802,8 +846,8 @@ _TRACKINGINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1397,
-  serialized_end=1509,
+  serialized_start=1564,
+  serialized_end=1700,
 )
 
 
@@ -841,8 +885,8 @@ _DIRECTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1511,
-  serialized_end=1544,
+  serialized_start=1702,
+  serialized_end=1735,
 )
 
 
@@ -880,8 +924,8 @@ _EVENTMETA_PROPERTIESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1692,
-  serialized_end=1741,
+  serialized_start=1907,
+  serialized_end=1956,
 )
 
 _EVENTMETA = _descriptor.Descriptor(
@@ -894,8 +938,8 @@ _EVENTMETA = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='timestamp', full_name='custom_node.EventMeta.timestamp', index=0,
-      number=1, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -939,8 +983,47 @@ _EVENTMETA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1547,
-  serialized_end=1741,
+  serialized_start=1738,
+  serialized_end=1956,
+)
+
+
+_POINT = _descriptor.Descriptor(
+  name='Point',
+  full_name='custom_node.Point',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='x', full_name='custom_node.Point.x', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='y', full_name='custom_node.Point.y', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1958,
+  serialized_end=1987,
 )
 
 
@@ -992,8 +1075,47 @@ _ROI = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1743,
-  serialized_end=1825,
+  serialized_start=1989,
+  serialized_end=2071,
+)
+
+
+_TIMESTAMP = _descriptor.Descriptor(
+  name='Timestamp',
+  full_name='custom_node.Timestamp',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='seconds', full_name='custom_node.Timestamp.seconds', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='nanos', full_name='custom_node.Timestamp.nanos', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2073,
+  serialized_end=2116,
 )
 
 _HANDSHAKERESPONSE.fields_by_name['image_type'].enum_type = _IMAGETYPE
@@ -1004,16 +1126,23 @@ _PROCESSRESPONSE.fields_by_name['image'].message_type = _IMAGE
 _PROCESSRESPONSE.fields_by_name['insights_meta'].message_type = _INSIGHTSMETA
 _FRAME.fields_by_name['image'].message_type = _IMAGE
 _FRAME.fields_by_name['insights_meta'].message_type = _INSIGHTSMETA
+_FRAME.fields_by_name['timestamp'].message_type = _TIMESTAMP
 _FRAME.fields_by_name['roi'].message_type = _ROI
 _IMAGE.fields_by_name['properties'].message_type = _IMAGEPROPERTIES
 _IMAGEPROPERTIES.fields_by_name['color_format'].enum_type = _COLORFORMAT
+_INSIGHTSMETA_OTHERMETAENTRY.containing_type = _INSIGHTSMETA
 _INSIGHTSMETA.fields_by_name['objects_meta'].message_type = _OBJECTMETA
 _INSIGHTSMETA.fields_by_name['events_meta'].message_type = _EVENTMETA
+_INSIGHTSMETA.fields_by_name['other_meta'].message_type = _INSIGHTSMETA_OTHERMETAENTRY
+_OBJECTMETA.fields_by_name['timestamp'].message_type = _TIMESTAMP
 _OBJECTMETA.fields_by_name['attributes'].message_type = _OBJECTMETAATTRIBUTE
 _OBJECTMETA.fields_by_name['bbox'].message_type = _BBOX
 _OBJECTMETA.fields_by_name['tracking_info'].message_type = _TRACKINGINFO
+_OBJECTMETAATTRIBUTE.fields_by_name['timestamp'].message_type = _TIMESTAMP
+_TRACKINGINFO.fields_by_name['timestamp'].message_type = _TIMESTAMP
 _TRACKINGINFO.fields_by_name['direction'].message_type = _DIRECTION
 _EVENTMETA_PROPERTIESENTRY.containing_type = _EVENTMETA
+_EVENTMETA.fields_by_name['timestamp'].message_type = _TIMESTAMP
 _EVENTMETA.fields_by_name['properties'].message_type = _EVENTMETA_PROPERTIESENTRY
 _ROI.fields_by_name['type'].enum_type = _ROITYPE
 DESCRIPTOR.message_types_by_name['HandshakeRequest'] = _HANDSHAKEREQUEST
@@ -1030,7 +1159,9 @@ DESCRIPTOR.message_types_by_name['BBox'] = _BBOX
 DESCRIPTOR.message_types_by_name['TrackingInfo'] = _TRACKINGINFO
 DESCRIPTOR.message_types_by_name['Direction'] = _DIRECTION
 DESCRIPTOR.message_types_by_name['EventMeta'] = _EVENTMETA
+DESCRIPTOR.message_types_by_name['Point'] = _POINT
 DESCRIPTOR.message_types_by_name['Roi'] = _ROI
+DESCRIPTOR.message_types_by_name['Timestamp'] = _TIMESTAMP
 DESCRIPTOR.enum_types_by_name['ImageType'] = _IMAGETYPE
 DESCRIPTOR.enum_types_by_name['ProcessRequestType'] = _PROCESSREQUESTTYPE
 DESCRIPTOR.enum_types_by_name['ProcessResponseType'] = _PROCESSRESPONSETYPE
@@ -1088,11 +1219,19 @@ ImageProperties = _reflection.GeneratedProtocolMessageType('ImageProperties', (_
 _sym_db.RegisterMessage(ImageProperties)
 
 InsightsMeta = _reflection.GeneratedProtocolMessageType('InsightsMeta', (_message.Message,), {
+
+  'OtherMetaEntry' : _reflection.GeneratedProtocolMessageType('OtherMetaEntry', (_message.Message,), {
+    'DESCRIPTOR' : _INSIGHTSMETA_OTHERMETAENTRY,
+    '__module__' : 'custom_node_pb2'
+    # @@protoc_insertion_point(class_scope:custom_node.InsightsMeta.OtherMetaEntry)
+    })
+  ,
   'DESCRIPTOR' : _INSIGHTSMETA,
   '__module__' : 'custom_node_pb2'
   # @@protoc_insertion_point(class_scope:custom_node.InsightsMeta)
   })
 _sym_db.RegisterMessage(InsightsMeta)
+_sym_db.RegisterMessage(InsightsMeta.OtherMetaEntry)
 
 ObjectMeta = _reflection.GeneratedProtocolMessageType('ObjectMeta', (_message.Message,), {
   'DESCRIPTOR' : _OBJECTMETA,
@@ -1144,6 +1283,13 @@ EventMeta = _reflection.GeneratedProtocolMessageType('EventMeta', (_message.Mess
 _sym_db.RegisterMessage(EventMeta)
 _sym_db.RegisterMessage(EventMeta.PropertiesEntry)
 
+Point = _reflection.GeneratedProtocolMessageType('Point', (_message.Message,), {
+  'DESCRIPTOR' : _POINT,
+  '__module__' : 'custom_node_pb2'
+  # @@protoc_insertion_point(class_scope:custom_node.Point)
+  })
+_sym_db.RegisterMessage(Point)
+
 Roi = _reflection.GeneratedProtocolMessageType('Roi', (_message.Message,), {
   'DESCRIPTOR' : _ROI,
   '__module__' : 'custom_node_pb2'
@@ -1151,7 +1297,15 @@ Roi = _reflection.GeneratedProtocolMessageType('Roi', (_message.Message,), {
   })
 _sym_db.RegisterMessage(Roi)
 
+Timestamp = _reflection.GeneratedProtocolMessageType('Timestamp', (_message.Message,), {
+  'DESCRIPTOR' : _TIMESTAMP,
+  '__module__' : 'custom_node_pb2'
+  # @@protoc_insertion_point(class_scope:custom_node.Timestamp)
+  })
+_sym_db.RegisterMessage(Timestamp)
 
+
+_INSIGHTSMETA_OTHERMETAENTRY._options = None
 _EVENTMETA_PROPERTIESENTRY._options = None
 
 _CUSTOMNODEHANDLER = _descriptor.ServiceDescriptor(
@@ -1161,8 +1315,8 @@ _CUSTOMNODEHANDLER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=2158,
-  serialized_end=2327,
+  serialized_start=2460,
+  serialized_end=2629,
   methods=[
   _descriptor.MethodDescriptor(
     name='Handshake',

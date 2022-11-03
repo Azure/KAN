@@ -4,7 +4,7 @@ In this scenario, you set up a Symphony control plane on Kubernetes. Then, you d
 
 You also set up an Azure Storage account that holds camera snapshots. Once the agent starts, it starts capturing camera snapshots and uploads then to the storage account. You can then query the latest snapshot URL through the ```Device``` object state.
 
-![RTSP Cameras](../../assets/camera-management.png)
+<!-- ![RTSP Cameras](../../assets/camera-management.png)-->
 
 ## 0. Prerequisites
 
@@ -17,7 +17,7 @@ You also set up an Azure Storage account that holds camera snapshots. Once the a
 
 ## 1. Deploy Symphony using Helm
 
-If you already have the ```symphony-k8s``` repository cloned:
+If you have already cloned the ```symphony-k8s``` repository:
 
 ```bash
 cd symphony-k8s/helm

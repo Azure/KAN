@@ -1,7 +1,8 @@
 # Symphony Quickstart
-[Symphony](https://github.com/azure/symphony-k8s) is designed with flexibility in mind. Depends on your hosting needs, there are numerous ways to get started with Symphony. Regardless which route you take, you can always fully customize your environment as your project requirements change.
 
-This article offers several quickstarts for you to choose from. Select the appropriate link that is closest to your projects needs from the table below.  
+[Symphony](https://github.com/azure/symphony-k8s) is designed with flexibility in mind. Depending on your hosting needs, there are numerous ways to get started with Symphony. Regardless of which route you take, you can always fully customize your environment as your project requirements change.
+
+This article offers quickstarts you can choose from. Select the appropriate link that is closest to your projects needs from the table below.  
 
 ## Quickstart scenarios
 

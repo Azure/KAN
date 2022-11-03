@@ -8,7 +8,7 @@ service CustomNodeHandler {
     rpc Handshake(HandshakeRequest) returns (HandshakeResponse) {}
 
     // After Handshake, client can start to data to server for processing
-    rpc Process (ProcessRequest) returns (ProcessResponse) {}
+    rpc Process (stream ProcessRequest) returns (stream ProcessResponse) {}
 }
 
 // **** Handshae Phase ****

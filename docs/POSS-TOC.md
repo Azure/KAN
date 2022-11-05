@@ -13,7 +13,7 @@
 
 ### API docs
 
-  [Azure Percept for Open-Source Project: API overview](/docs/api.md#poss-api)
+[Azure Percept for Open-Source Project: API overview](https://github.com/Azure/PerceptOSS/tree/main/docs/api#readme)
 
 ### Quickstarts for Symphony
 

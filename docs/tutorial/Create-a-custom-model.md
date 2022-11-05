@@ -51,7 +51,7 @@ The **Model** blade on the left navigation displays two options for adding model
 
 ![](./media/63c9948df94ad9329d4bc21f1ed04780.png)
 
-## Model Training
+## Model training
 
 Training the model consists of identifying the objects to be detected or classified and then providing tagged images where the object appears. This [*supervised learning*](https://docs.microsoft.com/en-us/learn/modules/introduction-to-classical-machine-learning/) allows the model’s layers to build features layer by layer. As with any neural network, more data is correlated with a more accurate model.
 
@@ -105,3 +105,10 @@ When **Successfully trained Model!** displays, the model is ready to be added to
 
 Now that you understand what models are and how to add them from your model gallery, your next step is to go to the **AI Skills** page to connect your models in a cascade which can chain models and business logic together.
 
+We also recommend the following tutorials to increase your experience:
+
+- [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)
+
+- [Tutorial: Create a complex AI skill with Azure Percept Open-Source Project](/docs/tutorial/Create-a-complex-AI-skill.md)
+
+- [Tutorial: Create a custom model with Azure Percept Open-Source Project](/docs/tutorial/Create-a-custom-model.md)

@@ -1,11 +1,11 @@
 # Symphony Quickstart: Deploying a simulated temperature sensor solution to an Azure IoT Edge device
 
-Ready to jump into actions right away? This quick start walks you through the steps of setting up a new Symphony control plane on your Kubernetes cluster and deploying a new Symphony solution instance to an Azure IoT Edge device.
+Ready to jump into actions right away? This quickstart walks you through the steps of setting up a new Symphony control plane on your Kubernetes cluster and deploying a new Symphony solution instance to an Azure IoT Edge device.
 
 > [!NOTE]
 > The following steps are tested under a Ubuntu 20.04.4 TLS WSL system on Windows 11. However, they should work for Linux, Windows, and MacOS systems as well.
 
-![IoT Edge](../../assets/quick-start-iot-edge.png)
+<!-- ![IoT Edge](../../assets/quick-start-iot-edge.png)-->
 
 ## 0. Prerequisites
 
@@ -47,9 +47,9 @@ az iot hub device-identity create --device-id s8c-vm --hub-name s8chub --edge-en
 az iot hub device-identity connection-string show --device-id s8c-vm --resource-group s8c-demo --hub-name s8chub
 ```
 
-## 3. Register a Linux VM as an IoT Edge Device
+## 3. Register a Linux VM as an IoT Edge device
 
-You need to prepare a Linux VM or physical Device for IoT Edge. In this guide, you'll create a new Linux VM:
+You need to prepare a Linux VM or physical device for IoT Edge. In this guide, you'll create a new Linux VM:
 
 ```bash
 # create vm
@@ -103,14 +103,14 @@ spec:
 ```
 
 > [!NOTE]
-> The above sample doesn't deploy a **Symphony Agent**, which is optional. To deploy an Symphony agent as an  IoT Edge module, see a sample target definition at ```symphony-k8s/samples/voe/default/target.yaml```.
+> The above sample doesn't deploy a **Symphony Agent**, which is optional. To deploy an Symphony agent as an  IoT Edge module, see a sample target definition in the ```symphony-k8s/samples/voe/default/target.yaml``` folder.
 
 ## 5. Create the Symphony Solution
 
 The following YAMl file describes a Symphony Solution with a single component, which is based on the ```mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0``` container.
 
 > [!NOTE]
-> You can get a sample of this file under ```symphony-k8s/samples/simulated-temperature-sensor/solution.yaml```:
+> You can get a sample of this file in the ```symphony-k8s/samples/simulated-temperature-sensor/solution.yaml``` folder.
 
 ```yaml
 apiVersion: solution.symphony/v1
@@ -133,7 +133,7 @@ spec:
 A Symphony Solution Instance maps a Symphony Solution to one or multiple Targets. The following artifacts maps the ```simulated-temperature-sensor``` solUtion to the ```s8c-vm``` target above:
 
 > [!NOTE]
-> You can get a sample of this file under ```symphony-k8s/samples/simulated-temperature-sensor/instance.yaml```:
+> You can get a sample of this file in the ```symphony-k8s/samples/simulated-temperature-sensor/instance.yaml``` folder.
 
 ```yaml
 apiVersion: solution.symphony/v1
@@ -148,7 +148,7 @@ spec:
 
 ## 7. Verification
 
-To examine all the Symphony objects that have been created:
+To examine all the Symphony objects you've created:
 
 ```bash
 kubectl get targets
@@ -156,9 +156,9 @@ kubectl get solutions
 kubectl get instances
 ```
 
-On the IoT Hub page, verify all IoT Edge modules are up and running:
+On the IoT Hub page, verify all IoT Edge modules are up and running.
 
-![IoT Edge](../images/iot-edge.png)
+<!-- ![IoT Edge](../images/iot-edge.png)-->
 
 ## 8. Clean up Symphony objects
 

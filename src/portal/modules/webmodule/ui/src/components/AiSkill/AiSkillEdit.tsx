@@ -217,11 +217,18 @@ const AiSkillEdit = () => {
         if (isInvalid) return;
       }
 
-      if (currentStep === 'cascade') await onCascadeCreate();
+      if (currentStep === 'cascade') {
+        const error = getCascadeErrorMessage(elements);
+        if (error) {
+          setLocalFormData((prev) => ({ ...prev, cascade: { ...prev.cascade, error } }));
+          return;
+        }
+        await onCascadeCreate();
+      }
 
       onLinkClick(nextStep);
     },
-    [onLinkClick, onFormDateValidate, onCascadeCreate],
+    [onLinkClick, onFormDateValidate, onCascadeCreate, elements],
   );
 
   return (

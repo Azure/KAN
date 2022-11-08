@@ -8,7 +8,7 @@ import { Connection } from 'react-flow-renderer';
 import { isEmpty, pick } from 'ramda';
 
 import { nodeTypeModelFactory } from '../../../../store/trainingProjectSlice';
-import { ModelNodeType, ModelProjectType, TrainingProject } from '../../../../store/types';
+import { ModelNodeType, TrainingProject } from '../../../../store/types';
 
 import SideNavCard from './SideNavCard';
 
@@ -21,45 +21,39 @@ const getClasses = () =>
     manageModels: { marginTop: '25px' },
   });
 
-type ContentModel = {
-  name: string;
-  describe: string;
-  nodetType: string;
-  projectType: string;
-};
-
-const constantModelList = [
+const MODOEL_NODE_LIST = [
   {
-    name: 'Run ML Model',
-    describe: 'Object Detection',
-    nodetType: 'model',
+    id: 9999,
+    name: 'Run ML model',
+    customVisionId: '',
+    isDemo: false,
+    isPredicationModel: false,
+    predictionUri: '',
+    predictionHeader: '',
+    category: 'customvision',
     projectType: 'ObjectDetection',
+    isCascade: false,
+    inputs: [],
+    outputs: [],
+    nodeType: 'model',
+    combined: '',
+    openvino_library_name: '',
+    openvino_model_name: '',
+    download_uri_openvino: '',
+    classification_type: '',
+    is_trained: false,
+    symphony_id: '',
+    tag_list: [],
+    accelerationList: [],
+    displayName: 'Run ML model',
+    displayType: '',
+    trainStatus: '',
   },
-  {
-    name: 'Run ML Model',
-    describe: 'Classification',
-    nodetType: 'model',
-    projectType: 'Classification',
-  },
-];
+] as TrainingProject[];
 
 interface Props {
   connectMap: Connection[];
 }
-
-const getFilteredConstantModelList = (modelList: ContentModel[], target: string) => {
-  const regex = new RegExp(target, 'i');
-
-  return modelList.filter((model) => {
-    const isValueMatch = Object.values(
-      pick(['name', 'describe', 'nodetType'] as (keyof ContentModel)[], model),
-    ).find((value: string) => {
-      return value.match(regex);
-    });
-
-    return isValueMatch;
-  });
-};
 
 const getFilterdNodelList = (modelList: TrainingProject[], target: string): TrainingProject[] => {
   const regex = new RegExp(target, 'i');
@@ -78,43 +72,45 @@ const getFilterdNodelList = (modelList: TrainingProject[], target: string): Trai
 const SideNavList = (props: Props) => {
   const { connectMap } = props;
 
-  const transformList = useSelector(nodeTypeModelFactory(['transform']));
+  const imoprtList = useSelector(nodeTypeModelFactory(['source']));
+  const processList = useSelector(nodeTypeModelFactory(['transform']));
   const exportList = useSelector(nodeTypeModelFactory(['export']));
 
-  const [localModelNodeList, setLocalModelNodeList] = useState(constantModelList);
-  const [localTransformNodeList, setLocalTransformNodeList] = useState(transformList);
+  const [localImportNodeList, setLocalImportNodeList] = useState(imoprtList);
+  const [localProcessNodeList, setLocalProcessNodeList] = useState([...MODOEL_NODE_LIST, ...processList]);
+
   const [localExportNodeList, setLocalExportNodeList] = useState(exportList);
 
-  const [isModelToggle, setIsModelToggle] = useState(false);
-  const [isTransformToggle, setIsTransformToggle] = useState(false);
+  const [isImportToggle, setIsImportToggle] = useState(false);
+  const [isProcessToggle, setIsProcessToggle] = useState(false);
   const [isExportToggle, setIsExportOpen] = useState(false);
 
   const classes = getClasses();
 
   const onSearchEnter = useCallback(
     (newValue: string) => {
-      setLocalModelNodeList(getFilteredConstantModelList(constantModelList, newValue));
-      setLocalTransformNodeList(getFilterdNodelList(transformList, newValue));
+      setLocalImportNodeList(getFilterdNodelList(imoprtList, newValue));
+      setLocalProcessNodeList(getFilterdNodelList([...MODOEL_NODE_LIST, ...processList], newValue));
       setLocalExportNodeList(getFilterdNodelList(exportList, newValue));
     },
-    [transformList, exportList],
+    [processList, exportList, imoprtList],
   );
 
   const onSearchClear = useCallback(() => {
-    setLocalModelNodeList(constantModelList);
-    setLocalTransformNodeList(transformList);
+    setLocalImportNodeList(imoprtList);
+    setLocalProcessNodeList([...MODOEL_NODE_LIST, ...processList]);
     setLocalExportNodeList(exportList);
-  }, [transformList, exportList]);
+  }, [imoprtList, processList, exportList]);
 
   const onSearchChange = useCallback(
     (newValue: string) => {
       if (isEmpty(newValue)) {
-        setLocalModelNodeList(constantModelList);
-        setLocalTransformNodeList(transformList);
+        setLocalImportNodeList(imoprtList);
+        setLocalProcessNodeList([...MODOEL_NODE_LIST, ...processList]);
         setLocalExportNodeList(exportList);
       }
     },
-    [transformList, exportList],
+    [imoprtList, processList, exportList],
   );
 
   return (
@@ -138,31 +134,37 @@ const SideNavList = (props: Props) => {
           Drag and drop these nodes to the canvas on the right.
         </Text>
 
-        {/* Model */}
-        {localModelNodeList.length > 0 && (
+        {/* Import */}
+        {localImportNodeList.length > 0 && (
           <>
             <Stack styles={{ root: classes.sidebarWrapper }}>
               <Stack horizontal verticalAlign="center">
-                <Icon iconName={isModelToggle ? 'ChevronUp' : 'ChevronDown'} />
+                <Icon iconName={isImportToggle ? 'ChevronUp' : 'ChevronDown'} />
                 <ActionButton
-                  text="Models"
-                  iconProps={{ iconName: 'ModelingView' }}
-                  onClick={() => setIsModelToggle((prev) => !prev)}
+                  text="Import"
+                  iconProps={{ iconName: 'Installation' }}
+                  onClick={() => setIsImportToggle((prev) => !prev)}
                 />
               </Stack>
             </Stack>
-            {isModelToggle && (
+            {isImportToggle && (
               <Stack styles={{ root: { padding: '20px' } }} tokens={{ childrenGap: 20 }}>
-                {localModelNodeList.map((model, id) => (
+                {localImportNodeList.map((importNode, id) => (
                   <SideNavCard
                     key={id}
-                    displayName={model.name}
-                    name={model.name}
-                    describe={model.describe}
-                    nodeType={model.nodetType as ModelNodeType}
-                    isDraggable={true}
-                    projectType={model.projectType as ModelProjectType}
+                    displayName={importNode.displayName}
+                    name={importNode.name}
+                    describe=""
+                    nodeType={importNode.nodeType}
+                    isDraggable={false}
                     connectMap={connectMap}
+                    model={{
+                      id: importNode.id,
+                      name: importNode.name,
+                      inputs: importNode.inputs,
+                      outputs: importNode.outputs,
+                      symphony_id: importNode.symphony_id,
+                    }}
                   />
                 ))}
               </Stack>
@@ -170,37 +172,41 @@ const SideNavList = (props: Props) => {
           </>
         )}
 
-        {/* Transform */}
-        {localTransformNodeList.length > 0 && (
+        {/* Process */}
+        {localProcessNodeList.length > 0 && (
           <>
             <Stack styles={{ root: classes.sidebarWrapper }}>
               <Stack horizontal verticalAlign="center">
-                <Icon iconName={isTransformToggle ? 'ChevronUp' : 'ChevronDown'} />
+                <Icon iconName={isProcessToggle ? 'ChevronUp' : 'ChevronDown'} />
                 <ActionButton
-                  text="Transform"
-                  iconProps={{ iconName: 'ModelingView' }}
-                  onClick={() => setIsTransformToggle((prev) => !prev)}
+                  text="Process"
+                  iconProps={{ iconName: 'LineChart' }}
+                  onClick={() => setIsProcessToggle((prev) => !prev)}
                 />
               </Stack>
             </Stack>
-            {isTransformToggle && (
+            {isProcessToggle && (
               <Stack styles={{ root: { padding: '20px' } }} tokens={{ childrenGap: 20 }}>
-                {localTransformNodeList.map((transform, id) => (
+                {localProcessNodeList.map((processNode, id) => (
                   <SideNavCard
                     key={id}
-                    displayName={transform.displayName}
-                    name={transform.name}
+                    displayName={processNode.displayName}
+                    name={processNode.name}
                     describe=""
-                    nodeType={transform.nodeType}
+                    nodeType={processNode.nodeType as ModelNodeType}
                     isDraggable={true}
                     connectMap={connectMap}
-                    model={{
-                      id: transform.id,
-                      name: transform.name,
-                      inputs: transform.inputs,
-                      outputs: transform.outputs,
-                      symphony_id: transform.symphony_id,
-                    }}
+                    model={
+                      processNode.nodeType === 'model'
+                        ? null
+                        : {
+                            id: processNode.id,
+                            name: processNode.name,
+                            inputs: processNode.inputs,
+                            outputs: processNode.outputs,
+                            symphony_id: processNode.symphony_id,
+                          }
+                    }
                   />
                 ))}
               </Stack>

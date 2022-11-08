@@ -2,20 +2,22 @@
 // Licensed under the MIT License.
 
 import React, { useCallback } from 'react';
-import { Stack, Text, Icon } from '@fluentui/react';
+import { Stack, Label, IconButton } from '@fluentui/react';
 import { Handle, addEdge, Connection, Node, Edge, isNode } from 'react-flow-renderer';
 
 import { SkillNodeData } from '../../types';
 import { getSourceNodeClasses } from './styles';
+import { getNodeImage } from '../../utils';
 
 interface Props {
   id: string;
   setElements: any;
   onNodeConnect: (node: Node) => void;
+  cascadeData: SkillNodeData;
 }
 
 const SourceNode = (props: Props) => {
-  const { setElements, onNodeConnect } = props;
+  const { setElements, onNodeConnect, cascadeData } = props;
 
   const classes = getSourceNodeClasses();
 
@@ -54,8 +56,18 @@ const SourceNode = (props: Props) => {
         verticalAlign="center"
         tokens={{ childrenGap: 10 }}
       >
-        <Icon styles={{ root: classes.title }} iconName="Camera" />
-        <Text styles={{ root: classes.describe }}>Camera Input</Text>
+        <img
+          style={{ height: '60px', width: '60px' }}
+          src={getNodeImage(cascadeData.nodeType)}
+          alt="icon"
+          onDragStart={(e) => e.preventDefault()}
+        />
+        <Stack styles={{ root: { padding: '5px 0 5px 12px', width: '180px' } }} verticalAlign="center">
+          <Label>Camera Input</Label>
+        </Stack>
+        <Stack verticalAlign="center">
+          <IconButton className={classes.controlBtn} menuIconProps={{ iconName: 'MoreVertical' }} />
+        </Stack>
       </Stack>
       <Handle
         id="source"

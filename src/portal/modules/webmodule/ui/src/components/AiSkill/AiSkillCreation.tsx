@@ -6,7 +6,7 @@ import { Stack, Pivot, PivotItem, IPivotItemProps, Spinner } from '@fluentui/rea
 import { useHistory, generatePath, Route, Switch, useParams } from 'react-router-dom';
 import { clone, isEmpty } from 'ramda';
 import { Node, Edge } from 'react-flow-renderer';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import html2canvas from 'html2canvas';
 
 import { PivotTabKey, CreateAISkillFormData, STEP_ORDER } from './types';

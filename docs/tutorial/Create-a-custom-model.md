@@ -73,6 +73,8 @@ Training the model consists of identifying the objects to be detected or classif
 
 4.  To start the tagging process, select **Capture from camera** and then select a camera from the **Select Camera** dropdown list.
 
+![Screenshot of Select camera dropdown list](./media/e2250059b66fb4ba00db0709e45081d8-1.png)
+
 ![Screenshot of Capture from camera image](./media/e2250059b66fb4ba00db0709e45081d8.png)
 
 5.  Select **Capture Image.**

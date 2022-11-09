@@ -75,17 +75,17 @@ Training the model consists of identifying the objects to be detected or classif
 
 ![Screenshot of Select camera dropdown list](./media/e2250059b66fb4ba00db0709e45081d8-1.png)
 
+5.  The Capture box appears displaying an image. Select **Capture Image.**  
+    
 ![Screenshot of Capture from camera image](./media/e2250059b66fb4ba00db0709e45081d8.png)
 
-5.  Select **Capture Image.**
+6.  Select **Go to tagging**.
 
 ![Screenshot of Capture image](./media/2cd7bb47072416fae27893e9ac52c07c.png)
 
-6.  Select **Go to Tagging**.
+7.  Tags you have previously identified appear as options. Select **Low stock**. The **Low Stock** tag represents those areas of the image with little or no stock.
 
 ![Screenshot of Capture image](./media/e58489f222cc1130967db12b2ff090a0.png)
-
-7.  Tags you have previously identified appear as options. Select **Low stock**. The **Low Stock** tag represents those areas of the image with little or no stock.
 
 8.  Using the mouse, draw a box around an area of the image representing low stock.   
     The best practice is to include as much of the object as possible.

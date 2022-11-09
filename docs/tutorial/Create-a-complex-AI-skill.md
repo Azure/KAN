@@ -10,7 +10,7 @@ There are three groups of nodes that comprise AI skills:
 
     Models may be selected from the [Model Zoo](https://modelzoo.co/), customized from an existing Azure Custom Vision (ACV) project, or a developer’s own external model (Bring Your Own Model, BYOM).
 
-2.  **Transform** – Transforms and enriches the data; for instance it can filter classes to the one we want to implement for our scenario. 
+2.  **Transform** – Transforms and enriches the data; for instance, it can filter classes to the one we want to implement for our scenario. 
 
     A filter may also only forward inference results that meet confidence level estimates. 
 
@@ -78,6 +78,7 @@ In this document, we will build an AI skill that detects vehicles and then class
 8.  Select **pedestrian-and-vehicle-detector (Model Zoo)** per our use case. The tag for the object(s) to be detected appears.
 
     ![Graphical user interface, application Description automatically generated](./media/5e45d4265599919877215d563999e7fd.png)
+        ![Graphical user interface, application Description automatically generated](./media/5e45d4265599919877215d563999e7fd-2.png)
 
 9.  Select **Done.**
 

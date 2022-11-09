@@ -27,13 +27,13 @@ The **Model** blade on the left navigation displays two options for adding model
     ![](./media/213d25b05e45e2786acbc49403b7bc5b.png)
 
     If you select **No**, you can create your own model. Then enter the **Model Name**, **Type**, and **Objects**.
-    
-    > [!NOTE]
-    > Since classification models are in preview, they can't be used in AI Skills or Deployment.
 
 ![](./media/47e4b4825eca44d66ef76dd5e54bc220.png)
 
 ![](./media/326cfc9977c999eb763901c3920b7f7d.png)
+
+    > [!NOTE]
+    > If you choose **Classification** in the **Type** box, note that classification models are in preview so you can't use them in AI Skills or Deployment.
 
 6.  Select **Objects** and enter at least one tag for the detection model to identify. Objects should be in quotes and separated by commas.
 
@@ -62,7 +62,7 @@ Training the model consists of identifying the objects to be detected or classif
 
 ![](./media/c552f72443fc4ba9df09f7b3ba47a0c4.png)
 
-2.  Add any additional tags, and then press **Enter**.
+2.  Add any additional **Objects** and/or **Tags**, and then press **Enter**.
 
 ![](./media/4c990c318622c694306b8c2421a0218b.png)
 

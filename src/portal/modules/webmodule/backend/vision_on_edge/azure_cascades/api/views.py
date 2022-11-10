@@ -111,7 +111,7 @@ class CascadeViewSet(FiltersMixin, viewsets.ModelViewSet):
             configure = json.loads(instance_obj["configure"])
             for cam in configure:
                 for skill in cam['skills']:
-                    if int(skill['id']) == int(instance.id):
+                    if skill['id'] == symphony_id:
                         affected_solutions.append(target_client.get_object(
                             instance_obj["compute_device"])["solution_id"])
 

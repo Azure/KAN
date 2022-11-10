@@ -14,34 +14,20 @@ import {
   IDropdownOption,
   ChoiceGroup,
   ITextFieldProps,
-  Callout,
-  IconButton,
-  DirectionalHint,
-  mergeStyleSets,
 } from '@fluentui/react';
 import { Node, Edge } from 'react-flow-renderer';
 import { clone } from 'ramda';
-import { useBoolean, useId } from '@uifabric/react-hooks';
 
 import { theme, ERROR_BLANK_VALUE } from '../../../../constant';
 import { InsightsOverLayType, ExportPanelFromData, SkillNodeData, ExportType } from '../../types';
+
+import DelayBufferToolTip from './ToolTip/DelayBufferToolTip';
 
 interface Props {
   node: Node<SkillNodeData>;
   onDismiss: () => void;
   setElements: any;
 }
-
-const getDelayBufferLabelClasses = () =>
-  mergeStyleSets({
-    lable: { fontWeight: 600 },
-    contentWrapper: { padding: '17px 25px' },
-    content: { fontSize: '13px' },
-    requiredMark: {
-      color: 'rgb(164, 38, 44)',
-      paddingRight: '12px',
-    },
-  });
 
 const ERROR_GREAT_THAN_ONE = 'Value must be equal to or greater than 1.';
 const ERROR_GREAT_THAN_ZERO = 'Value must be greater than 0.';
@@ -99,60 +85,6 @@ const getDelayBufferDefaultValue = (exportType: ExportType) => {
     default:
       return '';
   }
-};
-
-const DelayBufferLabel = (props: ITextFieldProps): JSX.Element => {
-  const [isCalloutVisible, { toggle: toggleIsCalloutVisible }] = useBoolean(false);
-  const iconButtonId: string = useId('iconButton');
-
-  const classes = getDelayBufferLabelClasses();
-
-  return (
-    <>
-      <Stack
-        horizontal
-        verticalAlign="center"
-        tokens={{
-          childrenGap: 4,
-          maxWidth: 300,
-        }}
-      >
-        <span id={props.id} className={classes.lable}>
-          {props.label}
-        </span>
-        <IconButton
-          id={iconButtonId}
-          iconProps={{ iconName: 'Info' }}
-          title="Info"
-          ariaLabel="Info"
-          onClick={toggleIsCalloutVisible}
-        />
-        <span className={classes.requiredMark}>*</span>
-      </Stack>
-      {isCalloutVisible && (
-        <Callout
-          target={`#${iconButtonId}`}
-          setInitialFocus
-          onDismiss={toggleIsCalloutVisible}
-          role="alertdialog"
-          directionalHint={DirectionalHint.bottomCenter}
-        >
-          <Stack
-            tokens={{
-              childrenGap: 4,
-              maxWidth: 280,
-            }}
-            horizontalAlign="start"
-            styles={{ root: classes.contentWrapper }}
-          >
-            <span className={classes.content}>
-              This is the time delay between the instances that this export operates.
-            </span>
-          </Stack>
-        </Callout>
-      )}
-    </>
-  );
 };
 
 const ModelPanel = (props: Props) => {
@@ -401,7 +333,7 @@ const ModelPanel = (props: Props) => {
         {['snippet', 'iotHub', 'iotEdge'].includes(data.exportType) && (
           <TextField
             label="Delay Buffer"
-            onRenderLabel={(props: ITextFieldProps) => <DelayBufferLabel {...props} />}
+            onRenderLabel={(props: ITextFieldProps) => <DelayBufferToolTip {...props} />}
             value={localForm.delay_buffer}
             required
             placeholder={

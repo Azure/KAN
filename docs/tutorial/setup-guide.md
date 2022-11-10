@@ -10,9 +10,9 @@ You need the following items before you start working with the self-hosting setu
 
   If you don't have an existing Kubernetes cluster, you can easily create one using the Azure Kubernetes Service (AKS). For more information, visit [Quickstart: Deploy an Azure Kubernetes Service (AKS) cluster using the Azure portal](https://docs.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli).
     
-- If you plan to use an **IoT Edge device**, you need an **IoT Hub account**
+- If you plan to use an **IoT Edge device**, you need an **IoT Hub account**. 
 
-  To onboard an IoT Edge device too Azure IoT Hub, visit [Quickstart: Deploy your first IoT Edge module to a virtual Linux device](CreateIoTEdgeDevice.md) for information on how to do so. Note that if you have already used Percept on Azure Stack HCI's WAC Extension to onboard a VM, the VM is already automatically onboarded as an IoT Edge device onto Azure IoT Hub. 
+  To onboard an IoT Edge device to Azure IoT Hub,  visit [Quickstart: Deploy your first IoT Edge module to a virtual Linux device](CreateIoTEdgeDevice.md) for information on how to do so. Note that if you have already used Percept on Azure Stack HCI's WAC Extention to onboard a VM, the VM is already automatically onboarded as an IoT Edge device onto Azure IoT Hub. 
 
 - Have **Storage account contributor** role assignment under your subscription. 
 
@@ -55,8 +55,8 @@ To begin the setup process:
 
 |Setup Installer Version	|POSS Version	|Download URL	|Supported Accelerators for Edge Workloads	|Released Date|
 |---------------------------|---------------|---------------|-------------------------------------------|-------------|
-|0.38.2	|0.38.2 |https://github.com/Azure/PerceptOSS/blob/main/Installer/poss-test-installer.sh	|Nvidia dGPU (for example, T4, A2, etc), Nvidia Jetson (for example, Orin), x64 CPU	|09/02/2022 |
-|0.38.1	|0.38.0 |https://github.com/Azure/PerceptOSS/blob/main/Installer/poss-test-installer.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (for example, Orin), x64 CPU	|08/30/2022 |
+|0.38.2	|0.38.2 |[https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.2-Installer0.38.2.sh](https://github.com/Azure/PerceptOSS/blob/main/Installer/poss-test-installer.sh)	|Nvidia dGPU (for example, T4, A2, etc), Nvidia Jetson (for example, Orin), x64 CPU	|09/02/2022 |
+|0.38.1	|0.38.0 |[https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.2-Installer0.38.2.sh](https://github.com/Azure/PerceptOSS/blob/main/Installer/poss-test-installer.sh)	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (for example, Orin), x64 CPU	|08/30/2022 |
  
     
 > [!NOTE]

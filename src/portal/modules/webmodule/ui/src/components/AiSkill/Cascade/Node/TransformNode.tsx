@@ -94,7 +94,7 @@ const TransformNode = (props: Props) => {
           onDragStart={(e) => e.preventDefault()}
         />
         <Stack className={classes.nodeWrapper} styles={{ root: { justifyContent: 'center' } }}>
-          <Label styles={{ root: { padding: 0 } }}>Filter</Label>
+          <Label styles={{ root: { padding: 0 } }}>{cascadeData.displayName}</Label>
         </Stack>
         <Stack verticalAlign="center">
           <IconButton

@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { CreateModelFormData, CreateType } from '../types';
 import { getSelectedProjectInfo, ProjectType, ClassificationType } from '../../../store/trainingProjectSlice';
 import { theme } from '../../../constant';
+import { modelTypeOptions, classificationOptions } from '../../constant';
 
 import HorizontalChoiceGroup from '../../Common/HorizonChoiceGroup';
 import HorizontalTextField from '../../Common/HorizontalTextField';
@@ -23,14 +24,6 @@ interface Props {
 const azureTypeOptions: IChoiceGroupOption[] = [
   { key: 'yes', text: 'Yes' },
   { key: 'no', text: 'No' },
-];
-const typeOptions: IDropdownOption[] = [
-  { key: 'ObjectDetection', text: 'Object Detection' },
-  { key: 'Classification', text: 'Classification' },
-];
-const classificationOptions: IDropdownOption[] = [
-  { key: 'Multilabel', text: 'Multilabel' },
-  { key: 'Multiclass', text: 'Multiclass' },
 ];
 
 const Basics = (props: Props) => {
@@ -155,7 +148,7 @@ const Basics = (props: Props) => {
             <Stack>
               <HorizontalDropdown
                 label="Type"
-                options={typeOptions}
+                options={modelTypeOptions}
                 required
                 selectedKey={localFormData.type}
                 disabled={localFormData.createType === 'yes'}

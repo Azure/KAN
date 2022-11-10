@@ -20,11 +20,11 @@ You need the following items before you start working with the self-hosting setu
   
     1. Select your subscription. 
     2. Select **Access control**, and then select **Add role assignment** (see screenshot).
-    3. Search for **Storage account contributor** (not the classic one).
-    4. Then select **Next**, select **Add member**, select your account, and then select **Review and assign**.
-
+      
     ![Screenshot of Access control AIM](./media/access-control-aim.png)
 
+    3. Search for **Storage account contributor** (not the classic one).
+    4. Then select **Next**, select **Add member**, select your account, and then select **Review and assign**.
 
 ## Setup process
 

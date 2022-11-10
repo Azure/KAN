@@ -94,11 +94,11 @@ Azure Percept Open-Source Project supports internet protocol (IP) cameras that u
 
     Once each entry passes the review, the following page appears:
 
-![Screenshot of Cameras page displaying a video file](media/7a2640fefed21d592bd21b1874398667.png)
+    ![Screenshot of Cameras page displaying a video file](media/7a2640fefed21d592bd21b1874398667.png)
 
 5. To see a playback video, **select the View** link at the bottom right of the camera tile. Note that you’ll see a captured image if the camera is on a private network.
 
-![Screenshot of Cameras page displaying a video](media/aa03894eba860015c8d3d0f5e7ff1693.png)
+    ![Screenshot of Cameras page displaying a video](media/aa03894eba860015c8d3d0f5e7ff1693.png)
 
 **You have now added a camera and configured its properties.**
 
@@ -113,13 +113,13 @@ A model is a machine learning (ML) algorithm for object detection or classificat
     - **Create custom model**, where you can create a custom model that allows you to bring 10-15 images and train the model yourself.
     - **Browse Model Zoo**, where you can select a pre-built model that works out of the box.
 
-![Screenshot of Models page](media/56b4d1c08a8559e9b61481390713c98c.png)
+    ![Screenshot of Models page](media/56b4d1c08a8559e9b61481390713c98c.png)
 
 2. Select **Browse Model Zoo** to choose a pre-built model from the Model Zoo.
 3. The Model Zoo page appears, displaying information about each available model.  
     For more information about a model, select the tile.
 
-![Screenshot of Model Zoo page](media/f5528f24b494e8787aa9de15467bd163.png)
+    ![Screenshot of Model Zoo page](media/f5528f24b494e8787aa9de15467bd163.png)
 
 4. In this tutorial, since we’re learning how to leverage pedestrian and vehicle detection to understand occupancy in a parking lot or on a street, select **Pedestrian and Vehicle Detection.**
 
@@ -214,7 +214,7 @@ Creating a deployment is the last major step in this tutorial. The last blade on
 
 1.  To configure your deployment, select **Create Deployment**.
 
-![Screenshot of Deployment page](media/dbd87944c941d9b3fecdcc5ff9ad7a4b.png)
+    ![Screenshot of Deployment page](media/dbd87944c941d9b3fecdcc5ff9ad7a4b.png)
 
 2.  In the **Deployment Name** box, enter a name for your deployment.
 3.  From the **Compute Device** dropdown list, select the device you added in the **Connect a compute device** step earlier in this tutorial.
@@ -224,7 +224,7 @@ Creating a deployment is the last major step in this tutorial. The last blade on
 4.  From the **Cameras** dropdown list, select the camera you added in the **Add a camera** step earlier in this tutorial.
 5.  To open the **Configure AI Skills** tab, select **Next**.
 
-![Screenshot of Configure AI Skills tab](media/ad73df5ca594a82ee40bbe0d0f087584.png)
+    ![Screenshot of Configure AI Skills tab](media/ad73df5ca594a82ee40bbe0d0f087584.png)
 
 6.  To configure the AI Skill, select the camera, select **Add AI Skills"**, select the AI Skill you want, and then select **Add**.  
     The **Add AI Skills** pane opens on the right, displaying the AI skill you created earlier in this tutorial.
@@ -232,7 +232,7 @@ Creating a deployment is the last major step in this tutorial. The last blade on
 7.  Select the AI skill to add it to your camera, and then select **Configure**.
 8.  Select **Review + Deploy** to move to the next step.
 
-![Screenshot of Configure AI Skills tab displaying properties box](media/6e746bf6e5813a81a3ca29444697e86a.png)
+    ![Screenshot of Configure AI Skills tab displaying properties box](media/6e746bf6e5813a81a3ca29444697e86a.png)
 
 9.  On the **Review + Deploy** tab, review your settings, and then select **Deploy**.
 
@@ -250,7 +250,7 @@ You can view the deployment you just created and a library of other deployments 
 
 1. To view a list of your AI skills, the cameras associated with them, and their locations, select a deployment.
 
-![Screenshot of Deployment page displaying AI Skills](media/77e6e097f90bd55096a30205bbda2e3c.png)
+    ![Screenshot of Deployment page displaying AI Skills](media/77e6e097f90bd55096a30205bbda2e3c.png)
 
 2. To view the details of a skill, select the skill.  
    A page displaying details about the skill opens.

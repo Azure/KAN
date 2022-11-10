@@ -15,6 +15,6 @@ Welcome to our documentation page. There are several types of documents here so 
 
 To get a deeper understanding of POSS and find out how to proceed next, review the following articles: 
 
-- [Introduction to Azure Percept for Open-Source Project: Core concepts](concepts-azure-percept-for-open-source%20.md).
-- [Azure Percept Open-Source Project: Setup guide](setup-guide.md). 
-- [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md).
+- [Introduction to Azure Percept for Open-Source Project: Core concepts](concepts-azure-percept-for-open-source%20.md)
+- [Azure Percept Open-Source Project: Setup guide](setup-guide.md)
+- [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)

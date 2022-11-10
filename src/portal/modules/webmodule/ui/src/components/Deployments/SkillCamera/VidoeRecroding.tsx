@@ -65,17 +65,13 @@ const VidoeRecroding = (props: Props) => {
         <Stack horizontal tokens={{ childrenGap: 20 }}>
           <Stack styles={{ root: { width: '50%' } }} tokens={{ childrenGap: 10 }}>
             <Text>Last 20 recordings in storage</Text>
-            <Stack tokens={{ childrenGap: 40 }}>
+            <Stack>
               <DetailsList
                 styles={{ root: { height: '360px', width: '400px' } }}
                 items={localVideoRecording}
                 columns={columns}
                 checkboxVisibility={CheckboxVisibility.hidden}
               />
-              <Stack>
-                <Label>Embed Recordings Widget</Label>
-                <Text>You can embed to above widget for your own application.</Text>
-              </Stack>
             </Stack>
           </Stack>
           <Stack>

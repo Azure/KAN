@@ -351,8 +351,6 @@ const slice = createSlice({
       // )
       .addCase(getCameras.fulfilled, entityAdapter.setAll)
       .addCase(getSingleCamera.fulfilled, (state, action) => {
-        console.log('action', action);
-
         entityAdapter.upsertOne(state, action.payload);
       })
       .addCase(postRTSPCamera.fulfilled, entityAdapter.addOne)

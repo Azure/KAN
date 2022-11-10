@@ -38,12 +38,12 @@ const CreationFooter = (props: Props) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const onCreateClick = useCallback(() => {
+  const onCreateClick = useCallback(async () => {
     if (onFormDateValidate(currentStep)) return;
 
     onIsCreatingChange();
 
-    dispatch(
+    await dispatch(
       createComputeDevice({
         name: localFormData.name,
         iothub: localFormData.iothub,

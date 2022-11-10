@@ -34,7 +34,7 @@ const getClasses = () =>
     bottomTitle: { color: theme.palette.neutralSecondaryAlt, fontSize: '10px', fontWeight: 400 },
     bottomInfo: { fontSize: '13px', color: theme.palette.black },
     connectedStatus: { color: '#57A300', fontSize: '13px' },
-    unconnectedStatus: { color: '#A4262C', fontSize: '13px' },
+    unconnectedStatus: { color: '#0078D4', fontSize: '13px' },
   });
 
 const Card = (props: Props) => {
@@ -93,13 +93,13 @@ const Card = (props: Props) => {
           <Label styles={{ root: classes.bottomTitle }}>Status</Label>
           <Stack horizontal tokens={{ childrenGap: 5 }} verticalAlign="center">
             <Icon
-              iconName={deployment.status.status_code === '0' ? 'SkypeCircleCheck' : 'DRM'}
+              iconName={deployment.status.status_code === '0' ? 'CompletedSolid' : 'WorkFlow'}
               styles={{
                 root:
                   deployment.status.status_code === '0' ? classes.connectedStatus : classes.unconnectedStatus,
               }}
             />
-            <Text>{deployment.status.status_code === '0' ? 'Configured' : 'Unconfigured'}</Text>
+            <Text>{deployment.status.status_code === '0' ? 'Running' : 'Deploying'}</Text>
           </Stack>
         </Stack>
       </Stack>

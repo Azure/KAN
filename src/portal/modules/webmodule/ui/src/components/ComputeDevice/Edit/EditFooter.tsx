@@ -44,12 +44,12 @@ const EditFooter = (props: Props) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const onUpdateClick = useCallback(() => {
+  const onUpdateClick = useCallback(async () => {
     if (onFormDateValidate(currentStep)) return;
 
     onIsCreatingChange();
 
-    dispatch(
+    await dispatch(
       updateComputeDevice({
         id,
         symphony_id,

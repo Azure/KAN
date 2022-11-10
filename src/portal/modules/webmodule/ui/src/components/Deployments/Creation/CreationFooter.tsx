@@ -67,7 +67,7 @@ const CreationFooter = (props: Props) => {
           : '',
     };
 
-    dispatch(createDeployment(payload));
+    await dispatch(createDeployment(payload));
 
     history.push(Url.DEPLOYMENT, {
       isCreated: true,

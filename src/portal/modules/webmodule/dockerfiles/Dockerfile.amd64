@@ -23,6 +23,7 @@ RUN echo ${GIT_LOG} > ./build/static/git_sha1.txt
 # =========================================================
 FROM amd64/python:3.8-slim-buster as backend-base
 RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
     libgl1-mesa-glx \
     && rm -rf /var/lib/apt/lists/*

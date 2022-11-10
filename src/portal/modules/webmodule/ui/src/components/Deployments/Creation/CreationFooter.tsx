@@ -31,6 +31,7 @@ const CreationFooter = (props: Props) => {
     onLinkClick,
     localFormData,
     isCreating,
+    onIsCreatingChange,
     stepList,
     onFormDateValidate,
     onValidationRedirect,
@@ -42,6 +43,8 @@ const CreationFooter = (props: Props) => {
 
   const onCreateClick = useCallback(async () => {
     if (onFormDateValidate(currentStep)) return;
+
+    onIsCreatingChange();
 
     const payload: CreateDeploymentPayload = {
       name: localFormData.name,
@@ -72,7 +75,7 @@ const CreationFooter = (props: Props) => {
     history.push(Url.DEPLOYMENT, {
       isCreated: true,
     });
-  }, [localFormData, history, onFormDateValidate, currentStep, dispatch]);
+  }, [localFormData, history, onFormDateValidate, currentStep, dispatch, onIsCreatingChange]);
 
   return (
     <Stack

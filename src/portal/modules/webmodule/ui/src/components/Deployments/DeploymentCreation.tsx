@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useState, useCallback } from 'react';
-import { Stack, Pivot, PivotItem, IPivotItemProps } from '@fluentui/react';
+import { Stack, Pivot, PivotItem, IPivotItemProps, Spinner } from '@fluentui/react';
 import { useHistory, generatePath, Route, Switch, useParams } from 'react-router-dom';
 import { clone, isEmpty } from 'ramda';
 
@@ -207,6 +207,7 @@ const DeploymentCreation = (props: Props) => {
               style={{ height: '100%', position: 'relative' }}
             />
           </Pivot>
+          {isCreating && <Spinner size={3} />}
         </Stack>
       </Stack>
       <Stack

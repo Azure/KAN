@@ -33,7 +33,7 @@ To begin the setup process:
 1. Go to your [Azure portal](https://portal.azure.com/).
 2. Open Azure Cloud CLI by selecting the **CLI** button in the top right corner of the portal.
 
-![image](https://user-images.githubusercontent.com/10191339/186480918-c366a912-c036-4ee7-ada8-d7ca4ad4d054.png)
+    ![Screenshot of Azure Services portal](https://user-images.githubusercontent.com/10191339/186480918-c366a912-c036-4ee7-ada8-d7ca4ad4d054.png)
 
 3. Run the following two commands; one at a time, and in the order shown here. 
 
@@ -82,7 +82,7 @@ To begin the setup process:
     
        Select the AKS cluster that you want to install POSS on.
 
-![image](https://user-images.githubusercontent.com/10191339/186487409-c325c76c-0771-409c-9c4a-4babb666d9de.png)
+    ![Screenshot of AKS cluster](https://user-images.githubusercontent.com/10191339/186487409-c325c76c-0771-409c-9c4a-4babb666d9de.png)
     
 7. Next you're asked whether you want to create a new storage account or use an already existing one. 
   
@@ -90,7 +90,7 @@ To begin the setup process:
     
     - To choose an already existing storage accounts, make a selection from the list of storage accounts under your subscription.
 
-![image](https://user-images.githubusercontent.com/10191339/186487829-cda5b6db-85c2-49af-9c3f-0f97cef4b019.png)
+    ![Screenshot of choose a storage account](https://user-images.githubusercontent.com/10191339/186487829-cda5b6db-85c2-49af-9c3f-0f97cef4b019.png)
 
 8. Next, you're asked whether you want to create a new blob container within your storage account or use an already existing one. 
     
@@ -98,7 +98,7 @@ To begin the setup process:
     
     - To choose from already existing blob container, make a selection from the list of storage accounts under your storage account.
 
-![image](https://user-images.githubusercontent.com/10191339/186488033-4bd85dfc-550e-4320-b242-30013828aefe.png)
+    ![Screenshot of choose a blob container](https://user-images.githubusercontent.com/10191339/186488033-4bd85dfc-550e-4320-b242-30013828aefe.png)
 
 9. Next you're asked whether you want to create a new custom vision account or use an already existing one. 
     
@@ -106,7 +106,7 @@ To begin the setup process:
     
     - If you want to select from already existing custom vision accounts, make a selection from the displayed list of custom vision accounts under your subscription.
 
-![image](https://user-images.githubusercontent.com/10191339/186488323-da75715d-9128-4bff-821e-d88547abc77c.png)
+    ![Screenshot of create a cognitive service](https://user-images.githubusercontent.com/10191339/186488323-da75715d-9128-4bff-821e-d88547abc77c.png)
 
 10. Next, you're asked whether you want to create a service principal or use an already existing one. 
     
@@ -114,11 +114,11 @@ To begin the setup process:
     
     - To choose an already existing one, make a selection from the list of existing service principals or provide the name of your existing service principal directly. (This option is recommended as there can be too many service principals to show with the first option).
 
- ![image](https://user-images.githubusercontent.com/10191339/186488469-ff1ae26e-2674-482e-a2f8-0717860fdad2.png)
+     ![Screenshot of create service principal](https://user-images.githubusercontent.com/10191339/186488469-ff1ae26e-2674-482e-a2f8-0717860fdad2.png)
 
 11. Lastly, the installer asks you to confirm your choices. Confirm your selections by answering **y** to the question.
 
-![image](https://user-images.githubusercontent.com/10191339/186488549-4c74bbc5-4f49-4bb7-a103-18e6452adfca.png)
+    ![Screenshot of confirm choices](https://user-images.githubusercontent.com/10191339/186488549-4c74bbc5-4f49-4bb7-a103-18e6452adfca.png)
 
 
 The installation may take a few minutes. 
@@ -130,11 +130,11 @@ The installation may take a few minutes.
     
 12. When the installation has completed, you can find the IP address of the portal to access it by running the following command in your Azure Cloud CLI command line: 
 
-   ``kubectl get svc -A``
+    ``kubectl get svc -A``
 
-   Use the LoadBalancer IP address as shown below:
+    Use the LoadBalancer IP address as shown below:
 
-![Screenshot of LoadBalancer IP address](https://user-images.githubusercontent.com/10191339/186488705-03d3af9b-4536-4575-afe8-978b8a692a73.png)
+    ![Screenshot of LoadBalancer IP address](https://user-images.githubusercontent.com/10191339/186488705-03d3af9b-4536-4575-afe8-978b8a692a73.png)
 
 ## Limit access to the POSS portal
     

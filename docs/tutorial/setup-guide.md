@@ -5,14 +5,14 @@
 You need the following items before you start working with the self-hosting setup experience:
 
 - An active **Azure subscription** with **Owner** role access. 
-- A **resource group** created in a location where [Azure Custom Vision](https://azure.microsoft.com/en-us/global-infrastructure/services/?products=cognitive-services&regions=all) is available.
+- A **resource group** created in a geographical location where [Azure Custom Vision](https://azure.microsoft.com/en-us/global-infrastructure/services/?products=cognitive-services&regions=all) is available.
 - A **Kubernetes cluster** accessible using [Azure CLI](https://github.com/Azure/cli). 
 
   If you don't have an existing Kubernetes cluster, you can easily create one using the Azure Kubernetes Service (AKS). For more information, visit [Quickstart: Deploy an Azure Kubernetes Service (AKS) cluster using the Azure portal](https://docs.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli).
     
-- An **IoT Hub account** with at least **one IoT Edge device**. 
+- If you plan to use an **IoT Edge device**, you need an **IoT Hub account**
 
-  If you don't have any IoT Edge device onboarded onto Azure IoT Hub,  visit [Quickstart: Deploy your first IoT Edge module to a virtual Linux device](CreateIoTEdgeDevice.md) for information on how to do so. Note that if you have already used Percept on Azure Stack HCI's WAC Extention to onboard a VM, the VM is already automatically onboarded as an IoT Edge device onto Azure IoT Hub. 
+  To onboard an IoT Edge device too Azure IoT Hub, visit [Quickstart: Deploy your first IoT Edge module to a virtual Linux device](CreateIoTEdgeDevice.md) for information on how to do so. Note that if you have already used Percept on Azure Stack HCI's WAC Extension to onboard a VM, the VM is already automatically onboarded as an IoT Edge device onto Azure IoT Hub. 
 
 - Have **Storage account contributor** role assignment under your subscription. 
 
@@ -23,7 +23,8 @@ You need the following items before you start working with the self-hosting setu
     3. Search for **Storage account contributor** (not the classic one).
     4. Then select **Next**, select **Add member**, select your account, and then select **Review and assign**.
 
-![image](https://user-images.githubusercontent.com/10191339/186480363-7eb2a5fa-66e0-49f5-a4c6-7b9fc0caee9b.png)
+    ![Screenshot of Access control AIM](./media/access-control-aim.png)
+
 
 ## Setup process
 
@@ -54,8 +55,8 @@ To begin the setup process:
 
 |Setup Installer Version	|POSS Version	|Download URL	|Supported Accelerators for Edge Workloads	|Released Date|
 |---------------------------|---------------|---------------|-------------------------------------------|-------------|
-|0.38.2	|0.38.2 |https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.2-Installer0.38.2.sh	|Nvidia dGPU (for example, T4, A2, etc), Nvidia Jetson (for example, Orin), x64 CPU	|09/02/2022 |
-|0.38.1	|0.38.0 |https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.0-Installer0.38.1.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (for example, Orin), x64 CPU	|08/30/2022 |
+|0.38.2	|0.38.2 |https://github.com/Azure/PerceptOSS/blob/main/Installer/poss-test-installer.sh	|Nvidia dGPU (for example, T4, A2, etc), Nvidia Jetson (for example, Orin), x64 CPU	|09/02/2022 |
+|0.38.1	|0.38.0 |https://github.com/Azure/PerceptOSS/blob/main/Installer/poss-test-installer.sh	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (for example, Orin), x64 CPU	|08/30/2022 |
  
     
 > [!NOTE]
@@ -133,13 +134,13 @@ The installation may take a few minutes.
 
    Use the LoadBalancer IP address as shown below:
 
-![image](https://user-images.githubusercontent.com/10191339/186488705-03d3af9b-4536-4575-afe8-978b8a692a73.png)
+![Screenshot of LoadBalancer IP address](https://user-images.githubusercontent.com/10191339/186488705-03d3af9b-4536-4575-afe8-978b8a692a73.png)
 
 ## Limit access to the POSS portal
     
 Once you have the LoadBalancer IP address as shown above:
 1. Open the resource group associated with your AKS cluster (not the AKS cluster itself).
-2. Open the network security (NSG) resource.
+2. In a separate tab, open the network security (NSG) resource.
 3. For each line that references the LoadBalancer IP address:
   
    1. Select the inbound security rule.

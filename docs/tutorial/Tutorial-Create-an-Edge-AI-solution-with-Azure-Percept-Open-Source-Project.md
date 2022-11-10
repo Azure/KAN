@@ -55,7 +55,7 @@ Azure Percept Open-Source Project is supported on many different devices and acc
 
     ![Screenshot of Basics tab displaying Acceleration names](media/9d6455d44a8f4d3ccd2645d87c7b1bca-2.png)
     
-        ![Screenshot of Basics tab displaying Acceleration names](media/9d6455d44a8f4d3ccd2645d87c7b1bca-3.png)
+    ![Screenshot of Basics tab displaying Acceleration names](media/9d6455d44a8f4d3ccd2645d87c7b1bca-3.png)
 
 
 8.  Select **Review + Create.**

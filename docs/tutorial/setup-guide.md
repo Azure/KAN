@@ -5,7 +5,7 @@
 You need the following items before you start working with the self-hosting setup experience:
 
 - An active **Azure subscription** with **Owner** role access. 
-- A **resource group** created in a location where [Azure Custom Vision](https://azure.microsoft.com/en-us/global-infrastructure/services/?products=cognitive-services&regions=all) is available.
+- A **resource group** created in a geographical location where [Azure Custom Vision](https://azure.microsoft.com/en-us/global-infrastructure/services/?products=cognitive-services&regions=all) is available.
 - A **Kubernetes cluster** accessible using [Azure CLI](https://github.com/Azure/cli). 
 
   If you don't have an existing Kubernetes cluster, you can easily create one using the Azure Kubernetes Service (AKS). For more information, visit [Quickstart: Deploy an Azure Kubernetes Service (AKS) cluster using the Azure portal](https://docs.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli).
@@ -20,10 +20,11 @@ You need the following items before you start working with the self-hosting setu
   
     1. Select your subscription. 
     2. Select **Access control**, and then select **Add role assignment** (see screenshot).
+      
+    ![Screenshot of Access control AIM](./media/access-control-aim.png)
+
     3. Search for **Storage account contributor** (not the classic one).
     4. Then select **Next**, select **Add member**, select your account, and then select **Review and assign**.
-
-![image](https://user-images.githubusercontent.com/10191339/186480363-7eb2a5fa-66e0-49f5-a4c6-7b9fc0caee9b.png)
 
 ## Setup process
 
@@ -133,13 +134,13 @@ The installation may take a few minutes.
 
    Use the LoadBalancer IP address as shown below:
 
-![image](https://user-images.githubusercontent.com/10191339/186488705-03d3af9b-4536-4575-afe8-978b8a692a73.png)
+![Screenshot of LoadBalancer IP address](https://user-images.githubusercontent.com/10191339/186488705-03d3af9b-4536-4575-afe8-978b8a692a73.png)
 
 ## Limit access to the POSS portal
     
 Once you have the LoadBalancer IP address as shown above:
 1. Open the resource group associated with your AKS cluster (not the AKS cluster itself).
-2. Open the network security (NSG) resource.
+2. In a separate tab, open the network security (NSG) resource.
 3. For each line that references the LoadBalancer IP address:
   
    1. Select the inbound security rule.

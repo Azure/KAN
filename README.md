@@ -4,7 +4,7 @@
 
 Azure Percept Open-Source Project is a framework for creating, deploying, and operating environment-aware solutions at scale that use artificial intelligence (AI) at the edge with the control and flexibility of open-source natively on your environment. POSS is fully open-sourced and leverages the open-source software (OSS) community to deliver enhanced experiences. And, as a self-managed solution, you can host the experience on your own [Kubernetes](https://kubernetes.io/) clusters.
 
-POSS has a no- to low-code portal experience as well as APIs that can be used to build custom Edge AI applications. It supports running Edge AI apps by utilizing cameras and Edge devices with different Edge runtimes and accelerators across multiple locations at scale. Since it is designed with machine learning operations (MLOps) in mind, it provides support for active learning, continuous training, and data gathering using your machine learning (ML) models running at the edge.
+POSS has a no- to low-code portal experience as well as APIs that can be used to build custom Edge AI applications. It supports running Edge AI apps by utilizing cameras, sensors, and Edge devices with different Edge runtimes and accelerators across multiple locations at scale. Since it is designed with machine learning operations (MLOps) in mind, it provides support for active learning, continuous training, and data gathering using your machine learning (ML) models running at the edge.
 
 <p align="center">
 <img src="docs/images/POSS Portal.gif" width="650"/>
@@ -29,7 +29,7 @@ POSS has a no- to low-code portal experience as well as APIs that can be used to
 
 - **Azure powered and platform agnostic**
 
-    POSS natively uses and supports Azure Edge and AI Services like [Azure IoT Hub](https://docs.microsoft.com/en-us/azure/iot-hub/), [Azure IoT Edge](https://azure.microsoft.com/en-us/services/iot-edge/), [Azure Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services/), [Azure Storage](https://azure.microsoft.com/en-us/products/category/storage/), [Azure ML](https://azure.microsoft.com/en-us/services/machine-learning/), [Azure Monitor](https://docs.microsoft.com/en-us/azure/azure-monitor/) and so on. At the same time, it also allows you to modify the experience for use cases that require the use of other services (Azure or non-Azure) or other Open-Source Software (OSS) tools. 
+    POSS natively uses and supports Azure Edge and AI Services like [Azure IoT Hub](https://docs.microsoft.com/azure/iot-hub/), [Azure IoT Edge](https://azure.microsoft.com/services/iot-edge/), [Azure Cognitive Services](https://azure.microsoft.com/services/cognitive-services/), [Azure Storage](https://azure.microsoft.com/products/category/storage/), [Azure ML](https://azure.microsoft.com/services/machine-learning/), [Azure Monitor](https://docs.microsoft.com/azure/azure-monitor/), [Azure Arc](https://learn.microsoft.com/azure/azure-arc/overview), and so on. At the same time, it also allows you to modify the experience for use cases that require the use of other services (Azure or non-Azure) or other Open-Source Software (OSS) tools. 
 
 # Get Started
 Follow [this document](docs/tutorial/setup-guide.md) to get started in minutes. 
@@ -39,9 +39,9 @@ Follow [this document](docs/tutorial/setup-guide.md) to get started in minutes.
 
 # How It Works
 
-POSS has three high-level components: portal, controller-API and agent. You can interact with POSS through its portal, Kuberntes tools like [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/), and [Azure Arc](https://docs.microsoft.com/en-us/azure/azure-arc/overview) through [GitOps](https://docs.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-gitops-flux2), as shown in the following diagram.
+POSS has three high-level components: portal, controller-API and agent. You can interact with POSS through its portal, Kubernetes tools like [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/), and [Azure Arc](https://docs.microsoft.com/en-us/azure/azure-arc/overview) through [GitOps](https://docs.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-gitops-flux2), as shown in the following diagram.
 
-![poss-architecture](./docs/images/poss-architecture.png)
+![Diagram of POSS architecture](./docs/images/poss-architecture.png)
 
 * **Portal** provides an intuitive graphic interface for users to create, edit and manage their intelligent edge payloads. It offers an AI model zoo, a drag-n-drop AI skill editor, live camera previews and many other features.
 * **Controller-API** is a Kubernetes operator that manages states of objects of a POSS object model (code named Symphony). Read more about POSS API [here](./docs/api/README.md).

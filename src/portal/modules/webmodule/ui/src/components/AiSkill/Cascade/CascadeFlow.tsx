@@ -185,9 +185,16 @@ const CascadeFlow = (props: Props) => {
             elements={elements}
             nodeTypes={{
               source: (node: Node) => {
-                const { id } = node;
+                const { id, data } = node;
 
-                return <SourceNode id={id} setElements={setElements} onNodeConnect={onNodeConnect} />;
+                return (
+                  <SourceNode
+                    id={id}
+                    setElements={setElements}
+                    onNodeConnect={onNodeConnect}
+                    cascadeData={data}
+                  />
+                );
               },
               model: (node: Node) => {
                 const { id, data } = node;

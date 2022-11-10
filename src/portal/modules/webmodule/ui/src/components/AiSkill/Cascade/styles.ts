@@ -79,7 +79,6 @@ export const getNavCardClasses = () =>
     title: {
       fontSize: '14px',
       lineHeight: '20px',
-      width: '115px',
     },
     label: {
       fontSize: '12px',

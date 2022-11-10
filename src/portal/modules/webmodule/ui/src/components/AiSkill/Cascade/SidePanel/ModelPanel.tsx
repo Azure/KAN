@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
   Panel,
@@ -14,23 +14,20 @@ import {
   TextField,
   PrimaryButton,
   DefaultButton,
-  mergeStyleSets,
-  IconButton,
-  Callout,
-  DirectionalHint,
   IDropdownProps,
 } from '@fluentui/react';
 import { Node, Edge } from 'react-flow-renderer';
-import { clone } from 'ramda';
-import { useBoolean, useId } from '@uifabric/react-hooks';
+import { clone, isEmpty } from 'ramda';
 
 import { accelerationModelSelectorFactory } from '../../../../store/selectors';
-import { FormattedModel } from '../../../../store/types';
-import { Acceleration } from '../../../constant';
+import { FormattedModel, ModelProjectType } from '../../../../store/types';
+import { ERROR_BLANK_VALUE } from '../../../../constant';
+import { Acceleration, modelTypeOptions } from '../../../constant';
 import { theme } from '../../../../constant/theme';
 import { CaptureData, ModlePanelFormData, SkillNodeData } from '../../types';
 
 import Tag from '../../../Models/Tag';
+import SelectModelToolTip from './ToolTip/SelectModelToolTip';
 
 interface Props {
   node: Node<SkillNodeData>;
@@ -44,78 +41,37 @@ const options: IChoiceGroupOption[] = [
   { key: 'no', text: 'No' },
 ];
 
-const ERROR_BLANK_VALUE = 'Value cannot be blank.';
 const ERROR_BETWEEN_0_100 = 'Value 0-100.';
 const ERROR_LOWER_UPPER = 'Confidence lower bound needs to be smaller than upper bound';
-const ERROR_BIGGER_LOWER = 'Confidence upper bound needs to be bigger than lower bound';
+const ERROR_UPPER_LOWER = 'Confidence upper bound needs to be bigger than lower bound';
 const ERROR_BOTH_BLANK_BETWEEN_0_100 = 'Value cannot be blank. Value 1-100.';
 
-const getSelectModelLabelClasses = () =>
-  mergeStyleSets({
-    lable: { fontWeight: 600 },
-    contentWrapper: { padding: '17px 25px', display: 'inline-block' },
-    boldContent: { fontSize: '13px', fontWeight: 600 },
-    content: { fontSize: '13px' },
-    requiredMark: {
-      color: 'rgb(164, 38, 44)',
-      paddingRight: '12px',
-    },
-  });
+const getLocalFormError = (form: ModlePanelFormData) => {
+  const error = {
+    projectType: '',
+    model: '',
+    captureData: '',
+    confidence_lower: '',
+    confidence_upper: '',
+    max_images: '',
+  };
 
-const SelectModelLabel = (props: IDropdownProps): JSX.Element => {
-  const [isCalloutVisible, { toggle: toggleIsCalloutVisible }] = useBoolean(false);
-  const iconButtonId: string = useId('iconButton');
+  if (isEmpty(form.projectType)) error.projectType = ERROR_BLANK_VALUE;
+  if (form.model.id === -1) error.model = ERROR_BLANK_VALUE;
+  if (form.category === 'customvision') {
+    if (form.captureData === '-') error.captureData = ERROR_BLANK_VALUE;
+    if (form.captureData === 'yes') {
+      if (form.confidence_lower < 0 || form.confidence_lower > 100)
+        error.confidence_lower = ERROR_BETWEEN_0_100;
+      if (form.confidence_lower > form.confidence_upper) error.confidence_lower = ERROR_LOWER_UPPER;
+      if (form.confidence_upper < 0 || form.confidence_upper > 100)
+        error.confidence_upper = ERROR_BETWEEN_0_100;
+      if (form.confidence_upper < form.confidence_lower) error.confidence_upper = ERROR_UPPER_LOWER;
+      if (form.max_images < 1 || form.max_images > 100) error.max_images = ERROR_BOTH_BLANK_BETWEEN_0_100;
+    }
+  }
 
-  const classes = getSelectModelLabelClasses();
-
-  return (
-    <>
-      <Stack
-        horizontal
-        verticalAlign="center"
-        tokens={{
-          childrenGap: 4,
-          maxWidth: 300,
-        }}
-      >
-        <span id={props.id} className={classes.lable}>
-          {props.label}
-        </span>
-        <IconButton
-          id={iconButtonId}
-          iconProps={{ iconName: 'Info' }}
-          title="Info"
-          ariaLabel="Info"
-          onClick={toggleIsCalloutVisible}
-        />
-        <span className={classes.requiredMark}>*</span>
-      </Stack>
-      {isCalloutVisible && (
-        <Callout
-          target={`#${iconButtonId}`}
-          setInitialFocus
-          onDismiss={toggleIsCalloutVisible}
-          role="alertdialog"
-          directionalHint={DirectionalHint.bottomCenter}
-        >
-          <Stack
-            tokens={{
-              childrenGap: 4,
-              maxWidth: 280,
-            }}
-            horizontalAlign="start"
-            styles={{ root: classes.contentWrapper }}
-          >
-            <span className={classes.boldContent}>Note: </span>
-            <span className={classes.content}>
-              Models from the model zoo will not appear if they are incompatible with your device
-              acceleration.
-            </span>
-          </Stack>
-        </Callout>
-      )}
-    </>
-  );
+  return error;
 };
 
 const ModelPanel = (props: Props) => {
@@ -123,6 +79,7 @@ const ModelPanel = (props: Props) => {
   const { data } = node;
 
   const [localForm, setLocalForm] = useState<ModlePanelFormData>({
+    projectType: '',
     model: { id: -1, name: '' },
     category: '',
     captureData: '-',
@@ -130,6 +87,7 @@ const ModelPanel = (props: Props) => {
     confidence_upper: 0,
     max_images: 0,
     error: {
+      projectType: '',
       model: '',
       captureData: '',
       confidence_lower: '',
@@ -138,102 +96,69 @@ const ModelPanel = (props: Props) => {
     },
   });
 
-  const accelerationModelList = useSelector(
-    accelerationModelSelectorFactory([data.projectType], acceleraction as Acceleration),
-  ) as FormattedModel[];
+  const selectedProjectTypeModelSelector = useMemo(
+    () =>
+      accelerationModelSelectorFactory(
+        !isEmpty(localForm.projectType) ? [localForm.projectType as ModelProjectType] : [],
+        acceleraction as Acceleration,
+      ),
+    [localForm.projectType, acceleraction],
+  );
+  const accelerationModelList = useSelector(selectedProjectTypeModelSelector) as FormattedModel[];
 
   const modelOptions: IDropdownOption[] = accelerationModelList.map((model) => ({
     key: model.id,
     text: model.name,
-    data: model.category,
+    data: model,
   }));
 
   useEffect(() => {
     if (data.configurations) {
       setLocalForm({
         ...(data.configurations as ModlePanelFormData),
+        projectType: data.projectType,
       });
     }
   }, [data]);
 
   const onFormValidate = useCallback(() => {
-    if (localForm.model.id === -1) {
+    const error = getLocalFormError(localForm);
+
+    if (Object.values(error).some((value) => !isEmpty(value))) {
       setLocalForm((prev) => ({
         ...prev,
-        error: { ...prev.error, model: ERROR_BLANK_VALUE },
+        error,
       }));
+
       return true;
     }
-
-    if (localForm.category === 'customvision') {
-      if (localForm.captureData === '-') {
-        setLocalForm((prev) => ({
-          ...prev,
-          error: { ...prev.error, captureData: ERROR_BLANK_VALUE },
-        }));
-        return true;
-      }
-
-      if (
-        (localForm.confidence_lower < 0 || localForm.confidence_lower > 100) &&
-        localForm.captureData === 'yes'
-      ) {
-        setLocalForm((prev) => ({
-          ...prev,
-          error: { ...prev.error, confidence_lower: ERROR_BETWEEN_0_100 },
-        }));
-        return true;
-      }
-
-      if (localForm.confidence_lower > localForm.confidence_upper && localForm.captureData === 'yes') {
-        setLocalForm((prev) => ({
-          ...prev,
-          error: {
-            ...prev.error,
-            confidence_lower: ERROR_LOWER_UPPER,
-          },
-        }));
-        return true;
-      }
-
-      if (
-        (localForm.confidence_upper < 0 || localForm.confidence_upper > 100) &&
-        localForm.captureData === 'yes'
-      ) {
-        setLocalForm((prev) => ({
-          ...prev,
-          error: { ...prev.error, confidence_upper: ERROR_BETWEEN_0_100 },
-        }));
-        return true;
-      }
-
-      if (localForm.confidence_upper < localForm.confidence_lower && localForm.captureData === 'yes') {
-        setLocalForm((prev) => ({
-          ...prev,
-          error: {
-            ...prev.error,
-            confidence_lower: ERROR_BIGGER_LOWER,
-          },
-        }));
-        return true;
-      }
-
-      if ((localForm.max_images < 1 || localForm.max_images > 100) && localForm.captureData === 'yes') {
-        setLocalForm((prev) => ({
-          ...prev,
-          error: { ...prev.error, max_images: ERROR_BOTH_BLANK_BETWEEN_0_100 },
-        }));
-        return true;
-      }
-    }
-
     return false;
   }, [localForm]);
+
+  const onProjectTypeSelect = useCallback((option: IDropdownOption) => {
+    setLocalForm({
+      projectType: option.key as ModelProjectType,
+      model: { id: -1, name: '' },
+      category: '',
+      captureData: '-',
+      confidence_lower: 0,
+      confidence_upper: 0,
+      max_images: 0,
+      error: {
+        model: '',
+        captureData: '',
+        confidence_lower: '',
+        confidence_upper: '',
+        max_images: '',
+      },
+    });
+  }, []);
 
   const onModelSelect = useCallback((option: IDropdownOption) => {
     setLocalForm({
       model: { id: +option.key, name: option.text },
-      category: option.data,
+      projectType: option.data.projectType,
+      category: option.data.category,
       captureData: '-',
       confidence_lower: 0,
       confidence_upper: 0,
@@ -304,16 +229,39 @@ const ModelPanel = (props: Props) => {
             ? 'This node takes an input frame, runs your ML model on the image, and outputs the modified frame with detected objects information.'
             : 'This node takes an input frame from your object detection model, tags/classifies the detected objects, and outputs this information.'}
         </Text>
+        <Stack>
+          <Stack tokens={{ childrenGap: 5 }}>
+            <Dropdown
+              label="Model type"
+              selectedKey={localForm.projectType}
+              onChange={(_, option: IDropdownOption) => onProjectTypeSelect(option)}
+              options={modelTypeOptions}
+              required
+              errorMessage={localForm.error.projectType}
+            />
+            <Text>
+              This node takes an input frame from your object detection model, tags/classifies the detected
+              objects, and outputs this information.
+            </Text>
+          </Stack>
+        </Stack>
         <Stack tokens={{ childrenGap: 5 }}>
-          <Dropdown
-            label="Select Model"
-            onRenderLabel={(props: IDropdownProps) => <SelectModelLabel {...props} />}
-            selectedKey={localForm.model.id}
-            onChange={(_, option: IDropdownOption) => onModelSelect(option)}
-            options={modelOptions}
-            required
-            errorMessage={localForm.error.model}
-          />
+          {!isEmpty(localForm.projectType) && (
+            <Dropdown
+              label={
+                localForm.projectType === 'ObjectDetection'
+                  ? 'Select object detection model'
+                  : 'Select classification model'
+              }
+              onRenderLabel={(props: IDropdownProps) => <SelectModelToolTip {...props} />}
+              selectedKey={localForm.model.id}
+              onChange={(_, option: IDropdownOption) => onModelSelect(option)}
+              options={modelOptions}
+              required
+              errorMessage={localForm.error.model}
+            />
+          )}
+
           {localForm.model.id !== -1 && (
             <Stack horizontal tokens={{ childrenGap: 8 }}>
               {accelerationModelList
@@ -363,7 +311,7 @@ const ModelPanel = (props: Props) => {
                     setLocalForm((prev) => ({
                       ...prev,
                       confidence_lower: Number.isInteger(+newValue) ? +newValue : prev.confidence_lower,
-                      error: { ...prev.error, confidence_lower: '' },
+                      error: { ...prev.error, confidence_lower: '', confidence_upper: '' },
                     }));
                   }}
                   errorMessage={localForm.error.confidence_lower}
@@ -377,7 +325,7 @@ const ModelPanel = (props: Props) => {
                     setLocalForm((prev) => ({
                       ...prev,
                       confidence_upper: Number.isInteger(+newValue) ? +newValue : prev.confidence_upper,
-                      error: { ...prev.error, confidence_upper: '' },
+                      error: { ...prev.error, confidence_lower: '', confidence_upper: '' },
                     }));
                   }}
                   errorMessage={localForm.error.confidence_upper}

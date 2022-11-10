@@ -3,7 +3,7 @@ import { pick, omit, groupBy, mapObjIndexed } from 'ramda';
 
 import { SOURCE_CONFIGURATIONS } from './constant';
 import { AiSkill, ModelNodeType, TrainingProject } from '../../store/types';
-import { SkillNodeData, ExportType } from './types';
+import { SkillNodeData, ExportType, TransformType } from './types';
 
 export const NODE_CONSTANT_X_POSITION = 350;
 export const NODE_CONSTANT_Y_POSITION = 50;
@@ -96,14 +96,14 @@ export const isDiscreteFlow = (nodeList: Node[], edgeList: Edge[]) => {
     }
   });
 
-  if (Object.keys(exportNodeMap).find((key) => exportNodeMap[key] === 0)) return;
+  if (Object.keys(exportNodeMap).find((key) => exportNodeMap[key] === 0)) return true;
 
   if (
     Object.keys(normalNodeMap).find(
       (key) => normalNodeMap[key].target === 0 || normalNodeMap[key].source === 0,
     )
   )
-    return;
+    return true;
 
   return false;
 };
@@ -141,13 +141,14 @@ export const getCascadeErrorMessage = (elements: (Node | Edge)[]) => {
 
 export const getNodeImage = (type: ModelNodeType) => {
   switch (type) {
+    case 'source':
+      return '/icons/aiSkill/import.png';
     case 'model':
-      return '/icons/aiSkill/modelCard.png';
+      return '/icons/aiSkill/process.png';
     case 'transform':
-      return '/icons/aiSkill/transformCard.png';
+      return '/icons/aiSkill/process.png';
     case 'export':
-      return '/icons/aiSkill/exportCard.png';
-
+      return '/icons/aiSkill/export.png';
     default:
       return '';
   }
@@ -288,6 +289,17 @@ export const convertElementsPayload = (elements: (Edge<any> | Node<any>)[]) => {
   };
 };
 
+export const getTransformType = (name: string): TransformType => {
+  switch (name) {
+    case 'filter_transform':
+      return 'filter';
+    case 'grpc_transform':
+      return 'grpc';
+    default:
+      return null;
+  }
+};
+
 export const getExportType = (name: string): ExportType => {
   switch (name) {
     case 'video_snippet_export':
@@ -357,6 +369,7 @@ export const backToSkillRawElements = (
       data.projectType = matchedModel.projectType;
       data.configurations.model = { id: matchedModel.id, name: matchedModel.name };
       data.configurations.category = matchedModel.category;
+      data.projectType = matchedModel.projectType;
       data.configurations.captureData = node.configurations.confidence_lower ? 'yes' : 'no';
       data.configurations.confidence_lower = +node.configurations.confidence_lower;
       data.configurations.confidence_upper = +node.configurations.confidence_upper;

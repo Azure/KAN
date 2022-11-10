@@ -32,3 +32,13 @@ export const FEEDBACK_URL = 'https://go.microsoft.com/fwlink/?linkid=2205447';
 export const TROUBLE_SHOOTING_URL = 'https://go.microsoft.com/fwlink/?linkid=2205255';
 
 export type PageType = 'deivce' | 'camera' | 'model' | 'skill' | 'deployment';
+
+export const modelTypeOptions: IDropdownOption[] = [
+  { key: 'ObjectDetection', text: 'Object Detection' },
+  { key: 'Classification', text: 'Classification' },
+];
+
+export const classificationOptions: IDropdownOption[] = [
+  { key: 'Multilabel', text: 'Multilabel' },
+  { key: 'Multiclass', text: 'Multiclass' },
+];

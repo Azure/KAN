@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import React, { memo, useCallback } from 'react';
-import { Stack, Text, IContextualMenuProps, IconButton, Label } from '@fluentui/react';
-import { Handle, addEdge, Connection, Edge, Node, isNode } from 'react-flow-renderer';
+import { Stack, IContextualMenuProps, IconButton, Label } from '@fluentui/react';
+import { Handle, addEdge, Connection, Edge, Node, isNode, Position } from 'react-flow-renderer';
 
 import { SkillNodeData } from '../../types';
 import { getNodeImage } from '../../utils';
@@ -73,22 +73,10 @@ const ModelNode = (props: Props) => {
     <>
       <Handle
         id="target"
-        // @ts-ignore
-        position="top"
+        position={Position.Top}
         type="target"
         onConnect={onConnectEdge}
         isConnectable={true}
-        // isValidConnection={(connection: Connection) => {
-        //   console.log('connection', connection);
-
-        //   return false;
-        //   // return isValidConnection(
-        //   //   getModel(connection.source, modelList),
-        //   //   refinedModel,
-        //   //   connection,
-        //   //   connectMap,
-        //   // );
-        // }}
       />
       <Stack horizontal styles={{ root: classes.node }}>
         <img
@@ -97,13 +85,13 @@ const ModelNode = (props: Props) => {
           alt="icon"
           onDragStart={(e) => e.preventDefault()}
         />
-        <Stack styles={{ root: { padding: '5px 0 5px 12px', width: '220px' } }}>
+        <Stack styles={{ root: { padding: '5px 0 5px 12px', width: '220px' } }} verticalAlign="center">
           <Label>
             {!cascadeData.configurations ? 'Run ML Model' : getLimitText(cascadeData.model.name, TEXT_LIMIT)}
           </Label>
-          <Text styles={{ root: classes.label }}>
+          {/* <Text styles={{ root: classes.label }}>
             {cascadeData.projectType === 'ObjectDetection' ? 'Object Detection' : 'Classification'}
-          </Text>
+          </Text> */}
         </Stack>
         <Stack verticalAlign="center">
           <IconButton
@@ -115,8 +103,7 @@ const ModelNode = (props: Props) => {
       </Stack>
       <Handle
         id="source"
-        // @ts-ignore
-        position="bottom"
+        position={Position.Bottom}
         type="source"
         isConnectable={true}
         onConnect={onConnectEdge}

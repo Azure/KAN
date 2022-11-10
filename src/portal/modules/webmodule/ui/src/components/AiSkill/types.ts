@@ -4,9 +4,10 @@ import { Tag } from '../Common/TagTab';
 import { ModelNodeType, ModelCategory, ModelProjectType, TrainingProject } from '../../store/types';
 
 export type PivotTabKey = 'basics' | 'preview' | 'tag' | 'cascade';
-export const STEP_ORDER = ['basics', 'cascade', 'tag', 'preview'] as PivotTabKey[];
-
+export type TransformType = 'filter' | 'grpc';
 export type ExportType = 'snippet' | 'iotHub' | 'iotEdge' | 'http';
+
+export const STEP_ORDER = ['basics', 'cascade', 'tag', 'preview'] as PivotTabKey[];
 
 export type CreateAISkillFormData = {
   name: string;
@@ -45,12 +46,14 @@ export type CaptureData = '-' | 'yes' | 'no';
 
 export type ModlePanelFormData = {
   model: { id: number; name: string };
+  projectType: ModelProjectType | '';
   category: ModelCategory | '';
   captureData: CaptureData;
   confidence_lower: number;
   confidence_upper: number;
   max_images: number;
   error: Partial<{
+    projectType: string;
     model: string;
     captureData: string;
     confidence_lower: string;
@@ -62,9 +65,17 @@ export type ModlePanelFormData = {
 export type TransformPanelFormData = {
   labels: string[];
   confidence_threshold: number;
+  communication_type: string;
+  enpointUrl: string;
+  imageUrl: string;
+  credentials: string;
   error: Partial<{
     confidence_threshold: string;
     labels: string;
+    communication_type: string;
+    enpointUrl: string;
+    imageUrl: string;
+    credentials: string;
   }>;
 };
 
@@ -97,6 +108,7 @@ export type SkillSideNode = {
   projectType?: ModelProjectType;
   nodeType: ModelNodeType;
   exportType?: ExportType;
+  transformType?: TransformType;
   connectMap: Connection[];
   isEditDone: boolean;
   model?: SkillModel;

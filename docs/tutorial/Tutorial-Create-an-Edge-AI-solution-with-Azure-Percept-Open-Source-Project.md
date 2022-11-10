@@ -10,7 +10,7 @@ The five major steps we will cover in this tutorial are:
 
 -   Step 2: Connect a video feed pointing to pedestrians or vehicles by adding and configuring a camera
 
--   Step 3: Build or add a model 
+-   Step 3: View models 
 
     A model is a machine learning (ML) algorithm for object detection or classification in video streams.
 
@@ -53,7 +53,7 @@ Azure Percept Open-Source Project is supported on many different devices and acc
 6.  Under **Device Specs**, for **CPU Architecture,** select **X64**.
 7.  From the **Acceleration** dropdown list, select **CPU**, and then select **Next**.
 
-    ![](media/9d6455d44a8f4d3ccd2645d87c7b1bca.png)
+    ![](media/9d6455d44a8f4d3ccd2645d87c7b1bca-2.png)
 
 8.  Select **Review + Create.**
 
@@ -80,7 +80,7 @@ Azure Percept Open-Source Project supports internet protocol (IP) cameras that u
 
 2. Add the **Name, RTSP URL**, and **Compute Device** for your camera.
 
-    -   Each camera must have an **RTSP URL** that the RTSP protocol can use for managing its feed. For this tutorial we created an RTSP URL for you that you can use if you don’t have one available. For ease of use, this is based on a recorded video and is publicly available to any device - **rtsp://20.69.91.148:554/media/people.mkv**
+    -   Each camera must have an **RTSP URL** that the RTSP protocol can use for managing its feed. For this tutorial we created an RTSP URL for you that you can use if you don’t have one available. For ease of use, this is based on a recorded video and is publicly available to any device - **rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4**
 
     -   The **Compute Device** field associates a camera feed with devices will have access to that feed. Since this is a “many-to-many” relationship, one camera feed may be processed by several compute devices and one compute device may process several camera feeds.
 
@@ -102,7 +102,7 @@ Azure Percept Open-Source Project supports internet protocol (IP) cameras that u
 
 **You have now added a camera and configured its properties.**
 
-## Step 3: Build or add a model
+## Step 3: View models
 
 A model is a machine learning (ML) algorithm for object detection or classification in video streams. You can add a model from the Model Zoo, a current project, or create one from scratch. For this tutorial, we’ll use a pre-built model from the Model Zoo.
 
@@ -178,7 +178,7 @@ Azure Percept Open-Source Project’s AI skill makes the inferences that power d
 10. Select **Done.**  
     The name of the model node changes to **pedestrian-and-vehicle-detector.**
 
-    To filter our results by confidence interval, select **Transform** and **Filter,** and then drag the filter node onto the canvas.
+    To filter our results by confidence interval, select **Transform**, select **Filter**, and then drag the filter node onto the canvas.
 
 11. Connect the pedestrian-and-vehicle-detector model node output to the filter node input.
 
@@ -226,8 +226,9 @@ Creating a deployment is the last major step in this tutorial. The last blade on
 
 ![](media/ad73df5ca594a82ee40bbe0d0f087584.png)
 
-6.  To assign AI skills to the camera, from the top menu, select **Configure AI Skills**.  
-    The **Configure AI Skills** pane opens on the right, displaying the AI skill you created earlier in this tutorial.
+6.  To configure the AI Skill, select the camera, select **Add AI Skills"**, select the AI Skill you want, and then select **Add**.  
+    The **Add AI Skills** pane opens on the right, displaying the AI skill you created earlier in this tutorial.
+    
 7.  Select the AI skill to add it to your camera, and then select **Configure**.
 8.  Select **Review + Deploy** to move to the next step.
 
@@ -256,7 +257,7 @@ You can view the deployment you just created and a library of other deployments 
 
     ![](media/0ca3a148c6439ad2275e20e230aa2efb.png)
 
-3. To display feed and status information, under the **General** tab, select a camera.
+3. Select a camera, then to display feed and status information, select the **General** tab.
 
     ![](media/c0e91e620c7c43f92e27e3141405b979.png)
 

@@ -21,5 +21,5 @@
   
   [Deploying a simulated temperature sensor Solution to an Azure IoT Edge device](/docs/api/quick_start/deploy_solution_to_azure_iot_edge.md)
   
-  [Mananging RTSP cameras connected to a a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)
+  [Managing RTSP cameras connected to a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)
   

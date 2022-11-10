@@ -22,7 +22,9 @@ After reviewing this article, visit the [Tutorial: Create an Edge AI solution wi
 
 A compute device is an essential part of the [Azure Percept for Open-Source Project](https://github.com/Azure/PerceptOSS) architecture. It holds all the components of the vision-based Edge AI deployments and executes close to the operating environment in real time. It is highly configurable and capable of processing several camera streams at once.
 
-Azure Percept for Open-Source Project and its Edge AI solutions are supported on many different devices and accelerators, for example, NVIDIA Orin AGX/NX, Xavier AGX/NX, Azure Stack HCI, and Azure stack edge.
+Azure Percept for Open-Source Project and its Edge AI solutions are supported on many different devices and accelerators, for example, NVIDIA Orin AGX/NX, Xavier AGX/NX, Azure Stack HCI, and Azure stack edge. 
+
+Support for K8s and IoT Edge devices is also available, including AKS, AKS-HCI, AKS-IoT, and Arc-enabled K8s clusters.
 
 ### Configuration options
 
@@ -116,14 +118,16 @@ After defining your compute devices, cameras, models, and AI skills, your next s
 
 ###  1. Solutions
 
-A solution is the combination of an AI skill and custom containers (business logic), expressing the functional solution to your use case. Because your inputs to the portal ultimately run on a Kubernetes cluster (k8s), a solution is deployed from the k8s control plane to k8s nodes or a target. 
+A solution is the combination of an AI skill and custom containers (business logic), expressing the functional solution to your use case. Because your inputs to the portal ultimately run on a Kubernetes cluster (K8s), a solution is deployed from the K8s control plane to K8s nodes or a target. 
 
 ![image](https://user-images.githubusercontent.com/10191339/192595220-7c429607-8921-492a-be5d-d175d65faa47.png)
 
 
 ###  2. Targets
 
-You defined the target (compute device) in the first step. This is your Edge virtual machine (VM). In a future release you can choose to define your own k8s cluster as part of the target. 
+You defined the target (compute device) in the first step. This is your Edge virtual machine (VM). If there are K8s environments you want to run on IoT edge environments, you can expand your targets to include these environments, for example, K8s AKS HCI, K3s AKS-IoT, and Iot Edge devices such as DDK, EFLOW, and Percept VM.
+
+<!-- In a future release you can choose to define your own K8s cluster as part of the target. -->
  
 ###  3. Solution instances
 

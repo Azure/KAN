@@ -195,5 +195,7 @@ helm delete symphony
 
 # Next step
 
-* [Symphony Quickstart - Managing RTSP cameras connected to a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)
 * [Symphony Quick Start - Deploying a Redis server to a Kubernetes cluster](https://github.com/Azure/symphony-docs/blob/main/symphony-book/quick_start/deploy_redis_k8s.md)
+
+<!-- * [Symphony Quickstart - Managing RTSP cameras connected to a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)-->
+

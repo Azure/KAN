@@ -79,11 +79,11 @@ sudo iotedge config mp --connection-string '<IoT Edge device connection string>'
 
 Create a new YAML file that describes a Symphony Target. Use the following to submit the file:
 
-  kubectl create -f <filename>
+```kubectl create -f <filename>```
 
 Use the following to apply any changes:
 
-    kubectl apply -f <filename> :
+```kubectl apply -f <filename> ```
 
 > [!NOTE]
 > You can get a sample of this file under ```symphony-k8s/samples/simulated-temperature-sensor/target.yaml```:
@@ -115,11 +115,11 @@ spec:
 
 The following YAMl file describes a Symphony Solution with a single component, which is based on the ```mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0``` container. Use the following to submit the file:
 
-  kubectl create -f <filename>
+```kubectl create -f <filename>```
 
 Use the following to apply any changes:
 
-  kubectl apply -f <filename> 
+```kubectl apply -f <filename> ```
 
 ```yaml
 apiVersion: solution.symphony/v1
@@ -141,11 +141,11 @@ spec:
 
 A Symphony Solution Instance maps a Symphony Solution to one or multiple Targets. The following artifacts maps the ```simulated-temperature-sensor``` solution to the ```voe``` target above. Use the following to submit the file:
 
-  kubectl create -f <filename>
+```kubectl create -f <filename>```
 
 Use the following to apply any changes:
 
-  kubectl apply -f <filename> 
+```kubectl apply -f <filename> ```
 
 > [!NOTE]
 > You can get a sample of this file in the ```symphony-k8s/samples/simulated-temperature-sensor/instance.yaml``` folder.

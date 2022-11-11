@@ -92,20 +92,20 @@ Use the following to apply any changes:
 apiVersion: fabric.symphony/v1
 kind: Target
 metadata:
-  name: s8c-vm
+  name: voe-target
 spec:
-  name: s8c-vm
+  forceRedeploy: true
   topologies:
   - bindings:
     - role: instance
-      type: providers.target.azure.iotedge
-      parameters:
+      provider: providers.target.azure.iotedge
+      config:
         name: "iot-edge"
         keyName: "iothubowner"
-        key: "<IoT Hub Key>"
-        iotHub: "s8chub.azure-devices.net"
+        key: "<Your IoT Hub Key>"
+        iotHub: "<Yout IoT Hub Hostname>"
         apiVersion: "2020-05-31-preview"
-        deviceName: "s8c-vm"
+        deviceName: "<Your device name>"
 ```
 
 > [!NOTE]
@@ -154,11 +154,11 @@ Use the following to apply any changes:
 apiVersion: solution.symphony/v1
 kind: Instance
 metadata:
-  name: my-sensor
+  name: my-instance-2
 spec:
   solution: simulated-temperature-sensor
   target:
-    name: s8c-vm
+    name: voe-target
 ```
 
 ## 7. Verification

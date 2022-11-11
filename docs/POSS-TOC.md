@@ -17,9 +17,14 @@
 
 ### Quickstarts for Symphony
 
-  [Symphony Quickstart](/docs/api/quick_start/quick_start.md)
+* [Symphony Quickstart](/docs/api/quick_start/quick_start.md)
+
+* [Deploying a Redis server to a K8s cluster](https://github.com/Azure/PerceptOSS/blob/main/docs/api/quick_start/manage_rtsp_cameras.md)
   
-  [Deploying a simulated temperature sensor Solution to an Azure IoT Edge device](/docs/api/quick_start/deploy_solution_to_azure_iot_edge.md)
+* [Deploying a simulated temperature sensor solution to an Azure IoT Edge device](/docs/api/quick_start/deploy_solution_to_azure_iot_edge.md)
+ 
+
   
-  [Managing RTSP cameras connected to a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)
+
+<!-- [Managing RTSP cameras connected to a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)-->
   

@@ -1,11 +1,11 @@
 # Default values for voe.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-symphonyAgentVersion: "0.38.0"
+symphonyAgentVersion: "0.40.58"
 image:
   pullPolicy: Always
   image: p4etest.azurecr.io/symphonyportal
-  tag: "0.36.8-amd64"
+  tag:
 symphonyportal:
   videoSource: opencv
 storage:

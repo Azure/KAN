@@ -2,7 +2,7 @@
 
 Azure Percept Open-Source Project (POSS) API defines a common object model that describes the full stack of intelligent Edge solutions, from AI models to solutions to devices and sensors. Because these objects are defined as standard Kubernetes [custom resources](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), you can use popular Kubernetes tools like [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/) to manipulate these objects.
 
-POSS API is based on another Open-Source Project (OSS) project – [Symphony](https://github.com/azure/symphony-k8s).
+POSS API is based on another Open-Source Project (OSS) project – [Symphony](./quick_start/quick_start.md).
 
 ## POSS object models
 
@@ -77,7 +77,6 @@ Visit the [Symphony Quickstart](./quick_start/quick_start.md) to try out the tut
 ## Next steps
 
 * For more information about Symphony, visit [Symphony documentation](https://github.com/azure/symphony-k8s).
-* POSS configuration
-* Secret management
-* Security
-* Observability
+* For more information about POSS configuration, visit [Azure Percept Open-Source Project: Setup guide](/docs/tutorial/setup-guide.md).
+* For more information about portal security, visit [Security]().
+

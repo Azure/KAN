@@ -22,18 +22,14 @@ After reviewing this article, visit the [Tutorial: Create an Edge AI solution wi
 
 A compute device is an essential part of the [Azure Percept for Open-Source Project](https://github.com/Azure/PerceptOSS) architecture. It holds all the components of the vision-based Edge AI deployments and executes close to the operating environment in real time. It is highly configurable and capable of processing several camera streams at once.
 
-Azure Percept for Open-Source Project and its Edge AI solutions are supported on many different devices and accelerators, for example, NVIDIA Orin AGX/NX, Xavier AGX/NX, Azure Stack HCI, and Azure Stack Edge. 
-
-Azure Percept for Open-Source Project also allows you to define your own Kubernetes cluster as part of the target. These clusters include K8s clusters like AKS-HCI or smaller footprint Kubernetes environments (K3s) like AKS-lite. 
- 
-Regardless of which environments you use, you can run and manage them in the same way.
+Azure Percept for Open-Source Project and its Edge AI solutions are supported on many different devices and accelerators; for example, NVIDIA Orin AGX/NX, Xavier AGX/NX, Azure Stack HCI, and Azure stack edge. POSS also allows you link your existing device on Kubernetes environments such as AKS-HCI and AKS-lite. Regardless of which environment(s) you use, you can run and manage them in the same way.
 
 
 ### Configuration options
 
 You can configure either a Kubernetes Device or an IoT Edge Device as a compute device.
 
-To bring a Kubernetes cluster to the experience, onboard an existing cluster that is running your portal or [Symphony](/docs/api/quick_start/quick_start.md), or onboard other external clusters using your kubeconfig file (see [Organizing Cluster Access Using kubeconfig Files](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/)). You must link your desired cluster to a device and provide hardware specifications of your linked device.
+To bring a Kubernetes cluster to the experience, onboard an existing cluster that is running  [Symphony](/docs/api/quick_start/quick_start.md) or your portal, or onboard other external clusters using your kubeconfig file (see [Organizing Cluster Access Using kubeconfig Files](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/)). You must link your desired cluster to a device and provide hardware specifications of your linked device.
 
 The following table provides information about the compute devices and configuration options available to you.
 

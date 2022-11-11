@@ -445,9 +445,11 @@ while [ $current_step -lt 6 ]; do
 
                 echo -e "\e[32mInstalling symphony\e[0m"
                 helm upgrade --install symphony oci://possprod.azurecr.io/helm/symphony --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version 0.38.0 --wait
-
-                echo -e "\e[32mInstalling webmodule\e[0m"
-                helm upgrade --install voe oci://possprod.azurecr.io/helm/voe --version 0.38.0-amd64 \
+                if [ $? != "0" ];  then
+                    echo -e "\e[31mWe faced some issues while pull symphony from container registry. Please try the installer again a few minutes later\e[0m"
+                fi
+                echo -e "\e[32mInstalling symphonyportal\e[0m"
+                helm upgrade --install voe oci://possprod.azurecr.io/helm/voe --version 0.38.1-amd64 \
                     --set "storage.storageAccount=$selected_storage_account_name" \
                     --set "storage.storageContainer=$selected_blob_container_name" \
                     --set "storage.subscriptionId=$storage_account_subscription" \

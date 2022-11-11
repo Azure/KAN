@@ -1,16 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: webmodule
+  name: symphonyportal
 spec:
   ingressClassName: nginx
   rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: webmodule
-            port:
-              number: 8000
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: symphonyportal
+                port:
+                  number: 8000

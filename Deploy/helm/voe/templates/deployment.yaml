@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webmodule
+  name: symphonyportal
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: webmodule
+      app: symphonyportal
   minReadySeconds: 10
   strategy:
     type: RollingUpdate
@@ -16,12 +16,12 @@ spec:
   template:
     metadata:
       labels:
-        app: webmodule
+        app: symphonyportal
     spec:
       serviceAccountName: symphony-user
       containers:
-      - name: webmodule
-        image: {{.Values.image.image}}:{{ .Values.image.tag | default .Chart.AppVersion }}
+      - name: symphonyportal
+        image: {{.Values.image.image}}:{{.Values.image.tag}}
         imagePullPolicy: {{.Values.image.pullPolicy}}
         ports:
         - containerPort: 8000
@@ -33,6 +33,6 @@ spec:
             name: azure-env
         env:          
           - name: DF_PD_VIDEO_SOURCE
-            value: {{.Values.webmodule.videoSource}}
+            value: {{.Values.symphonyportal.videoSource}}
           - name: IS_K8S
             value: "true"

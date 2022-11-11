@@ -14,7 +14,7 @@ trigger:
 steps:
 - task: HelmInstaller@0
   inputs:
-    helmVersion: '3.9.4'
+    helmVersion: '3.10.2'
     installKubectl: false
 
 - task: Bash@3
@@ -22,7 +22,7 @@ steps:
     targetType: 'inline'
     script: |
      export HELM_EXPERIMENTAL_OCI=1
-     /opt/hostedtoolcache/helm/3.9.4/x64/linux-amd64/helm registry login $(acr_host) --username $(acr_username) --password $acr_password
+     /opt/hostedtoolcache/helm/3.10.2/x64/linux-amd64/helm registry login $(acr_host) --username $(acr_username) --password $acr_password
   env:
     acr_password: $(acr_password)
   displayName: login acr
@@ -31,7 +31,7 @@ steps:
     failOnStderr: false
     targetType: 'inline'
     script: |
-      if /opt/hostedtoolcache/helm/3.9.4/x64/linux-amd64/helm show chart oci://$(acr_host)/helm/voe --version $(cat Deploy/helm/voe/Chart.yaml | grep version: | sed 's/.*"\(.*\)"/\1/') 2>&1 | grep -q fail; then
+      if /opt/hostedtoolcache/helm/3.10.2/x64/linux-amd64/helm show chart oci://$(acr_host)/helm/voe --version $(cat Deploy/helm/voe/Chart.yaml | grep version: | sed 's/.*"\(.*\)"/\1/') 2>&1 | grep -q fail; then
         echo "##vso[task.setvariable variable=chartExists;]false"
       else
         echo "##vso[task.setvariable variable=chartExists;]true"
@@ -52,8 +52,8 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-     /opt/hostedtoolcache/helm/3.9.4/x64/linux-amd64/helm package Deploy/helm/voe
-     /opt/hostedtoolcache/helm/3.9.4/x64/linux-amd64/helm push voe-$(ls voe*.tgz | sed 's/voe-\(.*\)\.tgz/\1/').tgz oci://$(acr_host)/helm
+     /opt/hostedtoolcache/helm/3.10.2/x64/linux-amd64/helm package Deploy/helm/voe
+     /opt/hostedtoolcache/helm/3.10.2/x64/linux-amd64/helm push voe-$(ls voe*.tgz | sed 's/voe-\(.*\)\.tgz/\1/').tgz oci://$(acr_host)/helm
   displayName: build and push helm chart  
   condition: or(eq(variables.chartExists, 'false'), eq('${{ parameters.forceUpdate }}','true'))
 

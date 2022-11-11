@@ -9,15 +9,15 @@ Ready to jump into actions right away? This quickstart walks you through the ste
 
 ## 0. Prerequisites
 
-* [Helm 3](https://helm.sh/)
-* [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/): Configured with the Kubernetes cluster you want to use as the default context.
+* [Helm 3](https://helm.sh/) - Required to deploy Symphony.
+* [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/): Configured with the Kubernetes cluster you want to use as the default context. Note that if you use cloud shell, kubectl is already configured.
 * [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/)
 
 ## 1. Deploy Symphony using Helm
 
 The easiest way to install Symphony is to use Helm:
 ```bash
-helm install symphony oci://p4etest.azurecr.io/helm/symphony --version 0.1.26
+helm install symphony oci://possprod.azurecr.io/helm/symphony --version 0.40.58
 ```
 
 Or, if you already have the ```symphony-k8s``` repository cloned:
@@ -77,7 +77,13 @@ sudo iotedge config mp --connection-string '<IoT Edge device connection string>'
 
 ## 4. Register the IoT Edge device as a Symphony Target
 
-Create a new YAML file that describes a Symphony Target:
+Create a new YAML file that describes a Symphony Target. Use the following to submit the file:
+
+  kubectl create -f <filename>
+
+Use the following to apply any changes:
+
+    kubectl apply -f <filename> :
 
 > [!NOTE]
 > You can get a sample of this file under ```symphony-k8s/samples/simulated-temperature-sensor/target.yaml```:
@@ -107,10 +113,13 @@ spec:
 
 ## 5. Create the Symphony Solution
 
-The following YAMl file describes a Symphony Solution with a single component, which is based on the ```mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0``` container.
+The following YAMl file describes a Symphony Solution with a single component, which is based on the ```mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0``` container. Use the following to submit the file:
 
-> [!NOTE]
-> You can get a sample of this file in the ```symphony-k8s/samples/simulated-temperature-sensor/solution.yaml``` folder.
+  kubectl create -f <filename>
+
+Use the following to apply any changes:
+
+  kubectl apply -f <filename> 
 
 ```yaml
 apiVersion: solution.symphony/v1
@@ -121,16 +130,22 @@ spec:
   components:
   - name: "simulated-temperature-sensor"
     properties:
-      version: "1.0"
-      type: "docker"
-      image: "mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0"
-      createOptions: ""
-      restartPolicy: "always"
+      container.version: "1.0"
+      container.type: "docker"
+      container.image: "mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0"
+      container.createOptions: ""
+      container.restartPolicy: "always"
 ```
 
 ## 6. Create the Symphony Solution Instance
 
-A Symphony Solution Instance maps a Symphony Solution to one or multiple Targets. The following artifacts maps the ```simulated-temperature-sensor``` solUtion to the ```s8c-vm``` target above:
+A Symphony Solution Instance maps a Symphony Solution to one or multiple Targets. The following artifacts maps the ```simulated-temperature-sensor``` solution to the ```voe``` target above. Use the following to submit the file:
+
+  kubectl create -f <filename>
+
+Use the following to apply any changes:
+
+  kubectl apply -f <filename> 
 
 > [!NOTE]
 > You can get a sample of this file in the ```symphony-k8s/samples/simulated-temperature-sensor/instance.yaml``` folder.
@@ -165,9 +180,9 @@ On the IoT Hub page, verify all IoT Edge modules are up and running.
 To delete all Symphony objects:
 
 ```bash
-kubectl delete instance my-sensor
+kubectl delete instance my-instance-2
 kubectl delete solution simulated-temperature-sensor
-kubectl delete target s8c-vm
+kubectl delete target voe-target
 ```
 ## 9. Remove the Symphony control plane (optional)
 
@@ -177,21 +192,8 @@ To remove the Symphony control plane:
 helm delete symphony
 ```
 
-## Appendix
-
-If you need to install the Helm chart from a private ACR like ```symphonyk8s.azurecr.io```, you need to log in first:
-
-```bash
-# login as necessary. Note once the repo is turned public no authentication is needed
-export HELM_EXPERIMENTAL_OCI=1
-USER_NAME="00000000-0000-0000-0000-000000000000"
-PASSWORD=$(az acr login --name symphonyk8s --expose-token --output tsv --query accessToken)
-helm registry login symphonyk8s.azurecr.io   --username $USER_NAME --password $PASSWORD
-
-# install using Helm chart
-helm install symphony oci://symphonyk8s.azurecr.io/helm/symphony --version 0.1.22
-```
 
 # Next step
 
 * [Symphony Quickstart - Managing RTSP cameras connected to a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)
+* [Symphony Quick Start - Deploying a Redis server to a Kubernetes cluster](https://github.com/Azure/symphony-docs/blob/main/symphony-book/quick_start/deploy_redis_k8s.md)

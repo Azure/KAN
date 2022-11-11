@@ -11,7 +11,7 @@ help: ## show help message
 
 
 .PHONY: build
-build: check-env ## build webmodule image
+build: check-env ## build symphonyportal image
 	@DOCKER_BUILDKIT=1 docker build --rm -f "$(PWD)/modules/webmodule/dockerfiles/Dockerfile.amd64" \
 		--build-arg GIT_LOG=$(git rev-parse HEAD) \
 		--build-arg APPLICATIONINSIGHTS_INSTRUMENTATION_KEY=$(APPLICATIONINSIGHTS_INSTRUMENTATION_KEY) \
@@ -20,15 +20,15 @@ build: check-env ## build webmodule image
 		--build-arg APPLICATIONINSIGHTS_CLIENT_ID=$(APPLICATIONINSIGHTS_CLIENT_ID) \
 		--build-arg APPLICATIONINSIGHTS_CLIENT_SECRET=$(APPLICATIONINSIGHTS_CLIENT_SECRET) \
 		--build-arg SECRET_KEY=$(SECRET_KEY) \
-		-t $(CONTAINER_REGISTRY_NAME)/webmodule:$(MODULE_VERSION)-amd64 \
+		-t $(CONTAINER_REGISTRY_NAME)/symphonyportal:$(MODULE_VERSION)-amd64 \
 		"$(WEBMODULE_PATH)"
 
 .PHONY: push
-push: check-env ## push webmodule image
-	@docker push $(CONTAINER_REGISTRY_NAME)/webmodule:$(MODULE_VERSION)-amd64
+push: check-env ## push symphonyportal image
+	@docker push $(CONTAINER_REGISTRY_NAME)/symphonyportal:$(MODULE_VERSION)-amd64
 
 .PHONY: version
-version: ## check webmodule version
+version: ## check symphonyportal version
 	@echo $(MODULE_VERSION)
 
 check-env:

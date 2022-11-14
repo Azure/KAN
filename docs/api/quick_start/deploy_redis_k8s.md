@@ -9,7 +9,7 @@ Ready to jump into actions right away? This quick start walks you through the st
 
 ## 0. Prerequisites
 
-* [Helm 3](https://helm.sh/) - Required to deploy Symphony.
+* [Helm 3](https://helm.sh/): Required to deploy Symphony.
 * [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/): Configured with the Kubernetes cluster you want to use as the default context. Note that if you use cloud shell, kubectl is already configured.
 * [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/)
 
@@ -25,8 +25,8 @@ Or, if you already have the ```symphony-k8s``` repository cloned, use:
 
   ```bash
   cd symphony-k8s/helm
-    helm install symphony ./symphony
-```
+  helm install symphony ./symphony
+  ```
 
 ## 2. Register the current cluster as a Symphony Target
 
@@ -38,7 +38,6 @@ Use the following to apply any changes:
 
   ```kubectl apply -f <filename> ```
 
-> **NOTE**: You can get a sample of this file under ```symphony-docs/samples/k8s/hello-world/target.yaml```:
 
 ```yaml
 apiVersion: fabric.symphony/v1

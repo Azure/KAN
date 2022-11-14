@@ -4,7 +4,8 @@ Ready to jump into actions right away? This quick start walks you through the st
 
 > **NOTE**: The following steps are tested under a Ubuntu 20.04.4 TLS WSL system on Windows 11. However, they should work for Linux, Windows, and MacOS systems as well.
 
-![IoT Edge](../images/redis-k8s.png)
+![Deploying a Redis server to a Kubernetes cluster](/docs/api/quick_start/media/redis-k8s.png)
+
 
 ## 0. Prerequisites
 

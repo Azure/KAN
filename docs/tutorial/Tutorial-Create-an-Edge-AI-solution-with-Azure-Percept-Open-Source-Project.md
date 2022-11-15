@@ -141,7 +141,7 @@ The **Pedestrian and Vehicle Detection Attribute** box opens on the right side o
 
 Azure Percept Open-Source Project’s AI skill makes the inferences that power decision making and any follow-on actions. You can run them with a single model or multiple models and business logic. In this tutorial, we’ll be adding an AI skill based on the model we selected in the previous step and stream the inference results to IoT hub.
 
-1. From the left navigation, select **AI Skills**, and then select **Create AI Skill**.
+1. From the left navigation, select **AI Skills**, and then select **Next**.
 
     ![Screenshot of AI Skills page](media/149e4ce010a90895299c465f4fd6f51f.png)
 
@@ -202,13 +202,14 @@ Azure Percept Open-Source Project’s AI skill makes the inferences that power d
 
     ![Screenshot of Export tab displaying video snippet](media/1cadf6d7d61ab3f458f606232ebf0605-16.png)
 
-
-18. Connect the **Model** node to the **Export** node. A side panel opens to prompt you to select a **Filename Prefix, Snippet Duration,** and **Delay Buffer**.  
-    Select **Done**, and then select **Review and Create.**  
+17. Connect the **Model** node to the **Export** node. A side panel opens to prompt you to select a **Filename Prefix, Snippet Duration,** and **Delay Buffer**.  
+    
+18. Select **Done**, and then select **Review and Create.**  
     The review process validates your selections.
-18. To create the skill and add it to the AI Skills library, select **Create**.
 
-    ![[Screenshot of AI Skills page displaying AI Skill](media/828cc4d38b81b3649ab71ba9369856f7.png)
+19. To create the skill and add it to the AI Skills library, select **Create AI Skill**.
+
+    ![Screenshot of AI Skills page displaying AI Skill](media/828cc4d38b81b3649ab71ba9369856f7.png)
 
     **You have now completed adding an AI skill. This AI skill is now displayed on the AI Skills page. In the next step we’ll bring it all together and deploy your Edge AI solution.**
 
@@ -230,7 +231,7 @@ Creating a deployment is the last major step in this tutorial. The last blade on
 
     ![Screenshot of Configure AI Skills tab](media/ad73df5ca594a82ee40bbe0d0f087584.png)
 
-6.  To configure the AI Skill, select the camera, select **Add AI Skills"**, select the AI Skill you want, and then select **Add**.  
+6.  To configure the AI Skill, select the camera, select **Add AI Skills**, select the AI Skill you want, and then select **Add**.  
     The **Add AI Skills** box opens on the right, displaying the AI skill you created earlier in this tutorial.
     
     ![Screenshot of Add AI Skills box](media/ad73df5ca594a82ee40bbe0d0f087584-6.png)
@@ -255,7 +256,7 @@ Now that you’ve deployed your solution, you’ll see a digital representation 
 
 You can view the deployment you just created and a library of other deployments you’ve created on the **Deployments** page in Azure Percept for Open-Source Project.
 
-![Screenshot of Deployment page displaying completed deployments](media/c650927e36a9e06efb73519eb2b1fc0d.png)
+![Screenshot of Deployment page displaying completed deployments](media/c650927e36a9e06efb73519eb2b1fc0d-2.png)
 
 1. To view a list of your AI skills, the cameras associated with them, and their locations, select a deployment.
 

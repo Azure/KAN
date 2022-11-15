@@ -281,3 +281,5 @@ Now that you have successfully created an Edge AI solution with Azure Percept Op
 - [Tutorial: Create a complex AI skill with Azure Percept Open-Source Project](/docs/tutorial/Create-a-complex-AI-skill.md)
 
 - [Tutorial: Create a custom model with Azure Percept Open-Source Project](/docs/tutorial/Create-a-custom-model.md)
+
+<!-- Update images. -->

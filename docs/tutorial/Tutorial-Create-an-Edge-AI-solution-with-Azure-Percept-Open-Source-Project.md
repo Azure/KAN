@@ -37,7 +37,8 @@ The five major steps we will cover in this tutorial are:
 Azure Percept Open-Source Project is supported on many different devices and accelerators, such as NVIDIA Orin AGX/NX, Xavier AGX/NX, Azure Stack HCI, and Azure stack edge. In this tutorial we’ll be using an Azure VM with a CPU.
 
 1.  To create your first project, on the left navigation, select **Compute Devices**.
-2.  On the **Compute Devices** tab, select **Add Device** on the top menu.  
+2.  On the **Compute Devices** tab, select **Add Device** on the top menu, and then select **Add an IoT Edge Device**.  
+
     The **Basics** tab appears.
 
     ![Screenshot of Compute Devices - Basics tab](media/e12da9687c89bc4173684c713d662112.png)
@@ -60,7 +61,7 @@ Azure Percept Open-Source Project is supported on many different devices and acc
     The portal validates your entries.
 
     -   If there are no errors, skip forward to the next section, **Add a camera**.
-    -   If there are errors, you can fix them by selecting the **Edit Compute Device** link.
+    -   If there are errors, you can fix them by selecting your device in the **Compute Devices** page, and then selecting  **Edit** on the right pane.
 
     Once each entry passes the review, the following page appears:
 
@@ -84,7 +85,7 @@ Azure Percept Open-Source Project supports internet protocol (IP) cameras that u
 
     -   The **Compute Device** field associates a camera feed with devices will have access to that feed. Since this is a “many-to-many” relationship, one camera feed may be processed by several compute devices and one compute device may process several camera feeds.
 
-3. To create a **Location** for the compute device, select **Create one** (below the **Location** box), and enter **parking_lot_85thStreet**, since we are monitoring pedestrian and vehicle traffic in the 85th Street parking lot.
+3. To create a **Location** for the compute device, select **Create one** (below the **Location** box), and then enter **Zone1**.
 
     ![Screenshot of Basics tab displaying available locations](media/a8d4338a8c637ca1021609d2f41e60a8.png)
 
@@ -113,25 +114,18 @@ A model is a machine learning (ML) algorithm for object detection or classificat
     - **Create custom model**, where you can create a custom model that allows you to bring 10-15 images and train the model yourself.
     - **Browse Model Zoo**, where you can select a pre-built model that works out of the box.
 
-    ![Screenshot of Models page](media/56b4d1c08a8559e9b61481390713c98c.png)
-
 2. Select **Browse Model Zoo** to choose a pre-built model from the Model Zoo.
-3. The Model Zoo page appears, displaying information about each available model.  
+
+    ![Screenshot of Model Zoo page](media/56b4d1c08a8559e9b61481390713c98c.png)
+
+4. The Model Zoo page appears, displaying information about each available model.  
     For more information about a model, select the tile.
 
     ![Screenshot of Model Zoo page](media/f5528f24b494e8787aa9de15467bd163.png)
 
 4. In this tutorial, since we’re learning how to leverage pedestrian and vehicle detection to understand occupancy in a parking lot or on a street, select **Pedestrian and Vehicle Detection.**
 
-    ![Screenshot of Model Zoo page displaying available models](media/c5533072ad941bf1e6cda51952ae9750.png)
-
-The **Pedestrian and Vehicle Detection Attribute** box opens on the right side of the **Model Zoo** page. It displays the following:
-
-- A **Use Case Description** section for the model, including the neural network model upon which it is based. This is important because those neural networks may have significant differences that affect the performance for your Edge device.
-- A **Metric** section that reflects the accuracy, compute requirements, parameters, and the source framework.
-- An **Input** section that describes the attributes of the video input. You can sort the model and camera input by their associated metadata.
-
-5. To close the **Attribute** box, select **Exit**.
+5. To close the **Attribute** box, select **Exit** (the **X** in the top right corner).
 
     To reopen the **Attributes** box later, select the ellipsis **(…)** in the corner of the tile.
 
@@ -191,7 +185,9 @@ Azure Percept Open-Source Project’s AI skill makes the inferences that power d
     Next, we’ll analyze insights from the model by streaming the inference data back to the IoT Hub.
 
 13. Select **Export**, drag **Send Insights to IoT Hub** onto the canvas, and then connect it to the model node.
-14. To limit the number of messages sent to IoT Hub at the specified frequency, connect the **Model** node to the **Export** node.
+
+    To limit the number of messages sent to IoT Hub at the specified frequency, connect the **Model** node to the **Export** node.
+
 15. When the side panel opens, select a **Delay Buffer**, and then select **Done**.
 
     The **Delay Buffer** prevents too many video snippets from uploading at the same time. It sets the minimum delay time to wait before uploading the next video.
@@ -200,14 +196,14 @@ Azure Percept Open-Source Project’s AI skill makes the inferences that power d
 
 16. Select **Export**, drag the **Export Video Snippet** onto the canvas and connect it to the model node.
 
+17. Connect the **Model** node to the **Export** node. A side panel opens to prompt you to select a **Filename Prefix, Snippet Duration,** and **Delay Buffer**.  
+
     ![Screenshot of Export tab displaying video snippet](media/1cadf6d7d61ab3f458f606232ebf0605-16.png)
 
-17. Connect the **Model** node to the **Export** node. A side panel opens to prompt you to select a **Filename Prefix, Snippet Duration,** and **Delay Buffer**.  
-    
 18. Select **Done**, and then select **Review and Create.**  
     The review process validates your selections.
 
-19. To create the skill and add it to the AI Skills library, select **Create AI Skill**.
+19. To create the skill and add it to the AI Skills library, select **Create**.
 
     ![Screenshot of AI Skills page displaying AI Skill](media/828cc4d38b81b3649ab71ba9369856f7.png)
 
@@ -231,7 +227,7 @@ Creating a deployment is the last major step in this tutorial. The last blade on
 
     ![Screenshot of Configure AI Skills tab](media/ad73df5ca594a82ee40bbe0d0f087584.png)
 
-6.  To configure the AI Skill, select the camera, select **Add AI Skills**, select the AI Skill you want, and then select **Add**.  
+6.  To configure the AI Skill, select the camera, and then select **Add AI Skills**.  
     The **Add AI Skills** box opens on the right, displaying the AI skill you created earlier in this tutorial.
     
     ![Screenshot of Add AI Skills box](media/ad73df5ca594a82ee40bbe0d0f087584-6.png)
@@ -259,6 +255,8 @@ You can view the deployment you just created and a library of other deployments 
 ![Screenshot of Deployment page displaying completed deployments](media/c650927e36a9e06efb73519eb2b1fc0d-2.png)
 
 1. To view a list of your AI skills, the cameras associated with them, and their locations, select a deployment.
+
+    Once your deployment is configured, the status changes to **Configured**.
 
     ![Screenshot of Deployment page displaying AI Skills](media/77e6e097f90bd55096a30205bbda2e3c.png)
 

@@ -180,7 +180,7 @@ Azure Percept Open-Source Project’s AI skill makes the inferences that power d
 
     ![Screenshot of Drag-and-Drop Nodes tab displaying model properties box](media/050c9716807eccbfa175089c5f608f6c.png)
 
-12. Select **Vehicle** as the object for the filter and the confidence threshold. Depending on the use case, the confidence threshold may vary.
+12. Enter **Vehicle** as the object for the filter and the confidence threshold. Depending on the use case, the confidence threshold may vary.
 
     Next, we’ll analyze insights from the model by streaming the inference data back to the IoT Hub.
 
@@ -244,6 +244,9 @@ Creating a deployment is the last major step in this tutorial. The last blade on
 
     ![Screenshot of Deployment page displaying deployment](media/ff8ab22c49ba2d28ac6a3d1ac8ec6792.png)
 
+    Once your deployment is configured, the status changes to **Configured**.
+    
+
     **You have now successfully created an Edge AI solution with Azure Percept Open-Source Project.** The AI skill you selected on your compute device is now processing your video feeds and generating insights.
 
 ### View the deployment library
@@ -256,7 +259,6 @@ You can view the deployment you just created and a library of other deployments 
 
 1. To view a list of your AI skills, the cameras associated with them, and their locations, select a deployment.
 
-    Once your deployment is configured, the status changes to **Configured**.
 
     ![Screenshot of Deployment page displaying AI Skills](media/77e6e097f90bd55096a30205bbda2e3c.png)
 

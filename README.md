@@ -43,7 +43,7 @@ POSS has three high-level components: portal, controller-API and agent. You can 
 
 ![Diagram of POSS architecture](./docs/images/poss-architecture.png)
 
-* **Portal** provides an intuitive graphic interface for users to create, edit and manage their intelligent edge payloads. It offers an AI model zoo, a drag-n-drop AI skill editor, live camera previews and many other features. Read more about our project [here] (./docs/POSS-TOC.md).
+* **Portal** provides an intuitive graphic interface for users to create, edit and manage their intelligent edge payloads. It offers an AI model zoo, a drag-n-drop AI skill editor, live camera previews and many other features. Read more about our project [here](./docs/POSS-TOC.md).
 * **Controller-API** is a Kubernetes operator that manages states of objects of a POSS object model (code named Symphony). Read more about POSS API [here](./docs/api/README.md).
 * **Agent** offers a number of services to edge payloads, such as retrieving new AI skill definitions and reporting object states.
 

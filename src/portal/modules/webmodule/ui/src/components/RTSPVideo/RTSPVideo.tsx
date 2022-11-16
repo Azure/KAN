@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { State as RootState } from 'RootStateType';
 import rootRquest from '../../store/rootRquest';
 import { useInterval } from '../../hooks/useInterval';
 import { handleAxiosError } from '../../utils/handleAxiosError';
@@ -15,12 +14,14 @@ type RTSPVideoProps = {
   cameraId: string;
   onStreamCreated?: (streamId: string) => void;
   partId?: number;
+  onStreamConnected?: () => void;
 };
 
 export const RTSPVideoComponent: React.FC<RTSPVideoProps> = ({
   cameraId,
   onStreamCreated,
   partId = null,
+  onStreamConnected,
 }) => {
   const camera = useSelector(selectCameraBySymphonyId(cameraId));
 
@@ -57,6 +58,11 @@ export const RTSPVideoComponent: React.FC<RTSPVideoProps> = ({
       .then(({ data }) => {
         setStreamId(data.stream_id);
         onStreamCreated(data.stream_id);
+
+        if (onStreamConnected) {
+          onStreamConnected();
+        }
+
         return void 0;
       })
       .catch(handleAxiosError)
@@ -64,7 +70,7 @@ export const RTSPVideoComponent: React.FC<RTSPVideoProps> = ({
         console.error(err);
       });
     // Ignore the dependency `onStreamCreated` because it may cause unecessary triggered in the useEffect
-  }, [partId, cameraId]);
+  }, [partId, cameraId, onStreamConnected]);
 
   const src = streamId ? `/api/streams/${streamId}/video_feed` : '';
 

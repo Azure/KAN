@@ -62,6 +62,7 @@ export const Component = (props: Props) => {
     cameraOptions.length === 1 ? cameraOptions[0].key : null,
   );
   const [status, setStatus] = useState<Status>(Status.Waiting);
+  const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const streamIdRef = useRef('');
   const capturedImgs = useRef<number[]>([]);
 
@@ -81,7 +82,9 @@ export const Component = (props: Props) => {
       shouldOpenLabelingPage: false,
       projectId,
     });
+
     const { payload } = action as any;
+
     if (payload) capturedImgs.current.push(parseInt(Object.keys(payload.images)[0], 10));
     setStatus(Status.Success);
   };
@@ -141,6 +144,7 @@ export const Component = (props: Props) => {
                   streamIdRef.current = streamId;
                 }}
                 partId={partId}
+                onStreamConnected={() => setIsConnecting(true)}
               />
               <CaptureBanner top="80%" left="50%" status={status} />
             </Stack>
@@ -150,6 +154,7 @@ export const Component = (props: Props) => {
                 iconProps={{ iconName: 'Camera', className: functionBtnStyleSets.icon }}
                 className={functionBtnStyleSets.button}
                 onClick={onCaptureClick}
+                disabled={!isConnecting}
               />
               {capturedImgs.current.length > 0 && (
                 <DefaultButton

@@ -18,7 +18,7 @@ import { getCascadeFlowClasses } from './styles';
 import { SkillSideNode } from '../types';
 import './dnd.css';
 
-import SideNavList from './LeftNav/SideNavList';
+import LeftNavigationList from './LeftNavigation/NavList';
 import ModelNode from './Node/ModelNode';
 import TransformNode from './Node/TransformNode';
 import ExportNode from './Node/ExportNode';
@@ -169,7 +169,7 @@ const CascadeFlow = (props: Props) => {
         </div>
       )}
       <ReactFlowProvider>
-        <SideNavList connectMap={elements.length > 0 ? elements[0].data?.connectMap : []} />
+        <LeftNavigationList connectMap={elements.length > 0 ? elements[0].data?.connectMap : []} />
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
           {!!selectedNode && (
             <PanelContainer

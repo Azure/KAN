@@ -48,9 +48,20 @@ const KeuernetesInfo = (props: Props) => {
     async (e) => {
       e.preventDefault();
       e.stopPropagation();
+
       setDragActive(false);
-      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+
+      const transfer = e.dataTransfer as DataTransfer;
+      const regex = new RegExp('(.yml|.yaml)$');
+
+      if (
+        transfer &&
+        transfer.files[0] &&
+        regex.test(transfer.files[0].name) &&
+        transfer.files[0].type === ''
+      ) {
         const file = (await toBase64(e.dataTransfer.files[0])) as string;
+
         onFormDataChange({
           ...localFormData,
           config_data: toImageContent(file),

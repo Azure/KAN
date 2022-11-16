@@ -15,7 +15,7 @@ interface Props {
 }
 
 const getParseLables = (labels: string): string[] => {
-  return labels.match(/(\S+?)(?:,|$)/g);
+  return labels.match(/(\S+?)(?:,|$)/g) ?? [];
 };
 
 const getPanelTitle = (type: TransformType) => {
@@ -57,10 +57,6 @@ const TransformPanel = (props: Props) => {
     error: {
       labels: '',
       confidence_threshold: '',
-      communication_type: '',
-      enpointUrl: '',
-      imageUrl: '',
-      credentials: '',
     },
   });
 

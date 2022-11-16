@@ -9,6 +9,7 @@ import { isEmpty, pick } from 'ramda';
 
 import { nodeTypeModelFactory } from '../../../../store/trainingProjectSlice';
 import { ModelNodeType, TrainingProject } from '../../../../store/types';
+import { MODOEL_NODE_LIST } from '../../constant';
 
 import SideNavCard from './NavCard';
 
@@ -20,36 +21,6 @@ const getClasses = () =>
     searchBoxTip: { width: '245px', margin: '10px 0' },
     manageModels: { marginTop: '25px' },
   });
-
-const MODOEL_NODE_LIST = [
-  {
-    id: 9999,
-    name: 'Run ML model',
-    customVisionId: '',
-    isDemo: false,
-    isPredicationModel: false,
-    predictionUri: '',
-    predictionHeader: '',
-    category: 'customvision',
-    projectType: 'ObjectDetection',
-    isCascade: false,
-    inputs: [],
-    outputs: [],
-    nodeType: 'model',
-    combined: '',
-    openvino_library_name: '',
-    openvino_model_name: '',
-    download_uri_openvino: '',
-    classification_type: '',
-    is_trained: false,
-    symphony_id: '',
-    tag_list: [],
-    accelerationList: [],
-    displayName: 'Run ML model',
-    displayType: '',
-    trainStatus: '',
-  },
-] as TrainingProject[];
 
 interface Props {
   connectMap: Connection[];

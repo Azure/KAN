@@ -62,21 +62,23 @@ export type ModlePanelFormData = {
   }>;
 };
 
-export type TransformPanelFormData = {
+export type FilterTransformPanelForm = {
   labels: string[];
   confidence_threshold: number;
-  communication_type: string;
-  enpointUrl: string;
-  imageUrl: string;
-  credentials: string;
   error: Partial<{
-    confidence_threshold: string;
     labels: string;
-    communication_type: string;
-    enpointUrl: string;
-    imageUrl: string;
-    credentials: string;
+    confidence_threshold: string;
   }>;
+};
+
+export type GrpcTransformPanelForm = {
+  type: 'container' | 'endpoint' | '';
+  // Enpoint Url
+  enpointUrl: string;
+  // error: Partial<{
+  //   type: string;
+  //   enpointUrl: string;
+  // }>;
 };
 
 export type InsightsOverLayType = 'true' | 'false' | '';
@@ -117,7 +119,7 @@ export type SkillSideNode = {
 export type SkillNodeData = SkillSideNode & {
   configurations?: Partial<
     ModlePanelFormData &
-      TransformPanelFormData &
+      FilterTransformPanelForm &
       ExportPanelFromData & { ip: string; fps: string; device_name: string }
   >;
 };

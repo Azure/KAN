@@ -6,7 +6,8 @@ import { Panel, Stack, PrimaryButton, DefaultButton, Text, TextField } from '@fl
 import { Node, Edge } from 'react-flow-renderer';
 import { clone } from 'ramda';
 
-import { TransformPanelFormData, SkillNodeData, TransformType } from '../../types';
+import { FilterTransformPanelForm, SkillNodeData } from '../../types';
+import { ERROR_BLANK_VALUE } from '../../../../constant';
 
 interface Props {
   node: Node<SkillNodeData>;
@@ -15,56 +16,27 @@ interface Props {
 }
 
 const getParseLables = (labels: string): string[] => {
-  return labels.match(/(\S+?)(?:,|$)/g) ?? [];
+  return labels.match(/(\S+?)(?:,|$)/g);
 };
-
-const getPanelTitle = (type: TransformType) => {
-  switch (type) {
-    case 'filter':
-      return 'Filter Transform';
-    case 'grpc':
-      return 'External Processing';
-    default:
-      return '';
-  }
-};
-
-const getPanelDescirbtion = (type: TransformType) => {
-  switch (type) {
-    case 'filter':
-      return 'Use this node to tag objects detected by your skill and output the data subset.';
-    case 'grpc':
-      return 'Use this node to process frames using your own container. You can use your own model and runtime to analyze the frames according to your requirements without any limitations.';
-    default:
-      return '';
-  }
-};
-
-const ERROR_BLANK_VALUE = 'Value cannot be blank.';
 
 const TransformPanel = (props: Props) => {
   const { node, onDismiss, setElements } = props;
   const { data } = node;
 
   const [localLabels, setLocalLabels] = useState('');
-  const [localForm, setLocalForm] = useState<TransformPanelFormData>({
+  const [localForm, setLocalForm] = useState<FilterTransformPanelForm>({
     labels: [],
     confidence_threshold: 0,
-    communication_type: '',
-    enpointUrl: '',
-    imageUrl: '',
-    credentials: '',
     error: {
       labels: '',
       confidence_threshold: '',
     },
   });
 
-
   useEffect(() => {
     if (data.configurations) {
       setLocalForm({
-        ...(data.configurations as TransformPanelFormData),
+        ...(data.configurations as FilterTransformPanelForm),
         error: {
           labels: '',
           confidence_threshold: '',

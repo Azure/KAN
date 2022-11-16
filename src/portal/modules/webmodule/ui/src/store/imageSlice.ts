@@ -5,7 +5,6 @@ import {
   ThunkAction,
   Action,
   PayloadAction,
-  // current,
 } from '@reduxjs/toolkit';
 import * as R from 'ramda';
 

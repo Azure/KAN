@@ -20,6 +20,32 @@ type ConfigurationsPayload = Partial<{
   module_input: string;
 }>;
 
+export const getTransformType = (name: string): TransformType => {
+  switch (name) {
+    case 'filter_transform':
+      return 'filter';
+    case 'grpc_transform':
+      return 'grpc';
+    default:
+      return null;
+  }
+};
+
+export const getExportType = (name: string): ExportType => {
+  switch (name) {
+    case 'video_snippet_export':
+      return 'snippet';
+    case 'iothub_export':
+      return 'iotHub';
+    case 'iotedge_export':
+      return 'iotEdge';
+    case 'http_export':
+      return 'http';
+    default:
+      return null;
+  }
+};
+
 const isNotExportNode = (elements: Node[]) => {
   const exportNode = elements.find((element) => element.type === 'export') as Node | undefined;
 
@@ -287,32 +313,6 @@ export const convertElementsPayload = (elements: (Edge<any> | Node<any>)[]) => {
       device_id: 'invalid',
     },
   };
-};
-
-export const getTransformType = (name: string): TransformType => {
-  switch (name) {
-    case 'filter_transform':
-      return 'filter';
-    case 'grpc_transform':
-      return 'grpc';
-    default:
-      return null;
-  }
-};
-
-export const getExportType = (name: string): ExportType => {
-  switch (name) {
-    case 'video_snippet_export':
-      return 'snippet';
-    case 'iothub_export':
-      return 'iotHub';
-    case 'iotedge_export':
-      return 'iotEdge';
-    case 'http_export':
-      return 'http';
-    default:
-      return null;
-  }
 };
 
 const POSITION = { x: 350, y: 50 };

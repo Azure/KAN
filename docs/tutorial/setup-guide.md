@@ -8,7 +8,7 @@ You need the following items before you start working with the self-hosting setu
 - A **resource group** created in a geographical location where [Azure Custom Vision](https://azure.microsoft.com/en-us/global-infrastructure/services/?products=cognitive-services&regions=all) is available.
 - A **Kubernetes cluster** accessible using [Azure CLI](https://github.com/Azure/cli). 
 
-  If you don't have an existing Kubernetes cluster, you can easily create one using the Azure Kubernetes Service (AKS). For more information, visit [Quickstart: Deploy an Azure Kubernetes Service (AKS) cluster using the Azure portal](https://docs.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli).
+  If you don't have an existing Kubernetes cluster, you can easily create one using the Azure Kubernetes Service (AKS). For more information, visit [Quickstart: Deploy an Azure Kubernetes Service (AKS) cluster using the Azure portal](https://docs.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli). Make sure to choose Standard DS3 v2 for the node size.
     
 - If you plan to use an **IoT Edge device**, you need an **IoT Hub account**. 
 

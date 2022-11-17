@@ -224,7 +224,7 @@ const CamerasDetailWrapper = (props: Props) => {
             />
             <Stack tokens={{ childrenGap: 5 }}>
               <Label styles={{ root: { fontSize: '16px', lineHeight: '22px', textAlign: 'center' } }}>
-                No Camera
+                No Cameras
               </Label>
               <Text styles={{ root: { fontSize: '13px', lineHeight: '18px' } }}>
                 Would you like to add one?

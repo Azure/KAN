@@ -60,6 +60,10 @@ const KeuernetesInfo = (props: Props) => {
       const transfer = e.dataTransfer as DataTransfer;
       const regex = new RegExp('(.yml|.yaml)$');
 
+      console.log(transfer);
+      console.log(transfer.files[0]);
+      console.log(transfer.items[0]);
+
       if (
         transfer &&
         transfer.files[0] &&

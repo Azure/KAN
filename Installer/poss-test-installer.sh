@@ -451,7 +451,7 @@ while [ $current_step -lt 6 ]; do
                     echo -e "\e[31mWe faced some issues while pull symphony from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
                 echo -e "\e[32mInstalling Portal\e[0m"
-                helm upgrade --install Symphonyportal oci://p4etest.azurecr.io/helm/voe --version 0.39.0-main-2ced531-amd64 \
+                helm upgrade --install symphonyportal oci://p4etest.azurecr.io/helm/voe --version 0.39.0-main-2ced531-amd64 \
                     --set "storage.storageResourceGroup=$selected_storage_account_rg" \
                     --set "storage.storageAccount=$selected_storage_account_name" \
                     --set "storage.storageContainer=$selected_blob_container_name" \

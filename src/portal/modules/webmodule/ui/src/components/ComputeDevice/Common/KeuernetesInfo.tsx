@@ -4,12 +4,17 @@
 import React, { useRef, useCallback, useState } from 'react';
 import { Stack, Text, Label, Icon, Link } from '@fluentui/react';
 import { isEmpty } from 'ramda';
+import { useDispatch } from 'react-redux';
 
 import { CreateComputeDeviceFormData, clusterOptions } from '../types';
 import { ClusterType } from '../../../store/types';
+import { validateComputeDeviceConfig } from '../../../store/computeDeviceSlice';
 import { getKeuernetesInfoClasses } from '../styles';
 
 import HorizonChoiceGroup from '../../Common/HorizonChoiceGroup';
+
+const INCORRECT_FILE_FORMATE = 'The format of config file is incorrect.';
+const INCORRECT_FILE_EXTENSION = 'Incorrect filename extension.';
 
 interface Props {
   localFormData: CreateComputeDeviceFormData;
@@ -33,6 +38,7 @@ const KeuernetesInfo = (props: Props) => {
   const fileInputRef = useRef(null);
 
   const classes = getKeuernetesInfoClasses();
+  const dispatch = useDispatch();
 
   const handleDrag = useCallback((e) => {
     e.preventDefault();
@@ -62,19 +68,38 @@ const KeuernetesInfo = (props: Props) => {
       ) {
         const file = (await toBase64(e.dataTransfer.files[0])) as string;
 
+        const response = (await dispatch(
+          validateComputeDeviceConfig({ config_data: toImageContent(file) }),
+        )) as any;
+
+        if (response.payload === 200) {
+          onFormDataChange({
+            ...localFormData,
+            config_data: toImageContent(file),
+            error: { ...localFormData.error, config_data: '' },
+          });
+        } else {
+          onFormDataChange({
+            ...localFormData,
+            config_data: '',
+            error: { ...localFormData.error, config_data: INCORRECT_FILE_FORMATE },
+          });
+        }
+      } else {
         onFormDataChange({
           ...localFormData,
-          config_data: toImageContent(file),
-          error: { ...localFormData.error, config_data: '' },
+          config_data: '',
+          error: { ...localFormData.error, config_data: INCORRECT_FILE_EXTENSION },
         });
       }
     },
-    [localFormData, onFormDataChange],
+    [localFormData, onFormDataChange, dispatch],
   );
 
   const handleChange = useCallback(
     async (e) => {
       e.preventDefault();
+
       if (e.target.files && e.target.files[0]) {
         const file = (await toBase64(e.target.files[0])) as string;
         onFormDataChange({

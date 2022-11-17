@@ -42,10 +42,10 @@ class Attribute(BaseModel):
 
 
 class ObjectMeta(BaseModel):
-    #timestamp: float
+    timestamp: float
     label: str
     confidence: float
-    #inference_id: str
+    inference_id: str
     attributes: List[Attribute] #FIXME
     bbox: Bbox
 

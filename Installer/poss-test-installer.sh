@@ -420,7 +420,7 @@ while [ $current_step -lt 6 ]; do
                 fi                
 
                 sleep 5
-                echo "Symphonyportal contributor role to subscription"
+                echo "assigning Symphonyportal contributor role to subscription"
                 az role assignment create --role "voe contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv) 
 
                 echo "assigning reader role to subscription"

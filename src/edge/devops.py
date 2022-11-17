@@ -113,7 +113,7 @@ def build_module(module_name):
         platforms.append('gpuamd64')
         platforms.append('openvinoamd64')
         pass
-    if module_name == 'SymphonyAI' and PLATFORM == 'amd64':
+    if module_name == 'symphonyai' and PLATFORM == 'amd64':
         platforms.append('gpuamd64')
         platforms.append('openvinoamd64')
     for platform in platforms:
@@ -146,7 +146,7 @@ def push_module(module_name):
         platforms.append('gpuamd64')
         platforms.append('openvinoamd64')
         pass
-    if module_name == 'SymphonyAI' and PLATFORM == 'amd64':
+    if module_name == 'symphonyai' and PLATFORM == 'amd64':
         platforms.append('gpuamd64')
         platforms.append('openvinoamd64')
     for platform in platforms:

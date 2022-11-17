@@ -101,7 +101,7 @@ const Tags = (props: Props) => {
               <DefaultButton
                 className={classes.button}
                 text="Add"
-                onClick={() => setIsAdd(isAdd ? false : true)}
+                onClick={() => setIsAdd(!isAdd)}
                 disabled={isLoading}
               />
             )}

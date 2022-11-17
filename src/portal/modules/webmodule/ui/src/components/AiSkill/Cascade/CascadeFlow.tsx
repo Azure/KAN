@@ -49,8 +49,6 @@ const CascadeFlow = (props: Props) => {
     hasUseAiSkill,
   } = props;
 
-  console.log('CascadeFlow', props);
-
   const classes = getCascadeFlowClasses();
 
   const reactFlowWrapper = useRef(null);

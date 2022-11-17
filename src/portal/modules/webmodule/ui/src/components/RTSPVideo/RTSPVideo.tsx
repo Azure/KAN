@@ -76,7 +76,7 @@ export const RTSPVideoComponent: React.FC<RTSPVideoProps> = ({
     // Ignore the dependency `onStreamCreated` because it may cause unecessary triggered in the useEffect
   }, [partId, cameraId, onStreamConnected]);
 
-  const src = streamId ? `http://20.89.186.195/api/streams/${streamId}/video_feed` : '';
+  const src = streamId ? `/api/streams/${streamId}/video_feed` : '';
 
   return (
     <div style={{ width: '100%', height: '100%', backgroundColor: '#F3F2F1', position: 'relative' }}>

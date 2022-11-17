@@ -31,17 +31,6 @@ export type UpdateComputeDeviceFromData = Pick<
   tag_list: Tag[];
 };
 
-export const cpuArchitectureOptions: IChoiceGroupOption[] = [
-  {
-    key: 'X64',
-    text: 'X64',
-  },
-  {
-    key: 'ARM64',
-    text: 'ARM64',
-  },
-];
-
 export const k8sCpuArchitectureOptions: IChoiceGroupOption[] = [
   {
     key: 'X64',
@@ -60,14 +49,6 @@ export const clusterOptions: IChoiceGroupOption[] = [
   },
 ];
 
-export const x64AccelerationOptions = accelerationOptions.filter((option) =>
-  ['-', 'Nvidia dGPU', 'CPU', 'Intel iGPU'].includes(option.key as string),
-);
-
 export const k8sAccelerationOptions = accelerationOptions.filter((option) =>
   ['-', 'Nvidia dGPU', 'CPU'].includes(option.key as string),
-);
-
-export const arm64AccelerationOptions = accelerationOptions.filter((option) =>
-  ['-', 'Nvidia Jetson (Jetpack 5)'].includes(option.key as string),
 );

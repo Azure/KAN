@@ -205,15 +205,30 @@ const parseNodePayload = (node: Node<SkillNodeData>) => {
       model,
     };
 
-  if (node.type === 'transform')
+  if (node.type === 'transform' && node.data.transformType === 'filter')
     return {
       id: node.id,
       type: node.type,
       name: model.name,
-      configurations: {
-        confidence_threshold: configurations.confidence_threshold.toString(),
-        labels: JSON.stringify(configurations.labels),
-      },
+      configurations,
+      model,
+    };
+
+  if (node.type === 'transform' && node.data.configurations.type === 'endpoint')
+    return {
+      id: node.id,
+      type: node.type,
+      name: model.name,
+      configurations,
+      model,
+    };
+
+  if (node.type === 'transform' && node.data.configurations.type === 'container')
+    return {
+      id: node.id,
+      type: node.type,
+      name: model.name,
+      configurations,
       model,
     };
 
@@ -317,7 +332,7 @@ export const convertElementsPayload = (elements: (Edge<any> | Node<any>)[]) => {
 
 const POSITION = { x: 350, y: 50 };
 
-export const backToSkillRawElements = (
+export const recoverRawElements = (
   flowData: {
     edges: { source: { node: string; route: string }; target: { node: string; route: string } }[];
     nodes: { id: string; type: ModelNodeType; name: string; configurations: any }[];
@@ -384,14 +399,7 @@ export const backToSkillRawElements = (
     }
 
     if (node.type === 'transform') {
-      data.configurations = {
-        ...node.configurations,
-        labels: JSON.parse((node.configurations as any).labels) ?? [],
-        error: {
-          labels: '',
-          confidence_threshold: '',
-        },
-      };
+      data.configurations = node.configurations;
     }
 
     if (node.type === 'export') {
@@ -416,6 +424,7 @@ export const backToSkillRawElements = (
       data.name = node.type === 'model' ? 'Run ML Model' : matchedModel.name;
       data.displayName = node.type === 'model' ? 'Run ML Model' : matchedModel.displayName;
       data.exportType = getExportType(matchedModel.name);
+      data.transformType = getTransformType(matchedModel.name);
     }
 
     const newNode = {

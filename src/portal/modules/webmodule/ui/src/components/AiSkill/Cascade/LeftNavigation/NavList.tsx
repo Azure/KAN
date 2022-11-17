@@ -125,7 +125,6 @@ const SideNavList = (props: Props) => {
                     key={id}
                     displayName={importNode.displayName}
                     name={importNode.name}
-                    describe=""
                     nodeType={importNode.nodeType}
                     isDraggable={false}
                     connectMap={connectMap}
@@ -163,7 +162,6 @@ const SideNavList = (props: Props) => {
                     key={id}
                     displayName={processNode.displayName}
                     name={processNode.name}
-                    describe=""
                     nodeType={processNode.nodeType as ModelNodeType}
                     isDraggable={true}
                     connectMap={connectMap}
@@ -205,7 +203,6 @@ const SideNavList = (props: Props) => {
                     key={id}
                     name={ex.name}
                     displayName={ex.displayName}
-                    describe=""
                     nodeType={ex.nodeType}
                     isDraggable={true}
                     connectMap={connectMap}

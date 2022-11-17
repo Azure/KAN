@@ -102,14 +102,27 @@ const KeuernetesInfo = (props: Props) => {
 
       if (e.target.files && e.target.files[0]) {
         const file = (await toBase64(e.target.files[0])) as string;
-        onFormDataChange({
-          ...localFormData,
-          config_data: toImageContent(file),
-          error: { ...localFormData.error, config_data: '' },
-        });
+
+        const response = (await dispatch(
+          validateComputeDeviceConfig({ config_data: toImageContent(file) }),
+        )) as any;
+
+        if (response.payload === 200) {
+          onFormDataChange({
+            ...localFormData,
+            config_data: toImageContent(file),
+            error: { ...localFormData.error, config_data: '' },
+          });
+        } else {
+          onFormDataChange({
+            ...localFormData,
+            config_data: '',
+            error: { ...localFormData.error, config_data: INCORRECT_FILE_FORMATE },
+          });
+        }
       }
     },
-    [localFormData, onFormDataChange],
+    [localFormData, onFormDataChange, dispatch],
   );
 
   const onButtonClick = useCallback(() => {

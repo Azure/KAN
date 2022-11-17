@@ -58,18 +58,8 @@ const KeuernetesInfo = (props: Props) => {
       setDragActive(false);
 
       const transfer = e.dataTransfer as DataTransfer;
-      const regex = new RegExp('(.yml|.yaml)$');
 
-      console.log(transfer);
-      console.log(transfer.files[0]);
-      console.log(transfer.items[0]);
-
-      if (
-        transfer &&
-        transfer.files[0] &&
-        regex.test(transfer.files[0].name) &&
-        transfer.files[0].type === ''
-      ) {
+      if (transfer && transfer.files[0] && transfer.files[0].type === 'application/x-yaml') {
         const file = (await toBase64(e.dataTransfer.files[0])) as string;
 
         const response = (await dispatch(

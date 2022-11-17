@@ -450,7 +450,7 @@ while [ $current_step -lt 6 ]; do
                 if [ $? != "0" ];  then
                     echo -e "\e[31mWe faced some issues while pull symphony from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
-                echo -e "\e[32mInstalling webmodule\e[0m"
+                echo -e "\e[32mInstalling Portal\e[0m"
                 helm upgrade Symphonyportal oci://possprod.azurecr.io/helm/voe --version 0.38.2-amd64 \
                     --set "storage.storageResourceGroup=$selected_storage_account_rg" \
                     --set "storage.storageAccount=$selected_storage_account_name" \

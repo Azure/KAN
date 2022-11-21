@@ -30,7 +30,7 @@ export const RTSPVideoComponent: React.FC<RTSPVideoProps> = ({
     fetch(`/api/streams/${streamId}/disconnect`).catch(console.error);
   };
 
-  const onUnmountComponent = useRef();
+  const onUnmountComponent = useRef<any>(null);
   onUnmountComponent.current = () => {
     if (streamId !== '') {
       onDisconnect();

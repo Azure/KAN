@@ -264,12 +264,6 @@ You can view the deployment you just created and a library of other deployments 
 
 2. To view the details of a skill, select the skill.  
    A page displaying details about the skill opens.
-   
-   View before tweaking
-   
-    ![Screenshot of Deployment page displaying AI Skill details](media/0ca3a148c6439ad2275e20e230aa2efb-before.png)
-
-   View after tweaking
 
     ![Screenshot of Deployment page displaying AI Skill details](media/0ca3a148c6439ad2275e20e230aa2efb.png)
 

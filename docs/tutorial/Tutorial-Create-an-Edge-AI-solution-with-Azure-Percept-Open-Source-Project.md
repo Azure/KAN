@@ -10,13 +10,9 @@ The five major steps we will cover in this tutorial are:
 
 -   Step 2: Connect a video feed pointing to pedestrians or vehicles by adding and configuring a camera
 
--   Step 3: View models 
+-   Step 3: View ML models in the model Zoo, we support object detection and classification models
 
-    A model is a machine learning (ML) algorithm for object detection or classification in video streams.
-
--   Step 4: Build an AI skill to increase accuracy and efficiency
-
-    An AI skill makes the inferences that power decision making and any follow-on actions.
+-   Step 4: Build an AI skill that connects ML models and business logic to create a pipeline
 
 -   Step 5: Deploy your Edge AI solution 
 
@@ -24,13 +20,13 @@ The five major steps we will cover in this tutorial are:
 
 ## Prerequisites
 
--   An Azure subscription. If you don't have one, create a before you begin. free account before you begin.
+-   An Azure subscription. If you don't have one, create it before you begin. Microsoft allows you to create a [free account](https://azure.microsoft.com/en-us/free/cloud-services/search/?OCID=AIDcmm5edswduu_SEM_1fae5b7734e9177481a238088f013eeb:G:s&ef_id=1fae5b7734e9177481a238088f013eeb:G:s&msclkid=1fae5b7734e9177481a238088f013eeb)
 -   Access to the latest version of one of these supported browsers:
     -   Microsoft Edge
     -   Google Chrome
 -   An RTSP IP camera accessible by your IoT Edge device.
 -   You must have configured an Azure Percept Open-Source Project in your environment. If you haven’t, follow the steps in the setup [guide](https://github.com/Azure/PerceptOSS/blob/main/docs/tutorial/setup-guide.md).
--   Launch the Azure Percept Open-Source Project portal. To do this, paste the link displayed at the end of setup into your browser.
+-   Launch the Azure Percept Open-Source Project portal. To do this, paste the IP address displayed at the end of setup into your browser.
 
 ## Step 1: Connect a compute device to power your Edge AI solution
 
@@ -135,8 +131,6 @@ The **Pedestrian and Vehicle Detection Attribute** box opens on the right side o
 
     To reopen the **Attributes** box later, select the ellipsis **(…)** in the corner of the tile.
 
-**You have now completed adding a pre-built model from the Model Zoo.**
-
 ## Step 4: Build an AI skill to increase accuracy and efficiency
 
 Azure Percept Open-Source Project’s AI skill makes the inferences that power decision making and any follow-on actions. You can run them with a single model or multiple models and business logic. In this tutorial, we’ll be adding an AI skill based on the model we selected in the previous step and stream the inference results to IoT hub.
@@ -158,7 +152,7 @@ Azure Percept Open-Source Project’s AI skill makes the inferences that power d
 
     A node is a draggable object that allows you to connect models and business logic easily without writing any code. There are three types of nodes:
 
-    1.  A **model node** is an ML algorithm like the Pedestrian and Vehicle Detector node you selected earlier in Step 3 of this tutorial, when you were adding a model. This model outputs *x* and *y* coordinates and a confidence threshold of the object’s identification. These coordinates are used to draw a bounding box around objects.
+    1.  A **model node** is an ML algorithm like the Pedestrian and Vehicle Detector node you viewed earlier in Step 3 of this tutorial. This model outputs *x* and *y* coordinates and a confidence threshold of the object’s identification. These coordinates are used to draw a bounding box around objects.
     2.  A **transform node** takes the inference results based on the objects you detected from the model and filters them by confidence level.
     3.  An **export node** sends filtered results or video snippets to a location you define.
 

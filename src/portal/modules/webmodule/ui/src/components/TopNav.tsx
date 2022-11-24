@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   CommandBar,
@@ -11,10 +11,18 @@ import {
   getTheme,
   ICommandBarStyles,
   mergeStyleSets,
+  Callout,
+  DirectionalHint,
+  Label,
+  Stack,
+  Text,
+  Link,
+  Icon,
 } from '@fluentui/react';
 import { WaffleIcon, SettingsIcon, FeedbackIcon, RingerIcon } from '@fluentui/react-icons';
-import { useBoolean } from '@uifabric/react-hooks';
+import { useBoolean, useId } from '@uifabric/react-hooks';
 import { useSelector } from 'react-redux';
+import { isNil } from 'ramda';
 
 import { State } from 'RootStateType';
 import { selectUnreadNotification } from '../store/notificationSlice';
@@ -24,6 +32,8 @@ import { FEEDBACK_URL } from './constant';
 import { NotificationPanel } from './NotificationPanel';
 
 const theme = getTheme();
+
+const RANDOM_SECOND = Math.floor(Math.random() * (1200 - 600 + 1)) + 600;
 
 const commandBarBtnStyles: IButtonStyles = {
   root: {
@@ -70,14 +80,32 @@ type TopNavProps = {
 
 export const TopNav: React.FC<TopNavProps> = ({ onSettingClick }) => {
   const history = useHistory();
+
+  const [isCalloutVisible, { toggle: toggleIsCalloutVisible }] = useBoolean(false);
   const [notificationOpen, { setFalse: closeNotification, setTrue: openNotification }] = useBoolean(false);
   const notificationCount = useSelector((state: State) => selectUnreadNotification(state).length);
+
+  const iconId = useId('callout-feedback');
+
+  useEffect(() => {
+    const isFeedback = localStorage.getItem('poss_feedback');
+    if (isNil(isFeedback)) {
+      localStorage.setItem('poss_feedback', 'off');
+    }
+
+    if (isNil(isFeedback) || isFeedback === 'off') {
+      const timer = setTimeout(() => {
+        toggleIsCalloutVisible();
+      }, RANDOM_SECOND * 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [toggleIsCalloutVisible]);
 
   const commandBarFarItems: ICommandBarItemProps[] = [
     {
       key: 'feedback',
       iconOnly: true,
-      onRenderIcon: () => <FeedbackIcon className={classes.icon} />,
+      onRenderIcon: () => <FeedbackIcon id={iconId} className={classes.icon} />,
       buttonStyles: commandBarBtnStyles,
       onClick: () => {
         const win = window.open(FEEDBACK_URL, '_blank');
@@ -123,11 +151,41 @@ export const TopNav: React.FC<TopNavProps> = ({ onSettingClick }) => {
     },
   ];
 
+  const onLinkClick = useCallback(() => {
+    localStorage.setItem('poss_feedback', 'on');
+  }, []);
+
   return (
     <>
       <CommandBar styles={commandBarStyles} items={commandBarItems} farItems={commandBarFarItems} />
       {/* <FeedbackDialog hidden={feedbackHidden} onDismiss={closeFeedback} /> */}
       <NotificationPanel isOpen={notificationOpen} onDismiss={closeNotification} />
+      {isCalloutVisible && (
+        <Callout
+          target={`#${iconId}`}
+          setInitialFocus
+          onDismiss={toggleIsCalloutVisible}
+          role="alertdialog"
+          directionalHint={DirectionalHint.bottomRightEdge}
+        >
+          <Stack
+            tokens={{
+              childrenGap: 8,
+              maxWidth: 310,
+              padding: '17px 24px 20px',
+            }}
+          >
+            <Label styles={{ root: { fontSize: '18px' } }}>Have feedback?</Label>
+            <Text>Click the link below, and you will be redirected to a feedback submission form.</Text>
+            <Link target="_blank" href={FEEDBACK_URL} onClick={onLinkClick}>
+              <Stack horizontal verticalAlign="center" tokens={{ childrenGap: 5 }}>
+                <Text>Send feedback</Text>
+                <Icon styles={{ root: { color: '#0078D4' } }} iconName="OpenInNewWindow" />
+              </Stack>
+            </Link>
+          </Stack>
+        </Callout>
+      )}
     </>
   );
 };

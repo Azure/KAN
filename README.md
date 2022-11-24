@@ -32,7 +32,7 @@ POSS has a no- to low-code portal experience as well as APIs that can be used to
     POSS natively uses and supports Azure Edge and AI Services like [Azure IoT Hub](https://docs.microsoft.com/azure/iot-hub/), [Azure IoT Edge](https://azure.microsoft.com/services/iot-edge/), [Azure Cognitive Services](https://azure.microsoft.com/services/cognitive-services/), [Azure Storage](https://azure.microsoft.com/products/category/storage/), [Azure ML](https://azure.microsoft.com/services/machine-learning/), [Azure Monitor](https://docs.microsoft.com/azure/azure-monitor/), [Azure Arc](https://learn.microsoft.com/azure/azure-arc/overview), and so on. At the same time, it also allows you to modify the experience for use cases that require the use of other services (Azure or non-Azure) or other Open-Source Software (OSS) tools. 
 
 # Get Started
-Follow [this document](docs/tutorial/setup-guide.md) to get started in minutes. 
+Follow [this document](docs/tutorial/setup-guide.md) to get started in minutes. Once done learn about our concepts and follow one of the tutorials [here](./docs/POSS-TOC.md), we recommend you to start with the tutorial to [create a solution with a pre-built model](./docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md).
 
 > [!NOTE]
 > The experiences in this repository should be considered to be in preview/alpha. Significant portions of these experiences are subject to change without warning.

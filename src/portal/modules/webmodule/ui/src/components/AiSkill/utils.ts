@@ -386,6 +386,7 @@ export const backToSkillRawElements = (
     if (node.type === 'transform') {
       data.configurations = {
         ...node.configurations,
+        labels: JSON.parse((node.configurations as any).labels) ?? [],
         error: {
           labels: '',
           confidence_threshold: '',

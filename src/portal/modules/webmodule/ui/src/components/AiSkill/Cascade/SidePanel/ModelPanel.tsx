@@ -187,6 +187,7 @@ const ModelPanel = (props: Props) => {
         data: {
           ...oldElements[idx].data,
           configurations: localForm,
+          projectType: localForm.projectType,
           isEditDone: true,
           model: {
             id: selectedModel.id,

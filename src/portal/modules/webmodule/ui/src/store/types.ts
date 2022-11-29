@@ -141,6 +141,10 @@ export type CreateComputeDevicePayload = {
   config_data: string;
 };
 
+export type ValidateComputeDeviceConfigPayload = {
+  config_data: string;
+};
+
 export type UpdateComputeDevicePayload = {
   id: number;
   symphony_id: string;

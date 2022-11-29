@@ -10,7 +10,7 @@ import { isEmpty, pick } from 'ramda';
 import { nodeTypeModelFactory } from '../../../../store/trainingProjectSlice';
 import { ModelNodeType, TrainingProject } from '../../../../store/types';
 
-import SideNavCard from './SideNavCard';
+import SideNavCard from './NavCard';
 
 const getClasses = () =>
   mergeStyleSets({
@@ -82,8 +82,8 @@ const SideNavList = (props: Props) => {
   const [localExportNodeList, setLocalExportNodeList] = useState(exportList);
 
   const [isImportToggle, setIsImportToggle] = useState(false);
-  const [isProcessToggle, setIsProcessToggle] = useState(false);
-  const [isExportToggle, setIsExportOpen] = useState(false);
+  const [isProcessToggle, setIsProcessToggle] = useState(true);
+  const [isExportToggle, setIsExportOpen] = useState(true);
 
   const classes = getClasses();
 

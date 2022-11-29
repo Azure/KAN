@@ -1,4 +1,4 @@
-import { createSlice, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
+import { createSlice, createEntityAdapter, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
 import { max } from 'ramda';
 
 import { State as RootState } from 'RootStateType';
@@ -7,6 +7,7 @@ import { createWrappedAsync } from './shared/createWrappedAsync';
 import {
   ComputeDevice,
   CreateComputeDevicePayload,
+  ValidateComputeDeviceConfigPayload,
   UpdateComputeDevicePayload,
   DeleteComputeDevicePayload,
   ClusterType,
@@ -93,6 +94,20 @@ export const createComputeDevice = createWrappedAsync<any, CreateComputeDevicePa
     return normalizeComputeDevice(response.data, +maxId + 1);
   },
 );
+
+export const validateComputeDeviceConfig = createAsyncThunk<
+  any,
+  ValidateComputeDeviceConfigPayload,
+  { state: RootState }
+>('ComputeDevice/ValidateConfig', async (payload) => {
+  try {
+    const response = await rootRquest.post(`/api/compute_devices/verify_config_data`, payload);
+
+    return response.status;
+  } catch (e) {
+    return e.response.status;
+  }
+});
 
 export const updateComputeDevice = createWrappedAsync<any, UpdateComputeDevicePayload>(
   'ComputeDevice/Update',

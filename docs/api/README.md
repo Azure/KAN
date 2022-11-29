@@ -75,7 +75,6 @@ Visit the [Symphony Quickstart](./quick_start/quick_start.md) to try out the tut
 ## Next steps
 
 * For more information about Symphony, visit [Symphony documentation](https://github.com/azure/symphony-k8s).
-* POSS configuration
-* Secret management
-* Security
-* Observability
+* For more information about POSS configuration, visit [Azure Percept Open-Source Project: Setup guide](/docs/tutorial/setup-guide.md).
+* For more information about portal security, visit [Security]().
+

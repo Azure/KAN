@@ -107,7 +107,7 @@ class SymphonyTargetClient(SymphonyClient):
                             "container.version": "1.0",
                             "container.type": "docker",
                             "container.image": "possprod.azurecr.io/symphony-agent:"+symphony_agent_version,
-                            "container.createOptions": "{\"HostConfig\":{\"Binds\":[\"/etc/iotedge/storage:/snapshots\"],\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
+                            "container.createOptions": "JO.{\"HostConfig\":{\"Binds\":[\"/etc/iotedge/storage:/snapshots\"],\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
                             "container.restartPolicy": "always",
                             "env.AZURE_CLIENT_ID": client_id,
                             "env.AZURE_TENANT_ID": tenant_id,
@@ -351,10 +351,10 @@ class SymphonySolutionClient(SymphonyClient):
             symphony_agent_address = "target-runtime-symphony-agent"
 
         image_suffix = ""
-        create_options = "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}"
+        create_options = "JO.{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}"
         if 'igpu' in acceleration.lower():
             image_suffix = 'openvino'
-            create_options = "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"Binds\":[\"/dev/bus/usb:/dev/bus/usb\"],\"Devices\":[{\"PathOnHost\":\"/dev/dxg\",\"PathInContainer\":\"/dev/dxg\",\"CgroupPermissions\":\"rwm\"}]}}"
+            create_options = "JO.{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"Binds\":[\"/dev/bus/usb:/dev/bus/usb\"],\"Devices\":[{\"PathOnHost\":\"/dev/dxg\",\"PathInContainer\":\"/dev/dxg\",\"CgroupPermissions\":\"rwm\"}]}}"
         elif 'dgpu' in acceleration.lower() or 'jetson' in acceleration.lower():
             image_suffix = 'gpu'
             create_options = "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"runtime\":\"nvidia\"}}"

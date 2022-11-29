@@ -20,7 +20,7 @@ The **Model** blade on the left navigation displays two options for adding model
 
     When prompted, choose whether the model is based on an existing model or not.
 
-![Screenshot of Basics tab](./media/b835ebaaf679f77b65ea469bdf8d346a.png)
+    ![Screenshot of Basics tab](./media/b835ebaaf679f77b65ea469bdf8d346a.png)
 
 4.  If you select **Yes,** a dropdown list appears allowing you to choose from available models.
 
@@ -28,9 +28,9 @@ The **Model** blade on the left navigation displays two options for adding model
 
     If you select **No**, you can create your own model. Then enter the **Model Name**, **Type**, and **Objects**.
 
-![Screenshot of Basics tab](./media/47e4b4825eca44d66ef76dd5e54bc220.png)
+    ![Screenshot of Basics tab](./media/47e4b4825eca44d66ef76dd5e54bc220.png)
 
-![Screenshot of Basics tab with note about Classisfication models](./media/326cfc9977c999eb763901c3920b7f7d.png)
+    ![Screenshot of Basics tab with note about Classisfication models](./media/326cfc9977c999eb763901c3920b7f7d.png)
 
 > [!NOTE] If you select **Classification** from the **Type** box, note that Classification models are in preview and you can't use them in AI Skills and Descriptions.
 > 
@@ -43,13 +43,13 @@ The **Model** blade on the left navigation displays two options for adding model
 
 7.  Select **Review + Create** or, to move to the **Tags** tab, select **Next**.
 
-![Screenshot of Tags tab](./media/efdff115ebd1ac5988e09d7cd1aefac2.png)
+    ![Screenshot of Tags tab](./media/efdff115ebd1ac5988e09d7cd1aefac2.png)
 
 8.  When you've finished adding tags, select **Review + Create** to move to the next page.
 
 9.  Select **Review + Create** to confirm all the inputs. If you want to make any changes, select **Edit**.
 
-![Screenshot of Review and Create tab](./media/bf00a8ace64970c3da335b4660153f77.png)
+    ![Screenshot of Review and Create tab](./media/bf00a8ace64970c3da335b4660153f77.png)
 
 10.  To add the model, select **Create**.
 
@@ -61,11 +61,11 @@ Training the model consists of identifying the objects to be detected or classif
 
 1.  To train the model, **Model Properties** box, select **Train Model**.
 
-![Screenshot of Models Properties box](./media/c552f72443fc4ba9df09f7b3ba47a0c4.png)
+    ![Screenshot of Models Properties box](./media/c552f72443fc4ba9df09f7b3ba47a0c4.png)
 
 2.  Add any additional objects or tags, and then press **Enter**.
 
-![Screenshot of Models page](./media/4c990c318622c694306b8c2421a0218b.png)
+    ![Screenshot of Models page](./media/4c990c318622c694306b8c2421a0218b.png)
 
 3.  After adding objects, select **Save.**
 
@@ -73,24 +73,24 @@ Training the model consists of identifying the objects to be detected or classif
 
 4.  To start the tagging process, select **Capture from camera** and then select a camera from the **Select Camera** dropdown list.
 
-![Screenshot of Select camera dropdown list](./media/e2250059b66fb4ba00db0709e45081d8-1.png)
+    ![Screenshot of Select camera dropdown list](./media/e2250059b66fb4ba00db0709e45081d8-1.png)
 
 5.  The Capture box appears displaying an image. Select **Capture Image.**  
     
-![Screenshot of Capture from camera image](./media/e2250059b66fb4ba00db0709e45081d8.png)
+    ![Screenshot of Capture from camera image](./media/e2250059b66fb4ba00db0709e45081d8.png)
 
 6.  Select **Go to tagging**.
 
-![Screenshot of Capture image](./media/2cd7bb47072416fae27893e9ac52c07c.png)
+    ![Screenshot of Capture image](./media/2cd7bb47072416fae27893e9ac52c07c.png)
 
 7.  Tags you have previously identified appear as options. Select **Low stock**. The **Low Stock** tag represents those areas of the image with little or no stock.
 
-![Screenshot of Capture image](./media/e58489f222cc1130967db12b2ff090a0.png)
+    ![Screenshot of Capture image](./media/e58489f222cc1130967db12b2ff090a0.png)
 
 8.  Using the mouse, draw a box around an area of the image representing low stock.   
     The best practice is to include as much of the object as possible.
 
-![Screenshot of Image detail information](./media/9b531aa2141135ca3d8e6e153f81623c.png)
+    ![Screenshot of Image detail information](./media/9b531aa2141135ca3d8e6e153f81623c.png)
 
 9.  To see the tagged image library, select **Done**.
 

@@ -34,7 +34,7 @@ COPY common/requirements.txt /app/requirements-common.txt
 RUN pip install -r /app/requirements-common.txt
 
 # this module
-COPY predictmodule/requirements-openvino.txt /app/
+COPY symphonyai/requirements-openvino.txt /app/
 RUN pip install -r /app/requirements-openvino.txt
 # move onnxruntimethis to acclerator specific
 
@@ -45,10 +45,10 @@ RUN pip install -r /app/requirements-openvino.txt
 COPY common/common /app/common
 
 # this module
-COPY predictmodule/app/*.py /app/
-#COPY predictmodule/app/models/*.py /app/models/
-COPY predictmodule/app/customvision /app/customvision
-COPY predictmodule/app/downloaders /app/downloaders
+COPY symphonyai/app/*.py /app/
+#COPY symphonyai/app/models/*.py /app/models/
+COPY symphonyai/app/customvision /app/customvision
+COPY symphonyai/app/downloaders /app/downloaders
 
 
 
@@ -57,5 +57,4 @@ WORKDIR /app/
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5004"]
-
+CMD ["python3", "main.py"]

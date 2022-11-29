@@ -150,6 +150,27 @@ class ComputeDeviceViewSet(viewsets.ModelViewSet):
         solution_client.deploy_config()
         return Response(target_client.get_object(target_symphony_id))
 
+    @action(detail=False, methods=["post"], url_path="verify_config_data")
+    def verify_config_data(self, request):
+
+        from kubernetes import client, config
+
+        # config_data: k8s config (base64 encoded)
+        try:
+            config_data = base64.b64decode(
+                request.data.get("config_data", "")).decode('utf8')
+            config_json = yaml.safe_load(config_data)
+            config.load_kube_config_from_dict(config_json)
+            api = client.CoreV1Api()
+            ret = api.list_pod_for_all_namespaces(watch=False)
+
+            return Response(status=status.HTTP_200_OK)
+
+        except Exception as e:
+            # invalid config
+            logger.warning(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
     @action(detail=False, methods=["patch"], url_path="update_symphony_object")
     def update_symphony_object(self, request):
 

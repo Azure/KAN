@@ -359,7 +359,8 @@ class SymphonySolutionClient(SymphonyClient):
             image_suffix = 'gpu'
             create_options = "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"runtime\":\"nvidia\"}}"
         network_api = self.get_network_client()
-        res = network_api.read_namespaced_ingress(name='webmodule', namespace='default')
+        res = network_api.read_namespaced_ingress(
+            name='symphonyportal', namespace='default')
         webmodule_ip = res.status.load_balancer.ingress[0].ip
         webmodule_url = "http://" + webmodule_ip
 
@@ -385,7 +386,7 @@ class SymphonySolutionClient(SymphonyClient):
             "route": "InferenceToIoTHub",
             "type": "iothub",
             "properties": {
-                "definition": f"FROM /messages/modules/{instance}-voeedge/metrics INTO $upstream"
+                "definition": f"FROM /messages/modules/{instance}-symphonyai/metrics INTO $upstream"
             }
 
         })
@@ -395,20 +396,20 @@ class SymphonySolutionClient(SymphonyClient):
                     "route": f"InferenceTo{module_route['module_name']}",
                     "type": "iothub",
                     "properties": {
-                        "definition": f"FROM /messages/modules/{instance}-voeedge/localmetrics INTO BrokeredEndpoint(\"/modules/{module_route['module_name']}/inputs/{module_route['module_input']}\")"
+                        "definition": f"FROM /messages/modules/{instance}-symphonyai/localmetrics INTO BrokeredEndpoint(\"/modules/{module_route['module_name']}/inputs/{module_route['module_input']}\")"
                     }
 
                 })
 
         # container image
-        container_version = "0.39.0-dev.4"
+        container_version = "0.39.0-dev.5"
         # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
         # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
         # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"
-        voeedge_image = f"p4etest.azurecr.io/voe/voeedge:{container_version}-{image_suffix}amd64"
+        voeedge_image = f"p4etest.azurecr.io/voe/symphonyai:{container_version}-{image_suffix}amd64"
 
         if 'arm' in architecture.lower():
-            voeedge_image = f"p4etest.azurecr.io/voe/voeedge:{container_version}-jetson"
+            voeedge_image = f"p4etest.azurecr.io/voe/symphonyai:{container_version}-jetson"
             managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-jetson"
             streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-jetson"
             predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-jetson"
@@ -463,7 +464,7 @@ class SymphonySolutionClient(SymphonyClient):
                     #     }
                     # },
                     {
-                        "name": "voeedge",
+                        "name": "symphonyai",
                         "properties": {
                             "container.createOptions": create_options,
                             "container.image": voeedge_image,

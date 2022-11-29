@@ -161,12 +161,12 @@ Azure Percept Open-Source Project’s AI skill makes the inferences that power d
 6. From the left navigation, select **Process**. A list of nodes appears.
 7. Drag **Run ML Model** onto the canvas.
 
-8. Connect the **Camera Input** node to the **Model** node by clicking the input node output dot (your cursor will turn into a crosshair) and connecting it to the model input dot.  
+8. Connect the **Camera Input** node to the **Run ML Model** node by clicking the input node output dot (your cursor will turn into a crosshair) and connecting it to the model input dot.  
     When these nodes are connected, the **Classification Model** side panel opens to prompt you to select a model type.  
 
     ![Screenshot of Drag-and-Drop Nodes tab displaying the Classification Model properties box](media/1aeb22e817206ce4831da9aef6eba25f-2.png)
     
-9. From the **Select Model** dropdown list, select **Model Type**.
+9. From the **Model Type** dropdown list, select a model type.
 
 10. From the **Select object detection model** dropdown list, select **pedestrian-and-vehicle-detector**.
 

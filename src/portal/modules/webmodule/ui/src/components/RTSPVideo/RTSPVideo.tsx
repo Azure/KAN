@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { useSelector } from 'react-redux';
 
@@ -32,19 +32,23 @@ export const RTSPVideoComponent: React.FC<RTSPVideoProps> = ({
     fetch(`/api/streams/${streamId}/disconnect`).catch(console.error);
   };
 
+  const onUnmountComponent = useRef<any>(null);
+  onUnmountComponent.current = () => {
+    if (streamId !== '') {
+      onDisconnect();
+    }
+  };
+
+  useEffect(() => {
+    return () => onUnmountComponent.current();
+  }, []);
+
   useInterval(
     () => {
       rootRquest.get(`/api/streams/${streamId}/keep_alive`).catch(console.error);
     },
     streamId ? 3000 : null,
   );
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', onDisconnect);
-    return (): void => {
-      window.removeEventListener('beforeunload', onDisconnect);
-    };
-  });
 
   useEffect(() => {
     if (typeof cameraId !== 'string') return;

@@ -117,11 +117,11 @@ A model is a machine learning (ML) algorithm for object detection or classificat
 
     ![Screenshot of Model Zoo page](media/f5528f24b494e8787aa9de15467bd163.png)
 
-4. In this tutorial, since we’re learning how to leverage pedestrian and vehicle detection to understand occupancy in a parking lot or on a street, select **Pedestrian and Vehicle Detection.**
+4. In this tutorial, since we’re learning how to leverage pedestrian and vehicle detection to understand occupancy in a parking lot or on a street, select **pedestrian-and-vehicle-detector**.
 
     ![Screenshot of Model Zoo page displaying available models](media/c5533072ad941bf1e6cda51952ae9750.png)
 
-The **Pedestrian and Vehicle Detection Attribute** box opens on the right side of the **Model Zoo** page. It displays the following:
+The **pedestrian-and-vehicle-detector** attribute box opens on the right side of the **Model Zoo** page. It displays the following:
 
 - A **Use Case Description** section for the model, including the neural network model upon which it is based. This is important because those neural networks may have significant differences that affect the performance for your Edge device.
 - A **Metric** section that reflects the accuracy, compute requirements, parameters, and the source framework.

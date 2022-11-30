@@ -166,7 +166,7 @@ Azure Percept Open-Source Project’s AI skill makes the inferences that power d
 
     ![Screenshot of Drag-and-Drop Nodes tab displaying the Classification Model properties box](media/1aeb22e817206ce4831da9aef6eba25f-2.png)
     
-9. From the **Model Type** dropdown list, select a model type.
+9. From the **Model Type** dropdown list, select a model type. For this tutorial, select **Object Detection**.
 
 10. From the **Select object detection model** dropdown list, select **pedestrian-and-vehicle-detector**.
 
@@ -177,13 +177,13 @@ Azure Percept Open-Source Project’s AI skill makes the inferences that power d
 
     To filter our results by confidence interval, select **Transform**, select **Filter**, and then drag the filter node onto the canvas.
 
-12. Connect the pedestrian-and-vehicle-detector model node output to the filter node input.
+12. Connect the **pedestrian-and-vehicle-detector** model node output to the **Filter** node input.
 
     A side panel appears for you to define the objects detected by the model and set the confidence interval.
 
     ![Screenshot of Drag-and-Drop Nodes tab displaying model properties box](media/050c9716807eccbfa175089c5f608f6c.png)
 
-13. Select **Vehicle** as the object for the filter and the confidence threshold. Depending on the use case, the confidence threshold may vary.
+13. Select **Vehicle** as the object for the filter and the confidence threshold, and then select **Done**. Depending on the use case, the confidence threshold may vary.
 
     Next, we’ll analyze insights from the model by streaming the inference data back to the IoT Hub.
 

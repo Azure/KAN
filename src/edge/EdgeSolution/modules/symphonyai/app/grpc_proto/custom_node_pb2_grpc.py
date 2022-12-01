@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import custom_node_pb2 as custom__node__pb2
+from . import custom_node_pb2 as custom__node__pb2
 
 
 class CustomNodeHandlerStub(object):
@@ -19,7 +19,7 @@ class CustomNodeHandlerStub(object):
                 request_serializer=custom__node__pb2.HandshakeRequest.SerializeToString,
                 response_deserializer=custom__node__pb2.HandshakeResponse.FromString,
                 )
-        self.Process = channel.stream_stream(
+        self.Process = channel.unary_unary(
                 '/custom_node.CustomNodeHandler/Process',
                 request_serializer=custom__node__pb2.ProcessRequest.SerializeToString,
                 response_deserializer=custom__node__pb2.ProcessResponse.FromString,
@@ -36,8 +36,9 @@ class CustomNodeHandlerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def Process(self, request_iterator, context):
+    def Process(self, request, context):
         """After Handshake, client can start to data to server for processing
+        rpc Process (stream ProcessRequest) returns (stream ProcessResponse) {}
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -51,7 +52,7 @@ def add_CustomNodeHandlerServicer_to_server(servicer, server):
                     request_deserializer=custom__node__pb2.HandshakeRequest.FromString,
                     response_serializer=custom__node__pb2.HandshakeResponse.SerializeToString,
             ),
-            'Process': grpc.stream_stream_rpc_method_handler(
+            'Process': grpc.unary_unary_rpc_method_handler(
                     servicer.Process,
                     request_deserializer=custom__node__pb2.ProcessRequest.FromString,
                     response_serializer=custom__node__pb2.ProcessResponse.SerializeToString,
@@ -84,7 +85,7 @@ class CustomNodeHandler(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def Process(request_iterator,
+    def Process(request,
             target,
             options=(),
             channel_credentials=None,
@@ -94,7 +95,7 @@ class CustomNodeHandler(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_stream(request_iterator, target, '/custom_node.CustomNodeHandler/Process',
+        return grpc.experimental.unary_unary(request, target, '/custom_node.CustomNodeHandler/Process',
             custom__node__pb2.ProcessRequest.SerializeToString,
             custom__node__pb2.ProcessResponse.FromString,
             options, channel_credentials,

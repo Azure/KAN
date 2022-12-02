@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { ICommandBarItemProps, CommandBar } from '@fluentui/react';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useBoolean } from '@uifabric/react-hooks';
 
 import { projectTypeModelSelectorFactory } from '../../store/selectors';
 import { commonCommandBarItems } from '../utils';
@@ -12,6 +13,7 @@ import { Url } from '../../constant';
 
 import ModelDashboardWrapper from './ModelDetail/ModelDashboardWrapper';
 import IntelModelZoo from './ModelDetail/IntelModelZooDashboard';
+import UnCustomVision from '../Common/Dialog/UnCustomVision';
 
 const ModelDetail = () => {
   const history = useHistory();
@@ -20,6 +22,7 @@ const ModelDetail = () => {
   const intelModelList = useSelector(projectTypeModelSelectorFactory('modelzoo'));
 
   const [isFilter, setIsFilter] = useState(false);
+  const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
 
   const commandBarItems: ICommandBarItemProps[] = [
     {
@@ -29,8 +32,9 @@ const ModelDetail = () => {
         iconName: 'CircleAddition',
       },
       onClick: () => {
-        history.push(Url.MODELS_CREATION_BASIC);
-        setIsFilter(false);
+        // history.push(Url.MODELS_CREATION_BASIC);
+        // setIsFilter(false);
+        toggleHideDialog();
       },
     },
     {
@@ -79,6 +83,7 @@ const ModelDetail = () => {
           render={() => <ModelDashboardWrapper modelList={customVisionModelList} isFilter={isFilter} />}
         />
       </Switch>
+      {!hideDialog && <UnCustomVision onDismiss={toggleHideDialog} />}
     </>
   );
 };

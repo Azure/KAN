@@ -170,6 +170,26 @@ def create_default_nodes():
     )
 
     Project.objects.update_or_create(
+        name="grpc_transform",
+        defaults={
+            "is_cascade": True,
+            "node_type": "transform",
+            "inputs": json.dumps([
+                {
+                    "route": "f",
+                    "type": "frame"
+                }
+            ]),
+            "outputs": json.dumps([
+                {
+                    "route": "f",
+                    "type": "frame"
+                }
+            ])
+        },
+    )
+
+    Project.objects.update_or_create(
         name="video_snippet_export",
         defaults={
             "is_cascade": True,

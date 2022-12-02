@@ -13,7 +13,6 @@ import { ModelNodeType, ModelProjectType } from '../../../../store/types';
 type Props = {
   displayName: string;
   name: string;
-  describe: string;
   projectType?: ModelProjectType;
   nodeType: ModelNodeType;
   connectMap: Connection[];
@@ -22,7 +21,7 @@ type Props = {
 };
 
 const SideNavCard = (props: Props) => {
-  const { nodeType, isDraggable, name, describe, projectType, connectMap, model, displayName } = props;
+  const { nodeType, isDraggable, name, projectType, connectMap, model, displayName } = props;
 
   const classes = getNavCardClasses();
 

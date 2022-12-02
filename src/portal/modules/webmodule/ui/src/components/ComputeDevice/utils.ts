@@ -1,12 +1,8 @@
 import { pick, groupBy, mapObjIndexed } from 'ramda';
 
 import { ComputeDevice } from '../../store/types';
-import {
-  DeviceCreateType,
-  k8sAccelerationOptions,
-  x64AccelerationOptions,
-  arm64AccelerationOptions,
-} from './types';
+import { x64AccelerationOptions, arm64AccelerationOptions } from '../constant';
+import { DeviceCreateType, k8sAccelerationOptions } from './types';
 
 export type DeviceFieldKey = keyof Pick<ComputeDevice, 'acceleration' | 'architecture'>;
 export type DeviceFieldMap = Record<DeviceFieldKey, number[]>;

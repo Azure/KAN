@@ -1,4 +1,4 @@
-import { IDropdownOption } from '@fluentui/react';
+import { IDropdownOption, IChoiceGroupOption } from '@fluentui/react';
 
 export const cardBorderStyle = {
   outline: '0.3px solid rgba(0,0,0,0.1)',
@@ -42,3 +42,22 @@ export const classificationOptions: IDropdownOption[] = [
   { key: 'Multilabel', text: 'Multilabel' },
   { key: 'Multiclass', text: 'Multiclass' },
 ];
+
+export const cpuArchitectureOptions: IChoiceGroupOption[] = [
+  {
+    key: 'X64',
+    text: 'X64',
+  },
+  {
+    key: 'ARM64',
+    text: 'ARM64',
+  },
+];
+
+export const x64AccelerationOptions = accelerationOptions.filter((option) =>
+  ['-', 'Nvidia dGPU', 'CPU', 'Intel iGPU'].includes(option.key as string),
+);
+
+export const arm64AccelerationOptions = accelerationOptions.filter((option) =>
+  ['-', 'Nvidia Jetson (Jetpack 5)'].includes(option.key as string),
+);

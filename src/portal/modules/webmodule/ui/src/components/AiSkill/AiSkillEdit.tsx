@@ -19,7 +19,7 @@ import { selectHasUseAiSkillSelectorFactory } from '../../store/deploymentSlice'
 import {
   getCascadeErrorMessage,
   convertElementsPayload,
-  backToSkillRawElements,
+  recoverRawElements,
   NODE_CONSTANT_X_POSITION,
   NODE_CONSTANT_Y_POSITION,
 } from './utils';
@@ -120,7 +120,7 @@ const AiSkillEdit = () => {
       screenshot: '',
     });
 
-    const result = backToSkillRawElements(skill.flow, modelList);
+    const result = recoverRawElements(skill.flow, modelList);
     setElements(getLayoutedElements(result));
   }, [skill, modelList]);
 

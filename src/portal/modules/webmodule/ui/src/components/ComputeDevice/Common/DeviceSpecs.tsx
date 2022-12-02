@@ -7,11 +7,11 @@ import { Stack, Text, Label, IDropdownOption } from '@fluentui/react';
 import {
   CreateComputeDeviceFormData,
   CPUArchitecture,
-  cpuArchitectureOptions,
   DeviceCreateType,
   k8sCpuArchitectureOptions,
 } from '../types';
 import { getAccelerationOptions } from '../utils';
+import { cpuArchitectureOptions } from '../../constant';
 
 import HorizontalDropdown from '../../Common/HorizontalDropdown';
 import HorizonChoiceGroup from '../../Common/HorizonChoiceGroup';

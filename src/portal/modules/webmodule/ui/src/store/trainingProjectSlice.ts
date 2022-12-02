@@ -89,7 +89,8 @@ export type UpdateCustomVisionProjectTagsPayload = {
 
 const getModelDisplayName = (modelName: string, nodeType: ModelNodeType) => {
   if (nodeType === 'source') return 'Camera input';
-  if (nodeType === 'transform') return 'Filter';
+  if (nodeType === 'transform' && modelName === 'filter_transform') return 'Filter';
+  if (nodeType === 'transform' && modelName === 'grpc_transform') return 'gRPC custom processing';
   if (nodeType === 'export' && modelName === 'video_snippet_export') return 'Export Video Snippet';
   if (nodeType === 'export' && modelName === 'iothub_export') return 'Send Insights to IoT Hub';
   if (nodeType === 'export' && modelName === 'iotedge_export') return 'Send Insights to IoT Edge Module';

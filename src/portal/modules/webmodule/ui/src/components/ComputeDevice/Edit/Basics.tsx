@@ -4,8 +4,9 @@
 import React from 'react';
 import { Stack, Text, Label } from '@fluentui/react';
 
-import { UpdateComputeDeviceFromData, cpuArchitectureOptions, clusterOptions } from '../types';
+import { UpdateComputeDeviceFromData, clusterOptions } from '../types';
 import { getAccelerationOptions } from '../utils';
+import { cpuArchitectureOptions } from '../../constant';
 
 import HorizontalTextField from '../../Common/HorizontalTextField';
 import HorizontalDropdown from '../../Common/HorizontalDropdown';

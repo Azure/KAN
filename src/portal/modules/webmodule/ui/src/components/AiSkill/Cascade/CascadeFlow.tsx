@@ -49,14 +49,13 @@ const CascadeFlow = (props: Props) => {
     hasUseAiSkill,
   } = props;
 
-  const classes = getCascadeFlowClasses();
-
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
 
   const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
   const onLoad = (_reactFlowInstance) => setReactFlowInstance(_reactFlowInstance);
+  const classes = getCascadeFlowClasses();
 
   const onDragOver = (event) => {
     event.preventDefault();

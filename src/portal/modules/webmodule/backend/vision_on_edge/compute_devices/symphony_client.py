@@ -107,7 +107,7 @@ class SymphonyTargetClient(SymphonyClient):
                             "container.version": "1.0",
                             "container.type": "docker",
                             "container.image": "possprod.azurecr.io/symphony-agent:"+symphony_agent_version,
-                            "container.createOptions": "JO.{\"HostConfig\":{\"Binds\":[\"/etc/iotedge/storage:/snapshots\"],\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
+                            "container.createOptions": "{\"HostConfig\":{\"Binds\":[\"/etc/iotedge/storage:/snapshots\"],\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
                             "container.restartPolicy": "always",
                             "env.AZURE_CLIENT_ID": client_id,
                             "env.AZURE_TENANT_ID": tenant_id,
@@ -351,12 +351,14 @@ class SymphonySolutionClient(SymphonyClient):
             symphony_agent_address = "target-runtime-symphony-agent"
 
         image_suffix = ""
-        create_options = "JO.{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}"
+        container_resources = ""
+        create_options = "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}"
         if 'igpu' in acceleration.lower():
             image_suffix = 'openvino'
-            create_options = "JO.{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"Binds\":[\"/dev/bus/usb:/dev/bus/usb\"],\"Devices\":[{\"PathOnHost\":\"/dev/dxg\",\"PathInContainer\":\"/dev/dxg\",\"CgroupPermissions\":\"rwm\"}]}}"
+            create_options = "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"Binds\":[\"/dev/bus/usb:/dev/bus/usb\"],\"Devices\":[{\"PathOnHost\":\"/dev/dxg\",\"PathInContainer\":\"/dev/dxg\",\"CgroupPermissions\":\"rwm\"}]}}"
         elif 'dgpu' in acceleration.lower() or 'jetson' in acceleration.lower():
             image_suffix = 'gpu'
+            container_resources = "{\"limits\":{\"nvidia.com/gpu\":\"1\"}}"
             create_options = "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"runtime\":\"nvidia\"}}"
         network_api = self.get_network_client()
         res = network_api.read_namespaced_ingress(
@@ -402,7 +404,7 @@ class SymphonySolutionClient(SymphonyClient):
                 })
 
         # container image
-        container_version = "0.39.0-dev.5"
+        container_version = "0.39.0-dev.6"
         # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
         # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
         # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"
@@ -468,6 +470,7 @@ class SymphonySolutionClient(SymphonyClient):
                         "properties": {
                             "container.createOptions": create_options,
                             "container.image": voeedge_image,
+                            "container.resources": container_resources,
                             "container.restartPolicy": "always",
                             "container.type": "docker",
                             "container.version": container_version,
@@ -485,6 +488,9 @@ class SymphonySolutionClient(SymphonyClient):
                 "displayName": display_name
             },
         }
+        # add container.resources to request gpu
+        if container_resources:
+            config_json["spec"]["components"][0]["properties"]["container.resources"] = container_resources
         return config_json
 
     def touch_config(self, name):

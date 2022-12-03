@@ -117,11 +117,11 @@ A model is a machine learning (ML) algorithm for object detection or classificat
 
     ![Screenshot of Model Zoo page](media/f5528f24b494e8787aa9de15467bd163.png)
 
-4. In this tutorial, since we’re learning how to leverage pedestrian and vehicle detection to understand occupancy in a parking lot or on a street, select **Pedestrian and Vehicle Detection.**
+4. In this tutorial, since we’re learning how to leverage pedestrian and vehicle detection to understand occupancy in a parking lot or on a street, select **pedestrian-and-vehicle-detector**.
 
     ![Screenshot of Model Zoo page displaying available models](media/c5533072ad941bf1e6cda51952ae9750.png)
 
-The **Pedestrian and Vehicle Detection Attribute** box opens on the right side of the **Model Zoo** page. It displays the following:
+The **pedestrian-and-vehicle-detector** attribute box opens on the right side of the **Model Zoo** page. It displays the following:
 
 - A **Use Case Description** section for the model, including the neural network model upon which it is based. This is important because those neural networks may have significant differences that affect the performance for your Edge device.
 - A **Metric** section that reflects the accuracy, compute requirements, parameters, and the source framework.
@@ -158,45 +158,48 @@ Azure Percept Open-Source Project’s AI skill makes the inferences that power d
 
         ![Screenshot of Drag-and-Drop Nodes tab](media/698c54f68b37a143851ff49a50ba6368.png)
 
-6. From the left navigation, select **Models**. A list of nodes appears.
-7. Drag **Run ML Model (Object Detection)** onto the canvas.
+6. From the left navigation, select **Process**. A list of nodes appears.
+7. Drag **Run ML Model** onto the canvas.
 
-    ![Screenshot of Drag-and-Drop Nodes tab displaying available models](media/d8aa8e651dc121780487a1b6a2232a2d.png)
+8. Connect the **Camera Input** node to the **Run ML Model** node by clicking the input node output dot (your cursor will turn into a crosshair) and connecting it to the model input dot.  
+    When these nodes are connected, the **Classification Model** side panel opens to prompt you to select a model type.  
 
-8. Connect the **Camera Input** node to the **Model** node by clicking the input node output dot (your cursor will turn into a crosshair) and connecting it to the model input dot.  
-    When these nodes are connected, a side panel opens to prompt you to select a model.
-9. From the **Select Model** dropdown list, select **pedestrian-and-vehicle-detector**.
+    ![Screenshot of Drag-and-Drop Nodes tab displaying the Classification Model properties box](media/1aeb22e817206ce4831da9aef6eba25f-2.png)
+    
+9. From the **Model Type** dropdown list, select a model type. For this tutorial, select **Object Detection**.
 
-    ![Screenshot of Drag-and-Drop Nodes tab displaying model properties box](media/1aeb22e817206ce4831da9aef6eba25f.png)
+10. From the **Select object detection model** dropdown list, select **pedestrian-and-vehicle-detector**.
 
-10. Select **Done.**  
+    ![Screenshot of the Classification Model properties box displaying the Select object detection model dropdown list](media/1aeb22e817206ce4831da9aef6eba25f-3.png)
+
+11. Select **Done.**  
     The name of the model node changes to **pedestrian-and-vehicle-detector.**
 
     To filter our results by confidence interval, select **Transform**, select **Filter**, and then drag the filter node onto the canvas.
 
-11. Connect the pedestrian-and-vehicle-detector model node output to the filter node input.
+12. Connect the **pedestrian-and-vehicle-detector** model node output to the **Filter** node input.
 
     A side panel appears for you to define the objects detected by the model and set the confidence interval.
 
     ![Screenshot of Drag-and-Drop Nodes tab displaying model properties box](media/050c9716807eccbfa175089c5f608f6c.png)
 
-12. Select **Vehicle** as the object for the filter and the confidence threshold. Depending on the use case, the confidence threshold may vary.
+13. Select **Vehicle** as the object for the filter and the confidence threshold, and then select **Done**. Depending on the use case, the confidence threshold may vary.
 
     Next, we’ll analyze insights from the model by streaming the inference data back to the IoT Hub.
 
-13. Select **Export**, drag **Send Insights to IoT Hub** onto the canvas, and then connect it to the model node.
-14. To limit the number of messages sent to IoT Hub at the specified frequency, connect the **Model** node to the **Export** node.
-15. When the side panel opens, select a **Delay Buffer**, and then select **Done**.
+14. Select **Export**, drag **Send Insights to IoT Hub** onto the canvas, and then connect it to the model node.
+15. To limit the number of messages sent to IoT Hub at the specified frequency, connect the **Model** node to the **Export** node.
+16. When the side panel opens, select a **Delay Buffer**, and then select **Done**.
 
     The **Delay Buffer** prevents too many video snippets from uploading at the same time. It sets the minimum delay time to wait before uploading the next video.
 
     ![Screenshot of Drag-and-Drop Nodes tab displaying Export properties box](media/1cadf6d7d61ab3f458f606232ebf0605.png)
 
-16. Select **Export**, drag the **Export Video Snippet** onto the canvas and connect it to the model node.
-17. Connect the **Model** node to the **Export** node. A side panel opens to prompt you to select a **Filename Prefix, Snippet Duration,** and **Delay Buffer**.  
+17. Select **Export**, drag the **Export Video Snippet** onto the canvas and connect it to the model node.
+18. Connect the **Model** node to the **Export** node. A side panel opens to prompt you to select a **Filename Prefix, Snippet Duration,** and **Delay Buffer**.  
     Select **Done**, and then select **Review and Create.**  
     The review process validates your selections.
-18. To create the skill and add it to the AI Skills library, select **Create**.
+19. To create the skill and add it to the AI Skills library, select **Create**.
 
     ![Screenshot of AI Skills page displaying AI Skill](media/828cc4d38b81b3649ab71ba9369856f7.png)
 

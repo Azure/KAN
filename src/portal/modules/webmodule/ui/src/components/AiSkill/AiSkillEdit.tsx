@@ -5,7 +5,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Stack, Pivot, PivotItem, IPivotItemProps, Spinner } from '@fluentui/react';
 import { useHistory, generatePath, Route, Switch, useParams } from 'react-router-dom';
 import { clone } from 'ramda';
-import { Node, Edge, isNode } from 'react-flow-renderer';
+import { Node, Edge, isNode, Position } from 'react-flow-renderer';
 import { useSelector } from 'react-redux';
 import dagre from 'dagre';
 import html2canvas from 'html2canvas';
@@ -54,10 +54,8 @@ const getLayoutedElements = (elements, direction = 'TB') => {
   return elements.map((el) => {
     if (isNode(el)) {
       const nodeWithPosition = dagreGraph.node(el.id);
-      // @ts-ignore
-      el.targetPosition = 'top';
-      // @ts-ignore
-      el.sourcePosition = 'bottom';
+      el.targetPosition = Position.Top;
+      el.sourcePosition = Position.Bottom;
 
       // unfortunately we need this little hack to pass a slightly different position
       // to notify react flow about the change. Moreover we are shifting the dagre node position

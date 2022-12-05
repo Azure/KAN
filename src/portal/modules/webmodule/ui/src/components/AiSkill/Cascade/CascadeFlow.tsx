@@ -44,7 +44,7 @@ interface Props {
   hasUseAiSkill?: boolean;
 }
 
-const getNodeId = (length: number) => length++;
+const getNodeId = (length: number) => length + 1;
 
 const CascadeFlow = (props: Props) => {
   const {

@@ -13,11 +13,10 @@ import {
   ActionButton,
 } from '@fluentui/react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { isEmpty } from 'ramda';
 
 import { Url, theme } from '../../constant';
-import { deleteCameras, Camera } from '../../store/cameraSlice';
+import { Camera } from '../../store/cameraSlice';
 import { ViewMode } from './types';
 import { commonCommandBarItems } from '../utils';
 import {
@@ -40,11 +39,10 @@ const CamerasDetailWrapper = (props: Props) => {
   const { cameraList } = props;
 
   const history = useHistory();
-  const dispatch = useDispatch();
   const location = useLocation<LocationState>();
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
-  const [selectedCameraList, setSelectedCameraList] = useState([]);
+  const [_, setSelectedCameraList] = useState([]);
   const [viewMode, setViewMode] = useState<ViewMode>('card');
   const [filterValue, setFilterValue] = useState('');
   const [localFormattedCamera, setLocalFormattedCamera] = useState<Camera[]>([]);

@@ -1,46 +1,41 @@
 import React from 'react';
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react';
+import { Dialog, DialogType, Stack, Text, Icon } from '@fluentui/react';
 
 interface Props {
   onDismiss: () => void;
+  showCloseButton?: boolean;
 }
 
-const UnCustomVision = (props: Props) => {
-  const { onDismiss } = props;
+const UnAzureStorage = (props: Props) => {
+  const { onDismiss, showCloseButton } = props;
 
   return (
-    // <Dialog
-    //     hidden={hideDialog}
-    //     onDismiss={toggleHideDialog}
-    //     dialogContentProps={dialogContentProps}
-    //     modalProps={modalProps}
-    //   >
-    //     <DialogFooter>
-    //       <PrimaryButton onClick={toggleHideDialog} text="Send" />
-    //       <DefaultButton onClick={toggleHideDialog} text="Don't send" />
-    //     </DialogFooter>
-    //   </Dialog>
-
     <Dialog
       hidden={false}
-      // onDismiss={onDismiss}
+      onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.normal,
         title: 'No Azure Storage',
         subText:
           'You need Azure Storage credentials in order to view camera feed. Please use the installer to add your Azure Storage account. ',
-        showCloseButton: false,
+        showCloseButton: showCloseButton ?? false,
+        styles: { subText: { marginBottom: '8px' } },
       }}
       modalProps={{
         isBlocking: false,
       }}
     >
-      <DialogFooter>
-        {/* <PrimaryButton onClick={toggleHideDialog} text="Send" />
-        <DefaultButton onClick={toggleHideDialog} text="Don't send" /> */}
-      </DialogFooter>
+      <Stack
+        horizontal
+        verticalAlign="center"
+        tokens={{ childrenGap: 5 }}
+        styles={{ root: { color: '#0078D4' } }}
+      >
+        <Text>Learn more</Text>
+        <Icon iconName="OpenInNewWindow" />
+      </Stack>
     </Dialog>
   );
 };
 
-export default UnCustomVision;
+export default UnAzureStorage;

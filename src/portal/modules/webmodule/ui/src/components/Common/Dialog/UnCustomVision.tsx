@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react';
+import { Dialog, DialogType, Stack, Text, Icon } from '@fluentui/react';
 
 interface Props {
   onDismiss: () => void;
@@ -18,15 +18,21 @@ const UnCustomVision = (props: Props) => {
         subText:
           'You need Custom Vision access in order to create a custom model. Please use the installer to allow access.',
         showCloseButton: false,
+        styles: { subText: { marginBottom: '8px' } },
       }}
       modalProps={{
         isBlocking: false,
       }}
     >
-      <DialogFooter>
-        {/* <PrimaryButton onClick={toggleHideDialog} text="Send" />
-        <DefaultButton onClick={toggleHideDialog} text="Don't send" /> */}
-      </DialogFooter>
+      <Stack
+        horizontal
+        verticalAlign="center"
+        tokens={{ childrenGap: 5 }}
+        styles={{ root: { color: '#0078D4' } }}
+      >
+        <Text>Learn more</Text>
+        <Icon iconName="OpenInNewWindow" />
+      </Stack>
     </Dialog>
   );
 };

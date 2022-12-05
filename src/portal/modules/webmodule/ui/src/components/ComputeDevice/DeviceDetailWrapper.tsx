@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import React, { useCallback, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import {
   ICommandBarItemProps,
   CommandBar,
@@ -17,7 +16,10 @@ import {
 } from '@fluentui/react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { isEmpty } from 'ramda';
+import { useSelector } from 'react-redux';
+import { useBoolean } from '@uifabric/react-hooks';
 
+import { State as RootState } from 'RootStateType';
 import { commonCommandBarItems } from '../utils';
 import { theme, Url } from '../../constant';
 import { ViewMode } from './types';
@@ -33,6 +35,7 @@ import {
 import ListManagement from './ListManagement';
 import FilteredDropdownLabel from '../Common/FilteredDropdownLabel';
 import CraeteMessageBar, { LocationState } from '../Common/CraeteMessageBar';
+import UnIotHutAccess from '../Common/Dialog/UnIotHutAccess';
 
 interface Props {
   deviceList: ComputeDevice[];
@@ -56,7 +59,8 @@ const ComputeDeviceDetail = (props: Props) => {
 
   const history = useHistory();
   const location = useLocation<LocationState>();
-  const dispatch = useDispatch();
+
+  const { tenant_id, client_id, client_secret } = useSelector((state: RootState) => state.setting);
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<ViewMode>('card');
@@ -68,6 +72,8 @@ const ComputeDeviceDetail = (props: Props) => {
   });
   const [filterValue, setFilterValue] = useState('');
   const [localCreated, setLocalCreated] = useState(location.state?.isCreated);
+  const isNoIotHubAccess = isEmpty(tenant_id) && isEmpty(client_id) && isEmpty(client_secret);
+  const [hideIotHubAccess, { toggle: toggleHideIotHubAccess }] = useBoolean(true);
 
   useEffect(() => {
     if (isEmpty(filterValue)) {
@@ -107,8 +113,12 @@ const ComputeDeviceDetail = (props: Props) => {
   }, []);
 
   const onIotRedirect = useCallback(() => {
-    history.push({ pathname: Url.COMPUTE_DEVICE_CREATION_BASIC, search: '?type=iot' });
-  }, [history]);
+    if (isNoIotHubAccess) {
+      toggleHideIotHubAccess();
+    } else {
+      history.push({ pathname: Url.COMPUTE_DEVICE_CREATION_BASIC, search: '?type=iot' });
+    }
+  }, [history, isNoIotHubAccess, toggleHideIotHubAccess]);
 
   const onK8sRedirect = useCallback(() => {
     history.push({ pathname: Url.COMPUTE_DEVICE_CREATION_BASIC, search: '?type=k8s' });
@@ -194,12 +204,7 @@ const ComputeDeviceDetail = (props: Props) => {
       {deviceList.length !== 0 ? (
         <>
           {isFilter && (
-            <Stack
-              styles={{ root: { padding: '10px 0' } }}
-              horizontal
-              tokens={{ childrenGap: 10 }}
-              verticalAlign="center"
-            >
+            <Stack horizontal tokens={{ childrenGap: 10, padding: '10px 0' }} verticalAlign="center">
               <SearchBox
                 styles={{ root: { width: '180px' } }}
                 placeholder="Search"
@@ -284,6 +289,7 @@ const ComputeDeviceDetail = (props: Props) => {
           </Stack>
         </Stack>
       )}
+      {!hideIotHubAccess && <UnIotHutAccess onDismiss={toggleHideIotHubAccess} />}
     </>
   );
 };

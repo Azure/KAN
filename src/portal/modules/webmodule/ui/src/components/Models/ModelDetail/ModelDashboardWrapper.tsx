@@ -23,10 +23,13 @@ import CraeteMessageBar, { LocationState } from '../../Common/CraeteMessageBar';
 interface Props {
   modelList: FormattedModel[];
   isFilter: boolean;
+  isEmptyCustomVision: boolean;
+  toggleHideDialog: () => void;
 }
 
 const modelSource = [
   {
+    id: 'cv',
     img: '/icons/models/customModel.png',
     title: 'Create custom model',
     describe: 'Make a model from an existing project, or from scratch.',
@@ -42,6 +45,7 @@ const modelSource = [
   //   isHistory: false,
   // },
   {
+    id: 'intel',
     img: '/icons/models/modelZoo.png',
     title: 'Browse Model Zoo',
     describe: 'View our archive of pre-built models to use in your AI Skills and Deployments.',
@@ -51,7 +55,7 @@ const modelSource = [
 ];
 
 const ModelDashboardWrapper = (props: Props) => {
-  const { isFilter, modelList } = props;
+  const { isFilter, modelList, isEmptyCustomVision, toggleHideDialog } = props;
 
   const history = useHistory();
   const location = useLocation<LocationState>();
@@ -192,7 +196,16 @@ const ModelDashboardWrapper = (props: Props) => {
                   <Label>{source.title}</Label>
                   <Text>{source.describe}</Text>
                   <div style={{ marginTop: '20px' }}>
-                    <PrimaryButton text={source.buttonText} onClick={() => history.push(source.history)} />
+                    <PrimaryButton
+                      text={source.buttonText}
+                      onClick={() => {
+                        if (source.id === 'cv' && isEmptyCustomVision) {
+                          toggleHideDialog();
+                        } else {
+                          history.push(source.history);
+                        }
+                      }}
+                    />
                   </div>
                 </Stack>
               </Stack>

@@ -14,7 +14,7 @@ This article cover the following six key concepts to provide you with a deep und
     2.  Targets
     3.  Solution instances
 
-![](./media/13fc6b9fb936ac86d478fecb8e519eca.png)
+![Screenshot of POSS portal](./media/13fc6b9fb936ac86d478fecb8e519eca.png)
 
 After reviewing this article, visit the [Tutorial: Create an Edge AI solution with Azure Percept for Open-Source Project](https://github.com/Azure/PerceptOSS/blob/main/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md) for step-by-step guidance on how to create an end-to-end Edge artificial intelligence (AI) solution.
 
@@ -107,11 +107,11 @@ There are three groups of nodes that comprise AI skills:
 
 This screenshot displays some of the nodes Azure Percept for Open-Source Project supports:
 
-![](./media/ec960a4d6611fe07fad6ae221393130d.png)
+![Screenshot of supported nodes](./media/ec960a4d6611fe07fad6ae221393130d.png)
 
 To summarize, you can chain nodes together in an AI skill to allow the result of one model to feed into the next. For example, the first model may detect vehicles and pass this information to a model that classifies vehicles by type; for example, car, truck, or bus. Based on user defined logic, these insights can be sent to IoT hub, you can also capture video snippets when an event of interest triggered, and it will be stored in your storage account.
    
-![](./media/aiskill.png)
+![Screenshot of chain nodes](./media/aiskill.png)
 
 ## 5. Deployments
 
@@ -123,7 +123,7 @@ After defining your compute devices, cameras, models, and AI skills, your next s
 
 A solution is the combination of an AI skill and custom containers (business logic), expressing the functional solution to your use case. Because your inputs to the portal ultimately run on a Kubernetes cluster (K8s), a solution is deployed from the K8s control plane to K8s nodes or a target. 
 
-![image](https://user-images.githubusercontent.com/10191339/192595220-7c429607-8921-492a-be5d-d175d65faa47.png)
+![image of architectural concept solution](https://user-images.githubusercontent.com/10191339/192595220-7c429607-8921-492a-be5d-d175d65faa47.png)
 
 
 ###  2. Targets

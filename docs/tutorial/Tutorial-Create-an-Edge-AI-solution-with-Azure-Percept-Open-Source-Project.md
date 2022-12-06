@@ -51,7 +51,7 @@ Azure Percept Open-Source Project is supported on many different devices and acc
   
     ![Screenshot of Basics tab displaying Acceleration names](media/9d6455d44a8f4d3ccd2645d87c7b1bca-3.png)
 
-8.  Select **Review + Create.**
+8.  Select **Review + Create**.
 
     The portal validates your entries.
 
@@ -84,7 +84,7 @@ Azure Percept Open-Source Project supports internet protocol (IP) cameras that u
 
     ![Screenshot of Basics tab displaying available locations](media/a8d4338a8c637ca1021609d2f41e60a8.png)
 
-4. Select **Review + Create.**
+4. Select **Review + Create**.
 
     The portal validates your entries. If there are errors, fix them by selecting the **Edit Device** link.
 

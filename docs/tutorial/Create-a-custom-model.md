@@ -67,7 +67,7 @@ Training the model consists of identifying the objects to be detected or classif
 
     ![Screenshot of Models page](./media/4c990c318622c694306b8c2421a0218b.png)
 
-3.  After adding objects, select **Save.**
+3.  After adding objects, select **Save**.
 
     Now that you have identified the objects, the next step is to enter input so the model can find objects in a camera feed.
 
@@ -75,7 +75,7 @@ Training the model consists of identifying the objects to be detected or classif
 
     ![Screenshot of Select camera dropdown list](./media/e2250059b66fb4ba00db0709e45081d8-1.png)
 
-5.  The Capture box appears displaying an image. Select **Capture Image.**  
+5.  The Capture box appears displaying an image. Select **Capture Image**.  
     
     ![Screenshot of Capture from camera image](./media/e2250059b66fb4ba00db0709e45081d8.png)
 

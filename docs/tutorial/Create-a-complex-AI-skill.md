@@ -73,7 +73,7 @@ In this document, we will build an AI skill that detects vehicles and then class
 
 7.  Open the **Select Model** dropdown list.
 
-    ![Screenshot of Select Model dropdown list ](./media/9d710bff56ef151ca071f676a6098d68.png)
+    ![Screenshot of Select Model dropdown list](./media/9d710bff56ef151ca071f676a6098d68.png)
 
 8.  Select **pedestrian-and-vehicle-detector (Model Zoo)** per our use case. The tag for the object(s) to be detected appears.
 

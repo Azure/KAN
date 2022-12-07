@@ -133,7 +133,7 @@ In the next section, we'll start with an export to your IoT hub.
 
 ## Export a Video Snippet
 
-    ![Screenshot of Export Video Snippet box](./media/8d17d61d6466500ad06b4d45d26f0c37.png)
+![Screenshot of Export Video Snippet box](./media/8d17d61d6466500ad06b4d45d26f0c37.png)
 
 1.  From the **Node/Export** dropdown list, select **Export Video Snippet** and drag it onto the canvas to connect to the **Filter** node.
 2.  In the information box, enter a meaningful name that you can find in storage in the **Filename Prefix** field.

@@ -339,7 +339,7 @@ while [ $current_step -lt 6 ]; do
                 if [ $create_aks_selection == "1" ]; then
                     subscription=$(echo $selected_aks | jq ".id" | awk -F/ '{print $3}')
                     az account set --subscription=$subscription
-                    az aks get-credentials --resource-group $selected_aks_rg --name $selected_aks_name
+                    az aks get-credentials --resource-group $selected_aks_rg --name $selected_aks_name --admin
                 else 
                     echo "use current kubeconfig"
                 fi

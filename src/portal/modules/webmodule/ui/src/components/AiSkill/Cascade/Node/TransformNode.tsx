@@ -5,7 +5,6 @@ import React, { memo, useCallback } from 'react';
 import { Stack, IContextualMenuProps, IconButton, Label } from '@fluentui/react';
 import { Handle, addEdge, Connection, Edge, Node, isNode, Position } from 'react-flow-renderer';
 
-// import { CascadeData } from '../types';
 import { getNodeImage } from '../../utils';
 import { getNodeClasses } from './styles';
 import { SkillNodeData } from '../../types';

@@ -79,8 +79,8 @@ export type GrpcTransformPanelForm = {
   port: string;
   route: string;
   env: { key: string; value: string }[];
-  architecture: string;
-  acceleration: string;
+  architecture?: string;
+  acceleration?: string;
 };
 
 export type InsightsOverLayType = 'true' | 'false' | '';

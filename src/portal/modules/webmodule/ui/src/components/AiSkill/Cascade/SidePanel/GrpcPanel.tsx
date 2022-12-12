@@ -17,7 +17,7 @@ import {
   IDropdownProps,
 } from '@fluentui/react';
 import { Node, Edge } from 'react-flow-renderer';
-import { clone } from 'ramda';
+import { clone, isEmpty } from 'ramda';
 import { Controller, useForm, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -37,26 +37,33 @@ interface Props {
   setElements: any;
 }
 
-export const typeOptions: IDropdownOption[] = [
+const ERROR_RORT_RANGE = 'Please enter a whole number from 1 to 65535.';
+const ERROR_VALID_FORMAT = 'Please enter a valid format.';
+
+type FromType = Omit<GrpcTransformPanelForm, 'port'> & {
+  port: number;
+};
+
+const typeOptions: IDropdownOption[] = [
   { key: 'container', text: 'Container' },
   { key: 'endpoint', text: 'Endpoint URL' },
 ];
 
-export const restartOptions: IDropdownOption[] = [
+const restartOptions: IDropdownOption[] = [
   { key: 'always', text: 'always' },
   { key: 'never', text: 'never' },
   { key: 'on-failure', text: 'on-failure' },
   { key: 'on-unhealthy', text: 'on-unhealthy' },
 ];
 
-const initialValues = {
+const initialValues: FromType = {
   type: '',
   endpoint_url: '',
   container_name: '',
   container_image: '',
   create_options: '',
-  restart_policy: '',
-  port: '0',
+  restart_policy: 'always',
+  port: 0,
   route: '',
   env: [{ key: '', value: '' }],
   architecture: '',
@@ -67,40 +74,62 @@ const TransformPanel = (props: Props) => {
   const { node, onDismiss, setElements } = props;
   const { data } = node;
 
-  const { reset, control, handleSubmit, watch, formState } = useForm<GrpcTransformPanelForm>({
+  const { reset, control, handleSubmit, watch, formState } = useForm<FromType>({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
     defaultValues: initialValues,
     resolver: yupResolver(
       yup.object().shape({
-        type: yup.string().oneOf(['container', 'endpoint']).required(),
+        type: yup.string().oneOf(['container', 'endpoint']).required(ERROR_BLANK_VALUE),
         endpoint_url: yup.string().when('type', {
           is: (val) => val === 'endpoint',
-          then: yup.string().required().min(1),
+          then: yup.string().required(ERROR_BLANK_VALUE),
         }),
         container_name: yup.string().when('type', {
           is: (val) => val === 'container',
-          then: yup.string().required().min(1),
+          then: yup.string().required(ERROR_BLANK_VALUE),
         }),
         container_image: yup.string().when('type', {
           is: (val) => val === 'container',
-          then: yup.string().required().min(1),
+          then: yup.string().required(ERROR_BLANK_VALUE),
         }),
         create_options: yup.string().when('type', {
           is: (val) => val === 'container',
-          then: yup.string().required().min(1),
+          then: yup
+            .string()
+            .optional()
+            .test(function (val) {
+              if (isEmpty(val)) return true;
+
+              try {
+                const _ = JSON.parse(val);
+
+                return true;
+              } catch (e) {
+                return this.createError({ message: ERROR_VALID_FORMAT });
+              }
+            }),
         }),
         restart_policy: yup.string().when('type', {
           is: (val) => val === 'container',
           then: yup.string().oneOf(['always', 'never', 'on-failure', 'on-unhealthy']).required(),
         }),
-        port: yup.string().when('type', {
+        port: yup.number().when('type', {
           is: (val) => val === 'container',
-          then: yup.string().min(1).required(),
+          then: yup.number().min(1, ERROR_RORT_RANGE).max(65535, ERROR_RORT_RANGE).required(),
         }),
         route: yup.string().when('type', {
           is: (val) => val === 'container',
-          then: yup.string().required().min(1),
+          then: yup
+            .string()
+            .optional()
+            .test(function (val) {
+              if (isEmpty(val)) return true;
+
+              const regex = new RegExp('^/[a-zA-Z0-9]+');
+              if (!regex.test(val)) return this.createError({ message: ERROR_VALID_FORMAT });
+              return true;
+            }),
         }),
         env: yup.array().when('type', {
           is: (val) => val === 'container',
@@ -145,12 +174,12 @@ const TransformPanel = (props: Props) => {
 
   useEffect(() => {
     if (data.configurations) {
-      reset({ ...initialValues, ...data.configurations });
+      reset({ ...initialValues, ...data.configurations, port: parseInt(data.configurations.port, 10) });
     }
   }, [data, reset]);
 
   const onPanelDone = useCallback(
-    (data: GrpcTransformPanelForm) => {
+    (data: FromType) => {
       const configurations: Partial<GrpcTransformPanelForm> = {};
       if (data.type === 'endpoint') {
         configurations.type = data.type;
@@ -161,10 +190,11 @@ const TransformPanel = (props: Props) => {
         configurations.container_image = data.container_image;
         configurations.create_options = data.create_options;
         configurations.restart_policy = data.restart_policy;
-        configurations.port = data.port;
+        configurations.port = data.port.toString();
         configurations.route = data.route;
-        configurations.architecture = data.architecture;
-        configurations.acceleration = data.acceleration;
+        configurations.endpoint_url = `${data.container_name}:${data.port}${data.route}`;
+        // configurations.architecture = data.architecture;
+        // configurations.acceleration = data.acceleration;
       }
 
       setElements((oldElements: (Node<SkillNodeData> | Edge<any>)[]) => {
@@ -224,7 +254,7 @@ const TransformPanel = (props: Props) => {
                     onChange={(_, option: IDropdownOption) => field.onChange(option.key)}
                     options={typeOptions}
                     required
-                    errorMessage={fieldState.error?.message && ERROR_BLANK_VALUE}
+                    errorMessage={fieldState.error?.message}
                   />
                 )}
               />
@@ -240,7 +270,7 @@ const TransformPanel = (props: Props) => {
                       onRenderLabel={(props: ITextFieldProps) => <LabelTitle label={props.label} isBold />}
                       onChange={(_, newValue): void => field.onChange(newValue)}
                       value={field.value}
-                      errorMessage={fieldState.error?.message && ERROR_BLANK_VALUE}
+                      errorMessage={fieldState.error?.message}
                       placeholder="Endpoint URL"
                     />
                   )}
@@ -263,7 +293,7 @@ const TransformPanel = (props: Props) => {
                           onRenderLabel={(props: ITextFieldProps) => <LabelTitle label={props.label} />}
                           onChange={(_, newValue): void => field.onChange(newValue)}
                           value={field.value}
-                          errorMessage={fieldState.error?.message && ERROR_BLANK_VALUE}
+                          errorMessage={fieldState.error?.message}
                         />
                       )}
                     />
@@ -276,7 +306,7 @@ const TransformPanel = (props: Props) => {
                           onRenderLabel={(props: ITextFieldProps) => <LabelTitle label={props.label} />}
                           onChange={(_, newValue): void => field.onChange(newValue)}
                           value={field.value}
-                          errorMessage={fieldState.error?.message && ERROR_BLANK_VALUE}
+                          errorMessage={fieldState.error?.message}
                         />
                       )}
                     />
@@ -286,10 +316,9 @@ const TransformPanel = (props: Props) => {
                       render={({ field, fieldState }) => (
                         <HorizontalTextField
                           label="Create options"
-                          onRenderLabel={(props: ITextFieldProps) => <LabelTitle label={props.label} />}
                           onChange={(_, newValue): void => field.onChange(newValue)}
                           value={field.value}
-                          errorMessage={fieldState.error?.message && ERROR_BLANK_VALUE}
+                          errorMessage={fieldState.error?.message}
                         />
                       )}
                     />
@@ -303,7 +332,7 @@ const TransformPanel = (props: Props) => {
                           selectedKey={field.value}
                           onChange={(_, option: IDropdownOption) => field.onChange(option.key)}
                           options={restartOptions}
-                          errorMessage={fieldState.error?.message && ERROR_BLANK_VALUE}
+                          errorMessage={fieldState.error?.message}
                           placeholder="Select one"
                         />
                       )}
@@ -322,8 +351,8 @@ const TransformPanel = (props: Props) => {
                           label="Port"
                           onRenderLabel={(props: ITextFieldProps) => <LabelTitle label={props.label} />}
                           onChange={(_, newValue): void => field.onChange(newValue)}
-                          value={field.value}
-                          errorMessage={fieldState.error?.message && ERROR_BLANK_VALUE}
+                          value={field.value.toString()}
+                          errorMessage={fieldState.error?.message}
                           placeholder="Enter number"
                         />
                       )}
@@ -334,11 +363,10 @@ const TransformPanel = (props: Props) => {
                       render={({ field, fieldState }) => (
                         <HorizontalTextField
                           label="Route"
-                          onRenderLabel={(props: ITextFieldProps) => <LabelTitle label={props.label} />}
                           onChange={(_, newValue): void => field.onChange(newValue)}
                           value={field.value}
-                          errorMessage={fieldState.error?.message && ERROR_BLANK_VALUE}
-                          placeholder="Enter route"
+                          errorMessage={fieldState.error?.message}
+                          placeholder="/GRPC"
                         />
                       )}
                     />
@@ -405,6 +433,9 @@ const TransformPanel = (props: Props) => {
                         <>
                           <HorizonChoiceGroup
                             styles={{
+                              root: {
+                                alignItems: 'center',
+                              },
                               flexContainer: {
                                 display: 'flex',
                                 '& div:not(:first-child)': {

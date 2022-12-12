@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogType, Stack, Text, Icon } from '@fluentui/react';
+import { Dialog, DialogType, Link, Text, Icon } from '@fluentui/react';
 
 interface Props {
   onDismiss: () => void;
@@ -25,15 +25,22 @@ const UnAzureStorage = (props: Props) => {
         isBlocking: false,
       }}
     >
-      <Stack
-        horizontal
-        verticalAlign="center"
-        tokens={{ childrenGap: 5 }}
-        styles={{ root: { color: '#0078D4' } }}
+      <Link
+        styles={{
+          root: {
+            color: '#0078D4',
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'underline',
+            '& span': { marginRight: '8px' },
+          },
+        }}
+        target="_blank"
+        href="https://github.com/Azure/PerceptOSS"
       >
         <Text>Learn more</Text>
         <Icon iconName="OpenInNewWindow" />
-      </Stack>
+      </Link>
     </Dialog>
   );
 };

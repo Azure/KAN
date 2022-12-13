@@ -9,16 +9,17 @@ import { theme } from '../../../../constant';
 type Props = {
   label: string;
   isBold?: boolean;
+  isHorizontal?: boolean;
 };
 
 const LabelTitle = (props: Props) => {
-  const { label, isBold } = props;
+  const { label, isBold, isHorizontal } = props;
 
   return (
     <Stack
       horizontal
       verticalAlign="center"
-      styles={{ root: { width: '150px' } }}
+      styles={{ root: { width: isHorizontal ? '100%' : '150px' } }}
       tokens={{ childrenGap: 4 }}
     >
       {isBold ? <Label>{label}</Label> : <Text>{label}</Text>}

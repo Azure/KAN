@@ -10,3 +10,4 @@ requests
 httpx
 azure-iot-device
 pytz
+grpcio

@@ -34,6 +34,7 @@ COPY symphonyai/app/*.py /app/
 #COPY symphonyai/app/models/*.py /app/models/
 COPY symphonyai/app/customvision /app/customvision
 COPY symphonyai/app/downloaders /app/downloaders
+COPY symphonyai/app/grpc_proto /app/grpc_proto
 
 
 

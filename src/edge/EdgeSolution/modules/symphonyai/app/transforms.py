@@ -3,9 +3,10 @@
 
 from node import Transform
 from frame import ObjectMeta, Bbox, InsightsMeta
+from common.voe_ipc import is_iotedge
 
 class FilterTransform(Transform):
-    def __init__(self, labels=None, confidence_threshold=None):
+    def __init__(self, labels=None, confidence_threshold=None, instance_name=None):
         super().__init__()
 
         if confidence_threshold is not None: 
@@ -48,9 +49,19 @@ from grpc_proto.custom_node_client import CustomNodeClient
 
 class GrpcTransform(Transform):
 
-    def __init__(self, endpoint_url, type=None):
+    def __init__(self, endpoint_url, instance_name, 
+            container_image=None, container_name=None, create_options=None, port=None, restart_policy=None, route=None, type=None):
         super().__init__()
         self.endpoint_url = endpoint_url
+
+        if type == 'container' and is_iotedge():
+            self.endpoint_url = instance_name + '-' + self.endpoint_url
+
+        print('--------------------------')
+        print('is_iotedge', is_iotedge(), flush=True)
+        print('endpoint_uri', self.endpoint_url, flush=True)
+        print('--------------------------')
+
         self.client = CustomNodeClient(self.endpoint_url, '', '', '')
 
     def process(self, frame):

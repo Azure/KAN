@@ -110,12 +110,13 @@ def build_module(module_name):
     #platforms = ['openvinoamd64']
     platforms = [PLATFORM]
     if module_name == 'predictmodule':
-        platforms.append('gpuamd64')
-        platforms.append('openvinoamd64')
+        #platforms.append('gpuamd64')
+        #platforms.append('openvinoamd64')
         pass
     if module_name == 'symphonyai' and PLATFORM == 'amd64':
-        platforms.append('gpuamd64')
-        platforms.append('openvinoamd64')
+        #platforms.append('gpuamd64')
+        #platforms.append('openvinoamd64')
+        pass
     for platform in platforms:
         dockerfile = module.get_dockerfile_by_platform(platform)
         tag = module.get_tag_by_platform(platform)
@@ -147,8 +148,9 @@ def push_module(module_name):
         platforms.append('openvinoamd64')
         pass
     if module_name == 'symphonyai' and PLATFORM == 'amd64':
-        platforms.append('gpuamd64')
-        platforms.append('openvinoamd64')
+        #platforms.append('gpuamd64')
+        #platforms.append('openvinoamd64')
+        pass
     for platform in platforms:
         module = IoTEdgeModule(module_name)
         dockerfile = module.get_dockerfile_by_platform(platform)

@@ -1,7 +1,7 @@
 import grpc
 import time
-import custom_node_pb2
-import custom_node_pb2_grpc
+from . import custom_node_pb2
+from . import custom_node_pb2_grpc
 
 import cv2
 
@@ -57,8 +57,9 @@ class CustomNodeClient:
                 )
             )
         )
-        if response.ack != self.seq:
-            raise Exception(f"Incorrect Ack, expect {self.seq} but got {response.ack}")
+        #FIXME
+        #if response.ack != self.seq:
+        #    raise Exception(f"Incorrect Ack, expect {self.seq} but got {response.ack}")
 
         self.seq += 1
 
@@ -74,7 +75,8 @@ if __name__ == '__main__':
 
     import numpy as np
     img = np.arange(12).reshape((2, 2, 3)).astype('uint8')
-    client = CustomNodeClient('localhost', 6677, '1', '2', '3')
+    client = CustomNodeClient('localhost:6677', '1', '2', '3')
+    #client = CustomNodeClient('168.63.246.174:6677', '1', '2', '3')
 
     response = client.send(img)
     print(response)

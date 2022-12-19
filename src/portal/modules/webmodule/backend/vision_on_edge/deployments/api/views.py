@@ -264,7 +264,7 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
 
         configure = json.loads(request.data.get("configure"))
 
-        pipelines, configure_data, module_routes = process_configure(
+        pipelines, configure_data, module_routes, is_grpc, grpc_components = process_configure(
             configure, request.data.get("name"))
 
         params = {"configure_data": json.dumps(configure_data)}
@@ -282,7 +282,9 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
                 "iothub": target_obj["iothub"],
                 "iotedge_device": target_obj["iotedge_device"],
                 "module_routes": module_routes,
-                "is_k8s": target_obj["is_k8s"]
+                "is_k8s": target_obj["is_k8s"],
+                "is_grpc": is_grpc,
+                "grpc_components": grpc_components
             }
         )
 
@@ -326,7 +328,7 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
 
         configure = json.loads(request.data.get("configure"))
 
-        pipelines, configure_data, module_routes = process_configure(
+        pipelines, configure_data, module_routes, is_grpc, grpc_components = process_configure(
             configure, instance_obj["name"])
 
         params = {"configure_data": json.dumps(configure_data)}
@@ -343,7 +345,9 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
                 "iothub": target_obj["iothub"],
                 "iotedge_device": target_obj["iotedge_device"],
                 "module_routes": module_routes,
-                "is_k8s": target_obj["is_k8s"]
+                "is_k8s": target_obj["is_k8s"],
+                "is_grpc": is_grpc,
+                "grpc_components": grpc_components
             }
         )
 
@@ -378,6 +382,8 @@ def process_configure(configure, displayname):
     module_routes = []
     pipelines = []
     pipeline_index = 0
+    is_grpc = False
+    grpc_components = []
     for cam in configure:
         device_obj = device_client.get_object(cam['camera'])
         configure_data[device_obj["symphony_id"]] = []
@@ -408,12 +414,42 @@ def process_configure(configure, displayname):
             })
             pipeline_index += 1
 
-            # check whether there is iotedge_export node and set route
             spec = skill_obj["flow"]
             for node in spec["nodes"]:
+                # check whether there is iotedge_export node and set route
                 if node["type"] == "export" and node["name"] == "iotedge_export":
                     module_routes.append({
                         "module_name": node["configurations"]["module_name"],
                         "module_input": node["configurations"]["module_input"]
                     })
-    return pipelines, configure_data, module_routes
+                # check whether there are grpc nodes to be deployed
+                if node["type"] == "transform" and node["name"] == "grpc_transform" and node["configurations"]["type"] == "container":
+                    is_grpc = True
+                    grpc_components.append(
+                        {
+                            "name": node["configurations"]["container_name"],
+                            "type": "container",
+                            "metadata": {
+                                "deployment.replicas": "#1",
+                                "service.ports": json.dumps(
+                                    [{
+                                        "name": f"port{node['configurations']['port']}",
+                                        "port": int(node["configurations"]["port"])
+                                    }]),
+                                "service.type": "ClusterIP"
+                            },
+                            "properties": {
+                                "container.image": node["configurations"]["container_image"],
+                                "container.imagePullPolicy": "Always",
+                                "container.restartPolicy": node["configurations"]["restart_policy"],
+                                "container.type": "docker",
+                                "container.version": "0.0.1",
+                                "container.ports": json.dumps(
+                                    [{"containerPort": int(
+                                        node["configurations"]["port"]), "protocol":"TCP"}]
+                                ),
+                                "container.resources": json.dumps({"requests": {"cpu": "100m", "memory": "100Mi"}})
+                            }
+                        }
+                    )
+    return pipelines, configure_data, module_routes, is_grpc, grpc_components

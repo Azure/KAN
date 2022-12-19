@@ -54,11 +54,15 @@ class SymphonyTargetClient(SymphonyClient):
         if is_k8s:
             provider = "providers.target.k8s"
             if cluster_type == "current":
-                config = {"inCluster": 'true'}
+                config = {
+                    "inCluster": "true",
+                    "deploymentStrategy": "services"
+                }
             else:
                 # TODO to be modified to provided config
                 config = {
                     "inCluster": "false",
+                    "deploymentStrategy": "services",
                     "configType": "bytes",
                     "configData": config_data
                 }
@@ -94,15 +98,16 @@ class SymphonyTargetClient(SymphonyClient):
             "spec": {
                 "name": name,
                 "displayName": display_name,
-                "metadata": {
-                    "deployment.replicas": "#1",
-                    "service.ports": "JA.[{\"name\":\"port8088\",\"port\": 8088}]",
-                    "service.type": "ClusterIP",
-                    "service.name": "symphony-agent"
-                },
+                "forceRedeploy": True,
                 "components": [
                     {
                         "name": "symphony-agent",
+                        "metadata": {
+                            "deployment.replicas": "#1",
+                            "service.ports": "[{\"name\":\"port8088\",\"port\": 8088}]",
+                            "service.type": "ClusterIP",
+                            "service.name": "symphony-agent"
+                        },
                         "properties": {
                             "container.version": "1.0",
                             "container.type": "docker",
@@ -342,8 +347,9 @@ class SymphonySolutionClient(SymphonyClient):
         iothub = self.args.get("iothub", "")
         iotedge_device = self.args.get("iotedge_device", "")
         module_routes = self.args.get("module_routes", "")
-
-        # workaround for synphony 0.39.7
+        is_grpc = self.args.get("is_grpc", False)
+        grpc_components = self.args.get("grpc_components", [])
+        # workaround for symphony 0.39.7
         is_k8s = self.args.get("is_k8s", False)
         if is_k8s:
             symphony_agent_address = "target-runtime.default.svc.cluster.local"
@@ -404,7 +410,7 @@ class SymphonySolutionClient(SymphonyClient):
                 })
 
         # container image
-        container_version = "0.39.0-dev.6"
+        container_version = "0.39.0-dev.7"
         # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
         # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
         # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"
@@ -467,6 +473,7 @@ class SymphonySolutionClient(SymphonyClient):
                     # },
                     {
                         "name": "symphonyai",
+                        "type": "container",
                         "properties": {
                             "container.createOptions": create_options,
                             "container.image": voeedge_image,
@@ -488,12 +495,18 @@ class SymphonySolutionClient(SymphonyClient):
                 "displayName": display_name
             },
         }
+        # add grpc container(s) if specified
+        if is_grpc and grpc_components:
+            config_json["spec"]["components"] += grpc_components
         # add container.resources to request gpu
         if container_resources:
             config_json["spec"]["components"][0]["properties"]["container.resources"] = container_resources
         return config_json
 
     def touch_config(self, name):
+
+        is_grpc = self.args.get("is_grpc", False)
+        grpc_components = self.args.get("grpc_components", [])
 
         api = self.get_client()
 
@@ -505,6 +518,9 @@ class SymphonySolutionClient(SymphonyClient):
                 plural="solutions",
                 name=name
             )
+
+            if is_grpc and grpc_components:
+                solution["spec"]["components"] += grpc_components
 
             for module in solution['spec']['components']:
                 module["properties"]["env.REVISIONS"] = str(
@@ -522,3 +538,17 @@ class SymphonySolutionClient(SymphonyClient):
             except Exception as e:
                 logger.warning("fail")
                 logger.warning(e)
+
+    def get_patch_config(self):
+
+        tag_list = self.args.get("tag_list", "[]")
+
+        labels = {}
+        if tag_list:
+            for tag in json.loads(tag_list):
+                labels[tag["name"]] = tag["value"]
+
+        patch_config = [
+            {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
+        ]
+        return patch_config

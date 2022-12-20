@@ -2,9 +2,17 @@
 // Licensed under the MIT License.
 
 import React, { useCallback, useEffect } from 'react';
-import { Panel, Stack, PrimaryButton, DefaultButton, Text, TextField } from '@fluentui/react';
+import {
+  Panel,
+  Stack,
+  PrimaryButton,
+  DefaultButton,
+  Text,
+  TextField,
+  ITextFieldProps,
+} from '@fluentui/react';
 import { Node, Edge } from 'react-flow-renderer';
-import { clone } from 'ramda';
+import { clone, isEmpty } from 'ramda';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -12,38 +20,52 @@ import * as yup from 'yup';
 import { FilterTransformPanelForm, SkillNodeData } from '../../types';
 import { ERROR_BLANK_VALUE } from '../../../../constant';
 
+import LabelTitle from '../Common/LabelTitle';
+
 interface Props {
   node: Node<SkillNodeData>;
   onDismiss: () => void;
   setElements: any;
 }
 
+type FormData = Pick<FilterTransformPanelForm, 'labels'> & {
+  confidence_threshold: number;
+};
+
+const ERROR_CONFIDENCE_THRESHOLD_RANGE = 'Please enter a whole number from 0 to 100.';
 const getParseLables = (labels: string): string[] => {
   return labels.match(/(\S+?)(?:,|$)/g);
 };
 
 const initialValues = {
   labels: '',
-  confidence_threshold: '0',
+  confidence_threshold: 0,
 };
 
 const TransformPanel = (props: Props) => {
   const { node, onDismiss, setElements } = props;
   const { data } = node;
 
-  const { reset, control, handleSubmit } = useForm<FilterTransformPanelForm>({
+  const { reset, control, handleSubmit } = useForm<FormData>({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
     defaultValues: initialValues,
     resolver: yupResolver(
       yup.object().shape({
         labels: yup.string().test('test', function (val) {
-          const parseLables = getParseLables(val);
+          if (isEmpty(val)) return this.createError({ message: ERROR_BLANK_VALUE });
 
-          if (!parseLables.length) return false;
+          const parseLables = getParseLables(val);
+          if (!parseLables.length) return this.createError({ message: ERROR_BLANK_VALUE });
           return true;
         }),
-        confidence_threshold: yup.number().integer().min(0).max(100).required(),
+        confidence_threshold: yup
+          .number()
+          .integer()
+          .min(0, ERROR_CONFIDENCE_THRESHOLD_RANGE)
+          .max(100, ERROR_CONFIDENCE_THRESHOLD_RANGE)
+          .typeError(ERROR_BLANK_VALUE)
+          .required(ERROR_BLANK_VALUE),
       }),
     ),
   });
@@ -52,16 +74,16 @@ const TransformPanel = (props: Props) => {
     if (data.configurations) {
       reset({
         labels: JSON.parse(data.configurations.labels).join(', '),
-        confidence_threshold: data.configurations.confidence_threshold.toString(),
+        confidence_threshold: parseInt(data.configurations.confidence_threshold, 10),
       });
     }
   }, [data, reset]);
 
   const onPanelDone = useCallback(
-    (data: FilterTransformPanelForm) => {
+    (data: FormData) => {
       const configurations: Partial<FilterTransformPanelForm> = {
-        confidence_threshold: data.confidence_threshold.toString(),
         labels: JSON.stringify(getParseLables(data.labels)),
+        confidence_threshold: data.confidence_threshold.toString(),
       };
 
       setElements((oldElements: (Node<any> | Edge<any>)[]) => {
@@ -112,7 +134,10 @@ const TransformPanel = (props: Props) => {
                   value={field.value}
                   onChange={(_, newValue): void => field.onChange(newValue)}
                   placeholder="object1, object2, etc."
-                  errorMessage={fieldState.error?.message && ERROR_BLANK_VALUE}
+                  errorMessage={fieldState.error?.message}
+                  onRenderLabel={(props: ITextFieldProps) => (
+                    <LabelTitle label={props.label} isHorizontal isBold />
+                  )}
                 />
               )}
             />
@@ -123,19 +148,28 @@ const TransformPanel = (props: Props) => {
                 <TextField
                   type="number"
                   label="Confidence Threshold"
-                  required
-                  value={field.value}
+                  value={field.value.toString()}
                   onChange={(_, newValue): void => field.onChange(newValue)}
-                  errorMessage={fieldState.error?.message && ERROR_BLANK_VALUE}
+                  errorMessage={fieldState.error?.message}
                   placeholder="0-100"
+                  onRenderLabel={(props: ITextFieldProps) => (
+                    <LabelTitle label={props.label} isHorizontal isBold />
+                  )}
                 />
               )}
             />
           </Stack>
 
-          <Stack styles={{ root: { padding: '16px 0', display: 'block' } }} tokens={{ childrenGap: 5 }}>
+          <Stack
+            styles={{ root: { padding: '16px 0 0' } }}
+            tokens={{ childrenGap: 10 }}
+            verticalAlign="center"
+            horizontal
+          >
             <PrimaryButton type="submit">Done</PrimaryButton>
-            <DefaultButton onClick={onDismiss}>Cancel</DefaultButton>
+            <DefaultButton styles={{ root: { marginTop: 0 } }} onClick={onDismiss}>
+              Cancel
+            </DefaultButton>
           </Stack>
         </form>
       </Stack>

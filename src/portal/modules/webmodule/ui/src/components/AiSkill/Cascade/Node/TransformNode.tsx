@@ -3,9 +3,8 @@
 
 import React, { memo, useCallback } from 'react';
 import { Stack, IContextualMenuProps, IconButton, Label } from '@fluentui/react';
-import { Handle, addEdge, Connection, Edge, Node, isNode } from 'react-flow-renderer';
+import { Handle, addEdge, Connection, Edge, Node, isNode, Position } from 'react-flow-renderer';
 
-// import { CascadeData } from '../types';
 import { getNodeImage } from '../../utils';
 import { getNodeClasses } from './styles';
 import { SkillNodeData } from '../../types';
@@ -70,8 +69,7 @@ const TransformNode = (props: Props) => {
     <>
       <Handle
         id="target"
-        // @ts-ignore
-        position="top"
+        position={Position.Top}
         type="target"
         onConnect={onConnectEdge}
         isConnectable={true}
@@ -106,8 +104,7 @@ const TransformNode = (props: Props) => {
       </Stack>
       <Handle
         id="source"
-        // @ts-ignore
-        position="bottom"
+        position={Position.Bottom}
         type="source"
         isConnectable={true}
         onConnect={onConnectEdge}

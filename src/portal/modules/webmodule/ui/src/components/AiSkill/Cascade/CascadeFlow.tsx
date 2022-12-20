@@ -13,9 +13,13 @@ import ReactFlow, {
   Connection,
 } from 'react-flow-renderer';
 import { MessageBar, MessageBarType } from '@fluentui/react';
+import { useSelector } from 'react-redux';
+import { isEmpty } from 'ramda';
+import { useBoolean } from '@uifabric/react-hooks';
 
+import { State as RootState } from 'RootStateType';
 import { getCascadeFlowClasses } from './styles';
-import { SkillSideNode } from '../types';
+import { SkillSideNode, ExportType } from '../types';
 import './dnd.css';
 
 import LeftNavigationList from './LeftNavigation/NavList';
@@ -25,6 +29,10 @@ import ExportNode from './Node/ExportNode';
 import PanelContainer from './SidePanel/PanelContainer';
 import SourceNode from './Node/SourceNode';
 import CustomEdge from './CustomEdge';
+import UnAzureStorage from '../../Common/Dialog/UnAzureStorage';
+import UnIotHutAccess from '../../Common/Dialog/UnIotHutAccess';
+
+const IotHubAccessList: ExportType[] = ['iotHub', 'iotEdge'];
 
 interface Props {
   elements: (Node | Edge)[];
@@ -36,7 +44,7 @@ interface Props {
   hasUseAiSkill?: boolean;
 }
 
-const getNodeId = (length: number) => length++;
+const getNodeId = (length: number) => length + 1;
 
 const CascadeFlow = (props: Props) => {
   const {
@@ -49,13 +57,21 @@ const CascadeFlow = (props: Props) => {
     hasUseAiSkill,
   } = props;
 
+  const classes = getCascadeFlowClasses();
+
+  const { storage_account, storage_container, subscription_id, tenant_id, client_id, client_secret } =
+    useSelector((state: RootState) => state.setting);
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
+  const isNoAzureStorage = isEmpty(storage_account) && isEmpty(storage_container) && isEmpty(subscription_id);
+  const isNoIotHubAccess = isEmpty(tenant_id) && isEmpty(client_id) && isEmpty(client_secret);
+
+  const [hideAzureStorage, { toggle: toggleHideAzureStorage }] = useBoolean(isNoAzureStorage);
+  const [hideIotHubAccess, { toggle: toggleHideIotHubAccess }] = useBoolean(isNoIotHubAccess);
 
   const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
   const onLoad = (_reactFlowInstance) => setReactFlowInstance(_reactFlowInstance);
-  const classes = getCascadeFlowClasses();
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -67,8 +83,15 @@ const CascadeFlow = (props: Props) => {
 
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
     const skillNode = JSON.parse(event.dataTransfer.getData('application/skillNode')) as SkillSideNode;
-    // const id = event.dataTransfer.getData('id');
-    // const connectMap = event.dataTransfer.getData('connectMap');
+
+    if (isNoAzureStorage && skillNode.exportType === 'snippet') {
+      toggleHideAzureStorage();
+      return;
+    }
+    if (isNoIotHubAccess && IotHubAccessList.includes(skillNode.exportType)) {
+      toggleHideIotHubAccess();
+      return;
+    }
 
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
@@ -147,118 +170,122 @@ const CascadeFlow = (props: Props) => {
   );
 
   return (
-    <div className="dndflow">
-      {cascadeError && (
-        <div className={classes.errorWrapper} style={{ top: hasUseAiSkill ? 40 : 0 }}>
-          <MessageBar messageBarType={MessageBarType.error} onDismiss={onErrorCancel}>
-            {cascadeError}
-          </MessageBar>
-        </div>
-      )}
-      {hasUseAiSkill && (
-        <div className={classes.errorWrapper}>
-          <MessageBar
-            messageBarType={MessageBarType.warning}
-            messageBarIconProps={{ iconName: 'IncidentTriangle' }}
-            styles={{ icon: { color: '#DB7500' } }}
-          >
-            Warning! This skill is referenced in at least one deployment. Changing this skill will modify your
-            deployments that have a reference to this skill.
-          </MessageBar>
-        </div>
-      )}
-      <ReactFlowProvider>
-        <LeftNavigationList connectMap={elements.length > 0 ? elements[0].data?.connectMap : []} />
-        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-          {!!selectedNode && (
-            <PanelContainer
-              node={selectedNode}
-              onDismiss={() => setSelectedNode(null)}
-              setElements={setElements}
-              acceleraction={selectedAcceleraction}
-            />
-          )}
-          <ReactFlow
-            className={classes.flow}
-            ref={reactFlowRef}
-            elements={elements}
-            nodeTypes={{
-              source: (node: Node) => {
-                const { id, data } = node;
+    <>
+      <div className="dndflow">
+        {cascadeError && (
+          <div className={classes.errorWrapper} style={{ top: hasUseAiSkill ? 40 : 0 }}>
+            <MessageBar messageBarType={MessageBarType.error} onDismiss={onErrorCancel}>
+              {cascadeError}
+            </MessageBar>
+          </div>
+        )}
+        {hasUseAiSkill && (
+          <div className={classes.errorWrapper}>
+            <MessageBar
+              messageBarType={MessageBarType.warning}
+              messageBarIconProps={{ iconName: 'IncidentTriangle' }}
+              styles={{ icon: { color: '#DB7500' } }}
+            >
+              Warning! This skill is referenced in at least one deployment. Changing this skill will modify
+              your deployments that have a reference to this skill.
+            </MessageBar>
+          </div>
+        )}
+        <ReactFlowProvider>
+          <LeftNavigationList connectMap={elements.length > 0 ? elements[0].data?.connectMap : []} />
+          <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+            {!!selectedNode && (
+              <PanelContainer
+                node={selectedNode}
+                onDismiss={() => setSelectedNode(null)}
+                setElements={setElements}
+                acceleraction={selectedAcceleraction}
+              />
+            )}
+            <ReactFlow
+              className={classes.flow}
+              ref={reactFlowRef}
+              elements={elements}
+              nodeTypes={{
+                source: (node: Node) => {
+                  const { id, data } = node;
 
-                return (
-                  <SourceNode
-                    id={id}
-                    setElements={setElements}
-                    onNodeConnect={onNodeConnect}
-                    cascadeData={data}
-                  />
-                );
-              },
-              model: (node: Node) => {
-                const { id, data } = node;
+                  return (
+                    <SourceNode
+                      id={id}
+                      setElements={setElements}
+                      onNodeConnect={onNodeConnect}
+                      cascadeData={data}
+                    />
+                  );
+                },
+                model: (node: Node) => {
+                  const { id, data } = node;
 
-                return (
-                  <ModelNode
-                    id={id}
-                    cascadeData={data}
-                    onSelected={() => setSelectedNode(node)}
-                    setElements={setElements}
-                    onDelete={() => onDeleteNode(id)}
-                    onNodeConnect={onNodeConnect}
-                    elementList={elements}
-                    connectMap={data.connectMap}
-                  />
-                );
-              },
-              transform: (node: Node) => {
-                const { id, data } = node;
+                  return (
+                    <ModelNode
+                      id={id}
+                      cascadeData={data}
+                      onSelected={() => setSelectedNode(node)}
+                      setElements={setElements}
+                      onDelete={() => onDeleteNode(id)}
+                      onNodeConnect={onNodeConnect}
+                      elementList={elements}
+                      connectMap={data.connectMap}
+                    />
+                  );
+                },
+                transform: (node: Node) => {
+                  const { id, data } = node;
 
-                return (
-                  <TransformNode
-                    id={id}
-                    cascadeData={data}
-                    onSelected={() => setSelectedNode(node)}
-                    setElements={setElements}
-                    onDelete={() => onDeleteNode(id)}
-                    onNodeConnect={onNodeConnect}
-                    connectMap={data.connectMap}
-                  />
-                );
-              },
-              export: (node: Node) => {
-                const { id, data } = node;
+                  return (
+                    <TransformNode
+                      id={id}
+                      cascadeData={data}
+                      onSelected={() => setSelectedNode(node)}
+                      setElements={setElements}
+                      onDelete={() => onDeleteNode(id)}
+                      onNodeConnect={onNodeConnect}
+                      connectMap={data.connectMap}
+                    />
+                  );
+                },
+                export: (node: Node) => {
+                  const { id, data } = node;
 
-                return (
-                  <ExportNode
-                    id={id}
-                    cascadeData={data}
-                    onSelected={() => setSelectedNode(node)}
-                    // modelList={modelList}
-                    // type="openvino_model"
-                    setElements={setElements}
-                    onDelete={() => onDeleteNode(id)}
-                    connectMap={data.connectMap}
-                  />
-                );
-              },
-            }}
-            edgeTypes={{
-              default: (edge) => {
-                return <CustomEdge {...edge} onDeleteEdge={(edgeId: string) => onDeleteEdge(edgeId)} />;
-              },
-            }}
-            onElementsRemove={onElementsRemove}
-            onLoad={onLoad}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            snapToGrid={true}
-          >
-            <Controls />
-          </ReactFlow>
-        </div>
-      </ReactFlowProvider>
-    </div>
+                  return (
+                    <ExportNode
+                      id={id}
+                      cascadeData={data}
+                      onSelected={() => setSelectedNode(node)}
+                      // modelList={modelList}
+                      // type="openvino_model"
+                      setElements={setElements}
+                      onDelete={() => onDeleteNode(id)}
+                      connectMap={data.connectMap}
+                    />
+                  );
+                },
+              }}
+              edgeTypes={{
+                default: (edge) => {
+                  return <CustomEdge {...edge} onDeleteEdge={(edgeId: string) => onDeleteEdge(edgeId)} />;
+                },
+              }}
+              onElementsRemove={onElementsRemove}
+              onLoad={onLoad}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+              snapToGrid={true}
+            >
+              <Controls />
+            </ReactFlow>
+          </div>
+        </ReactFlowProvider>
+      </div>
+      {hideAzureStorage && <UnAzureStorage onDismiss={toggleHideAzureStorage} />}
+      {hideIotHubAccess && <UnIotHutAccess onDismiss={toggleHideIotHubAccess} />}
+    </>
   );
 };
 

@@ -3,13 +3,18 @@
 
 import React, { useCallback } from 'react';
 import { useHistory, generatePath } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { isEmpty } from 'ramda';
+import { useBoolean } from '@uifabric/react-hooks';
 
+import { State as RootState } from 'RootStateType';
 import { Camera } from '../../../store/cameraSlice';
 import { ViewMode } from '../types';
 import { Url } from '../../../constant';
 
 import CameraCardList from './CameraCardList';
 import CameraList from './CameraList';
+import UnAzureStorage from '../../Common/Dialog/UnAzureStorage';
 
 interface Props {
   cameraList: Camera[];
@@ -22,6 +27,12 @@ const CameraListManagement = (props: Props) => {
   const { cameraList, onCameraCardSelect, viewMode, onCameraListSelect } = props;
 
   const history = useHistory();
+
+  const { storage_account, storage_container, subscription_id } = useSelector(
+    (state: RootState) => state.setting,
+  );
+  const isNoAzureStorage = isEmpty(storage_account) && isEmpty(storage_container) && isEmpty(subscription_id);
+  const [hideAzureStorage, { toggle: toggleHideAzureStorage }] = useBoolean(isNoAzureStorage);
 
   const onLiveFeedRedirect = useCallback(
     (id: number) => {
@@ -49,6 +60,7 @@ const CameraListManagement = (props: Props) => {
           onLiveFeedRedirect={onLiveFeedRedirect}
         />
       )}
+      {hideAzureStorage && <UnAzureStorage onDismiss={toggleHideAzureStorage} showCloseButton />}
     </>
   );
 };

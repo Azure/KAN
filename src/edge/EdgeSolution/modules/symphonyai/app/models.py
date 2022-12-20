@@ -111,8 +111,8 @@ class ObjectDetectionModel(Model):
                 h=y2-y1,
             )
 
-
-            object_meta = ObjectMeta(label=obj.label, bbox=obj.bbox, confidence=obj.confidence, attributes=[])
+            # FIXME
+            object_meta = ObjectMeta(timestamp=0, inference_id='0', label=obj.label, bbox=obj.bbox, confidence=obj.confidence, attributes=[])
             frame.insights_meta.objects_meta.append(object_meta)
 
             # FIXME send image to webmodule for train new models (according to confidence threshold)

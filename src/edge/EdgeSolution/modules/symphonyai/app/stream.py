@@ -5,17 +5,18 @@ import networkx as nx
 from common.voe_cascade_config import CascadeConfig
 
 from sources import RtspSource
-from transforms import FilterTransform
+from transforms import FilterTransform, GrpcTransform
 from exports import VideoSnippetExport, IothubExport, IotedgeExport, Cv2ImshowExport, HttpExport
 from models import FakeModel, ObjectDetectionModel, ClassificationModel
+
 
 supported_sources = {
     'rtsp': RtspSource
 }
 
 supported_transforms = {
-    'filter_transform': FilterTransform
-     
+    'filter_transform': FilterTransform,
+    'grpc_transform': GrpcTransform
 }
 
 supported_exports = {

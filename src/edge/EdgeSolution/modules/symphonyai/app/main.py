@@ -14,7 +14,7 @@ from common.symphony_objects import SkillSpec, ModelSpec, InstanceSpec
 from common.symphony_agent_client import SymphonyAgentClient
 from common.voe_cascade_config import CascadeConfig, Node, Edge
 from common.voe_model_config import ModelConfig
-from common.voe_ipc import PredictModule, StreamingModule
+from common.voe_ipc import PredictModule, StreamingModule, is_iotedge
 from common.voe_status import StatusEnum
 
 # logging.basicConfig(level=logging.DEBUG)
@@ -33,7 +33,7 @@ STATUS_INITIALIZING_PREDICTMODULE = '2'
 STATUS_INITIALIZING_STREAMINGMODULE = '3'
 
 
-def process_skill(skill, skill_name):
+def process_skill(skill, skill_name, instance_name):
 
     skill_spec = SkillSpec(**skill['spec'])
 
@@ -143,6 +143,17 @@ def process_skill(skill, skill_name):
                 configurations=configurations
             )
 
+        elif skill_node.type == 'transform':
+
+            configurations = skill_node.configurations.copy()
+            configurations['instance_name'] = instance_name
+            node = Node(
+                id=skill_node.id,
+                type=skill_node.type,
+                name=skill_node.name,
+                configurations=configurations or {}
+            )
+
         else:
             node = Node(
                 id=skill_node.id,
@@ -205,7 +216,7 @@ if __name__ == '__main__':
             f'skill_name: {skill_name}, skill_alias: {skill_alias}', flush=True)
         print(skill, flush=True)
         new_cascade_config, new_model_configs = process_skill(
-            skill, skill_name)
+            skill, skill_name, instance_name)
 
         cascade_configs.append(new_cascade_config)
         model_configs += new_model_configs

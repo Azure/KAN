@@ -21,6 +21,12 @@ def is_local():
     
     return True
 
+def is_iotedge():
+    if 'IOTEDGE_MODULEID' in os.environ:
+        return True
+    return False
+
+
 def is_symphony():
     if 'INSTANCE' in os.environ:
         return True

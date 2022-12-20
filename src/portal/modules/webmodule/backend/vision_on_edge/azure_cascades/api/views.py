@@ -105,6 +105,49 @@ class CascadeViewSet(FiltersMixin, viewsets.ModelViewSet):
 
         skill_client.patch_config(name=symphony_id)
 
+        # maintain grpc components
+        is_grpc = False
+        grpc_components = []
+        for node in flow["nodes"]:
+            # check whether there are grpc nodes to be deployed
+            if node["type"] == "transform" and node["name"] == "grpc_transform" and node["configurations"]["type"] == "container":
+                is_grpc = True
+                grpc_components.append(
+                    {
+                        "name": node["configurations"]["container_name"],
+                        "type": "container",
+                        "metadata": {
+                            "deployment.replicas": "#1",
+                            "service.ports": json.dumps(
+                                [{
+                                    "name": f"port{node['configurations']['port']}",
+                                    "port": int(node["configurations"]["port"])
+                                }]),
+                            "service.type": "ClusterIP"
+                        },
+                        "properties": {
+                            "container.image": node["configurations"]["container_image"],
+                            "container.imagePullPolicy": "always",
+                            "container.type": "docker",
+                            "container.version": "0.0.1",
+                            "container.restartPolicy": node["configurations"]["restart_policy"],
+                            "container.ports": json.dumps(
+                                [{"containerPort": int(
+                                    node["configurations"]["port"]), "protocol":"TCP"}]
+                            ),
+                            "container.resources": json.dumps({"requests": {"cpu": "100m", "memory": "100Mi"}})
+                        }
+                    }
+                )
+
+        if is_grpc and grpc_components:
+            solution_client.set_attr(
+                {
+                    "is_grpc": is_grpc,
+                    "grpc_components": grpc_components
+                }
+            )
+
         # TODO Update affected solutions (after sync deployment finished)
         affected_solutions = []
         for instance_obj in instance_client.get_objects():

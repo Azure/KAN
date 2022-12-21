@@ -446,12 +446,12 @@ while [ $current_step -lt 6 ]; do
                 kubectl get instance --no-headers=true | awk '{print $1}' | xargs kubectl patch instance.solution.symphony -p '{"metadata":{"finalizers":null}}' --type=merge
 
                 echo -e "\e[32mInstalling symphony\e[0m"
-                helm upgrade --install symphony oci://possprod.azurecr.io/helm/symphony --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version  0.40.60 --wait
+                helm upgrade --install symphony oci://possprod.azurecr.io/helm/symphony --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version  0.41.19 --wait
                 if [ $? != "0" ];  then
                     echo -e "\e[31mWe faced some issues while pull symphony from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
                 echo -e "\e[32mInstalling Portal\e[0m"
-                helm upgrade --install symphonyportal oci://p4etest.azurecr.io/helm/voe --version 0.39.0-main-57bb5cb-amd64 \
+                helm upgrade --install symphonyportal oci://p4etest.azurecr.io/helm/voe --version 0.39.0-main-674f0a6-amd64 \
                     --set "storage.storageResourceGroup=$selected_storage_account_rg" \
                     --set "storage.storageAccount=$selected_storage_account_name" \
                     --set "storage.storageContainer=$selected_blob_container_name" \

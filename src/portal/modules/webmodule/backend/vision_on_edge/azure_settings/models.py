@@ -5,6 +5,7 @@
 """
 
 import logging
+import os
 
 from azure.cognitiveservices.vision.customvision.training import (
     CustomVisionTrainingClient,
@@ -43,10 +44,10 @@ class Setting(models.Model):
     subscription_id = models.CharField(max_length=1000, blank=True)
     storage_account = models.CharField(max_length=1000, blank=True)
     storage_container = models.CharField(max_length=1000, blank=True)
+    storage_resource_group = models.CharField(max_length=1000, blank=True)
     tenant_id = models.CharField(max_length=1000, blank=True)
     client_id = models.CharField(max_length=1000, blank=True)
     client_secret = models.CharField(max_length=1000, blank=True)
-
 
     is_collect_data = models.BooleanField(default=False)
 
@@ -131,6 +132,16 @@ class Setting(models.Model):
         instance.obj_detection_domain_id = (
             instance.get_domain_id() if instance.is_trainer_valid else ""
         )
+
+        os.environ["SUBSCRIPTION_ID"] = instance.subscription_id
+        os.environ["STORAGE_ACCOUNT"] = instance.storage_account
+        os.environ["STORAGE_CONTAINER"] = instance.storage_container
+        os.environ["STORAGE_RESOURCE_GROUP"] = instance.storage_resource_group
+        os.environ["TENANT_ID"] = instance.tenant_id
+        os.environ["CLIENT_ID"] = instance.client_id
+        os.environ["CLIENT_SECRET"] = instance.client_secret
+        os.environ["ENDPOINT"] = instance.endpoint
+        os.environ["TRAINING_KEY"] = instance.training_key
 
     def create_project(self, project_name: str, domain_id: str = None, classification_type: str = None) -> Project:
         """Create Project on Custom Vision

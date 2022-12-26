@@ -376,9 +376,16 @@ class SymphonySolutionClient(SymphonyClient):
         storage_resource_group = os.getenv('STORAGE_RESOURCE_GROUP')
         storage_container = os.getenv('STORAGE_CONTAINER')
         storage_account = os.getenv('STORAGE_ACCOUNT')
-        res = subprocess.check_output(
-            ['az', 'storage', 'account', 'show-connection-string', '--name', storage_account, '--resource-group', storage_resource_group, '-o', 'tsv'])
-        storage_conn_str = res.decode('utf8').strip()
+        if storage_resource_group and storage_account:
+            try:
+                res = subprocess.check_output(
+                    ['az', 'storage', 'account', 'show-connection-string', '--name', storage_account, '--resource-group', storage_resource_group, '-o', 'tsv'])
+                storage_conn_str = res.decode('utf8').strip()
+            except Exception as e:
+                logger.warning(e)
+                storage_conn_str = ""
+        else:
+            storage_conn_str = ""
 
         if not is_k8s and iotedge_device and iothub:
             # get iotedge device connection string

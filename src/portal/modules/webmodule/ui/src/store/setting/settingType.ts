@@ -70,6 +70,20 @@ export type GetAllCvProjectsErrorAction = {
   error: Error;
 };
 
+export type UpdateSettingRequestAction = {
+  type: 'setting/update_pending';
+};
+
+export type UpdateSettingSuccessAction = {
+  type: 'setting/update_fulfilled';
+  payload: Setting;
+};
+
+export type UpdateSettingErrorAction = {
+  type: 'setting/update_rejected';
+  error: Error;
+};
+
 export type SettingActionType =
   // | UpdateKeyAction
   // | UpdateNamespaceAction
@@ -79,6 +93,9 @@ export type SettingActionType =
   | GetAllCvProjectsRequestAction
   | GetAllCvProjectsSuccessAction
   | GetAllCvProjectsErrorAction
-  | OnSettingStatusCheckAction;
+  | OnSettingStatusCheckAction
+  | UpdateSettingRequestAction
+  | UpdateSettingSuccessAction
+  | UpdateSettingErrorAction;
 
 export type SettingThunk<ReturnType = void> = ThunkAction<ReturnType, State, unknown, Action<string>>;

@@ -8,8 +8,8 @@ import {
   Stack,
   TextField,
   mergeStyleSets,
-  MessageBar,
-  MessageBarType,
+  // MessageBar,
+  // MessageBarType,
   PrimaryButton,
   DefaultButton,
   styled,
@@ -20,16 +20,20 @@ import {
   IconButton,
   Text,
 } from '@fluentui/react';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import { State as RootState } from 'RootStateType';
 import {
   checkSettingStatus,
   // updateNamespace,
   // updateKey,
-  thunkPostSetting,
+  // thunkPostSetting,
   thunkGetAllCvProjects,
+  updateSetting,
 } from '../store/setting/settingAction';
-import { theme } from '../constant';
+import { ERROR_BLANK_VALUE, theme } from '../constant';
 
 interface Props {
   isModalOpen: boolean;
@@ -57,7 +61,7 @@ const HorizontalTextField = styled<ITextFieldProps, ITextFieldStyleProps, ITextF
       },
     },
     wrapper: { display: 'flex' },
-    field: { width: '480px' },
+    fieldGroup: { width: '480px' },
     errorMessage: { paddingLeft: '200px' },
   }),
 );
@@ -73,15 +77,53 @@ const HorizontalTextField = styled<ITextFieldProps, ITextFieldStyleProps, ITextF
 //   );
 // };
 
+type FormData = {
+  training_key: string;
+  endpoint: string;
+  subscription_id: string;
+  storage_account: string;
+  storage_container: string;
+  tenant_id: string;
+  client_id: string;
+  client_secret: string;
+};
+
 const SettingModal = (props: Props) => {
   const { isModalOpen, onModalClose, canBeDismissed, showProjectDropdown } = props;
 
   const settingData = useSelector((state: RootState) => state.setting);
   // const originSettingData = useSelector((state: RootState) => state.setting.origin);
-  const error = useSelector((state: RootState) => state.setting.error);
+  // const error = useSelector((state: RootState) => state.setting.error);
 
   // const dontNeedUpdateOrSave = equals(settingData, originSettingData);
   const [loading, setLoading] = useState(false);
+
+  const { control, handleSubmit } = useForm<FormData>({
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+    defaultValues: {
+      tenant_id: settingData.tenant_id,
+      client_id: settingData.client_id,
+      client_secret: settingData.client_secret,
+      subscription_id: settingData.subscription_id,
+      storage_account: settingData.storage_account,
+      storage_container: settingData.storage_container,
+      training_key: settingData.training_key,
+      endpoint: settingData.endpoint,
+    },
+    resolver: yupResolver(
+      yup.object().shape({
+        tenant_id: yup.string().required(ERROR_BLANK_VALUE),
+        client_id: yup.string().required(ERROR_BLANK_VALUE),
+        client_secret: yup.string().required(ERROR_BLANK_VALUE),
+        storage_account: yup.string().required(ERROR_BLANK_VALUE),
+        storage_container: yup.string().required(ERROR_BLANK_VALUE),
+        subscription_id: yup.string().required(ERROR_BLANK_VALUE),
+        training_key: yup.string().required(ERROR_BLANK_VALUE),
+        endpoint: yup.string().required(ERROR_BLANK_VALUE),
+      }),
+    ),
+  });
 
   const classes = getClasses();
   const dispatch = useDispatch();
@@ -94,18 +136,29 @@ const SettingModal = (props: Props) => {
     dispatch(checkSettingStatus());
   }, [dispatch]);
 
-  const onConfirm = useCallback(async () => {
-    try {
+  // const onConfirm = useCallback(async () => {
+  //   try {
+  //     setLoading(true);
+
+  //     await dispatch(thunkPostSetting());
+
+  //     setLoading(false);
+  //     onModalClose();
+  //   } catch (e) {
+  //     alert(e);
+  //   }
+  // }, [dispatch, onModalClose]);
+
+  const onFormDone = useCallback(
+    async (data: FormData) => {
       setLoading(true);
 
-      await dispatch(thunkPostSetting());
+      await dispatch(updateSetting(data));
 
       setLoading(false);
-      onModalClose();
-    } catch (e) {
-      alert(e);
-    }
-  }, [dispatch, onModalClose]);
+    },
+    [dispatch],
+  );
 
   return (
     <Modal
@@ -114,70 +167,137 @@ const SettingModal = (props: Props) => {
       isBlocking={true}
       styles={{ scrollableContent: classes.scrollableContent }}
     >
-      <Stack tokens={{ childrenGap: 25 }}>
-        <Stack horizontal verticalAlign="center" horizontalAlign="space-between">
-          <Label styles={{ root: classes.title }}>Settings</Label>
-          <IconButton
-            iconProps={{ iconName: 'Cancel' }}
-            onClick={onModalClose}
-            disabled={!showProjectDropdown}
-          />
-        </Stack>
-        <Text styles={{ root: classes.describe }}>These settings are autofilled with your credentials.</Text>
-        <Stack tokens={{ childrenGap: 12 }}>
-          <h4 className={classes.sbutTitle}>Service Principal Settings</h4>
-          <HorizontalTextField
-            label="tenantId"
-            required
-            value={settingData.tenant_id}
-            disabled={true}
-            // styles={{ root: classes.contentTitle }}
-          />
-          <HorizontalTextField label="clientId" required value={settingData.client_id} disabled={true} />
-          <HorizontalTextField
-            label="clientSecret"
-            required
-            value={settingData.client_secret}
-            disabled={true}
-            type="password"
-          />
-        </Stack>
+      <form onSubmit={handleSubmit(onFormDone)}>
+        <Stack tokens={{ childrenGap: 25 }}>
+          <Stack horizontal verticalAlign="center" horizontalAlign="space-between">
+            <Label styles={{ root: classes.title }}>Settings</Label>
+            <IconButton
+              iconProps={{ iconName: 'Cancel' }}
+              onClick={onModalClose}
+              disabled={!showProjectDropdown}
+            />
+          </Stack>
+          <Text styles={{ root: classes.describe }}>
+            These settings are autofilled with your credentials.
+          </Text>
+          <Stack tokens={{ childrenGap: 12 }}>
+            <h4 className={classes.sbutTitle}>Service Principal Settings</h4>
+            <Controller
+              control={control}
+              name="tenant_id"
+              render={({ field, fieldState }) => (
+                <HorizontalTextField
+                  label="tenantId"
+                  value={field.value}
+                  onChange={(_, newValue): void => field.onChange(newValue)}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="client_id"
+              render={({ field, fieldState }) => (
+                <HorizontalTextField
+                  label="clientId"
+                  value={field.value}
+                  onChange={(_, newValue): void => field.onChange(newValue)}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="client_secret"
+              render={({ field, fieldState }) => (
+                <HorizontalTextField
+                  type="password"
+                  canRevealPassword
+                  label="clientSecret"
+                  value={field.value}
+                  onChange={(_, newValue): void => field.onChange(newValue)}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
+            />
+          </Stack>
+          <Stack tokens={{ childrenGap: 12 }}>
+            <h4 className={classes.sbutTitle}>Azure Storage Settings</h4>
 
-        <Stack tokens={{ childrenGap: 12 }}>
-          <h4 className={classes.sbutTitle}>Azure Storage Settings</h4>
-          <HorizontalTextField
-            label="storageAccount"
-            required
-            value={settingData.storage_account}
-            disabled={true}
-          />
-          <HorizontalTextField
-            label="storageContainer"
-            required
-            value={settingData.storage_container}
-            disabled={true}
-          />
-          <HorizontalTextField
-            label="subscriptionId"
-            required
-            value={settingData.subscription_id}
-            disabled={true}
-          />
-        </Stack>
+            <Controller
+              control={control}
+              name="storage_account"
+              render={({ field, fieldState }) => (
+                <HorizontalTextField
+                  label="storageAccount"
+                  value={field.value}
+                  onChange={(_, newValue): void => field.onChange(newValue)}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="storage_container"
+              render={({ field, fieldState }) => (
+                <HorizontalTextField
+                  label="storageContainer"
+                  value={field.value}
+                  onChange={(_, newValue): void => field.onChange(newValue)}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="subscription_id"
+              render={({ field, fieldState }) => (
+                <HorizontalTextField
+                  label="subscriptionId"
+                  value={field.value}
+                  onChange={(_, newValue): void => field.onChange(newValue)}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
+            />
+          </Stack>
+          <Stack tokens={{ childrenGap: 12 }}>
+            <h4 className={classes.sbutTitle}>Azure Cognitive Services Settings</h4>
 
-        <Stack tokens={{ childrenGap: 12 }}>
-          <h4 className={classes.sbutTitle}>Azure Cognitive Services Settings</h4>
-          <HorizontalTextField label="Endpoint" value={settingData.endpoint} disabled={true} />
-          <HorizontalTextField label="Key" value={settingData.training_key} disabled={true} type="password" />
-        </Stack>
+            <Controller
+              control={control}
+              name="endpoint"
+              render={({ field, fieldState }) => (
+                <HorizontalTextField
+                  label="Endpoint"
+                  value={field.value}
+                  onChange={(_, newValue): void => field.onChange(newValue)}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="training_key"
+              render={({ field, fieldState }) => (
+                <HorizontalTextField
+                  label="Key"
+                  type="password"
+                  canRevealPassword
+                  value={field.value}
+                  onChange={(_, newValue): void => field.onChange(newValue)}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
+            />
+          </Stack>
 
-        {error && <MessageBar messageBarType={MessageBarType.blocked}>{error.message}</MessageBar>}
-
-        <Stack horizontal tokens={{ childrenGap: 10 }}>
-          <PrimaryButton text="Save" onClick={onConfirm} disabled={true} />
-          {showProjectDropdown && <DefaultButton text="Cancel" onClick={onModalClose} />}
+          <Stack horizontal tokens={{ childrenGap: 10 }}>
+            <PrimaryButton type="submit" text="Save" />
+            {showProjectDropdown && <DefaultButton text="Cancel" onClick={onModalClose} />}
+          </Stack>
         </Stack>
-      </Stack>
+      </form>
     </Modal>
   );
 };

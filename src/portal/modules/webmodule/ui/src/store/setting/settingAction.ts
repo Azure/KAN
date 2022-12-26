@@ -13,6 +13,9 @@ import {
   GetAllCvProjectsErrorAction,
   OnSettingStatusCheckAction,
   CVProject,
+  UpdateSettingRequestAction,
+  UpdateSettingSuccessAction,
+  UpdateSettingErrorAction,
 } from './settingType';
 import { getTrainingProject } from '../trainingProjectSlice';
 import { getAppInsights } from '../../TelemetryService';
@@ -62,6 +65,20 @@ const getAllCvProjectsSuccess = (cvProjects: CVProject[]): GetAllCvProjectsSucce
 
 export const getAllCvProjectError = (error: Error): GetAllCvProjectsErrorAction => ({
   type: 'settings/listAllProjects/rejected',
+  error,
+});
+
+export const updateSettingRequest = (): UpdateSettingRequestAction => ({
+  type: 'setting/update_pending',
+});
+
+export const updateSettingSuccess = (payload: Setting): UpdateSettingSuccessAction => ({
+  type: 'setting/update_fulfilled',
+  payload,
+});
+
+export const updateSettingFailed = (error: Error): UpdateSettingErrorAction => ({
+  type: 'setting/update_rejected',
   error,
 });
 
@@ -252,5 +269,28 @@ export const thunkPostSetting =
       })
       .catch((err) => {
         dispatch(settingFailed(err));
+      });
+  };
+
+export const updateSetting =
+  (payload): SettingThunk =>
+  (dispatch, getStore): Promise<any> => {
+    dispatch(updateSettingRequest());
+
+    const settingData = getStore().setting;
+
+    return rootRquest(`/api/settings/${settingData.id}/`, {
+      method: 'PUT',
+      data: {
+        ...payload,
+      },
+    })
+      .then(({ data }) => {
+        console.log('data', data);
+
+        dispatch(updateSettingSuccess(data));
+      })
+      .catch((err) => {
+        dispatch(updateSettingFailed(err));
       });
   };

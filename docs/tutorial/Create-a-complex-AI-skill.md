@@ -73,7 +73,7 @@ In this document, we will build an AI skill that detects vehicles and then class
 
 7.  Open the **Select Model** dropdown list.
 
-    ![Screenshot of Select Model dropdown list ](./media/9d710bff56ef151ca071f676a6098d68.png)
+    ![Screenshot of Select Model dropdown list](./media/9d710bff56ef151ca071f676a6098d68.png)
 
 8.  Select **pedestrian-and-vehicle-detector (Model Zoo)** per our use case. The tag for the object(s) to be detected appears.
 
@@ -133,7 +133,7 @@ In the next section, we'll start with an export to your IoT hub.
 
 ## Export a Video Snippet
 
-    ![Screenshot of Export Video Snippet box](./media/8d17d61d6466500ad06b4d45d26f0c37.png)
+![Screenshot of Export Video Snippet box](./media/8d17d61d6466500ad06b4d45d26f0c37.png)
 
 1.  From the **Node/Export** dropdown list, select **Export Video Snippet** and drag it onto the canvas to connect to the **Filter** node.
 2.  In the information box, enter a meaningful name that you can find in storage in the **Filename Prefix** field.

@@ -9,14 +9,14 @@ image:
 symphonyportal:
   videoSource: opencv
 storage:
-  storageResourceGroup:
-  storageAccount:
-  storageContainer:
-  subscriptionId:
+  storageResourceGroup: ""
+  storageAccount: ""
+  storageContainer: ""
+  subscriptionId: ""
 customvision:
-  endpoint:
-  trainingKey:
+  endpoint: ""
+  trainingKey: ""
 servicePrincipal:
-  tenantId:
-  clientId:
-  clientSecret:
+  tenantId: ""
+  clientId: ""
+  clientSecret: ""

@@ -53,6 +53,25 @@ const settingReducer = (state = initialState, action: SettingActionType): Settin
       return { ...state, isCollectData: (action as any).meta.arg.isCollectData, appInsightHasInit: true };
     case patchIsCollectData.rejected.toString():
       return { ...state, isCollectData: !(action as any).meta.arg.isCollectData };
+    case 'setting/update_pending':
+      return { ...state, loading: true };
+    case 'setting/update_fulfilled':
+      return {
+        ...state,
+        training_key: action.payload.training_key,
+        endpoint: action.payload.endpoint,
+        subscription_id: action.payload.subscription_id,
+        storage_account: action.payload.storage_account,
+        storage_container: action.payload.storage_container,
+        tenant_id: action.payload.tenant_id,
+        client_id: action.payload.client_id,
+        client_secret: action.payload.client_secret,
+        storage_resource_group: action.payload.storage_resource_group,
+        loading: false,
+      };
+    case 'setting/update_rejected':
+      return { ...state, loading: false, error: action.error };
+
     default:
       return state;
   }

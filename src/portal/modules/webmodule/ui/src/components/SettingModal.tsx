@@ -25,15 +25,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { State as RootState } from 'RootStateType';
-import {
-  checkSettingStatus,
-  // updateNamespace,
-  // updateKey,
-  // thunkPostSetting,
-  thunkGetAllCvProjects,
-  updateSetting,
-} from '../store/setting/settingAction';
-import { ERROR_BLANK_VALUE, theme } from '../constant';
+import { checkSettingStatus, thunkGetAllCvProjects, updateSetting } from '../store/setting/settingAction';
+import { theme } from '../constant';
 
 interface Props {
   onModalClose: () => void;
@@ -85,53 +78,37 @@ const SettingModal = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const { control, handleSubmit, reset } = useForm<FormData>({
+  const { control, handleSubmit } = useForm<FormData>({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
     defaultValues: {
-      tenant_id: '',
-      client_id: '',
-      client_secret: '',
-      subscription_id: '',
-      storage_account: '',
-      storage_container: '',
-      storage_resource_group: '',
-      training_key: '',
-      endpoint: '',
+      tenant_id: settingData.tenant_id,
+      client_id: settingData.client_id,
+      client_secret: settingData.client_secret,
+      subscription_id: settingData.subscription_id,
+      storage_account: settingData.storage_account,
+      storage_container: settingData.storage_container,
+      storage_resource_group: settingData.storage_resource_group,
+      training_key: settingData.training_key,
+      endpoint: settingData.endpoint,
     },
     resolver: yupResolver(
       yup.object().shape({
-        tenant_id: yup.string().required(ERROR_BLANK_VALUE),
-        client_id: yup.string().required(ERROR_BLANK_VALUE),
-        client_secret: yup.string().required(ERROR_BLANK_VALUE),
-        storage_account: yup.string().required(ERROR_BLANK_VALUE),
-        storage_container: yup.string().required(ERROR_BLANK_VALUE),
-        subscription_id: yup.string().required(ERROR_BLANK_VALUE),
-        storage_resource_group: yup.string().required(ERROR_BLANK_VALUE),
-        training_key: yup.string().required(ERROR_BLANK_VALUE),
-        endpoint: yup.string().required(ERROR_BLANK_VALUE),
+        tenant_id: yup.string().optional(),
+        client_id: yup.string().optional(),
+        client_secret: yup.string().optional(),
+        storage_account: yup.string().optional(),
+        storage_container: yup.string().optional(),
+        subscription_id: yup.string().optional(),
+        storage_resource_group: yup.string().optional(),
+        training_key: yup.string().optional(),
+        endpoint: yup.string().optional(),
       }),
     ),
   });
 
   const classes = getClasses();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (settingData) {
-      reset({
-        tenant_id: settingData.tenant_id,
-        client_id: settingData.client_id,
-        client_secret: settingData.client_secret,
-        subscription_id: settingData.subscription_id,
-        storage_account: settingData.storage_account,
-        storage_container: settingData.storage_container,
-        storage_resource_group: settingData.storage_resource_group,
-        training_key: settingData.training_key,
-        endpoint: settingData.endpoint,
-      });
-    }
-  }, [reset, settingData]);
 
   useEffect(() => {
     if (showProjectDropdown) dispatch(thunkGetAllCvProjects());

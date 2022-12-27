@@ -25,6 +25,7 @@ class AzureBlobClient:
         self.storage_conn_str = self.get_storage_account_connection_string()
 
     def _reset_params(self):
+
         self.storage_resource_group = os.getenv('STORAGE_RESOURCE_GROUP')
         self.storage_account = os.getenv('STORAGE_ACCOUNT')
         self.storage_container = os.getenv('STORAGE_CONTAINER')

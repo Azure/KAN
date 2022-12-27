@@ -1,5 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
+
 import type { State } from 'RootStateType';
 
 export type CVProject = { id: string; name: string; exportable: boolean };
@@ -22,6 +23,7 @@ export type Setting = {
   tenant_id: string;
   client_id: string;
   client_secret: string;
+  storage_resource_group: string;
 };
 
 // export type UpdateKeyAction = {

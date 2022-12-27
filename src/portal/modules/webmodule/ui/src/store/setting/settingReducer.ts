@@ -28,6 +28,7 @@ export const initialState: Setting = {
   tenant_id: '',
   client_id: '',
   client_secret: '',
+  storage_resource_group: '',
 };
 
 const settingReducer = (state = initialState, action: SettingActionType): Setting => {

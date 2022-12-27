@@ -108,6 +108,7 @@ export const thunkGetSetting =
               tenant_id: data[0].tenant_id,
               client_id: data[0].client_id,
               client_secret: data[0].client_secret,
+              storage_resource_group: data[0].storage_resource_group,
             }),
           );
         }
@@ -156,6 +157,7 @@ export const thunkGetSettingAndAppInsightKey =
                 tenant_id: settingsData[0].tenant_id,
                 client_id: settingsData[0].client_id,
                 client_secret: settingsData[0].client_secret,
+                storage_resource_group: settingsData[0].storage_resource_group,
               }),
             );
           } else {
@@ -261,6 +263,7 @@ export const thunkPostSetting =
             tenant_id: data[0].tenant_id,
             client_id: data[0].client_id,
             client_secret: data[0].client_secret,
+            storage_resource_group: data[0].storage_resource_group,
           }),
         );
         dispatch(thunkGetAllCvProjects());
@@ -286,11 +289,10 @@ export const updateSetting =
       },
     })
       .then(({ data }) => {
-        console.log('data', data);
-
         dispatch(updateSettingSuccess(data));
       })
       .catch((err) => {
         dispatch(updateSettingFailed(err));
+        // return err;
       });
   };

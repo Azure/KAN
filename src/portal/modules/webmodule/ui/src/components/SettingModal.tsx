@@ -8,8 +8,8 @@ import {
   Stack,
   TextField,
   mergeStyleSets,
-  // MessageBar,
-  // MessageBarType,
+  MessageBar,
+  MessageBarType,
   PrimaryButton,
   DefaultButton,
   styled,
@@ -36,7 +36,6 @@ import {
 import { ERROR_BLANK_VALUE, theme } from '../constant';
 
 interface Props {
-  isModalOpen: boolean;
   onModalClose: () => void;
   canBeDismissed: boolean;
   showProjectDropdown: boolean;
@@ -66,50 +65,39 @@ const HorizontalTextField = styled<ITextFieldProps, ITextFieldStyleProps, ITextF
   }),
 );
 
-// const NormalLabel = (props: ITextFieldProps): JSX.Element => {
-//   return (
-//     <Stack horizontal verticalAlign="center">
-//       <Label styles={{ root: { fontWeight: 400 } }} required={props.required}>
-//         {props.label}
-//       </Label>
-//       <IconButton iconProps={{ iconName: 'Info' }} />
-//     </Stack>
-//   );
-// };
-
 type FormData = {
   training_key: string;
   endpoint: string;
   subscription_id: string;
   storage_account: string;
   storage_container: string;
+  storage_resource_group: string;
   tenant_id: string;
   client_id: string;
   client_secret: string;
 };
 
 const SettingModal = (props: Props) => {
-  const { isModalOpen, onModalClose, canBeDismissed, showProjectDropdown } = props;
+  const { onModalClose, showProjectDropdown } = props;
 
   const settingData = useSelector((state: RootState) => state.setting);
-  // const originSettingData = useSelector((state: RootState) => state.setting.origin);
-  // const error = useSelector((state: RootState) => state.setting.error);
 
-  // const dontNeedUpdateOrSave = equals(settingData, originSettingData);
   const [loading, setLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-  const { control, handleSubmit } = useForm<FormData>({
+  const { control, handleSubmit, reset } = useForm<FormData>({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
     defaultValues: {
-      tenant_id: settingData.tenant_id,
-      client_id: settingData.client_id,
-      client_secret: settingData.client_secret,
-      subscription_id: settingData.subscription_id,
-      storage_account: settingData.storage_account,
-      storage_container: settingData.storage_container,
-      training_key: settingData.training_key,
-      endpoint: settingData.endpoint,
+      tenant_id: '',
+      client_id: '',
+      client_secret: '',
+      subscription_id: '',
+      storage_account: '',
+      storage_container: '',
+      storage_resource_group: '',
+      training_key: '',
+      endpoint: '',
     },
     resolver: yupResolver(
       yup.object().shape({
@@ -119,6 +107,7 @@ const SettingModal = (props: Props) => {
         storage_account: yup.string().required(ERROR_BLANK_VALUE),
         storage_container: yup.string().required(ERROR_BLANK_VALUE),
         subscription_id: yup.string().required(ERROR_BLANK_VALUE),
+        storage_resource_group: yup.string().required(ERROR_BLANK_VALUE),
         training_key: yup.string().required(ERROR_BLANK_VALUE),
         endpoint: yup.string().required(ERROR_BLANK_VALUE),
       }),
@@ -129,6 +118,22 @@ const SettingModal = (props: Props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (settingData) {
+      reset({
+        tenant_id: settingData.tenant_id,
+        client_id: settingData.client_id,
+        client_secret: settingData.client_secret,
+        subscription_id: settingData.subscription_id,
+        storage_account: settingData.storage_account,
+        storage_container: settingData.storage_container,
+        storage_resource_group: settingData.storage_resource_group,
+        training_key: settingData.training_key,
+        endpoint: settingData.endpoint,
+      });
+    }
+  }, [reset, settingData]);
+
+  useEffect(() => {
     if (showProjectDropdown) dispatch(thunkGetAllCvProjects());
   }, [dispatch, showProjectDropdown]);
 
@@ -136,33 +141,26 @@ const SettingModal = (props: Props) => {
     dispatch(checkSettingStatus());
   }, [dispatch]);
 
-  // const onConfirm = useCallback(async () => {
-  //   try {
-  //     setLoading(true);
-
-  //     await dispatch(thunkPostSetting());
-
-  //     setLoading(false);
-  //     onModalClose();
-  //   } catch (e) {
-  //     alert(e);
-  //   }
-  // }, [dispatch, onModalClose]);
-
   const onFormDone = useCallback(
     async (data: FormData) => {
       setLoading(true);
 
-      await dispatch(updateSetting(data));
+      const errorResponse = await dispatch(updateSetting(data));
+      if (errorResponse) {
+        setIsError(true);
+      }
 
       setLoading(false);
+      if (!errorResponse) {
+        onModalClose();
+      }
     },
-    [dispatch],
+    [dispatch, onModalClose],
   );
 
   return (
     <Modal
-      isOpen={isModalOpen}
+      isOpen={true}
       onDismiss={onModalClose}
       isBlocking={true}
       styles={{ scrollableContent: classes.scrollableContent }}
@@ -174,7 +172,7 @@ const SettingModal = (props: Props) => {
             <IconButton
               iconProps={{ iconName: 'Cancel' }}
               onClick={onModalClose}
-              disabled={!showProjectDropdown}
+              disabled={!showProjectDropdown || loading}
             />
           </Stack>
           <Text styles={{ root: classes.describe }}>
@@ -185,41 +183,52 @@ const SettingModal = (props: Props) => {
             <Controller
               control={control}
               name="tenant_id"
-              render={({ field, fieldState }) => (
+              render={({ field }) => (
                 <HorizontalTextField
                   label="tenantId"
                   value={field.value}
-                  onChange={(_, newValue): void => field.onChange(newValue)}
-                  errorMessage={fieldState.error?.message}
+                  onChange={(_, newValue): void => {
+                    field.onChange(newValue);
+                    setIsError(false);
+                  }}
                 />
               )}
             />
             <Controller
               control={control}
               name="client_id"
-              render={({ field, fieldState }) => (
+              render={({ field }) => (
                 <HorizontalTextField
                   label="clientId"
                   value={field.value}
-                  onChange={(_, newValue): void => field.onChange(newValue)}
-                  errorMessage={fieldState.error?.message}
+                  onChange={(_, newValue): void => {
+                    field.onChange(newValue);
+                    setIsError(false);
+                  }}
                 />
               )}
             />
             <Controller
               control={control}
               name="client_secret"
-              render={({ field, fieldState }) => (
+              render={({ field }) => (
                 <HorizontalTextField
                   type="password"
                   canRevealPassword
                   label="clientSecret"
                   value={field.value}
-                  onChange={(_, newValue): void => field.onChange(newValue)}
-                  errorMessage={fieldState.error?.message}
+                  onChange={(_, newValue): void => {
+                    field.onChange(newValue);
+                    setIsError(false);
+                  }}
                 />
               )}
             />
+            {isError && (
+              <MessageBar messageBarType={MessageBarType.error}>
+                Invalid service principal settings
+              </MessageBar>
+            )}
           </Stack>
           <Stack tokens={{ childrenGap: 12 }}>
             <h4 className={classes.sbutTitle}>Azure Storage Settings</h4>
@@ -260,6 +269,18 @@ const SettingModal = (props: Props) => {
                 />
               )}
             />
+            <Controller
+              control={control}
+              name="storage_resource_group"
+              render={({ field, fieldState }) => (
+                <HorizontalTextField
+                  label="storage resource group"
+                  value={field.value}
+                  onChange={(_, newValue): void => field.onChange(newValue)}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
+            />
           </Stack>
           <Stack tokens={{ childrenGap: 12 }}>
             <h4 className={classes.sbutTitle}>Azure Cognitive Services Settings</h4>
@@ -293,8 +314,8 @@ const SettingModal = (props: Props) => {
           </Stack>
 
           <Stack horizontal tokens={{ childrenGap: 10 }}>
-            <PrimaryButton type="submit" text="Save" />
-            {showProjectDropdown && <DefaultButton text="Cancel" onClick={onModalClose} />}
+            <PrimaryButton type="submit" text="Save" disabled={loading} />
+            {showProjectDropdown && <DefaultButton text="Cancel" onClick={onModalClose} disabled={loading} />}
           </Stack>
         </Stack>
       </form>

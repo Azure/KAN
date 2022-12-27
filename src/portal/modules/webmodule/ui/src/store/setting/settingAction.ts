@@ -13,6 +13,9 @@ import {
   GetAllCvProjectsErrorAction,
   OnSettingStatusCheckAction,
   CVProject,
+  UpdateSettingRequestAction,
+  UpdateSettingSuccessAction,
+  UpdateSettingErrorAction,
 } from './settingType';
 import { getTrainingProject } from '../trainingProjectSlice';
 import { getAppInsights } from '../../TelemetryService';
@@ -65,6 +68,20 @@ export const getAllCvProjectError = (error: Error): GetAllCvProjectsErrorAction 
   error,
 });
 
+export const updateSettingRequest = (): UpdateSettingRequestAction => ({
+  type: 'setting/update_pending',
+});
+
+export const updateSettingSuccess = (payload: Setting): UpdateSettingSuccessAction => ({
+  type: 'setting/update_fulfilled',
+  payload,
+});
+
+export const updateSettingFailed = (error: Error): UpdateSettingErrorAction => ({
+  type: 'setting/update_rejected',
+  error,
+});
+
 export const thunkGetSetting =
   () =>
   (dispatch): Promise<any> => {
@@ -91,6 +108,7 @@ export const thunkGetSetting =
               tenant_id: data[0].tenant_id,
               client_id: data[0].client_id,
               client_secret: data[0].client_secret,
+              storage_resource_group: data[0].storage_resource_group,
             }),
           );
         }
@@ -139,6 +157,7 @@ export const thunkGetSettingAndAppInsightKey =
                 tenant_id: settingsData[0].tenant_id,
                 client_id: settingsData[0].client_id,
                 client_secret: settingsData[0].client_secret,
+                storage_resource_group: settingsData[0].storage_resource_group,
               }),
             );
           } else {
@@ -244,6 +263,7 @@ export const thunkPostSetting =
             tenant_id: data[0].tenant_id,
             client_id: data[0].client_id,
             client_secret: data[0].client_secret,
+            storage_resource_group: data[0].storage_resource_group,
           }),
         );
         dispatch(thunkGetAllCvProjects());
@@ -252,5 +272,27 @@ export const thunkPostSetting =
       })
       .catch((err) => {
         dispatch(settingFailed(err));
+      });
+  };
+
+export const updateSetting =
+  (payload): SettingThunk =>
+  (dispatch, getStore): Promise<any> => {
+    dispatch(updateSettingRequest());
+
+    const settingData = getStore().setting;
+
+    return rootRquest(`/api/settings/${settingData.id}/`, {
+      method: 'PUT',
+      data: {
+        ...payload,
+      },
+    })
+      .then(({ data }) => {
+        dispatch(updateSettingSuccess(data));
+      })
+      .catch((err) => {
+        dispatch(updateSettingFailed(err));
+        // return err;
       });
   };

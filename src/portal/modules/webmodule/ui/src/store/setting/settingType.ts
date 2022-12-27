@@ -1,5 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
+
 import type { State } from 'RootStateType';
 
 export type CVProject = { id: string; name: string; exportable: boolean };
@@ -22,6 +23,7 @@ export type Setting = {
   tenant_id: string;
   client_id: string;
   client_secret: string;
+  storage_resource_group: string;
 };
 
 // export type UpdateKeyAction = {
@@ -70,6 +72,20 @@ export type GetAllCvProjectsErrorAction = {
   error: Error;
 };
 
+export type UpdateSettingRequestAction = {
+  type: 'setting/update_pending';
+};
+
+export type UpdateSettingSuccessAction = {
+  type: 'setting/update_fulfilled';
+  payload: Setting;
+};
+
+export type UpdateSettingErrorAction = {
+  type: 'setting/update_rejected';
+  error: Error;
+};
+
 export type SettingActionType =
   // | UpdateKeyAction
   // | UpdateNamespaceAction
@@ -79,6 +95,9 @@ export type SettingActionType =
   | GetAllCvProjectsRequestAction
   | GetAllCvProjectsSuccessAction
   | GetAllCvProjectsErrorAction
-  | OnSettingStatusCheckAction;
+  | OnSettingStatusCheckAction
+  | UpdateSettingRequestAction
+  | UpdateSettingSuccessAction
+  | UpdateSettingErrorAction;
 
 export type SettingThunk<ReturnType = void> = ThunkAction<ReturnType, State, unknown, Action<string>>;

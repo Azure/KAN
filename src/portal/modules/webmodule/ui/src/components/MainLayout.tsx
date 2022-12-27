@@ -74,12 +74,13 @@ export const MainLayout: React.FC = ({ children }) => {
           // openDataPolicyDialog={!appInsightHasInit}
           showProjectDropdown={isTrainerValid}
         /> */}
-        <SettingModal
-          isModalOpen={settingOpen}
-          onModalClose={closeSettingPanel}
-          canBeDismissed={appInsightHasInit && isTrainerValid}
-          showProjectDropdown={isTrainerValid}
-        />
+        {settingOpen && (
+          <SettingModal
+            onModalClose={closeSettingPanel}
+            canBeDismissed={appInsightHasInit && isTrainerValid}
+            showProjectDropdown={isTrainerValid}
+          />
+        )}
       </div>
     </main>
   );

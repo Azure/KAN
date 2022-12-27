@@ -24,6 +24,13 @@ class AzureBlobClient:
     def __init__(self):
         self.storage_conn_str = self.get_storage_account_connection_string()
 
+    def _reset_params(self):
+
+        self.storage_resource_group = os.getenv('STORAGE_RESOURCE_GROUP')
+        self.storage_account = os.getenv('STORAGE_ACCOUNT')
+        self.storage_container = os.getenv('STORAGE_CONTAINER')
+        self.storage_conn_str = self.get_storage_account_connection_string()
+
     def get_storage_account_connection_string(self):
 
         if self.storage_account:
@@ -35,10 +42,17 @@ class AzureBlobClient:
             return ""
 
     def get_container_client(self):
-        service_client = BlobServiceClient.from_connection_string(self.storage_conn_str)
-        return service_client.get_container_client(self.storage_container)
+        if self.storage_conn_str and self.storage_container:
+            service_client = BlobServiceClient.from_connection_string(
+                self.storage_conn_str)
+            return service_client.get_container_client(self.storage_container)
+        else:
+            return ""
 
     def generate_sas_token(self, blob_name):
+
+        if not (self.storage_account and self.storage_container and self.storage_conn_str):
+            self._reset_params()
 
         storage_info = {}
         for kv in self.storage_conn_str.split(';'):
@@ -60,6 +74,10 @@ class AzureBlobClient:
 
     def list_video_blobs(self, instance_displayname, skill_displayname, device_displayname):
         container_client = self.get_container_client()
+
+        if not container_client:
+            return []
+
         name_starts_with = f"video-snippet/{instance_displayname}/{skill_displayname}/{device_displayname}/"
         # still need to iterate all to get the last n objects, so list it in the beginning
         # video_list = list(container_client.list_blobs(name_starts_with=name_starts_with))

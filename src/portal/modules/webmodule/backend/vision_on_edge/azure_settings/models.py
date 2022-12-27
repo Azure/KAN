@@ -6,6 +6,7 @@
 
 import logging
 import os
+import subprocess
 
 from azure.cognitiveservices.vision.customvision.training import (
     CustomVisionTrainingClient,
@@ -142,6 +143,13 @@ class Setting(models.Model):
         os.environ["CLIENT_SECRET"] = instance.client_secret
         os.environ["ENDPOINT"] = instance.endpoint
         os.environ["TRAINING_KEY"] = instance.training_key
+
+        # re-login
+        if instance.tenant_id and instance.client_id and instance.client_secret:
+            logger.warning("re-login")
+            res = subprocess.check_output(['az', 'login', '--service-principal', '-u',
+                                          instance.client_id, f'-p={instance.client_secret}', '--tenant', instance.tenant_id])
+            logger.warning(res.decode('utf8'))
 
     def create_project(self, project_name: str, domain_id: str = None, classification_type: str = None) -> Project:
         """Create Project on Custom Vision

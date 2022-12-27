@@ -1,6 +1,6 @@
 #!/bin/bash
 symphony_version=0.41.19
-symphonyportal_version=0.39.0-main-674f0a6-amd64
+symphonyportal_version=0.39.0-dev.6-amd64
 current_step=0
 while [ $current_step -lt 6 ]; do
     case $current_step in

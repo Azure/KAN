@@ -3,11 +3,10 @@ import { Dialog, DialogType, Link, Text, Icon } from '@fluentui/react';
 
 interface Props {
   onDismiss: () => void;
-  showCloseButton?: boolean;
 }
 
 const UnAzureStorage = (props: Props) => {
-  const { onDismiss, showCloseButton } = props;
+  const { onDismiss } = props;
 
   return (
     <Dialog
@@ -18,7 +17,7 @@ const UnAzureStorage = (props: Props) => {
         title: 'No Azure Storage',
         subText:
           'You need Azure Storage credentials in order to view camera feed. Please use the installer to add your Azure Storage account. ',
-        showCloseButton: showCloseButton ?? false,
+        showCloseButton: true,
         styles: { subText: { marginBottom: '8px' } },
       }}
       modalProps={{

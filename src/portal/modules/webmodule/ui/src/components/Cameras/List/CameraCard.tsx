@@ -96,8 +96,20 @@ const CameraCard = (props: Props) => {
           <Stack verticalAlign="end">
             {isNoAzureStorage && (
               <Stack
-                styles={{ root: { width: '135px', height: '80px', backgroundColor: 'rgba(0,0,0,0.2)' } }}
-              />
+                styles={{
+                  root: {
+                    width: '135px',
+                    height: '80px',
+                    backgroundColor: 'rgba(0,0,0,0.2)',
+                    fontSize: '12px',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    whiteSpace: 'pre-line',
+                  },
+                }}
+              >
+                Not Available {'\n'} No Storage Account
+              </Stack>
             )}
             {/* {isEmpty(camera.snapshot) && !isNoAzureStorage ? (
               <Stack

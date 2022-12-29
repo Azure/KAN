@@ -67,8 +67,8 @@ const CascadeFlow = (props: Props) => {
   const isNoAzureStorage = isEmpty(storage_account) && isEmpty(storage_container) && isEmpty(subscription_id);
   const isNoIotHubAccess = isEmpty(tenant_id) && isEmpty(client_id) && isEmpty(client_secret);
 
-  const [hideAzureStorage, { toggle: toggleHideAzureStorage }] = useBoolean(isNoAzureStorage);
-  const [hideIotHubAccess, { toggle: toggleHideIotHubAccess }] = useBoolean(isNoIotHubAccess);
+  const [hideAzureStorage, { toggle: toggleHideAzureStorage }] = useBoolean(false);
+  const [hideIotHubAccess, { toggle: toggleHideIotHubAccess }] = useBoolean(false);
 
   const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
   const onLoad = (_reactFlowInstance) => setReactFlowInstance(_reactFlowInstance);

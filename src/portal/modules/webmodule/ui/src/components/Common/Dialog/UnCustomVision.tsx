@@ -17,7 +17,7 @@ const UnCustomVision = (props: Props) => {
         title: 'No Custom Vision access',
         subText:
           'You need Custom Vision access in order to create a custom model. Please use the installer to allow access.',
-        showCloseButton: false,
+        showCloseButton: true,
         styles: { subText: { marginBottom: '8px' } },
       }}
       modalProps={{

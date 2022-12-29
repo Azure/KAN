@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogType, Stack, Link, Text, Icon } from '@fluentui/react';
+import { Dialog, DialogType, Link, Text, Icon } from '@fluentui/react';
 
 interface Props {
   onDismiss: () => void;
@@ -17,7 +17,7 @@ const UnIotHutAccess = (props: Props) => {
         title: 'No IoT Hub access',
         subText:
           'You need Service Principal with IoT Hub access in order to add an IoT Edge Device. Please use the installer to allow access.',
-        showCloseButton: false,
+        showCloseButton: true,
         styles: { subText: { marginBottom: '8px' } },
       }}
       modalProps={{

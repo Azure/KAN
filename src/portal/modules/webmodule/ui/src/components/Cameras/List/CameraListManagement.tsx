@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useCallback } from 'react';
-import { useHistory, generatePath } from 'react-router-dom';
+import { useHistory, generatePath, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { isEmpty } from 'ramda';
 import { useBoolean } from '@uifabric/react-hooks';
@@ -27,12 +27,15 @@ const CameraListManagement = (props: Props) => {
   const { cameraList, onCameraCardSelect, viewMode, onCameraListSelect } = props;
 
   const history = useHistory();
+  const location = useLocation<{ isCreated?: boolean }>();
 
   const { storage_account, storage_container, subscription_id } = useSelector(
     (state: RootState) => state.setting,
   );
   const isNoAzureStorage = isEmpty(storage_account) && isEmpty(storage_container) && isEmpty(subscription_id);
-  const [hideAzureStorage, { toggle: toggleHideAzureStorage }] = useBoolean(isNoAzureStorage);
+  const [showUnAzureStorage, { toggle: togglesUnAzureStorage }] = useBoolean(
+    !!location.state?.isCreated && isNoAzureStorage,
+  );
 
   const onLiveFeedRedirect = useCallback(
     (id: number) => {
@@ -60,7 +63,7 @@ const CameraListManagement = (props: Props) => {
           onLiveFeedRedirect={onLiveFeedRedirect}
         />
       )}
-      {hideAzureStorage && <UnAzureStorage onDismiss={toggleHideAzureStorage} showCloseButton />}
+      {showUnAzureStorage && <UnAzureStorage onDismiss={togglesUnAzureStorage} />}
     </>
   );
 };

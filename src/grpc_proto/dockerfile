@@ -1,0 +1,22 @@
+FROM python:3.8-slim-buster
+
+RUN apt update
+RUN apt install ffmpeg libsm6 libxext6 -y
+RUN apt install wget zip unzip -y
+
+RUN pip3 install --upgrade pip
+RUN pip3 install grpcio protobuf
+
+### Copy Files ###
+
+
+# this module
+COPY . /app/grpc_proto
+
+
+
+WORKDIR /app/grpc_proto
+ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+
+
+CMD ["python3", "custom_node_server.py"]

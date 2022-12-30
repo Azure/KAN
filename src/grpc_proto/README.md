@@ -1,6 +1,6 @@
 # grpc_proto
 
-An easy grpc server that forwards the frame data.
+A simple grpc server that forwards the frame data.
 
 
 

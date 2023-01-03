@@ -1,7 +1,7 @@
 # Default values for voe.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-symphonyAgentVersion: "0.40.60"
+symphonyAgentVersion: "0.41.19"
 image:
   pullPolicy: Always
   image: p4etest.azurecr.io/symphonyportal
@@ -9,14 +9,14 @@ image:
 symphonyportal:
   videoSource: opencv
 storage:
-  storageResourceGroup: "<Storage Account Resource Group>"
-  storageAccount: "<Storage Account>"
-  storageContainer: "<Storate Container>"
-  subscriptionId: "<Subscription Id>"
+  storageResourceGroup: ""
+  storageAccount: ""
+  storageContainer: ""
+  subscriptionId: ""
 customvision:
-  endpoint: "<Customvision Endpoint>"
-  trainingKey: "<Customvision Training Key>"
+  endpoint: ""
+  trainingKey: ""
 servicePrincipal:
-  tenantId: "<SP Tenant Id>"
-  clientId: "<SP APP Id>"
-  clientSecret: "<SP Secret>"
+  tenantId: ""
+  clientId: ""
+  clientSecret: ""

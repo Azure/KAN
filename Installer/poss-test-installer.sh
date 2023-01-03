@@ -82,7 +82,7 @@ while [ $current_step -lt 6 ]; do
                         echo "Would you like to create a new storage account, or use an existing one?"
                         echo "1) create a new one"
                         echo "2) use an existing one"
-                        echo "3) ignore"
+                        echo "3) skip"
                         echo "4) back to previous step"
                         read -p "Your answer: " -r; echo
                         create_storage_account_selection=$REPLY
@@ -223,7 +223,7 @@ while [ $current_step -lt 6 ]; do
             echo "Would you like to create a new cognitive services, or use an existing one?"
             echo "1) create a new one"
             echo "2) use an existing one"
-            echo "3) ignore"
+            echo "3) skip"
             echo "4) back to previous step"
             read -p "Your answer: " -r; echo
             create_custom_vision_selection=$REPLY
@@ -302,7 +302,7 @@ while [ $current_step -lt 6 ]; do
             echo "1) create a new one"
             echo "2) use an existing one"
             echo "3) use an existing one by entering name"
-            echo "4) ignore"
+            echo "4) skip"
 			echo "5) back to previous step"
             read -p "Your answer: " -r; echo
             create_sp_selection=$REPLY

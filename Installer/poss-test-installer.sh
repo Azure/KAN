@@ -1,5 +1,5 @@
 #!/bin/bash
-symphony_version=0.41.19
+symphony_version=0.41.28
 symphonyportal_version=0.39.0-main-1c9ff05-amd64
 current_step=0
 while [ $current_step -lt 6 ]; do

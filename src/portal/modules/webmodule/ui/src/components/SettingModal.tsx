@@ -25,13 +25,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { State as RootState } from 'RootStateType';
-import { checkSettingStatus, thunkGetAllCvProjects, updateSetting } from '../store/setting/settingAction';
+import {
+  checkSettingStatus,
+  updateSetting,
+  //  thunkGetAllCvProjects
+} from '../store/setting/settingAction';
 import { theme } from '../constant';
 
 interface Props {
   onModalClose: () => void;
-  canBeDismissed: boolean;
-  showProjectDropdown: boolean;
 }
 
 const getClasses = () =>
@@ -71,7 +73,7 @@ type FormData = {
 };
 
 const SettingModal = (props: Props) => {
-  const { onModalClose, showProjectDropdown } = props;
+  const { onModalClose } = props;
 
   const settingData = useSelector((state: RootState) => state.setting);
 
@@ -110,9 +112,9 @@ const SettingModal = (props: Props) => {
   const classes = getClasses();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (showProjectDropdown) dispatch(thunkGetAllCvProjects());
-  }, [dispatch, showProjectDropdown]);
+  // useEffect(() => {
+  //   dispatch(thunkGetAllCvProjects());
+  // }, [dispatch]);
 
   useEffect(() => {
     dispatch(checkSettingStatus());
@@ -146,11 +148,7 @@ const SettingModal = (props: Props) => {
         <Stack tokens={{ childrenGap: 25 }}>
           <Stack horizontal verticalAlign="center" horizontalAlign="space-between">
             <Label styles={{ root: classes.title }}>Settings</Label>
-            <IconButton
-              iconProps={{ iconName: 'Cancel' }}
-              onClick={onModalClose}
-              disabled={!showProjectDropdown || loading}
-            />
+            <IconButton iconProps={{ iconName: 'Cancel' }} onClick={onModalClose} disabled={loading} />
           </Stack>
           <Text styles={{ root: classes.describe }}>
             These settings are autofilled with your credentials.
@@ -292,7 +290,8 @@ const SettingModal = (props: Props) => {
 
           <Stack horizontal tokens={{ childrenGap: 10 }}>
             <PrimaryButton type="submit" text="Save" disabled={loading} />
-            {showProjectDropdown && <DefaultButton text="Cancel" onClick={onModalClose} disabled={loading} />}
+            <DefaultButton text="Cancel" onClick={onModalClose} disabled={loading} />
+            {/* {showProjectDropdown && <DefaultButton text="Cancel" onClick={onModalClose} disabled={loading} />} */}
           </Stack>
         </Stack>
       </form>

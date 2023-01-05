@@ -15,6 +15,7 @@ import {
   IconButton,
   ITextFieldProps,
   IDropdownProps,
+  DefaultButton,
 } from '@fluentui/react';
 import { Node, Edge } from 'react-flow-renderer';
 import { clone, isEmpty } from 'ramda';
@@ -219,7 +220,7 @@ const TransformPanel = (props: Props) => {
       isOpen={true}
       onDismiss={onDismiss}
       hasCloseButton
-      headerText="gRPC custom processing"
+      headerText="gRPC Custom Processing"
       isFooterAtBottom={true}
       type={PanelType.custom}
       customWidth="800px"
@@ -487,8 +488,16 @@ const TransformPanel = (props: Props) => {
             )}
           </Stack>
 
-          <Stack styles={{ root: { padding: '16px 0', display: 'block' } }}>
-            <PrimaryButton type="submit">Configure</PrimaryButton>
+          <Stack
+            styles={{ root: { padding: '16px 0 0' } }}
+            tokens={{ childrenGap: 10 }}
+            verticalAlign="center"
+            horizontal
+          >
+            <PrimaryButton type="submit">Done</PrimaryButton>
+            <DefaultButton styles={{ root: { marginTop: 0 } }} onClick={onDismiss}>
+              Cancel
+            </DefaultButton>
           </Stack>
         </form>
       </Stack>

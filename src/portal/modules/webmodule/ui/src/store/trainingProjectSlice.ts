@@ -44,36 +44,6 @@ export type Metadata = {
   labels?: string[];
 };
 
-// export type TrainingProject = {
-//   id: number;
-//   name: string;
-//   customVisionId: string;
-//   isDemo: boolean;
-//   isPredicationModel: boolean;
-//   predictionUri: string;
-//   predictionHeader: string;
-//   category: ModelCategory;
-//   projectType: ProjectType;
-//   isCascade: boolean;
-//   inputs: ModelHandler[];
-//   outputs: ModelHandler[];
-//   nodeType: ModelNodeType;
-//   // demultiply_count: number;
-//   // params: Params | string;
-//   combined: string;
-//   openvino_library_name: string;
-//   openvino_model_name: string;
-//   download_uri_openvino: string;
-//   classification_type: ClassificationType;
-//   is_trained: boolean;
-//   symphony_id: string;
-//   tag_list: { name: string; value: string }[];
-//   accelerationList: Acceleration[];
-//   displayName: string;
-//   displayType: string;
-//   trainStatus: string;
-// };
-
 export type CreatOwnModelPayload = {
   is_prediction_module: boolean;
   name: string;
@@ -90,7 +60,7 @@ export type UpdateCustomVisionProjectTagsPayload = {
 const getModelDisplayName = (modelName: string, nodeType: ModelNodeType) => {
   if (nodeType === 'source') return 'Camera input';
   if (nodeType === 'transform' && modelName === 'filter_transform') return 'Filter';
-  if (nodeType === 'transform' && modelName === 'grpc_transform') return 'gRPC custom processing';
+  if (nodeType === 'transform' && modelName === 'grpc_transform') return 'gRPC Custom Processing';
   if (nodeType === 'export' && modelName === 'video_snippet_export') return 'Export Video Snippet';
   if (nodeType === 'export' && modelName === 'iothub_export') return 'Send Insights to IoT Hub';
   if (nodeType === 'export' && modelName === 'iotedge_export') return 'Send Insights to IoT Edge Module';

@@ -20,7 +20,7 @@ const Preview = (props: Props) => {
 
   return (
     <Stack styles={{ root: { paddingTop: '40px' } }} tokens={{ childrenGap: 15 }}>
-      <PreviewLabel title="name" content={localFormData.name} />
+      <PreviewLabel title="Name" content={localFormData.name} />
       {localFormData.is_k8s ? (
         <PreviewLabel
           title="Cluster Context"

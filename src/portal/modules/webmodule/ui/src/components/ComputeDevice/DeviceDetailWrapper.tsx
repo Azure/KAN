@@ -263,10 +263,10 @@ const ComputeDeviceDetail = (props: Props) => {
       ) : (
         <Stack styles={{ root: { paddingTop: '35px' } }}>
           <Label styles={{ root: { fontSize: '14px', lineHeight: '20px' } }}>
-            Why do I need Compute Devices?
+            Why do I need a Compute Device?
           </Label>
           <Text styles={{ root: { fontSize: '13px', lineHeight: '18px' } }}>
-            The compute device hold all the components for your vision-based AI solution.
+            The compute device holds all the components for your vision-based AI solution.
           </Text>
           <Stack
             styles={{ root: { paddingTop: '95px' } }}

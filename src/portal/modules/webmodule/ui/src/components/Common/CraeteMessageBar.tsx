@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { Stack, Text, IconButton, MessageBar, MessageBarType, mergeStyleSets } from '@fluentui/react';
+import { Stack, Text, IconButton, MessageBar, MessageBarType, mergeStyleSets, Icon } from '@fluentui/react';
 
 import { PageType } from '../constant';
 
@@ -25,8 +25,11 @@ const getClasses = () =>
       width: 'calc(100%-30px)',
     },
     barText: { fontSize: '12px' },
-    icon: { width: '45px', height: '65px' },
-    barIcon: { color: '#57A300' },
+    content: {
+      alignItems: 'center',
+    },
+    icon: { color: '#57A300', fontSize: '22.5px' },
+    barIcon: { color: '#57A300', fontSize: '22.5px' },
     cancelButton: { position: 'absolute', fontSize: '8px', right: '8px', top: '8px' },
   });
 
@@ -79,7 +82,12 @@ const CraeteMessage = (props: Props) => {
     return (
       <MessageBar
         messageBarIconProps={{ iconName: 'SkypeCircleCheck' }}
-        styles={{ icon: classes.barIcon, root: classes.barRoot, text: classes.barText }}
+        styles={{
+          icon: classes.barIcon,
+          root: classes.barRoot,
+          text: classes.barText,
+          content: classes.content,
+        }}
         messageBarType={MessageBarType.success}
         onDismiss={onMessageBarClose}
       >
@@ -98,7 +106,7 @@ const CraeteMessage = (props: Props) => {
       tokens={{ childrenGap: 50 }}
       verticalAlign="center"
     >
-      <img src={matchedMessage.iconSrc} className={classes.icon} alt="" />
+      <Icon iconName="SkypeCircleCheck" className={classes.icon} />
       <Stack>
         <Text>{matchedMessage.tipOne}</Text>
         <Text>{matchedMessage.tipTwo}</Text>

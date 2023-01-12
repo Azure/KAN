@@ -63,7 +63,7 @@ const DeviceSidePanel = (props: Props) => {
       isOpen={true}
       onDismiss={onPanelClose}
       hasCloseButton
-      headerText="Compute Devices Properties"
+      headerText="Compute Device Properties"
       onRenderFooterContent={onRenderFooterContent}
       isFooterAtBottom={true}
       isBlocking={true}

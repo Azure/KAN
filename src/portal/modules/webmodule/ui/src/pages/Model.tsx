@@ -12,6 +12,7 @@ import { getImages } from '../store/imageSlice';
 import { getTrainingProjectStatusList } from '../store/trainingProjectStatusSlice';
 import { getTrainingProject } from '../store/trainingProjectSlice';
 import { getAiSkillList } from '../store/cascadeSlice';
+import { thunkGetAllCvProjects } from '../store/setting/settingAction';
 
 import ModelCreation from '../components/Models/ModelCreation';
 import ModelDetailWrapper from '../components/Models/ModelDetailWrapper';
@@ -32,6 +33,7 @@ const Model = () => {
       await dispatch(getImages({ freezeRelabelImgs: false }));
       await dispatch(getTrainingProjectStatusList());
       await dispatch(getAiSkillList());
+      await dispatch(thunkGetAllCvProjects());
       setIsLoading(false);
     })();
   }, [dispatch]);

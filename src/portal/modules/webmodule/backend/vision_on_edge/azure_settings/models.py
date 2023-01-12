@@ -158,7 +158,6 @@ class Setting(models.Model):
 
         # update cognitive service credential
         if instance.training_key:
-            logger.warning("Post training_key to symphony")
 
             service_api = symphony_client.get_service_client()
             res = service_api.read_namespaced_service(
@@ -171,7 +170,8 @@ class Setting(models.Model):
                     "key": instance.training_key
                 }
             }
-            res = requests.post(url, json=payload)
+            logger.warning(f"Post training_key to symphony url: {conifg_url}")
+            res = requests.post(conifg_url, json=payload)
             if res.status_code == 200:
                 logger.warning("Update taining key successfully")
             else:

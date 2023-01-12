@@ -6,6 +6,7 @@
 
 import logging
 import os
+import requests
 import subprocess
 
 from azure.cognitiveservices.vision.customvision.training import (
@@ -29,7 +30,11 @@ from .exceptions import (
     SettingCustomVisionCannotCreateProject,
 )
 
+from ..general.symphony_client import SymphonyClient
+
 logger = logging.getLogger(__name__)
+
+symphony_client = SymphonyClient()
 
 
 class Setting(models.Model):
@@ -150,6 +155,27 @@ class Setting(models.Model):
             res = subprocess.check_output(['az', 'login', '--service-principal', '-u',
                                           instance.client_id, f'-p={instance.client_secret}', '--tenant', instance.tenant_id])
             logger.warning(res.decode('utf8'))
+
+        # update cognitive service credential
+        if instance.training_key:
+            logger.warning("Post training_key to symphony")
+
+            service_api = symphony_client.get_service_client()
+            res = service_api.read_namespaced_service(
+                name='symphony-service-ext', namespace='symphony-k8s-system')
+            symphony_ip = res.status.load_balancer.ingress[0].ip
+            conifg_url = "http://" + symphony_ip + ":8080/v1alpha2/agent/config"
+            payload = {
+                "type": "providers.reference.customvision",
+                "config": {
+                    "key": instance.training_key
+                }
+            }
+            res = requests.post(url, json=payload)
+            if res.status_code == 200:
+                logger.warning("Update taining key successfully")
+            else:
+                logger.warning(res.text)
 
     def create_project(self, project_name: str, domain_id: str = None, classification_type: str = None) -> Project:
         """Create Project on Custom Vision

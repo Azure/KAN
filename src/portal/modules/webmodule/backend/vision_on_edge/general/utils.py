@@ -73,6 +73,9 @@ class AzureBlobClient:
         )
 
     def list_video_blobs(self, instance_displayname, skill_displayname, device_displayname):
+
+        if not (self.storage_account and self.storage_container and self.storage_conn_str):
+            self._reset_params()
         container_client = self.get_container_client()
 
         if not container_client:

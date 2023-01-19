@@ -516,9 +516,9 @@ while [ $current_step -lt 6 ]; do
 
                 echo -e "\e[32mInstalling kan\e[0m"
                 if [ $create_custom_vision_selection == 3 ]; then
-                    helm upgrade -n default --install kan oci://kanprod.azurecr.io/helm/kan --version $kan_version --wait
+                    helm upgrade -n default --install kan oci://possprod.azurecr.io/helm/kan --version $kan_version --wait
                 else 
-                    helm upgrade -n default --install kan oci://kanprod.azurecr.io/helm/kan --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version $kan_version --wait
+                    helm upgrade -n default --install kan oci://possprod.azurecr.io/helm/kan --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version $kan_version --wait
                 fi
                 
                 if [ $? != "0" ];  then
@@ -538,7 +538,7 @@ while [ $current_step -lt 6 ]; do
                     values="$values --set servicePrincipal.tenantId=$sp_tenant --set servicePrincipal.clientId=$app_id --set servicePrincipal.clientSecret=$sp_password"
                 fi
 
-                helm upgrade -n default --install kanportal oci://p4etest.azurecr.io/helm/kan --version $kanportal_version $values --set image.image=p4etest.azurecr.io/kanportal
+                helm upgrade -n default --install kanportal oci://p4etest.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=p4etest.azurecr.io/kanportal
 
                 if [ $? != "0" ];  then
                     echo -e "\e[31mWe faced some issues while pull KANportal from container registry. Please try the installer again a few minutes later\e[0m"

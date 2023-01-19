@@ -46,7 +46,7 @@ const CreationFooter = (props: Props) => {
   const classes = getFooterClasses();
   const isWarningDisplay =
     (currentStep === 'configure' &&
-      deviceList.find((_device) => _device.symphony_id === localFormData.device.key)?.is_k8s) ??
+      deviceList.find((_device) => _device.kan_id === localFormData.device.key)?.is_k8s) ??
     false;
 
   const onCreateClick = useCallback(async () => {

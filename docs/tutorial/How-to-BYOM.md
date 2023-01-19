@@ -56,11 +56,16 @@ Now that you understand what BYOM is and how to add models through the portal, y
 -   Go to the AI Skills page to connect your models in a cascade which can chain models and business logic together.
 
 
+ 
+ 
 
 
-
-
-
+ 
+ 
+ 
+ 
+ 
+  
 
 
 # How-to use gRPC

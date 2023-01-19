@@ -21,7 +21,7 @@ const getImgListItem = (
   annotations: Annotation[],
 ): ImageListItem => {
   const part = partEntities[img.part];
-  const camera = cameraList.find((c) => c.symphony_id === img.camera);
+  const camera = cameraList.find((c) => c.kan_id === img.camera);
 
   const parts = img.labels
     .map((id) => annotations.find((anno) => anno.id === id).part)
@@ -119,7 +119,7 @@ export const isLabeledImagesSelector = (projectId: number) =>
 
 export const matchDeviceAccelerationSelectorFactory = (deivceId: string) =>
   createSelector([selectAllCascades, selectAllComputeDevices], (aiSkillList, deiceList) => {
-    const matchDevice = deiceList.find((device) => device.symphony_id === deivceId);
+    const matchDevice = deiceList.find((device) => device.kan_id === deivceId);
 
     return aiSkillList.filter((skill) => skill.acceleration === matchDevice.acceleration);
   });
@@ -131,11 +131,11 @@ export const formattedDeploymentSelectorFactory = createSelector(
 
     return deploymentList.map((deployment) => ({
       ...deployment,
-      deviceName: deviceList.find((device) => device.symphony_id === deployment.compute_device).name,
+      deviceName: deviceList.find((device) => device.kan_id === deployment.compute_device).name,
       skillNameList: deployment.configure
         .map((con) => con.skills.map((skill) => skill.id))
         .flat()
-        .map((id) => aiSkillList.find((skill) => skill.symphony_id === id).name),
+        .map((id) => aiSkillList.find((skill) => skill.kan_id === id).name),
     }));
   },
 );

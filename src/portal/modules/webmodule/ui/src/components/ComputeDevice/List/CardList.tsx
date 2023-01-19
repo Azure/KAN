@@ -27,9 +27,7 @@ const CardList = (props: Props) => {
   const [localSelectedDevice, setLocalSelectedDevice] = useState<ComputeDevice | null>(null);
   const [deletedDeivce, setDeletedDeivce] = useState<ComputeDevice | null>(null);
   const [selectedDefinition, setSelectedDefinition] = useState<ComputeDevice | null>(null);
-  const hasDeviceDeploy = useSelector(
-    selectHasDeviceDeploymentSelectorFactory(deletedDeivce?.symphony_id ?? ''),
-  );
+  const hasDeviceDeploy = useSelector(selectHasDeviceDeploymentSelectorFactory(deletedDeivce?.kan_id ?? ''));
 
   // const onDeviceDelete = useCallback(async () => {
   //   await dispatch(deleteComputeDevice({ ids: [localSelectedDevice.id] }));
@@ -42,9 +40,7 @@ const CardList = (props: Props) => {
       setDeletedDeivce(null);
     };
 
-    await dispatch(
-      deleteComputeDevice({ id: deletedDeivce.id, symphony_id: deletedDeivce.symphony_id, resolve }),
-    );
+    await dispatch(deleteComputeDevice({ id: deletedDeivce.id, kan_id: deletedDeivce.kan_id, resolve }));
   }, [deletedDeivce, dispatch]);
 
   return (
@@ -64,7 +60,7 @@ const CardList = (props: Props) => {
       {localSelectedDevice && (
         <DeviceSidePanel
           deivceId={localSelectedDevice.id}
-          symphony_id={localSelectedDevice.symphony_id}
+          kan_id={localSelectedDevice.kan_id}
           onPanelClose={() => setLocalSelectedDevice(null)}
           onDeleteModalOpen={() => setDeletedDeivce(localSelectedDevice)}
         />
@@ -82,7 +78,7 @@ const CardList = (props: Props) => {
       {selectedDefinition && (
         <DefinitionPanel
           onPanelClose={() => setSelectedDefinition(null)}
-          selectedTargetId={selectedDefinition.symphony_id}
+          selectedTargetId={selectedDefinition.kan_id}
           pageType="deivce"
           onDeleteModalOpen={() => setDeletedDeivce(selectedDefinition)}
         />

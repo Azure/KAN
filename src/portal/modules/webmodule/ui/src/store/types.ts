@@ -13,7 +13,7 @@ export type ComputeDevice = {
   architecture: string;
   acceleration: string;
   tag_list: { name: string; value: string }[];
-  symphony_id: string;
+  kan_id: string;
   solution_id: string;
   status: Record<string, ConntectedStatus>;
   is_k8s: boolean;
@@ -26,7 +26,7 @@ export type AiSkill = {
   flow: any;
   screenshot: string;
   tag_list: { name: string; value: string }[];
-  symphony_id: string;
+  kan_id: string;
   fps: number;
   acceleration: string;
 };
@@ -41,7 +41,7 @@ export type DeploymentConfigureCamera = {
   skills: DeploymentConfigureSkill[];
 };
 
-// { symphony_id : fps}
+// { kan_id : fps}
 export type DeploymentFPS = Record<string, string>;
 
 export type VideoRecroding = {
@@ -55,7 +55,7 @@ export type Deployment = {
   name: string;
   configure: DeploymentConfigureCamera[];
   tag_list: { name: string; value: string }[];
-  symphony_id: string;
+  kan_id: string;
   compute_device: string;
   status: { status_code: string; status_description: string; fps: DeploymentFPS | null };
   iothub_insights: {
@@ -113,7 +113,7 @@ export type TrainingProject = {
   download_uri_openvino: string;
   classification_type: ClassificationType;
   is_trained: boolean;
-  symphony_id: string;
+  kan_id: string;
   tag_list: { name: string; value: string }[];
   accelerationList: Acceleration[];
   displayName: string;
@@ -126,7 +126,7 @@ export type TrainingProject = {
 
 export type GetSingleComputeDeivcePayload = {
   id: number;
-  symphony_id: string;
+  kan_id: string;
 };
 
 export type CreateComputeDevicePayload = {
@@ -147,7 +147,7 @@ export type ValidateComputeDeviceConfigPayload = {
 
 export type UpdateComputeDevicePayload = {
   id: number;
-  symphony_id: string;
+  kan_id: string;
   body: {
     architecture: string;
     acceleration: string;
@@ -159,14 +159,14 @@ export type UpdateComputeDevicePayload = {
 
 export type DeleteComputeDevicePayload = {
   id: number;
-  symphony_id: string;
+  kan_id: string;
   resolve?: () => void;
 };
 
 // Camera
 export type GetSingleCameraPayload = {
   id: number;
-  symphony_id: string;
+  kan_id: string;
 };
 
 export type CreateCameraPayload = {
@@ -183,7 +183,7 @@ export type CreateCameraPayload = {
 
 export type UpdateCameraPayload = {
   id: number;
-  symphony_id: string;
+  kan_id: string;
   body: {
     location: number | string;
     tag_list: string;
@@ -194,7 +194,7 @@ export type UpdateCameraPayload = {
 
 export type DeleteCameraPayload = {
   id: number;
-  symphony_id: string;
+  kan_id: string;
   resolve?: () => void;
 };
 
@@ -225,7 +225,7 @@ export type CreateAiSkillPayload = {
 
 export type UpdateAiSkillPayload = {
   id: number;
-  symphony_id: string;
+  kan_id: string;
   body: {
     flow: string;
     screenshot: string;
@@ -235,15 +235,15 @@ export type UpdateAiSkillPayload = {
 
 export type DeleteAiSkillPayload = {
   id: number;
-  symphony_id: string;
+  kan_id: string;
 };
 
 // Deployment
 
 // configure: {
-//   camera: symphony_id: string;
+//   camera: kan_id: string;
 //   skills: {
-//     id: symphony_id: string;;
+//     id: kan_id: string;;
 //     configured: boolean;
 //   }[];
 // }[];
@@ -261,14 +261,14 @@ export type GetDeploymentVideoRecordingsPayload = {
 };
 
 export type GetDeploymentInsightPayload = {
-  deploymentSymphonyId: string;
-  skillSymphonyId: string;
-  cameraSymphonyId: string;
+  deploymentKanId: string;
+  skillKanId: string;
+  cameraKanId: string;
 };
 
 export type UpdateDeploymentPayload = {
   id: number;
-  symphony_id: string;
+  kan_id: string;
   body: {
     tag_list: string;
     configure: string;
@@ -277,7 +277,7 @@ export type UpdateDeploymentPayload = {
 
 export type DeleteDeploymentPayload = {
   id: number;
-  symphony_id: string;
+  kan_id: string;
 };
 
 // Formatted

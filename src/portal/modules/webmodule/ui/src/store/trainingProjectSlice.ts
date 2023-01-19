@@ -98,7 +98,7 @@ const normalize = (e): TrainingProject => ({
   download_uri_openvino: e.download_uri_openvino,
   classification_type: e.classification_type,
   is_trained: e.is_trained,
-  symphony_id: e.symphony_id,
+  kan_id: e.kan_id,
   accelerationList: (e.category === 'customvision'
     ? customViisionModelAcceleration
     : openVinoModelAcceleration) as Acceleration[],

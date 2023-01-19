@@ -24,13 +24,10 @@ import { Url } from '../../constant';
 import { commonCommandBarItems } from '../utils';
 import { selectDeploymentById } from '../../store/deploymentSlice';
 import { selectAllCameras, Camera } from '../../store/cameraSlice';
-import { selectAiSkillBySymphonyIdSelectorFactory } from '../../store/cascadeSlice';
+import { selectAiSkillByKanIdSelectorFactory } from '../../store/cascadeSlice';
 import { wrapperPadding } from './styles';
 import { getFooterClasses } from '../Common/styles';
-import {
-  getSingleComputeDevice,
-  selectDeviceBySymphonyIdSelectorFactory,
-} from '../../store/computeDeviceSlice';
+import { getSingleComputeDevice, selectDeviceByKanIdSelectorFactory } from '../../store/computeDeviceSlice';
 
 import SkillCameraDetail from './SkillCameraDetail';
 import PageLoading from '../Common/PageLoading';
@@ -44,9 +41,8 @@ const DeploymentSkillCamera = () => {
 
   const deployment = useSelector((state: RootState) => selectDeploymentById(state, deploymentId));
   const cameraList = useSelector((state: RootState) => selectAllCameras(state));
-  const device = useSelector(selectDeviceBySymphonyIdSelectorFactory(deployment.compute_device));
-  const skill = useSelector(selectAiSkillBySymphonyIdSelectorFactory(skillId));
-  const isWarningDisplay = device.is_k8s;
+  const device = useSelector(selectDeviceByKanIdSelectorFactory(deployment.compute_device));
+  const skill = useSelector(selectAiSkillByKanIdSelectorFactory(skillId));
 
   const [selectedCamera, setseLectedCamera] = useState<Camera | null>(null);
   const [filterInput, setFilterInput] = useState('');
@@ -56,7 +52,7 @@ const DeploymentSkillCamera = () => {
     (async () => {
       setIsLoading(true);
 
-      await dispatch(getSingleComputeDevice({ id: deployment.id, symphony_id: deployment.symphony_id }));
+      await dispatch(getSingleComputeDevice({ id: deployment.id, kan_id: deployment.kan_id }));
 
       setIsLoading(false);
     })();
@@ -79,7 +75,7 @@ const DeploymentSkillCamera = () => {
       deployment.configure
         .map((configureCamera) => ({
           key: configureCamera.camera.toString(),
-          text: cameraList.find((camera) => camera.symphony_id === configureCamera.camera).name,
+          text: cameraList.find((camera) => camera.kan_id === configureCamera.camera).name,
         }))
         .filter((option) => (isEmpty(filterInput) ? option : option.text.match(filterInput))),
     [deployment, cameraList, filterInput],
@@ -91,7 +87,7 @@ const DeploymentSkillCamera = () => {
 
   const onCameraOptionsChange = useCallback(
     (optoption?: IChoiceGroupOption) => {
-      const matchCamera = cameraList.find((camera) => camera.symphony_id === optoption.key);
+      const matchCamera = cameraList.find((camera) => camera.kan_id === optoption.key);
 
       setseLectedCamera(matchCamera);
     },
@@ -128,7 +124,7 @@ const DeploymentSkillCamera = () => {
               <SkillCameraDetail
                 camera={selectedCamera}
                 deviceId={device.id}
-                deviceSymphonyId={device.symphony_id}
+                deviceKanId={device.kan_id}
                 deployment={deployment}
                 skill={skill}
                 tabKey="general"

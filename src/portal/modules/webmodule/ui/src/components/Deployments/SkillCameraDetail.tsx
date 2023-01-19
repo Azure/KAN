@@ -18,14 +18,14 @@ import Insights from './SkillCamera/Insights';
 interface Props {
   camera: Camera;
   deviceId: number;
-  deviceSymphonyId: string;
+  deviceKanId: string;
   skill: AiSkill;
   deployment: Deployment;
   tabKey: string;
 }
 
 const SkillCameraDetail = (props: Props) => {
-  const { camera, skill, deployment, deviceId, deviceSymphonyId } = props;
+  const { camera, skill, deployment, deviceId, deviceKanId } = props;
 
   const dispatch = useDispatch();
 
@@ -39,11 +39,11 @@ const SkillCameraDetail = (props: Props) => {
     (async () => {
       setLoading(true);
 
-      await dispatch(getSingleComputeDevice({ id: deviceId, symphony_id: deviceSymphonyId }));
+      await dispatch(getSingleComputeDevice({ id: deviceId, kan_id: deviceKanId }));
 
       setLoading(false);
     })();
-  }, [dispatch, deviceId, deviceSymphonyId]);
+  }, [dispatch, deviceId, deviceKanId]);
 
   useEffect(() => {
     setLocalCamera(camera);
@@ -63,15 +63,15 @@ const SkillCameraDetail = (props: Props) => {
         <GeneralCamera
           camera={localCamera}
           status={isEmpty(device.status[camera.name]) ? 'disconnected' : device.status[camera.name]}
-          fps={deployment.status.fps[skill.symphony_id]}
+          fps={deployment.status.fps[skill.kan_id]}
           acceleration={skill.acceleration}
         />
       )}
       {selectedKey === 'insight' && (
         <Insights
-          deploymentSymphonyId={deployment.symphony_id}
-          skillSymphonyId={skill.symphony_id}
-          cameraSymphonyId={localCamera.symphony_id}
+          deploymentKanId={deployment.kan_id}
+          skillKanId={skill.kan_id}
+          cameraKanId={localCamera.kan_id}
           status={deployment.iothub_insights}
         />
       )}

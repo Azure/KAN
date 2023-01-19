@@ -20,7 +20,7 @@ export type CreateAISkillFormData = {
   raw_data: string;
   screenshot: string;
   tag_list: Tag[];
-  symphony_id: string;
+  kan_id: string;
   error: {
     name: string;
     acceleration: string;
@@ -39,7 +39,7 @@ export type UpdateAiSkillFormData = {
   raw_data: string;
   screenshot: string;
   tag_list: Tag[];
-  symphony_id: string;
+  kan_id: string;
 };
 
 export type CaptureData = '-' | 'yes' | 'no';
@@ -104,7 +104,7 @@ export type ExportPanelFromData = {
   }>;
 };
 
-export type SkillModel = Pick<TrainingProject, 'id' | 'name' | 'inputs' | 'outputs' | 'symphony_id'>;
+export type SkillModel = Pick<TrainingProject, 'id' | 'name' | 'inputs' | 'outputs' | 'kan_id'>;
 
 export type SkillSideNode = {
   name?: string;

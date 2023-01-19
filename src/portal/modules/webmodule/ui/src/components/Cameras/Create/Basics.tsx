@@ -52,7 +52,7 @@ const Basics = (props: Props) => {
       computeDeviceList.map((device) => ({
         key: device.id,
         text: device.name,
-        data: device.symphony_id,
+        data: device.kan_id,
       })),
     [computeDeviceList],
   );

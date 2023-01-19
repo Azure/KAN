@@ -16,7 +16,7 @@ import { Url } from '../../../constant';
 
 interface Props {
   id: number;
-  symphony_id: string;
+  kan_id: string;
   currentStep: PivotTabKey;
   onLinkClick: (key: PivotTabKey) => void;
   localFormData: UpdateAiSkillFormData;
@@ -38,7 +38,7 @@ const EditFooter = (props: Props) => {
     onCreatingChange,
     isCreating,
     id,
-    symphony_id,
+    kan_id,
     onValidationRedirect,
     hasUseAiSkill,
   } = props;
@@ -53,7 +53,7 @@ const EditFooter = (props: Props) => {
 
     const payload: UpdateAiSkillPayload = {
       id,
-      symphony_id,
+      kan_id,
       body: {
         flow: localFormData.cascade.flow,
         screenshot: localFormData.screenshot,
@@ -72,7 +72,7 @@ const EditFooter = (props: Props) => {
     await dispatch(updateAiSkill(payload));
 
     history.push(Url.AI_SKILL);
-  }, [localFormData, dispatch, history, onCreatingChange, id, symphony_id]);
+  }, [localFormData, dispatch, history, onCreatingChange, id, kan_id]);
 
   return (
     <Stack

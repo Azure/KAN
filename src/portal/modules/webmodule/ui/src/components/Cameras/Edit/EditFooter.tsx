@@ -15,7 +15,7 @@ import { getFooterClasses } from '../../Common/styles';
 
 interface Props {
   cameraId: number;
-  symphony_id: string;
+  kan_id: string;
   currentStep: PivotTabKey;
   onLinkClick: (key: PivotTabKey) => void;
   localFormData: UpdateCameraFormData;
@@ -28,7 +28,7 @@ interface Props {
 const EditFooter = (props: Props) => {
   const {
     cameraId,
-    symphony_id,
+    kan_id,
     currentStep,
     onLinkClick,
     localFormData,
@@ -55,7 +55,7 @@ const EditFooter = (props: Props) => {
     await dispatch(
       updateCamera({
         id: cameraId,
-        symphony_id,
+        kan_id,
         body: {
           location: localFormData.location,
           username: localFormData.userName,
@@ -72,7 +72,7 @@ const EditFooter = (props: Props) => {
         },
       }),
     );
-  }, [dispatch, localFormData, cameraId, symphony_id]);
+  }, [dispatch, localFormData, cameraId, kan_id]);
 
   const onMediaSourceUpdate = useCallback(async () => {
     console.log('onMediaSourceUpdate');

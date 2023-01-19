@@ -31,7 +31,7 @@ const Basics = (props: Props) => {
   const deviceOptions: IDropdownOption[] = useMemo(
     () =>
       deviceList.map((device) => ({
-        key: device.symphony_id,
+        key: device.kan_id,
         text: device.name,
       })),
     [deviceList],

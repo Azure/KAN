@@ -194,7 +194,7 @@ const ModelPanel = (props: Props) => {
             name: selectedModel.name,
             inputs: selectedModel.inputs,
             outputs: selectedModel.outputs,
-            symphony_id: selectedModel.symphony_id,
+            kan_id: selectedModel.kan_id,
           },
         },
       });

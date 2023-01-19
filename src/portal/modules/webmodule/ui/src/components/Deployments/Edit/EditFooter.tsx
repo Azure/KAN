@@ -18,7 +18,7 @@ import { Url } from '../../../constant';
 
 interface Props {
   deploymentId: number;
-  symphony_id: string;
+  kan_id: string;
   currentStep: PivotTabKey;
   onLinkClick: (key: PivotTabKey) => void;
   localFormData: UpdateDeploymentFormData;
@@ -27,15 +27,8 @@ interface Props {
 }
 
 const EditFooter = (props: Props) => {
-  const {
-    currentStep,
-    onLinkClick,
-    stepList,
-    localFormData,
-    deploymentId,
-    onValidationRedirect,
-    symphony_id,
-  } = props;
+  const { currentStep, onLinkClick, stepList, localFormData, deploymentId, onValidationRedirect, kan_id } =
+    props;
 
   const classes = getFooterClasses();
   const dispatch = useDispatch();
@@ -51,7 +44,7 @@ const EditFooter = (props: Props) => {
   const onUpdateClick = useCallback(async () => {
     const payload: UpdateDeploymentPayload = {
       id: deploymentId,
-      symphony_id,
+      kan_id,
       body: {
         configure: JSON.stringify(
           localFormData.cameraList.map((configureCamera) => {
@@ -77,7 +70,7 @@ const EditFooter = (props: Props) => {
 
     await dispatch(updateDeployment(payload));
     history.push(Url.DEPLOYMENT);
-  }, [localFormData, dispatch, history, deploymentId, symphony_id]);
+  }, [localFormData, dispatch, history, deploymentId, kan_id]);
 
   return (
     <Stack

@@ -54,3 +54,78 @@ Later releases will cover a variety of formats.
 Now that you understand what BYOM is and how to add models through the portal, your next step is:
 
 -   Go to the AI Skills page to connect your models in a cascade which can chain models and business logic together.
+
+
+
+
+
+
+
+
+
+# How-to use gRPC
+
+Users are able to create AI Skills to manage the flow of deployments. The drag-and-drop control is the core method of AI Skill page to compose the flow of an AI Skill. One of the provided nodes is gRPC Custom Processing node, which allows users to host by themselves or let us host on the edge.
+
+![Graphical user interface, text, application, email Description automatically generated](./media/o1.png)
+
+
+## Type 1: Endpoint URL
+
+1.	Click Create AI Skill to start a new AI Skill creation.
+
+![Graphical user interface, text, application, email Description automatically generated](./media/o2.png)
+
+1.	Fill in the necessary information in the Basics tab, which include the Skill Name, Desired Frame Rate (fps), and selecting Device Acceleration, and then click Next to go into Drag-and-Drop Nodes page.
+
+
+![Graphical user interface, text, application, email Description automatically generated](./media/o3.png)
+
+1.	There are three categories on the left side, including Import, Process, and Export. Import now only has the Camera Input node, which already exists on the canvas by default.
+2.	Drag the gPRC Custom Processing node and drop on the canvas for gRPC settings.
+
+![Graphical user interface, text, application, email Description automatically generated](./media/o4.png)
+
+1.	There are two types, including Container and Endpoint URL.
+2.	Select Endpoint URL.
+
+![Graphical user interface, text, application, email Description automatically generated](./media/o5.png)
+
+Fill the Endpoint URL in the field, and then click Done to save.
+
+![Graphical user interface, text, application, email Description automatically generated](./media/o6.png)
+
+1.	Select one of the Export nodes and drag and drop into the canvas. (Video Snippet, Insights to IoT Hub, and Insights to IoT Edge Module will need Azure resources.) 
+2.	Click Next to Tags (Optional) Tab.
+
+![Graphical user interface, text, application, email Description automatically generated](./media/o7.png)
+
+1.	(Optional) Assign tags similarly to the way Azure resources are tagged.
+2.	Click Review + Create to Review + Create Tab.
+
+![Graphical user interface, text, application, email Description automatically generated](./media/o8.png)
+
+1.	Click Create to complete, and then Your AI Skill will now appear on Al Skills page.
+
+![Graphical user interface, text, application, email Description automatically generated](./media/o9.png)
+
+
+## Type 2: Container
+
+The AI Skill creation is the same as Type 1: Endpoint URL, except for selecting Container type in the gRPC Custom Processing node.
+
+![Graphical user interface, text, application, email Description automatically generated](./media/10.png)
+
+1.	Fill in the information for your container, which includes the Name of container, the Image URL for the path, the Create options (optional) for more detail of container settings, and selecting a Restart policy.
+2.	Fill in the information for the endpoint, which includes the Port and Route (optional) that are exited in your container.
+3.	If you need, the Environment Variables allows you to fill in the name and the corresponding value.
+4.	Finally, set the Constraints for use. Select X64 with Accelerations (Nvidia dGPU, CPU, and Intel iGPU(EFLOW only) ) or select ARM64 with Accelerations (Nvidia Jetson(Jetpack 5) ).
+5.	Click Done to save
+
+![Graphical user interface, text, application, email Description automatically generated](./media/11.png)
+
+The following step will be the same as Type 1: Endpoint URL.
+
+
+
+

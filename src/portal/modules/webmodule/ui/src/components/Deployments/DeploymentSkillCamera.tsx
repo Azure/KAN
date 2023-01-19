@@ -14,6 +14,8 @@ import {
   IconButton,
   SearchBox,
   DefaultButton,
+  MessageBar,
+  MessageBarType,
 } from '@fluentui/react';
 import { isEmpty } from 'ramda';
 
@@ -44,6 +46,7 @@ const DeploymentSkillCamera = () => {
   const cameraList = useSelector((state: RootState) => selectAllCameras(state));
   const device = useSelector(selectDeviceBySymphonyIdSelectorFactory(deployment.compute_device));
   const skill = useSelector(selectAiSkillBySymphonyIdSelectorFactory(skillId));
+  const isWarningDisplay = device.is_k8s;
 
   const [selectedCamera, setseLectedCamera] = useState<Camera | null>(null);
   const [filterInput, setFilterInput] = useState('');
@@ -136,9 +139,19 @@ const DeploymentSkillCamera = () => {
       </Stack>
       <Stack
         styles={{
-          root: footerClasses.root,
+          root: isWarningDisplay ? footerClasses.warningFooter : footerClasses.root,
         }}
       >
+        {isWarningDisplay && (
+          <MessageBar
+            messageBarType={MessageBarType.warning}
+            messageBarIconProps={{ iconName: 'IncidentTriangle' }}
+            styles={{ icon: { color: '#DB7500' } }}
+          >
+            Your AI Skill has some nodes that are not configurable on Kubernetes based Targets (IoThub Export)
+            so AI Skill configuration may not succeed.
+          </MessageBar>
+        )}
         <DefaultButton
           styles={{ root: { width: '205px' } }}
           iconProps={{ iconName: 'ChevronLeft' }}

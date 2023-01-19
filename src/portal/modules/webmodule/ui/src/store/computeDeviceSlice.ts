@@ -24,7 +24,7 @@ type ComputeDeviceFromServer = {
   architecture: string;
   acceleration: string;
   tag_list: string;
-  symphony_id: string;
+  kan_id: string;
   solution_id: string;
   status: string;
   is_k8s: boolean;
@@ -56,7 +56,7 @@ const normalizeComputeDevice = (response: ComputeDeviceFromServer, id: number): 
 });
 
 export const getComputeDeviceList = createWrappedAsync('ComputeDevice/Get', async () => {
-  const response = await rootRquest.get(`/api/compute_devices/get_symphony_objects`);
+  const response = await rootRquest.get(`/api/compute_devices/get_kan_objects`);
 
   return response.data.map((da, i) => normalizeComputeDevice(da, i + 1));
 });
@@ -65,18 +65,16 @@ export const getSingleComputeDevice = createWrappedAsync<
   any,
   GetSingleComputeDeivcePayload,
   { state: RootState }
->('ComputeDevice/GetSingle', async ({ id, symphony_id }) => {
-  const response = await rootRquest.get(
-    `/api/compute_devices/get_symphony_object?symphony_id=${symphony_id}`,
-  );
+>('ComputeDevice/GetSingle', async ({ id, kan_id }) => {
+  const response = await rootRquest.get(`/api/compute_devices/get_kan_object?kan_id=${kan_id}`);
 
   return normalizeComputeDevice(response.data, id);
 });
 
 export const getComputeDeviceDefinition = createWrappedAsync<any, string, { state: RootState }>(
   'ComputeDevice/getDefinition',
-  async (symphony_id) => {
-    const response = await rootRquest.get(`/api/compute_devices/get_properties?symphony_id=${symphony_id}`);
+  async (kan_id) => {
+    const response = await rootRquest.get(`/api/compute_devices/get_properties?kan_id=${kan_id}`);
 
     return response.data;
   },
@@ -89,7 +87,7 @@ export const createComputeDevice = createWrappedAsync<any, CreateComputeDevicePa
       return max(m, id);
     }, 0);
 
-    const response = await rootRquest.post(`/api/compute_devices/create_symphony_object`, payload);
+    const response = await rootRquest.post(`/api/compute_devices/create_kan_object`, payload);
 
     return normalizeComputeDevice(response.data, +maxId + 1);
   },
@@ -111,11 +109,8 @@ export const validateComputeDeviceConfig = createAsyncThunk<
 
 export const updateComputeDevice = createWrappedAsync<any, UpdateComputeDevicePayload>(
   'ComputeDevice/Update',
-  async ({ id, symphony_id, body }) => {
-    const response = await rootRquest.patch(
-      `/api/compute_devices/update_symphony_object?symphony_id=${symphony_id}`,
-      body,
-    );
+  async ({ id, kan_id, body }) => {
+    const response = await rootRquest.patch(`/api/compute_devices/update_kan_object?kan_id=${kan_id}`, body);
 
     return normalizeComputeDevice(response.data, id);
   },
@@ -123,8 +118,8 @@ export const updateComputeDevice = createWrappedAsync<any, UpdateComputeDevicePa
 
 export const deleteComputeDevice = createWrappedAsync<any, DeleteComputeDevicePayload>(
   'ComputeDevice/Delete',
-  async ({ id, symphony_id, resolve }) => {
-    const url = `/api/compute_devices/delete_symphony_object?symphony_id=${symphony_id}`;
+  async ({ id, kan_id, resolve }) => {
+    const url = `/api/compute_devices/delete_kan_object?kan_id=${kan_id}`;
 
     await rootRquest.delete(url);
 
@@ -160,7 +155,5 @@ export const {
   selectEntities: selectComputeDeviceEntities,
 } = computeDeviceAdapter.getSelectors<RootState>((state) => state.computeDevice);
 
-export const selectDeviceBySymphonyIdSelectorFactory = (id: string) =>
-  createSelector(selectAllComputeDevices, (deviceList) =>
-    deviceList.find((device) => device.symphony_id === id),
-  );
+export const selectDeviceByKanIdSelectorFactory = (id: string) =>
+  createSelector(selectAllComputeDevices, (deviceList) => deviceList.find((device) => device.kan_id === id));

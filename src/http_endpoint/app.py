@@ -14,7 +14,7 @@ import json
 
 app = Flask(__name__)
 
-last_result = {'_default_': None}
+last_result = {'_default_': {}}
 
 
 
@@ -26,9 +26,9 @@ def hello_world():
         print(last_result['_default_'])
         return 'ok'
     else:
-        q = json.dumps(json.loads(last_result['r']), indent=4, sort_keys=True)
-        #return q
-        return json.loads(last_result['r'])
+        q = json.dumps(last_result['_default_'], indent=4, sort_keys=True)
+        return q
+        #return json.loads(last_result['r'])
 
 @app.route("/<name>", methods=["GET", "POST"])
 def hello_world2(name):
@@ -38,6 +38,7 @@ def hello_world2(name):
         print(last_result[name])
         return 'ok'
     else:
-        q = json.dumps(json.loads(last_result[name]), indent=4, sort_keys=True)
-        #return q
-        return json.loads(last_result[name])
+        if name not in last_result: last_result[name] = {}
+        q = json.dumps(last_result[name], indent=4, sort_keys=True)
+        return q
+        #return json.loads(last_result[name])

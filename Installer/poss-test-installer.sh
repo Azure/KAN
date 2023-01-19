@@ -1,6 +1,6 @@
 #!/bin/bash
-symphony_version=0.41.34
-symphonyportal_version=0.39.0-main-603f4b9-amd64
+kan_version=0.41.34
+kanportal_version=0.39.0-main-603f4b9-amd64
 current_step=0
 while [ $current_step -lt 6 ]; do
     case $current_step in
@@ -19,7 +19,7 @@ while [ $current_step -lt 6 ]; do
                 fi
             ;;
             [Nn]* )                
-                read -p "symphony will install on current kubeconfig: (y/n) " -r; echo
+                read -p "kan will install on current kubeconfig: (y/n) " -r; echo
                 case $REPLY in
                 [Yy]* )
                     create_aks_selection=2
@@ -450,7 +450,7 @@ while [ $current_step -lt 6 ]; do
                 
                 if [  $create_sp_selection != "4" ]; then
                     echo "creating credential"
-                    new_cred=$(az ad sp credential reset --id $app_id --append --display-name voe --only-show-errors)
+                    new_cred=$(az ad sp credential reset --id $app_id --append --display-name kan --only-show-errors)
                     echo $new_cred
                     sp_password=$(echo $new_cred | jq -r ".password")
                     sp_tenant=$(echo $new_cred | jq -r ".tenant")
@@ -460,11 +460,11 @@ while [ $current_step -lt 6 ]; do
                 
                   subscriptionId=$(az account show --query "id" -o tsv)
 
-                    if [  $(az role definition list --custom-role-only true --name "voe contributor $subscriptionId" | jq ". | length") -lt 1 ]; 
+                    if [  $(az role definition list --custom-role-only true --name "kan contributor $subscriptionId" | jq ". | length") -lt 1 ]; 
                     then
                         az role definition create --role-definition "{
-                            \"Name\": \"voe contributor $subscriptionId\",
-                            \"Description\": \"voe contributor $subscriptionId\",
+                            \"Name\": \"kan contributor $subscriptionId\",
+                            \"Description\": \"kan contributor $subscriptionId\",
                             \"Actions\": [
                                 \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
                                 \"Microsoft.Devices/iotHubs/listkeys/Action\"
@@ -475,8 +475,8 @@ while [ $current_step -lt 6 ]; do
                     sleep 120
                     else
                         az role definition update --role-definition "{
-                            \"Name\": \"voe contributor $subscriptionId\",
-                            \"Description\": \"voe contributor $subscriptionId\",
+                            \"Name\": \"kan contributor $subscriptionId\",
+                            \"Description\": \"kan contributor $subscriptionId\",
                             \"Actions\": [
                                 \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
                                 \"Microsoft.Devices/iotHubs/listkeys/Action\"
@@ -488,8 +488,8 @@ while [ $current_step -lt 6 ]; do
 
                     sleep 5
 
-                    echo "assigning Symphonyportal contributor role to subscription"
-                    az role assignment create --role "voe contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv) 
+                    echo "assigning KANportal contributor role to subscription"
+                    az role assignment create --role "kan contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv) 
 
                     echo "assigning reader role to subscription"
                     az role assignment create --role "Reader" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv) 
@@ -511,18 +511,18 @@ while [ $current_step -lt 6 ]; do
                 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
                 
                 echo -e "\e[32mRemoving terminating CRDs\e[0m"
-                kubectl get target --no-headers=true | awk '{print $1}' | xargs kubectl patch target.fabric.symphony -p '{"metadata":{"finalizers":null}}' --type=merge                
-                kubectl get instance --no-headers=true | awk '{print $1}' | xargs kubectl patch instance.solution.symphony -p '{"metadata":{"finalizers":null}}' --type=merge
+                kubectl get target --no-headers=true | awk '{print $1}' | xargs kubectl patch target.fabric.kan -p '{"metadata":{"finalizers":null}}' --type=merge                
+                kubectl get instance --no-headers=true | awk '{print $1}' | xargs kubectl patch instance.solution.kan -p '{"metadata":{"finalizers":null}}' --type=merge
 
-                echo -e "\e[32mInstalling symphony\e[0m"
+                echo -e "\e[32mInstalling kan\e[0m"
                 if [ $create_custom_vision_selection == 3 ]; then
-                    helm upgrade -n default --install symphony oci://possprod.azurecr.io/helm/symphony --version $symphony_version --wait
+                    helm upgrade -n default --install kan oci://kanprod.azurecr.io/helm/kan --version $kan_version --wait
                 else 
-                    helm upgrade -n default --install symphony oci://possprod.azurecr.io/helm/symphony --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version $symphony_version --wait
+                    helm upgrade -n default --install kan oci://kanprod.azurecr.io/helm/kan --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version $kan_version --wait
                 fi
                 
                 if [ $? != "0" ];  then
-                    echo -e "\e[31mWe faced some issues while pull symphony from container registry. Please try the installer again a few minutes later\e[0m"
+                    echo -e "\e[31mWe faced some issues while pull kan from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
                 echo -e "\e[32mInstalling Portal\e[0m"
 
@@ -538,10 +538,10 @@ while [ $current_step -lt 6 ]; do
                     values="$values --set servicePrincipal.tenantId=$sp_tenant --set servicePrincipal.clientId=$app_id --set servicePrincipal.clientSecret=$sp_password"
                 fi
 
-                helm upgrade -n default --install symphonyportal oci://p4etest.azurecr.io/helm/voe --version $symphonyportal_version $values --set image.image=p4etest.azurecr.io/symphonyportal
+                helm upgrade -n default --install kanportal oci://p4etest.azurecr.io/helm/kan --version $kanportal_version $values --set image.image=p4etest.azurecr.io/kanportal
 
                 if [ $? != "0" ];  then
-                    echo -e "\e[31mWe faced some issues while pull Symphonyportal from container registry. Please try the installer again a few minutes later\e[0m"
+                    echo -e "\e[31mWe faced some issues while pull KANportal from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
 
                 current_step=`expr $current_step + 1`

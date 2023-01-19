@@ -17,11 +17,6 @@ class AzureCascadesConfig(AppConfig):
         """ready."""
 
         if "runserver" in sys.argv:
-            from .symphony_client import SymphonySkillClient
 
             logger.info("App ready ready while running server")
-
-            # skill_client = SymphonySkillClient()
-            # skill_client.load_symphony_objects()
-
             logger.info("App ready end while running server")

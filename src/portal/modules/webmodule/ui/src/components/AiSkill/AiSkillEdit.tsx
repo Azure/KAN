@@ -78,7 +78,7 @@ const AiSkillEdit = () => {
 
   const skill = useSelector((state: RootState) => selectCascadeById(state, id));
   const modelList = useSelector((state: RootState) => selectAllTrainingProjects(state));
-  const hasAiSkillDeployment = useSelector(selectHasUseAiSkillSelectorFactory(skill.symphony_id));
+  const hasAiSkillDeployment = useSelector(selectHasUseAiSkillSelectorFactory(skill.kan_id));
 
   const reactFlowRef = useRef(null);
   const [elements, setElements] = useState<(Node | Edge)[]>([]);
@@ -92,7 +92,7 @@ const AiSkillEdit = () => {
     },
     raw_data: '',
     tag_list: [{ name: '', value: '', errorMessage: '' }],
-    symphony_id: '',
+    kan_id: '',
     screenshot: '',
   });
   const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(editStep);
@@ -105,7 +105,7 @@ const AiSkillEdit = () => {
       name: skill.name,
       acceleration: skill.acceleration,
       fps: skill.fps,
-      symphony_id: skill.symphony_id,
+      kan_id: skill.kan_id,
       cascade: {
         flow: '',
         error: '',
@@ -306,7 +306,7 @@ const AiSkillEdit = () => {
       </Stack>
       <EditFooter
         id={skill.id}
-        symphony_id={skill.symphony_id}
+        kan_id={skill.kan_id}
         currentStep={localPivotKey}
         onLinkClick={onLinkClick}
         localFormData={localFormData}

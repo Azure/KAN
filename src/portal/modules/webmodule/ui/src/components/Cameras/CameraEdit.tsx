@@ -177,7 +177,7 @@ const CameraCreate = () => {
       </Stack>
       <EditFooter
         cameraId={camera.id}
-        symphony_id={camera.symphony_id}
+        kan_id={camera.kan_id}
         currentStep={localPivotKey}
         onLinkClick={onLinkClick}
         localFormData={localFormData}

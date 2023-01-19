@@ -145,7 +145,7 @@ export const TopNav: React.FC<TopNavProps> = ({ onSettingClick }) => {
     },
     {
       key: 'title',
-      text: 'Percept Open-Source Project',
+      text: 'KAN Portal',
       buttonStyles: commandBarBtnStyles,
       onClick: () => history.push(Url.HOME),
     },

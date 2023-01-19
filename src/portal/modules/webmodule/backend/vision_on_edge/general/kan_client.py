@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-"""Symphony utils.
+"""Kan utils.
 """
 
 import logging
@@ -11,13 +11,11 @@ import os
 from kubernetes import client, config
 
 
-from ..azure_app_insight.utils import get_app_insight_logger
-
 logger = logging.getLogger(__name__)
 
 
-class SymphonyClient:
-    '''symphony sdk operation
+class KanClient:
+    '''kan sdk operation
     '''
 
     def __init__(self, **kwargs):
@@ -61,11 +59,11 @@ class SymphonyClient:
 
         return api
 
-    def load_symphony_objects(self):
+    def load_kan_objects(self):
         raise NotImplementedError
 
     def process_data(self, obj, multi=False):
-        '''transform symphony object into key-value json
+        '''transform kan object into key-value json
         '''
         raise NotImplementedError
 
@@ -75,20 +73,20 @@ class SymphonyClient:
     def get_patch_config(self):
         raise NotImplementedError
 
-    def get_config_from_symphony(self, name):
+    def get_config_from_kan(self, name):
 
         api = self.get_client()
 
         if api:
             try:
-                symphony_object = api.get_namespaced_custom_object(
+                kan_object = api.get_namespaced_custom_object(
                     group=self.group,
                     version="v1",
                     namespace="default",
                     plural=self.plural,
                     name=name
                 )
-                return symphony_object
+                return kan_object
             except Exception as e:
                 logger.warning(e)
                 return {}
@@ -97,9 +95,9 @@ class SymphonyClient:
 
     def get_object(self, name):
 
-        symphony_object = self.get_config_from_symphony(name)
-        if symphony_object:
-            return(self.process_data(symphony_object, multi=False))
+        kan_object = self.get_config_from_kan(name)
+        if kan_object:
+            return(self.process_data(kan_object, multi=False))
         else:
             return {}
 
@@ -112,15 +110,15 @@ class SymphonyClient:
                 namespace="default",
                 plural=self.plural
             )
-            symphony_objects = res['items']
+            kan_objects = res['items']
 
             res = []
-            for symphony_object in symphony_objects:
-                res.append(self.process_data(symphony_object, multi=True))
+            for kan_object in kan_objects:
+                res.append(self.process_data(kan_object, multi=True))
 
             return res
         else:
-            logger.warning("No symphony detected")
+            logger.warning("No kan detected")
             return []
 
     def deploy_config(self):

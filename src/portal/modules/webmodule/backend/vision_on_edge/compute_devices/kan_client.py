@@ -6,17 +6,17 @@ import os
 import json
 import subprocess
 
-from ..general.symphony_client import SymphonyClient
+from ..general.kan_client import KanClient
 
 
 logger = logging.getLogger(__name__)
 
 
-class SymphonyTargetClient(SymphonyClient):
+class KanTargetClient(KanClient):
 
     def __init__(self):
         super().__init__()
-        self.group = "fabric.symphony"
+        self.group = "fabric.kan"
         self.plural = "targets"
 
     def get_config(self):
@@ -37,14 +37,14 @@ class SymphonyTargetClient(SymphonyClient):
         client_secret = os.getenv('CLIENT_SECRET')
         storage_account = os.getenv('STORAGE_ACCOUNT')
         storage_container = os.getenv('STORAGE_CONTAINER')
-        # symphony_url = os.getenv('SYMPHONY_URL')
-        symphony_agent_version = os.getenv('SYMPHONY_AGENT_VERSION')
+        # kan_url = os.getenv('KAN_URL')
+        kan_agent_version = os.getenv('KAN_AGENT_VERSION')
 
         service_api = self.get_service_client()
         res = service_api.read_namespaced_service(
-            name='symphony-service-ext', namespace='symphony-k8s-system')
-        symphony_ip = res.status.load_balancer.ingress[0].ip
-        symphony_url = "http://" + symphony_ip + ":8080/v1alpha2/agent/references"
+            name='kan-service-ext', namespace='kan-k8s-system')
+        kan_ip = res.status.load_balancer.ingress[0].ip
+        kan_url = "http://" + kan_ip + ":8080/v1alpha2/agent/references"
 
         labels = {}
         if tag_list:
@@ -89,7 +89,7 @@ class SymphonyTargetClient(SymphonyClient):
             }
 
         config_json = {
-            "apiVersion": "fabric.symphony/v1",
+            "apiVersion": "fabric.kan/v1",
             "kind": "Target",
             "metadata": {
                 "name": name,
@@ -101,17 +101,17 @@ class SymphonyTargetClient(SymphonyClient):
                 "forceRedeploy": True,
                 "components": [
                     {
-                        "name": "symphony-agent",
+                        "name": "kan-agent",
                         "metadata": {
                             "deployment.replicas": "#1",
                             "service.ports": "[{\"name\":\"port8088\",\"port\": 8088}]",
                             "service.type": "ClusterIP",
-                            "service.name": "symphony-agent"
+                            "service.name": "kan-agent"
                         },
                         "properties": {
                             "container.version": "1.0",
                             "container.type": "docker",
-                            "container.image": "possprod.azurecr.io/symphony-agent:"+symphony_agent_version,
+                            "container.image": "possprod.azurecr.io/kan-agent:"+kan_agent_version,
                             "container.createOptions": "{\"HostConfig\":{\"Binds\":[\"/etc/iotedge/storage:/snapshots\"],\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
                             "container.restartPolicy": "always",
                             "env.AZURE_CLIENT_ID": client_id,
@@ -119,7 +119,7 @@ class SymphonyTargetClient(SymphonyClient):
                             "env.AZURE_CLIENT_SECRET": client_secret,
                             "env.STORAGE_ACCOUNT": storage_account,
                             "env.STORAGE_CONTAINER": storage_container,
-                            "env.SYMPHONY_URL": symphony_url,
+                            "env.KAN_URL": kan_url,
                             "env.TARGET_NAME": name,
                             "env.SNAPSHOT_ROOT": "/snapshots"
                         }
@@ -161,13 +161,13 @@ class SymphonyTargetClient(SymphonyClient):
         ]
         return patch_config
 
-    def load_symphony_objects(self):
+    def load_kan_objects(self):
         from .models import ComputeDevice
 
         api = self.get_client()
         if api:
             res = api.list_namespaced_custom_object(
-                group="fabric.symphony",
+                group="fabric.kan",
                 version="v1",
                 namespace="default",
                 plural="targets"
@@ -176,7 +176,7 @@ class SymphonyTargetClient(SymphonyClient):
 
             for target in targets:
                 name = target['spec']['displayName']
-                symphony_id = target['metadata']['name']
+                kan_id = target['metadata']['name']
                 iothub = target['spec']['topologies'][0]['bindings'][0]['config'].get('iotHub', "").split('.')[
                     0]
                 iotedge_device = target['spec']['topologies'][0]['bindings'][0]['config'].get(
@@ -209,7 +209,7 @@ class SymphonyTargetClient(SymphonyClient):
                         "iotedge_device": iotedge_device,
                         "architecture": architecture,
                         "acceleration": acceleration,
-                        "symphony_id": symphony_id,
+                        "kan_id": kan_id,
                         "solution_id": solution_id,
                         "tag_list": tag_list,
                         "is_k8s": is_k8s,
@@ -219,12 +219,12 @@ class SymphonyTargetClient(SymphonyClient):
                 logger.info("ComputeDevice: %s %s.", compute_device_obj,
                             "created" if created else "updated")
         else:
-            logger.warning("Not loading symphony targets")
+            logger.warning("Not loading kan targets")
 
     def process_data(self, target, multi):
 
         name = target['spec']['displayName']
-        symphony_id = target['metadata']['name']
+        kan_id = target['metadata']['name']
         iothub = target['spec']['topologies'][0]['bindings'][0]['config'].get(
             'iotHub', "").split('.')[0]
         iotedge_device = target['spec']['topologies'][0]['bindings'][0]['config'].get(
@@ -255,7 +255,7 @@ class SymphonyTargetClient(SymphonyClient):
             "iotedge_device": iotedge_device,
             "architecture": architecture,
             "acceleration": acceleration,
-            "symphony_id": symphony_id,
+            "kan_id": kan_id,
             "solution_id": solution_id,
             "tag_list": tag_list,
             "is_k8s": is_k8s,
@@ -274,10 +274,10 @@ class SymphonyTargetClient(SymphonyClient):
         return res
 
     def process_status(self, status):
-        from ..cameras.symphony_client import SymphonyDeviceClient
-        device_client = SymphonyDeviceClient()
+        from ..cameras.kan_client import KanDeviceClient
+        device_client = KanDeviceClient()
 
-        camera_table = {i["symphony_id"]: i["name"]
+        camera_table = {i["kan_id"]: i["name"]
                         for i in device_client.get_objects()}
 
         status_table = {}
@@ -299,7 +299,7 @@ class SymphonyTargetClient(SymphonyClient):
 
         if api:
             target = api.get_namespaced_custom_object(
-                group="fabric.symphony",
+                group="fabric.kan",
                 version="v1",
                 namespace="default",
                 plural="targets",
@@ -318,7 +318,7 @@ class SymphonyTargetClient(SymphonyClient):
 
         if api:
             target = api.get_namespaced_custom_object(
-                group="fabric.symphony",
+                group="fabric.kan",
                 version="v1",
                 namespace="default",
                 plural="targets",
@@ -329,11 +329,11 @@ class SymphonyTargetClient(SymphonyClient):
             return ""
 
 
-class SymphonySolutionClient(SymphonyClient):
+class KanSolutionClient(KanClient):
 
     def __init__(self):
         super().__init__()
-        self.group = "solution.symphony"
+        self.group = "solution.kan"
         self.plural = "solutions"
 
     def get_config(self):
@@ -349,12 +349,12 @@ class SymphonySolutionClient(SymphonyClient):
         module_routes = self.args.get("module_routes", "")
         is_grpc = self.args.get("is_grpc", False)
         grpc_components = self.args.get("grpc_components", [])
-        # workaround for symphony 0.39.7
+        # workaround for kan 0.39.7
         is_k8s = self.args.get("is_k8s", False)
         if is_k8s:
-            symphony_agent_address = "target-runtime.default.svc.cluster.local"
+            kan_agent_address = "target-runtime.default.svc.cluster.local"
         else:
-            symphony_agent_address = "target-runtime-symphony-agent"
+            kan_agent_address = "target-runtime-kan-agent"
 
         image_suffix = ""
         container_resources = ""
@@ -368,7 +368,7 @@ class SymphonySolutionClient(SymphonyClient):
             create_options = "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"runtime\":\"nvidia\"}}"
         network_api = self.get_network_client()
         res = network_api.read_namespaced_ingress(
-            name='symphonyportal', namespace='default')
+            name='kanportal', namespace='default')
         webmodule_ip = res.status.load_balancer.ingress[0].ip
         webmodule_url = "http://" + webmodule_ip
 
@@ -401,7 +401,7 @@ class SymphonySolutionClient(SymphonyClient):
             "route": "InferenceToIoTHub",
             "type": "iothub",
             "properties": {
-                "definition": f"FROM /messages/modules/{instance}-symphonyai/metrics INTO $upstream"
+                "definition": f"FROM /messages/modules/{instance}-kanai/metrics INTO $upstream"
             }
 
         })
@@ -411,26 +411,26 @@ class SymphonySolutionClient(SymphonyClient):
                     "route": f"InferenceTo{module_route['module_name']}",
                     "type": "iothub",
                     "properties": {
-                        "definition": f"FROM /messages/modules/{instance}-symphonyai/localmetrics INTO BrokeredEndpoint(\"/modules/{module_route['module_name']}/inputs/{module_route['module_input']}\")"
+                        "definition": f"FROM /messages/modules/{instance}-kanai/localmetrics INTO BrokeredEndpoint(\"/modules/{module_route['module_name']}/inputs/{module_route['module_input']}\")"
                     }
 
                 })
 
         # container image
-        container_version = "0.39.0-dev.7"
+        container_version = "0.39.0-dev.8"
         # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
         # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
         # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"
-        voeedge_image = f"p4etest.azurecr.io/voe/symphonyai:{container_version}-{image_suffix}amd64"
+        voeedge_image = f"p4etest.azurecr.io/voe/kanai:{container_version}-{image_suffix}amd64"
 
         if 'arm' in architecture.lower():
-            voeedge_image = f"p4etest.azurecr.io/voe/symphonyai:{container_version}-jetson"
+            voeedge_image = f"p4etest.azurecr.io/voe/kanai:{container_version}-jetson"
             managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-jetson"
             streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-jetson"
             predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-jetson"
 
         config_json = {
-            "apiVersion": "solution.symphony/v1",
+            "apiVersion": "solution.kan/v1",
             "kind": "Solution",
             "metadata": {
                 "name": name,
@@ -447,7 +447,7 @@ class SymphonySolutionClient(SymphonyClient):
                     #         "container.version": container_version,
                     #         "env.AISKILLS": skills,
                     #         "env.INSTANCE": "$instance()",
-                    #         "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
+                    #         "env.KAN_AGENT_ADDRESS": kan_agent_address
                     #     }
                     # },
                     # {
@@ -463,7 +463,7 @@ class SymphonySolutionClient(SymphonyClient):
                     #         "env.BLOB_STORAGE_CONTAINER": storage_container,
                     #         "env.WEBMODULE_URL": webmodule_url,
                     #         "env.IOTEDGE_CONNECTION_STRING": iotedge_connection_str,
-                    #         "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
+                    #         "env.KAN_AGENT_ADDRESS": kan_agent_address
                     #     },
                     #     "routes": routes
                     # },
@@ -479,7 +479,7 @@ class SymphonySolutionClient(SymphonyClient):
                     #     }
                     # },
                     {
-                        "name": "symphonyai",
+                        "name": "kanai",
                         "type": "container",
                         "properties": {
                             "container.createOptions": create_options,
@@ -494,7 +494,7 @@ class SymphonySolutionClient(SymphonyClient):
                             "env.BLOB_STORAGE_CONTAINER": storage_container,
                             "env.WEBMODULE_URL": webmodule_url,
                             "env.IOTEDGE_CONNECTION_STRING": iotedge_connection_str,
-                            # "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
+                            # "env.KAN_AGENT_ADDRESS": kan_agent_address
                         },
                         "routes": routes
                     }
@@ -519,7 +519,7 @@ class SymphonySolutionClient(SymphonyClient):
 
         if api:
             solution = api.get_namespaced_custom_object(
-                group="solution.symphony",
+                group="solution.kan",
                 version="v1",
                 namespace="default",
                 plural="solutions",
@@ -535,7 +535,7 @@ class SymphonySolutionClient(SymphonyClient):
 
             try:
                 api.patch_namespaced_custom_object(
-                    group="solution.symphony",
+                    group="solution.kan",
                     version="v1",
                     namespace="default",
                     plural="solutions",

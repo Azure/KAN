@@ -12,14 +12,14 @@ import yaml
 from django.db import models
 from django.db.models.signals import post_save, post_delete, pre_save
 
-from .symphony_client import SymphonyTargetClient, SymphonySolutionClient
+from .kan_client import KanTargetClient, KanSolutionClient
 from ..azure_app_insight.utils import get_app_insight_logger
 
 logger = logging.getLogger(__name__)
 
 
-target_client = SymphonyTargetClient()
-solution_client = SymphonySolutionClient()
+target_client = KanTargetClient()
+solution_client = KanSolutionClient()
 
 
 class ComputeDevice(models.Model):
@@ -32,7 +32,7 @@ class ComputeDevice(models.Model):
     architecture = models.CharField(max_length=1000, null=True, blank=True, default="")
     acceleration = models.CharField(max_length=1000, null=True, blank=True, default="")
     tag_list = models.CharField(max_length=1000, null=True, blank=True, default="")
-    symphony_id = models.CharField(max_length=1000, null=True, blank=True, default="")
+    kan_id = models.CharField(max_length=1000, null=True, blank=True, default="")
     solution_id = models.CharField(max_length=1000, null=True, blank=True, default="")
     status = models.CharField(max_length=1000, blank=True, default="")
     is_k8s = models.BooleanField(default=False)
@@ -41,9 +41,9 @@ class ComputeDevice(models.Model):
 
     def get_status(self):
         from ..cameras.models import Camera
-        camera_table = {i.symphony_id: i.name for i in Camera.objects.all()}
+        camera_table = {i.kan_id: i.name for i in Camera.objects.all()}
         status_table = {}
-        status = target_client.get_status(self.symphony_id)
+        status = target_client.get_status(self.kan_id)
         if status:
             for key in status.keys():
                 cam = key.split('.')[0]
@@ -59,7 +59,7 @@ class ComputeDevice(models.Model):
             return ""
 
     def get_properties(self):
-        prop = target_client.get_config_from_symphony(self.symphony_id)
+        prop = target_client.get_config_from_kan(self.kan_id)
         if prop:
             return yaml.dump(prop)
         else:
@@ -70,8 +70,8 @@ class ComputeDevice(models.Model):
         """pre_save."""
         instance = kwargs["instance"]
 
-        if not instance.symphony_id:
-            instance.symphony_id = 'target-' + str(uuid.uuid4())
+        if not instance.kan_id:
+            instance.kan_id = 'target-' + str(uuid.uuid4())
             instance.solution_id = 'solution-' + str(uuid.uuid4())
 
     @staticmethod
@@ -84,7 +84,7 @@ class ComputeDevice(models.Model):
             return
 
         attrs = {
-            "name": instance.symphony_id,
+            "name": instance.kan_id,
             "iothub": instance.iothub,
             "iotedge_device": instance.iotedge_device,
             "architecture": instance.architecture,
@@ -104,28 +104,28 @@ class ComputeDevice(models.Model):
             "is_k8s": instance.is_k8s,
         })
 
-        az_logger = get_app_insight_logger()
-        properties = {
-            "custom_dimensions": {
-                "create_compute_device": json.dumps(attrs)
-            }
-        }
+        # az_logger = get_app_insight_logger()
+        # properties = {
+        #     "custom_dimensions": {
+        #         "create_compute_device": json.dumps(attrs)
+        #     }
+        # }
         if created:
             # create
             target_client.deploy_config()
             solution_client.deploy_config()
         else:
             # update
-            target_client.patch_config(name=instance.symphony_id)
-        az_logger.warning(
-            "create_compute_device",
-            extra=properties,
-        )
+            target_client.patch_config(name=instance.kan_id)
+        # az_logger.warning(
+        #     "create_compute_device",
+        #     extra=properties,
+        # )
 
     @staticmethod
     def post_delete(**kwargs):
         instance = kwargs["instance"]
-        target_client.remove_config(name=instance.symphony_id)
+        target_client.remove_config(name=instance.kan_id)
         solution_client.remove_config(name=instance.solution_id)
 
 

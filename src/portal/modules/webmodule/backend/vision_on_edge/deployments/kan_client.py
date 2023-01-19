@@ -4,17 +4,17 @@
 import logging
 import json
 
-from ..general.symphony_client import SymphonyClient
+from ..general.kan_client import KanClient
 
 
 logger = logging.getLogger(__name__)
 
 
-class SymphonyInstanceClient(SymphonyClient):
+class KanInstanceClient(KanClient):
 
     def __init__(self):
         super().__init__()
-        self.group = "solution.symphony"
+        self.group = "solution.kan"
         self.plural = "instances"
 
     def get_config(self):
@@ -33,7 +33,7 @@ class SymphonyInstanceClient(SymphonyClient):
                 labels[tag["name"]] = tag["value"]
 
         config_json = {
-            "apiVersion": "solution.symphony/v1",
+            "apiVersion": "solution.kan/v1",
             "kind": "Instance",
             "metadata": {
                 "name": name,
@@ -70,7 +70,7 @@ class SymphonyInstanceClient(SymphonyClient):
         ]
         return patch_config
 
-    def load_symphony_objects(self):
+    def load_kan_objects(self):
         from .models import Deployment
         from ..cameras.models import Camera
         from ..azure_cascades.models import Cascade
@@ -79,7 +79,7 @@ class SymphonyInstanceClient(SymphonyClient):
         api = self.get_client()
         if api:
             res = api.list_namespaced_custom_object(
-                group="solution.symphony",
+                group="solution.kan",
                 version="v1",
                 namespace="default",
                 plural="instances"
@@ -88,13 +88,13 @@ class SymphonyInstanceClient(SymphonyClient):
 
             for instance in instances:
                 name = instance['spec']['displayName']
-                symphony_id = instance['metadata']['name']
-                target_symphony_id = instance['spec']['target']['name']
+                kan_id = instance['metadata']['name']
+                target_kan_id = instance['spec']['target']['name']
                 configure_data = json.loads(
                     instance['spec']['parameters']['configure_data'])
 
                 target = ComputeDevice.objects.filter(
-                    symphony_id=target_symphony_id).first()
+                    kan_id=target_kan_id).first()
                 configure = []
                 for cam in configure_data.keys():
                     cam_obj = Camera.objects.filter(name=cam).first()
@@ -115,7 +115,7 @@ class SymphonyInstanceClient(SymphonyClient):
                 deployment_obj, created = Deployment.objects.update_or_create(
                     name=name,
                     defaults={
-                        "symphony_id": symphony_id,
+                        "kan_id": kan_id,
                         "configure": json.dumps(configure),
                         "compute_device": target,
                     },
@@ -123,14 +123,14 @@ class SymphonyInstanceClient(SymphonyClient):
                 logger.info("Deployment: %s %s.", deployment_obj,
                             "created" if created else "updated")
         else:
-            logger.warning("Not loading symphony skills")
+            logger.warning("Not loading kan skills")
 
     def process_data(self, instance, multi):
 
         name = instance['spec']['displayName']
-        symphony_id = instance['metadata']['name']
+        kan_id = instance['metadata']['name']
         configure_data = json.loads(instance['spec']['parameters']['configure_data'])
-        target_symphony_id = instance['spec']['target']['name']
+        target_kan_id = instance['spec']['target']['name']
 
         labels = instance['metadata'].get('labels')
         if labels:
@@ -161,9 +161,9 @@ class SymphonyInstanceClient(SymphonyClient):
 
         return {
             "name": name,
-            "symphony_id": symphony_id,
+            "kan_id": kan_id,
             "configure": json.dumps(configure),
-            "compute_device": target_symphony_id,
+            "compute_device": target_kan_id,
             "status": processed_status,
             "tag_list": tag_list
         }
@@ -177,7 +177,7 @@ class SymphonyInstanceClient(SymphonyClient):
 
         if api:
             instance = api.get_namespaced_custom_object(
-                group="solution.symphony",
+                group="solution.kan",
                 version="v1",
                 namespace="default",
                 plural="instances",

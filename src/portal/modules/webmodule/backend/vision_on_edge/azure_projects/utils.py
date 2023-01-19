@@ -56,20 +56,20 @@ def update_app_insight_counter(
             images_now = trainer.get_tagged_image_count(project_obj.customvision_id)
             parts_now = len(trainer.get_tags(project_obj.customvision_id))
             # Traces
-            az_logger = get_app_insight_logger()
-            az_logger.warning(
-                "training",
-                extra={
-                    "custom_dimensions": {
-                        "training": json.dumps({
-                            "train": train,
-                            "images": images_now - images_last_train,
-                            "parts": parts_now - parts_last_train,
-                            "retrain": retrain,
-                        })
-                    }
-                },
-            )
+            # az_logger = get_app_insight_logger()
+            # az_logger.warning(
+            #     "training",
+            #     extra={
+            #         "custom_dimensions": {
+            #             "training": json.dumps({
+            #                 "train": train,
+            #                 "images": images_now - images_last_train,
+            #                 "parts": parts_now - parts_last_train,
+            #                 "retrain": retrain,
+            #             })
+            #         }
+            #     },
+            # )
     except Exception:
         logger.exception("update_app_insight_counter occur unexcepted error")
         raise
@@ -176,7 +176,7 @@ def update_tags_helper(project_id, tags=None):
         part_obj.delete()
 
 
-def pull_cv_project_helper(customvision_project_id: str, is_partial: bool, name: str = "", symphony_id: str = ""):
+def pull_cv_project_helper(customvision_project_id: str, is_partial: bool, name: str = "", kan_id: str = ""):
     """pull_cv_project_helper.
 
     Args:
@@ -242,7 +242,7 @@ def pull_cv_project_helper(customvision_project_id: str, is_partial: bool, name:
 
     project_obj = Project.objects.create(
         name=name,
-        symphony_id=symphony_id,
+        kan_id=kan_id,
         project_type=project_type,
         customvision_id=customvision_project_id,
         setting=setting_obj,

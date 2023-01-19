@@ -25,12 +25,12 @@ class AzureProjectsConfig(AppConfig):
 
             from . import signals  # noqa: F401
             from .helpers import create_default_objects, create_demo_objects, create_default_nodes
-            from .symphony_client import SymphonyModelClient
+            from .kan_client import KanModelClient
 
             create_default_objects()
             create_default_nodes()
             if get_create_demo():
                 create_demo_objects()
 
-            model_client = SymphonyModelClient()
-            model_client.load_symphony_objects()
+            model_client = KanModelClient()
+            model_client.load_kan_objects()

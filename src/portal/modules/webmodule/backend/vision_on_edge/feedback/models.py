@@ -46,15 +46,15 @@ class Feedback(models.Model):
         logger.warning("Satisfaction: %s", instance.satisfaction)
 
         # Escape from test
-        if (
-            Setting.objects.first() is not None
-            and Setting.objects.first().is_collect_data
-        ):
-            az_logger = get_app_insight_logger()
-            az_logger.warning(
-                "feedback",
-                extra={"custom_dimensions": {"satisfaction": instance.satisfaction}},
-            )
+        # if (
+        #     Setting.objects.first() is not None
+        #     and Setting.objects.first().is_collect_data
+        # ):
+        #     az_logger = get_app_insight_logger()
+        #     az_logger.warning(
+        #         "feedback",
+        #         extra={"custom_dimensions": {"satisfaction": instance.satisfaction}},
+        #     )
 
 
 post_save.connect(Feedback.post_save, Feedback, dispatch_uid="Feedback_post")

@@ -9,7 +9,7 @@ from .models import ComputeDevice
 logger = logging.getLogger(__name__)
 
 
-def load_symphony_objects():
+def load_kan_objects():
     try:
         config.load_incluster_config()
         api = client.CustomObjectsApi()
@@ -18,7 +18,7 @@ def load_symphony_objects():
 
     if api:
         res = api.list_namespaced_custom_object(
-            group="fabric.symphony",
+            group="fabric.kan",
             version="v1",
             namespace="default",
             plural="targets"
@@ -46,4 +46,4 @@ def load_symphony_objects():
             logger.info("ComputeDevice: %s %s.", compute_device_obj,
                         "created" if created else "updated")
     else:
-        logger.warning("Not creating symphony targets")
+        logger.warning("Not creating kan targets")

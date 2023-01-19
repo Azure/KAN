@@ -4,20 +4,20 @@
 import logging
 import json
 
-from ..general.symphony_client import SymphonyClient
+from ..general.kan_client import KanClient
 from ..general.utils import AzureBlobClient
 
 
 logger = logging.getLogger(__name__)
 
 
-class SymphonyDeviceClient(SymphonyClient):
+class KanDeviceClient(KanClient):
     blob_client = None
 
     def __init__(self):
         super().__init__()
         self.blob_client = AzureBlobClient()
-        self.group = "fabric.symphony"
+        self.group = "fabric.kan"
         self.plural = "devices"
 
     def get_config(self):
@@ -39,7 +39,7 @@ class SymphonyDeviceClient(SymphonyClient):
                 labels[tag["name"]] = tag["value"]
 
         config_json = {
-            "apiVersion": "fabric.symphony/v1",
+            "apiVersion": "fabric.kan/v1",
             "kind": "Device",
             "metadata": {
                 "name": name,
@@ -86,7 +86,7 @@ class SymphonyDeviceClient(SymphonyClient):
 
         if api:
             device = api.get_namespaced_custom_object(
-                group="fabric.symphony",
+                group="fabric.kan",
                 version="v1",
                 namespace="default",
                 plural="devices",
@@ -108,7 +108,7 @@ class SymphonyDeviceClient(SymphonyClient):
 
         if api:
             device = api.get_namespaced_custom_object(
-                group="fabric.symphony",
+                group="fabric.kan",
                 version="v1",
                 namespace="default",
                 plural="devices",
@@ -122,7 +122,7 @@ class SymphonyDeviceClient(SymphonyClient):
         else:
             return ""
 
-    def load_symphony_objects(self):
+    def load_kan_objects(self):
         from .models import Camera
         from ..azure_settings.models import Setting
         from ..locations.models import Location
@@ -130,7 +130,7 @@ class SymphonyDeviceClient(SymphonyClient):
         api = self.get_client()
         if api:
             res = api.list_namespaced_custom_object(
-                group="fabric.symphony",
+                group="fabric.kan",
                 version="v1",
                 namespace="default",
                 plural="devices"
@@ -139,7 +139,7 @@ class SymphonyDeviceClient(SymphonyClient):
 
             for device in devices:
                 name = device['spec']['displayName']
-                symphony_id = device['metadata']['name']
+                kan_id = device['metadata']['name']
                 rtsp = device['spec']['properties'].get('ip', "")
                 username = device['spec']['properties'].get('user', "")
                 password = device['spec']['properties'].get('password', "")
@@ -170,21 +170,21 @@ class SymphonyDeviceClient(SymphonyClient):
                         "lines": "",
                         "location": location_obj,
                         "allowed_devices": allowed_devices,
-                        "symphony_id": symphony_id,
+                        "kan_id": kan_id,
                         "tag_list": tag_list,
                     },
                 )
                 logger.info("Camera: %s %s.", cam_obj,
                             "created" if created else "updated")
         else:
-            logger.warning("Not loading symphony devices")
+            logger.warning("Not loading kan devices")
 
     def process_data(self, device, multi):
 
         from ..locations.models import Location
 
         name = device['spec']['displayName']
-        symphony_id = device['metadata']['name']
+        kan_id = device['metadata']['name']
         rtsp = device['spec']['properties'].get('ip', "")
         username = device['spec']['properties'].get('user', "")
         password = device['spec']['properties'].get('password', "")
@@ -209,7 +209,7 @@ class SymphonyDeviceClient(SymphonyClient):
         except KeyError:
             snapshot_url = ""
         if snapshot_url:
-            blob_sas = self.blob_client.generate_sas_token(symphony_id+'-snapshot.jpg')
+            blob_sas = self.blob_client.generate_sas_token(kan_id+'-snapshot.jpg')
             blob_url = f"{snapshot_url}?{blob_sas}"
         else:
             blob_url = ""
@@ -223,7 +223,7 @@ class SymphonyDeviceClient(SymphonyClient):
             "lines": "",
             "location": location_obj.name,
             "allowed_devices": allowed_devices,
-            "symphony_id": symphony_id,
+            "kan_id": kan_id,
             "tag_list": tag_list,
             "snapshot": blob_url
         }
@@ -239,10 +239,10 @@ class SymphonyDeviceClient(SymphonyClient):
         return res
 
     def process_status(self, status):
-        from ..compute_devices.symphony_client import SymphonyTargetClient
-        target_client = SymphonyTargetClient()
+        from ..compute_devices.kan_client import KanTargetClient
+        target_client = KanTargetClient()
 
-        compute_device_table = {i["symphony_id"]: i["name"]
+        compute_device_table = {i["kan_id"]: i["name"]
                                 for i in target_client.get_objects()}
 
         status_table = {}

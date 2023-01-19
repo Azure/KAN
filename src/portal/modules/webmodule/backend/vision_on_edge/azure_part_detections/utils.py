@@ -70,8 +70,8 @@ def if_trained_then_deploy_worker(part_detection_id):
     # =====================================================
     # 2. Project training success                       ===
     # =====================================================
-        # logger.info("Project train/export success.")
-        # logger.info("Deploying...")
+    # logger.info("Project train/export success.")
+    # logger.info("Deploying...")
 
     # =====================================================
     # 3.0 Update cascade config                         ===
@@ -157,7 +157,7 @@ def deploy_worker(part_detection_id):
     #             "pipeline": instance.cascade.flow,
     #         },
     #         timeout=REQUEST_TIMEOUT,
-    #     ) 
+    #     )
     # else:
     #     requests.post(
     #         "http://" + str(instance.inference_module.url) + "/update_endpoint",
@@ -298,10 +298,10 @@ def deploy_worker(part_detection_id):
     # 6. Update last fps                                ===
     # =====================================================
     # TODO filter PDScenario object, set its fps
-    logger.info('Update last fps')
-    part_detection_scenario_obj = PDScenario.objects.filter(
-        inference_mode=instance.inference_mode).first()
-    part_detection_scenario_obj.set_fps(instance.fps)
+    # logger.info('Update last fps')
+    # part_detection_scenario_obj = PDScenario.objects.filter(
+    #     inference_mode=instance.inference_mode).first()
+    # part_detection_scenario_obj.set_fps(instance.fps)
 
 
 def if_trained_then_deploy_catcher(part_detection_id):

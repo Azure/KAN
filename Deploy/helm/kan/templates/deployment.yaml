@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: symphonyportal
+  name: kanportal
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: symphonyportal
+      app: kanportal
   minReadySeconds: 10
   strategy:
     type: RollingUpdate
@@ -16,11 +16,11 @@ spec:
   template:
     metadata:
       labels:
-        app: symphonyportal
+        app: kanportal
     spec:
-      serviceAccountName: symphony-user
+      serviceAccountName: kan-user
       containers:
-      - name: symphonyportal
+      - name: kanportal
         image: {{.Values.image.image}}:{{ .Values.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{.Values.image.pullPolicy}}
         ports:
@@ -33,6 +33,6 @@ spec:
             name: azure-env
         env:          
           - name: DF_PD_VIDEO_SOURCE
-            value: {{.Values.symphonyportal.videoSource}}
+            value: {{.Values.kanportal.videoSource}}
           - name: IS_K8S
             value: "true"

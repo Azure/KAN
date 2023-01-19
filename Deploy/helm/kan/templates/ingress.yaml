@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: symphonyportal
+  name: kanportal
 spec:
   ingressClassName: nginx
   rules:
@@ -11,6 +11,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: symphonyportal
+                name: kanportal
                 port:
                   number: 8000

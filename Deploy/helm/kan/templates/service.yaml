@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: symphonyportal
+  name: kanportal
   labels:
-    app: symphonyportal
+    app: kanportal
 spec:
   type: ClusterIP
   ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: symphonyportal
+    app: kanportal

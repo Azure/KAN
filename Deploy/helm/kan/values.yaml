@@ -1,12 +1,12 @@
-# Default values for voe.
+# Default values for kan.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-symphonyAgentVersion: "0.41.19"
+kanAgentVersion: "0.41.19"
 image:
   pullPolicy: Always
-  image: p4etest.azurecr.io/symphonyportal
+  image: p4etest.azurecr.io/kanportal
   tag:
-symphonyportal:
+kanportal:
   videoSource: opencv
 storage:
   storageResourceGroup: ""

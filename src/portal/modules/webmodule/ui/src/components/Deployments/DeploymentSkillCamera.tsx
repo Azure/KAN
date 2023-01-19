@@ -43,6 +43,7 @@ const DeploymentSkillCamera = () => {
   const cameraList = useSelector((state: RootState) => selectAllCameras(state));
   const device = useSelector(selectDeviceByKanIdSelectorFactory(deployment.compute_device));
   const skill = useSelector(selectAiSkillByKanIdSelectorFactory(skillId));
+  const isWarningDisplay = device.is_k8s;
 
   const [selectedCamera, setseLectedCamera] = useState<Camera | null>(null);
   const [filterInput, setFilterInput] = useState('');

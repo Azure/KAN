@@ -76,7 +76,25 @@ Azure Percept Open-Source Project supports internet protocol (IP) cameras that u
 
 2. Add the **Name, RTSP URL**, and **Compute Device** for your camera.
 
-    -   Each camera must have an **RTSP URL** that the RTSP protocol can use for managing its feed. For this tutorial we created an RTSP URL for you that you can use if you don’t have one available. For ease of use, this is based on a recorded video and is publicly available to any device - **rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4**
+    -   Each camera must have an **RTSP URL** that the RTSP protocol can use for managing its feed. For this tutorial we created an RTSP simulator for you that you can use it if you don’t have a real camera available at the moment. You can leverage it easily by running the following commands and get rtsp urls showing real scenarios:
+    -   view your clusters by running: kubectl config view
+    -   Pick one from the list and set by running: kubectl config set-cluster <YourClusterName>
+    -   kubectl create deployment rtspsim --image=mcr.microsoft.com/azureedgedevices/p4drtspsim:d923853-amd64
+    -   kubectl get deployments
+    -   kubectl get pods
+    -   kubectl expose deployment rtspsim --type=LoadBalancer --port=554kubectl get services -A -w
+    -   kubectl get services -A -w
+    -   copy the external_Ip for the rtspsim LoadBalancer and paste it instead of the "Ingress_IP" in any of the rtsp urls below:
+    ![image](https://user-images.githubusercontent.com/8229075/214940346-3125550b-1843-4cc6-85f2-5f3ce6bec3c6.png)
+    - Then you will be able to use the following simulated videos:
+    rtsp://<Ingress_IP>:554/media/cafeteria1.mkv
+    rtsp://<Ingress_IP>:554/media/camera-300s.mkv
+    rtsp://<Ingress_IP>:554/media/co-final.mkv
+    rtsp://<Ingress_IP>:554/media/homes_00425.mkv
+    rtsp://<Ingress_IP>:554/media/lots_015.mkv
+    rtsp://<Ingress_IP>:554/media/peoplewaiting.mkv
+    rtsp://<Ingress_IP>:554/media/retailshop-15fps.mkv
+    -  Alternatively, you can the use the following publicly avaialble rtsp url -  **rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4**
 
     -   The **Compute Device** field associates a camera feed with devices will have access to that feed. Since this is a “many-to-many” relationship, one camera feed may be processed by several compute devices and one compute device may process several camera feeds.
 

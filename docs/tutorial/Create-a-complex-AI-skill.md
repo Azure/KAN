@@ -1,8 +1,8 @@
-# Create a complex AI skill with Azure Percept Open-Source Portal
+# How-to guide: Create a complex AI skill with KAN Portal AI Skill builder
 
 ## Overview
 
-Azure Percept Open-Source skills are deployable packages to Edge devices. These packages are a cascade of stages or *nodes* where the video feed is consumed by an Edge device, inferences are calculated, results are filtered, and results and video clips are exported for further business logic processing or storage. 
+KAN AI Skills are deployable packages to Edge devices. These packages are a cascade of stages or *nodes* where the video feed is consumed by an Edge device, inferences are calculated, results are filtered, and results and video clips are exported for further business logic processing or storage. 
 
 There are three groups of nodes that comprise AI skills:
 
@@ -172,8 +172,7 @@ Now that you understand what AI skills are and how to use models to build, trans
 
 We also recommend the following tutorials to increase your experience:
 
-- [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)
+- [Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
 
-- [Tutorial: Create a complex AI skill with Azure Percept Open-Source Project](/docs/tutorial/Create-a-complex-AI-skill.md)
+- [KAN: API overview](/docs/api/README.md)
 
-- [Tutorial: Create a custom model with Azure Percept Open-Source Project](/docs/tutorial/Create-a-custom-model.md)

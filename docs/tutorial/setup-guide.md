@@ -1,4 +1,4 @@
-# Azure Percept Open-Source Project: Setup guide
+# KAN: Setup guide
 
 ## Prerequisites
 
@@ -8,11 +8,11 @@ You need the following items before you start working with the self-hosting setu
 - A **resource group** created in a geographical location where [Azure Custom Vision](https://azure.microsoft.com/en-us/global-infrastructure/services/?products=cognitive-services&regions=all) is available.
 - A **Kubernetes cluster** accessible using [Azure CLI](https://github.com/Azure/cli). 
 
-  If you don't have an existing Kubernetes cluster, you can easily create one using the Azure Kubernetes Service (AKS). For more information, visit [Quickstart: Deploy an Azure Kubernetes Service (AKS) cluster using the Azure portal](https://docs.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli). Make sure to choose Standard DS3 v2 for the node size.
+  If you don't have an existing Kubernetes cluster, you can easily create one using the Azure Kubernetes Service (AKS). For more information, visit [Quickstart: Deploy an Azure Kubernetes Service (AKS) cluster using the Azure Portal](https://docs.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli). Make sure to choose Standard DS3 v2 for the node size.
     
 - If you plan to use an **IoT Edge device**, you need an **IoT Hub account**. 
 
-  To onboard an IoT Edge device to Azure IoT Hub,  visit [Quickstart: Deploy your first IoT Edge module to a virtual Linux device](CreateIoTEdgeDevice.md) for information on how to do so. Note that if you have already used Percept on Azure Stack HCI's WAC Extention to onboard a VM, the VM is already automatically onboarded as an IoT Edge device onto Azure IoT Hub. 
+  To onboard an IoT Edge device to Azure IoT Hub,  visit [Quickstart: Deploy your first IoT Edge module to a virtual Linux device](CreateIoTEdgeDevice.md) for information on how to do so. 
 
 - Have **Storage account contributor** role assignment under your subscription. 
 
@@ -45,15 +45,15 @@ To begin the setup process:
     source fix-helm-issue.sh
 ```
 
-4. Run the following command to download the setup installer. Substitute <download-url> with the required download URL corresponding to a specific version of installer and POSS release using the table below:
+4. Run the following command to download the setup installer. Substitute <download-url> with the required download URL corresponding to a specific version of installer and KAN release using the table below:
 
 ```
-    wget -O poss-installer.sh "download-url"
+    wget -O kan-installer.sh "download-url"
 ```
 
 **Installation Options**
 
-|Setup Installer Version	|POSS Version	|Download URL	|Supported Accelerators for Edge Workloads	|Released Date|
+|Setup Installer Version	|KAN Version	|Download URL	|Supported Accelerators for Edge Workloads	|Released Date|
 |---------------------------|---------------|---------------|-------------------------------------------|-------------|
 |0.38.2	|0.38.2 |[https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.2-Installer0.38.2.sh](https://github.com/Azure/PerceptOSS/blob/main/Installer/poss-test-installer.sh)	|Nvidia dGPU (for example, T4, A2, etc), Nvidia Jetson (for example, Orin), x64 CPU	|09/02/2022 |
 |0.38.1	|0.38.0 |[https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.2-Installer0.38.2.sh](https://github.com/Azure/PerceptOSS/blob/main/Installer/poss-test-installer.sh)	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (for example, Orin), x64 CPU	|08/30/2022 |
@@ -70,9 +70,9 @@ To begin the setup process:
 
 5. Start the installation process by running the following command:
 
-    `bash poss-installer.sh`
+    `bash kan-installer.sh`
 
-6. When you're asked to select whether you want to install POSS onto an AKS cluster or your existing K8s cluster which is included in your kubeconfig context. 
+6. When you're asked to select whether you want to install KAN onto an AKS cluster or your existing K8s cluster which is included in your kubeconfig context. 
     
     1. If you want to install on AKS select **1**, otherwise select **2**. 
     
@@ -80,7 +80,7 @@ To begin the setup process:
     
     2. After you select **1**, a list of AKS clusters appears under your subscription. 
     
-       Select the AKS cluster that you want to install POSS on.
+       Select the AKS cluster that you want to install KAN on.
 
     ![Screenshot of AKS cluster](https://user-images.githubusercontent.com/10191339/186487409-c325c76c-0771-409c-9c4a-4babb666d9de.png)
     
@@ -124,7 +124,7 @@ To begin the setup process:
 The installation may take a few minutes. 
     
 > [!NOTE]
-> If you face any issues towards the end of the installation to download our Helm charts to install either **symphony** or **voe**, uninstall the experience using the commands below and retry running the installer script in a few minutes. 
+> If you face any issues towards the end of the installation to download our Helm charts to install either **kan** or **kanportal**, uninstall the experience using the commands below and retry running the installer script in a few minutes. 
 >
 > Azure is currently facing some issues with the Azure Container Registry not handling all download requests successfully due to high load. Trying again in a few minutes may resolve the issue.  
     
@@ -136,7 +136,7 @@ The installation may take a few minutes.
 
     ![Screenshot of LoadBalancer IP address](https://user-images.githubusercontent.com/10191339/186488705-03d3af9b-4536-4575-afe8-978b8a692a73.png)
 
-## Limit access to the POSS portal
+## Limit access to the KAN portal
     
 Once you have the LoadBalancer IP address as shown above:
 1. Open the resource group associated with your AKS cluster (not the AKS cluster itself).
@@ -147,19 +147,19 @@ Once you have the LoadBalancer IP address as shown above:
    2. Change the source IP address range to the network you want to allow access to the portal. For example, your home or corporate IP address space in CIDR notation.
   
 
-## Uninstall POSS
-To uninstall POSS, in your Azure Cloud CLI instance, run the following two commands in the order shown below:
+## Uninstall KAN
+To uninstall KAN, in your Azure Cloud CLI instance, run the following two commands in the order shown below:
 
-    1. `helm uninstall voe`
-    2. `helm uninstall symphony`
+    1. `helm uninstall kanportal`
+    2. `helm uninstall kan`
  
 ## Reporting Issues and Bugs
     
-Report any issues or bugs you face using the [repository's issues page](https://github.com/Azure/perceptoss/issues).
+Report any issues or bugs you face using the [repository's issues page](https://github.com/Azure/KAN/issues).
 
 ## Next steps
 
-Now that you have successfully setup POSS experience onto your Kubernetes environment, we recommend continuing with the following resources:
+Now that you have successfully setup KAN experience onto your Kubernetes environment, we recommend continuing with the following resources:
 
--   [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)
--   [Introduction to Azure Percept for Open-Source Project: Core concepts](concepts-azure-percept-for-open-source%20.md)
+-   [Tutorial: Create an Edge AI solution with KAN portal using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
+-   [Introduction to KAN: Core concepts](/docs/tutorial/concepts-kan.md)

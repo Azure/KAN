@@ -1,6 +1,6 @@
 # AI skills
 
-```skill.ai.symphony``` defines a processing graph that is comprised of ```edges``` and ```nodes```. 
+```skill.ai.kan``` defines a processing graph that is comprised of ```edges``` and ```nodes```. 
 
 ## Schema
 | Field | Type | Description |

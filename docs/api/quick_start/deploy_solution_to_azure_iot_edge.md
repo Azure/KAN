@@ -1,6 +1,6 @@
-# Symphony Quickstart: Deploying a simulated temperature sensor solution to an Azure IoT Edge device
+# KAN API Quickstart: Deploying a simulated temperature sensor solution to an Azure IoT Edge device
 
-Ready to jump into actions right away? This quickstart walks you through the steps of setting up a new Symphony control plane on your Kubernetes cluster and deploying a new Symphony solution instance to an Azure IoT Edge device.
+Ready to jump into actions right away? This quickstart walks you through the steps of setting up a new KAN API control plane on your Kubernetes cluster and deploying a new KAN API solution instance to an Azure IoT Edge device.
 
 > [!NOTE]
 > The following steps are tested under a Ubuntu 20.04.4 TLS WSL system on Windows 11. However, they should work for Linux, Windows, and MacOS systems as well.
@@ -9,21 +9,21 @@ Ready to jump into actions right away? This quickstart walks you through the ste
 
 ## 0. Prerequisites
 
-* [Helm 3](https://helm.sh/) - Required to deploy Symphony.
+* [Helm 3](https://helm.sh/) - Required to deploy KAN API.
 * [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/): Configured with the Kubernetes cluster you want to use as the default context. Note that if you use cloud shell, kubectl is already configured.
 * [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/)
 
-## 1. Deploy Symphony using Helm
+## 1. Deploy KAN API using Helm
 
-The easiest way to install Symphony is to use Helm:
+The easiest way to install KAN API is to use Helm:
 ```bash
-helm install symphony oci://possprod.azurecr.io/helm/symphony --version 0.40.58
+helm install kan oci://possprod.azurecr.io/helm/kan --version 0.40.58
 ```
 
-Or, if you already have the ```symphony-k8s``` repository cloned:
+Or, if you already have the ```kan-k8s``` repository cloned:
 ```bash
-cd symphony-k8s/helm
-helm install symphony ./symphony
+cd kan-k8s/helm
+helm install kan ./kan
 ```
 
 ## 2. Create an IoT Edge device
@@ -75,9 +75,9 @@ sudo apt-get update; \
 sudo iotedge config mp --connection-string '<IoT Edge device connection string>'
 ```
 
-## 4. Register the IoT Edge device as a Symphony Target
+## 4. Register the IoT Edge device as a KAN API Target
 
-Create a new YAML file that describes a Symphony Target. Use the following to submit the file:
+Create a new YAML file that describes a KAN API Target. Use the following to submit the file:
 
 ```kubectl create -f <filename>```
 
@@ -86,10 +86,10 @@ Use the following to apply any changes:
 ```kubectl apply -f <filename> ```
 
 > [!NOTE]
-> You can get a sample of this file under ```symphony-k8s/samples/simulated-temperature-sensor/target.yaml```:
+> You can get a sample of this file under ```kan-k8s/samples/simulated-temperature-sensor/target.yaml```:
 
 ```yaml
-apiVersion: fabric.symphony/v1
+apiVersion: fabric.kan/v1
 kind: Target
 metadata:
   name: voe-target
@@ -109,11 +109,11 @@ spec:
 ```
 
 > [!NOTE]
-> The above sample doesn't deploy a **Symphony Agent**, which is optional. To deploy an Symphony agent as an  IoT Edge module, see a sample target definition in the ```symphony-k8s/samples/voe/default/target.yaml``` folder.
+> The above sample doesn't deploy a **KAN Agent**, which is optional. To deploy an KAN agent as an  IoT Edge module, see a sample target definition in the ```kan-k8s/samples/voe/default/target.yaml``` folder.
 
-## 5. Create the Symphony Solution
+## 5. Create the KAN API Solution
 
-The following YAMl file describes a Symphony Solution with a single component, which is based on the ```mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0``` container. Use the following to submit the file:
+The following YAMl file describes a KAN API Solution with a single component, which is based on the ```mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0``` container. Use the following to submit the file:
 
 ```kubectl create -f <filename>```
 
@@ -122,7 +122,7 @@ Use the following to apply any changes:
 ```kubectl apply -f <filename> ```
 
 ```yaml
-apiVersion: solution.symphony/v1
+apiVersion: solution.kan/v1
 kind: Solution
 metadata:
   name: simulated-temperature-sensor
@@ -137,9 +137,9 @@ spec:
       container.restartPolicy: "always"
 ```
 
-## 6. Create the Symphony Solution Instance
+## 6. Create the KAN API Solution Instance
 
-A Symphony Solution Instance maps a Symphony Solution to one or multiple Targets. The following artifacts maps the ```simulated-temperature-sensor``` solution to the ```voe``` target above. Use the following to submit the file:
+A KAN API Solution Instance maps a KAN API Solution to one or multiple Targets. The following artifacts maps the ```simulated-temperature-sensor``` solution to the ```voe``` target above. Use the following to submit the file:
 
 ```kubectl create -f <filename>```
 
@@ -148,10 +148,10 @@ Use the following to apply any changes:
 ```kubectl apply -f <filename> ```
 
 > [!NOTE]
-> You can get a sample of this file in the ```symphony-k8s/samples/simulated-temperature-sensor/instance.yaml``` folder.
+> You can get a sample of this file in the ```kan-k8s/samples/simulated-temperature-sensor/instance.yaml``` folder.
 
 ```yaml
-apiVersion: solution.symphony/v1
+apiVersion: solution.kan/v1
 kind: Instance
 metadata:
   name: my-instance-2
@@ -163,7 +163,7 @@ spec:
 
 ## 7. Verification
 
-To examine all the Symphony objects you've created:
+To examine all the KAN API objects you've created:
 
 ```bash
 kubectl get targets
@@ -175,27 +175,27 @@ On the IoT Hub page, verify all IoT Edge modules are up and running.
 
 <!-- ![IoT Edge](../images/iot-edge.png)-->
 
-## 8. Clean up Symphony objects
+## 8. Clean up KAN API objects
 
-To delete all Symphony objects:
+To delete all KAN API objects:
 
 ```bash
 kubectl delete instance my-instance-2
 kubectl delete solution simulated-temperature-sensor
 kubectl delete target voe-target
 ```
-## 9. Remove the Symphony control plane (optional)
+## 9. Remove the KAN API control plane (optional)
 
-To remove the Symphony control plane:
+To remove the KAN API control plane:
 
 ```bash
-helm delete symphony
+helm delete kan
 ```
 
 
 # Next step
 
-* [Symphony Quick Start - Deploying a Redis server to a Kubernetes cluster](https://github.com/Azure/symphony-docs/blob/main/symphony-book/quick_start/deploy_redis_k8s.md)
+* [KAN API Quick Start - Deploying a Redis server to a Kubernetes cluster](deploy_redis_k8s.md)
 
-<!-- * [Symphony Quickstart - Managing RTSP cameras connected to a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)-->
+ * [KAN API Quickstart - Managing RTSP cameras connected to a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)
 

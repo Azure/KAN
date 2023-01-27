@@ -1,28 +1,28 @@
-# Azure Percept for Open-Source Project: API overview
+# KAN: API overview
 
-Azure Percept Open-Source Project (POSS) API defines a common object model that describes the full stack of intelligent Edge solutions, from AI models to solutions to devices and sensors. Because these objects are defined as standard Kubernetes [custom resources](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), you can use popular Kubernetes tools like [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/) to manipulate these objects.
+KAN API defines a common object model that describes the full stack of intelligent Edge solutions, from AI models to solutions to devices and sensors. Because these objects are defined as standard Kubernetes [custom resources](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), you can use popular Kubernetes tools like [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/) to manipulate these objects.
 
-## POSS object models
+## KAN API object models
 
-* [AI model](./object-model/ai-model.md) (```model.ai.symphony```)
-* [AI skill](./object-model/ai-skill.md) (```skill.ai.symphony```)
-* [Device](./object-model/device.md) (```device.fabric.symphony```)
-* [Target](./object-model/target.md) (```target.fabric.symphony```)
-* [Solution](./object-model/solution.md) (```solution.solution.symphony```)
-* [Instance](./object-model/instance.md) (```instance.solution.symphony```)
+* [AI model](./object-model/ai-model.md) (```model.ai.kan```)
+* [AI skill](./object-model/ai-skill.md) (```skill.ai.kan```)
+* [Device](./object-model/device.md) (```device.fabric.kan```)
+* [Target](./object-model/target.md) (```target.fabric.kan```)
+* [Solution](./object-model/solution.md) (```solution.solution.kan```)
+* [Instance](./object-model/instance.md) (```instance.solution.kan```)
 
-## Mapping between POSS object models and POSS portal concepts
+## Mapping between KAN API object models and KAN portal concepts
 
-The POSS portal experience aims to provide a streamlined experience of creating and managing intelligent Edge solutions leveraging cameras. Hence, we’ve hidden some POSS API concepts and renamed a few objects to make the UX more intuitive for target scenarios. The following table summarizes how portal concepts are mapped to API concepts:
+The KAN portal experience aims to provide a streamlined experience of creating and managing intelligent Edge solutions leveraging cameras. Hence, we’ve hidden some KAN API concepts and renamed a few objects to make the UX more intuitive for target scenarios. The following table summarizes how portal concepts are mapped to API concepts:
 
 | API Object | Portal Concept |
 |--------|--------|
-| ```device.fabric.symphony``` | Camera |
-| ```instance.solution.symphony``` | Deployment |
-| ```model.ai.symphony``` | AI Model |
-| ```skill.ai.symphony``` | AI Skill |
-| ```solution.solution.symphony``` | There are no solutions surfaced on portal. Essentially, a portal operates on a single, system-maintained solution object on behalf of the user. |
-| ```target.fabric.symphony``` | Compute device | 
+| ```device.fabric.kan``` | Camera |
+| ```instance.solution.kan``` | Deployment |
+| ```model.ai.kan``` | AI Model |
+| ```skill.ai.kan``` | AI Skill |
+| ```solution.solution.kan``` | There are no solutions surfaced on portal. Essentially, a portal operates on a single, system-maintained solution object on behalf of the user. |
+| ```target.fabric.kan``` | Compute device | 
 
 ## Typical workflows
 
@@ -31,37 +31,37 @@ Depending on your focus, you can start with the AI workflow, the device workflow
 ### AI workflow
 
 1. Create your AI model using tools of your choice. 
-2. Once you have the AI model file, register your AI model with POSS as a ```Model``` object. 
+2. Once you have the AI model file, register your AI model with KAN as a ```Model``` object. 
 3. Then define AI ```Skill``` objects that define processing pipelines. A processing pipeline reads data from a data source, applies one or more AI models (and other transformations), and sends inference results to designated outputs.
 
 ### Device workflow
 
-1. Register your computational devices with POSS as ```Target``` objects. You can also specify desired runtime components, such as a POSS agent, in your target definition.
+1. Register your computational devices with KAN API as ```Target``` objects. You can also specify desired runtime components, such as a KAN agent, in your target definition.
 2. Manually register your non-computational devices, such as sensors and actuators, as ```Device``` objects. You can also leverage projects like [Akri](https://github.com/project-akri/akri) to auto-discover devices.
 
 ### Solution workflow
 
 1. Define your intelligent solution as a ```Solution``` object, which consists of a number of ```Component``` elements. A component is usually a container, and it may refer to AI ```Skill``` objects in its properties.
-2. Define a ```Instance``` object that maps a ```Solution``` to one or multiple ```Target``` objects. Once the instance object is created, POSS ensures the impacted targets are updated according to the desired solution state and target state.
+2. Define a ```Instance``` object that maps a ```Solution``` to one or multiple ```Target``` objects. Once the instance object is created, KAN API ensures the impacted targets are updated according to the desired solution state and target state.
 
 > [!NOTE]
-> The current version of POSS portal doesn't explicitly expose the ```Solution``` object. Behind the scenes, you always work with a single ```Solution``` object that is automatically managed. However, you can use POSS API to examine and update the object.
+> The current version of KAN portal doesn't explicitly expose the ```Solution``` object. Behind the scenes, you always work with a single ```Solution``` object that is automatically managed. However, you can use KAN API to examine and update the object.
 
 ## A sample workflow
 
-Assume that you are creating an intelligent edge solution that uses a website to show number of cars passing an intersection each hour. The following workflow describes how to create and deploy such a solution using POSS API.
+Assume that you are creating an intelligent edge solution that uses a website to show number of cars passing an intersection each hour. The following workflow describes how to create and deploy such a solution using KAN API.
 
-1. Create or select a car detection model. POSS comes with a model zoo, which contains a car detection model you can use.
-2. Register the model as a POSS ```Model``` object.
-3. Define a POSS ```Skill``` object that defines a pipeline that:
+1. Create or select a car detection model. KAN comes with a model zoo, which contains a car detection model you can use.
+2. Register the model as a KAN API ```Model``` object.
+3. Define a KAN API ```Skill``` object that defines a pipeline that:
 
     * Takes input from a camera;
     * Sends frames to the car detection model;
     * Collects inference results and sends detection events to an output (such as IoT Hub or an HTTP endpoint).
     
-4. Define a POSS ```Solution``` object that will create a Docker container ```Component``` that takes the ```Skill``` as input and drives the inference process. 
+4. Define a KAN API ```Solution``` object that will create a Docker container ```Component``` that takes the ```Skill``` as input and drives the inference process. 
 
-   Since POSS provides some containers out-of-the-box, you don't have to create these containers yousrelf.
+   Since KAN Portal provides some containers out-of-the-box, you don't have to create these containers yousrelf.
    
 6. Create your website container and add it as a ```Component``` of your ```Solution```.
 7. Define a ```Target``` that represents a computer to which you want to deploy your solution.
@@ -74,7 +74,6 @@ Visit the [Symphony Quickstart](./quick_start/quick_start.md) to try out the tut
 
 ## Next steps
 
-* For more information about Symphony, visit [Symphony documentation](https://github.com/azure/symphony-k8s).
-* For more information about POSS configuration, visit [Azure Percept Open-Source Project: Setup guide](/docs/tutorial/setup-guide.md).
-* For more information about portal security, visit [Security]().
+* For more information about POSS configuration, visit [KAN: Setup guide](/docs/tutorial/setup-guide.md).
+* [KAN API Quickstart](/docs/api/quick_start/quick_start.md)
 

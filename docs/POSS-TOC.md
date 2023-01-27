@@ -1,30 +1,25 @@
-# Azure Percept Open Source Project (POSS) documentation
+# KubeAI Application Nucleus for edge (KAN) documentation
 
-[Introduction to Azure Percept for Open-Source Project: Core concepts](/docs/tutorial/concepts-azure-percept-for-open-source%20.md)
+[Introduction to KAN: Core concepts](/docs/tutorial/concepts-kan.md)
 
-[Azure Percept for Open-Source Project: Setup guide](/docs/tutorial/setup-guide.md)
+[KAN: Setup guide](/docs/tutorial/setup-guide.md)
 
-[Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)
+[Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
 
-[Tutorial: Create a complex AI skill with Azure Percept Open-Source Project](/docs/tutorial/Create-a-complex-AI-skill.md)
+[How-to guide: Create a complex AI skill with KAN Portal AI Skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
 
-[Tutorial: Create a custom model with Azure Percept Open-Source Project](/docs/tutorial/Create-a-custom-model.md)
+[How-to guide: Create a custom model using KAN Portal](/docs/tutorial/Create-a-custom-model.md)
 
 
-### API docs
+### API Docs
 
-[Azure Percept for Open-Source Project: API overview](https://github.com/Azure/PerceptOSS/tree/main/docs/api#readme)
+[KAN: API overview](/docs/api/README.md)
 
-### Quickstarts for Symphony
+[KAN API Quickstart](/docs/api/quick_start/quick_start.md)
 
-* [Symphony Quickstart](/docs/api/quick_start/quick_start.md)
-
-* [Deploying a Redis server to a K8s cluster](https://github.com/Azure/PerceptOSS/blob/main/docs/api/quick_start/manage_rtsp_cameras.md)
+[Deploying a Redis server to a K8s cluster](/docs/api/quick_start/deploy_redis_k8s.md)
   
-* [Deploying a simulated temperature sensor solution to an Azure IoT Edge device](/docs/api/quick_start/deploy_solution_to_azure_iot_edge.md)
+[Deploying a simulated temperature sensor solution to an Azure IoT Edge device](/docs/api/quick_start/deploy_solution_to_azure_iot_edge.md)
  
-
-  
-
-<!-- [Managing RTSP cameras connected to a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)-->
+[Managing RTSP cameras connected to a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)
   

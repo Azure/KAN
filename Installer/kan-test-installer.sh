@@ -413,7 +413,7 @@ while [ $current_step -lt 6 ]; do
                     storage_account_subscription=$(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r .id | awk -F/ '{print $3}')
                 fi
 
-                if [ -z $create_blob_container_selection ] && [ $create_blob_container_selection == "1" ]; then
+                if [ ! -z $create_blob_container_selection ] && [ $create_blob_container_selection == "1" ]; then
                     creation_result=$(az storage container create --account-name $selected_storage_account_name -n $selected_blob_container_name --auth-mode login | jq -r ".created" )
                     if [ $creation_result == "true" ]; then
                         echo -e "blob container create \e[32msuccessfully\e[0m"

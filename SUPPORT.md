@@ -12,4 +12,4 @@ For help and questions about using or contributing to KAN, you can also join our
 
 ## Microsoft Support Policy  
 
-KAN is an open source project that Microsoft maintains or contributes to. KAN is NOT covered by the Microsoft Azure support policy and support for this project is limited to the resources listed above.
+KAN is a project that Microsoft Community maintains or contributes to. KAN is NOT covered by the Microsoft Azure support policy. There are no SLAs or guarantees for supportability for any portion of the code/experience. Code support is on a best-effort basis. 

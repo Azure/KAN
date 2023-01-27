@@ -65,6 +65,10 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
+# Support
+
+To learn more about our support structure, how to file issues and get support, visit: [How to get support](SUPPORT.md).
+
 # Join the discussion
 
 To report bugs, send feedbacks, or discuss any KAN related topics, please join our Discord server: 

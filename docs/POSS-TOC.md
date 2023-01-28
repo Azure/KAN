@@ -10,6 +10,9 @@
 
 [Tutorial: Create a custom model with Azure Percept Open-Source Project](/docs/tutorial/Create-a-custom-model.md)
 
+### Advanced
+
+[Tutorial: How to Create and Manage Deployments with Azure Arc enabled Kubernetes with GitOps](docs/tutorial/How-to-Create-and-Manage-Deployments-with-Azure-Arc-enabled-Kubernetes-with-GitOps.md)
 
 ### API docs
 

@@ -18,13 +18,12 @@ Once your KAN portal has been set up, it is accessible to anyone via the IP. In 
 
    Note: This option is available only if you are using AKS. 
 
-1. When you’ve finished installing the KAN-controller, you can find the IP address of the portal by running the following command in your Azure Cloud CLI command line: 
+1. When you’ve finished installing the KAN-controller, you can find the IP address (the first one) of the portal by running the following command in your Azure Cloud CLI command line: 
 
   ```azurecli-interactive
     kubectl get svc -A 
   ```
 
-  Use the first LoadBalancer IP address.
 
 2. Once you have the LoadBalancer IP address, open the resource group associated with your AKS cluster (not the AKS cluster itself). 
 3. In a separate tab, open the network security (NSG) resource. 
@@ -44,35 +43,36 @@ Modify ingress resource “webmodule” that was automatically created during in
 
 1. Delete the ingress object “webmodule” created during installation: 
 
-  ```azurecli-interactive
-  kubectl delete ingress webmodule 
-  ```
+```azurecli-interactive
+kubectl delete ingress webmodule 
+```
 
 2. Use Kubernetes port-forwarding to access the portal on the spot locally using the following command:  
 
-  ```azurecli-interactive
-  kubectl port-forward --address localhost service/webmodule <you-desired-port>:8000" 
-  ```
-  This allows you to view the portal using: 
-   ```azurecli-interactive
-   localhost:<you-desired-port>
-   ```
+```azurecli-interactive
+kubectl port-forward --address localhost service/webmodule <your-desired-port>:8000" 
+```
+
+This allows you to view the portal using: 
+```azurecli-interactive
+localhost:<your-desired-port>
+```
    Note: Run this command on the system you would like to access the portal with. For example, if you want to use your computer to view the portal, you need to run        the command on your computer. 
 
   With port-forwarding, admin access to the portal does not need to be granted to everyone. Instead, you can create a configuration file with restricted access. The     following steps show you how to provide permission to update the config map (“mycm”) in a specific namespace (“myns”) to create a kubeconfig with restricted access. 
 
-  1. Create the namespace if it doesn’t already exist. For this example, call the namespace myns. 
+  1. Create the namespace if it doesn’t already exist. For this example, call the namespace __myns__. 
 
   ```azurecli-interactive
   kubectl create ns myns 
   ```
 
-  2. Create a service account in the myns namespace. For this example, call the service account cm-user. This command will also create a secret token. 
+  2. Create a service account in the __myns__ namespace. For this example, call the service account __cm-user__. This command will also create a secret token. 
   ```azurecli-interactive
   kubectl create sa cm-user -n myns 
   ```
 
-  3. Use the following to get cm-user secrets. You need the token and ca.crt from the cm-user token. Make sure to Base64 decode the value of the token. 
+  3. Use the following to get __cm-user__ secrets. You need the token and ca.crt from the __cm-user__ token. Make sure to Base64 decode the value of the token. 
 
   ```azurecli-interactive
   kubectl get sa cm-user -n myns 
@@ -86,7 +86,7 @@ Modify ingress resource “webmodule” that was automatically created during in
   kubectl config set-credentials cm-user --token=<decoded token value> 
   ```
 
-  5. Next, generate a kubeconfig file kubeconfig-cm: 
+  5. Next, generate a kubeconfig file __kubeconfig-cm__: 
 
   ```azurecli-interactive
   apiVersion: v1 
@@ -127,7 +127,7 @@ Modify ingress resource “webmodule” that was automatically created during in
 
   ```
 
-  6. Next, create a role and rolebinding for service account cm-user: 
+  6. Next, create a role and rolebinding for service account __cm-user__: 
 
 
 
@@ -181,7 +181,7 @@ Modify ingress resource “webmodule” that was automatically created during in
   ---
   ```
 
-  You can now use this kubeconfig file to update your configmap mycm. 
+  You can now use this kubeconfig file to update your configmap __mycm__. 
 
 
   Refer to the following docs for more information: 
@@ -198,7 +198,7 @@ Modify ingress resource “webmodule” that was automatically created during in
    
 ## Create Basic Login/Pass Authentication Using Ingress Basic Http Authentication 
 
-For more information on how to add a basic-authentication secret to the ingress automatically created in your K8s environment called "webmodule", visit Basic Authentication.  
+For more information on how to add a basic-authentication secret to the ingress automatically created in your K8s environment called "webmodule", visit [Basic Authentication](https://kubernetes.github.io/ingress-nginx/examples/auth/basic/).  
 
 1. Create htpasswd file 
 ```azurecli-interactive 
@@ -217,15 +217,15 @@ kubectl get secret basic-auth -o yaml
 
 4. Modify your ingress and tie to the basic-auth secret then use kubectl to apply the changes 
 
-  Use curl to confirm authorization is required by the ingress 
-  ```azurecli-interactive 
-  curl -v http://10.2.29.4/ -H 'Host: foo.bar.com' 
-  ```
-  
-  Use curl with the correct credentials to connect to the ingress 
-  ```azurecli-interactive 
-  curl -v http://10.2.29.4/ -H 'Host: foo.bar.com' -u 'foo:bar' 
-  ```
+      Use curl to confirm authorization is required by the ingress 
+      ```azurecli-interactive 
+      curl -v http://10.2.29.4/ -H 'Host: foo.bar.com' 
+      ```
+
+      Use curl with the correct credentials to connect to the ingress 
+      ```azurecli-interactive 
+      curl -v http://10.2.29.4/ -H 'Host: foo.bar.com' -u 'foo:bar' 
+      ```
  
 
    
@@ -248,8 +248,8 @@ For more information on authentication and authorization with Azure API Manageme
 ## Deciding between access options 
 
 1. For a quick and simple option, try one of the following: 
-  a. Limit portal access directly from the Azure portal to certain IPs (AKS only) 
-  b. Limit external access using ingress rules 
+   * Limit portal access directly from the Azure portal to certain IPs (AKS only) 
+   * Limit external access using ingress rules 
 2. Use port forwarding if you want to allow multiple members to access the portal without providing admin access to everyone 
 3. Use Basic Authentication with NGINX Ingress Controller if you want to a user to create their own user/password and tie it to the ingress which controls access to the portal 
 4. Set up Azure API Management (APIM) if you want the most thorough security. You can use Azure Active Directory with this option. This is the most time-consuming option to set up and there is some cost associated with it 

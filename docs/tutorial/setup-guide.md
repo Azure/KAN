@@ -159,7 +159,11 @@ Report any issues or bugs you face using the [repository's issues page](https://
 
 ## Next steps
 
-Now that you have successfully setup POSS experience onto your Kubernetes environment, we recommend continuing with the following resources:
+Now that you have successfully setup KAN experience onto your Kubernetes environment, we recommend first securing your portal. 
+  
+-   [Security: Limiting User Access to your KAN Portal](/docs/tutorial/Security-Limiting-User-Access-to-your-KAN-Portal.md)
+  
+After doing so, continue with the following resources:
 
 -   [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)
 -   [Introduction to Azure Percept for Open-Source Project: Core concepts](concepts-azure-percept-for-open-source%20.md)

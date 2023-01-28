@@ -255,5 +255,10 @@ For more information on authentication and authorization with Azure API Manageme
 4. Set up Azure API Management (APIM) if you want the most thorough security. You can use Azure Active Directory with this option. This is the most time-consuming option to set up and there is some cost associated with it 
 
  
+## Next Steps
+
+Now that you have secured your portal, we recommend completing the following tutorials:
+* [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](https://github.com/smshreyah/KAN/blob/main/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)
+* [Tutorial: Create a complex AI skill with Azure Percept Open-Source Project](https://github.com/smshreyah/KAN/blob/main/docs/tutorial/Create-a-complex-AI-skill.md)
 
  

@@ -2,6 +2,8 @@
 
 [Introduction to Azure Percept for Open-Source Project: Core concepts](/docs/tutorial/concepts-azure-percept-for-open-source%20.md)
 
+[Security: Limiting User Access to your KAN Portal](/docs/tutorial/Security-Limiting-User-Access-to-your-KAN-Portal.md)
+
 [Azure Percept for Open-Source Project: Setup guide](/docs/tutorial/setup-guide.md)
 
 [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)

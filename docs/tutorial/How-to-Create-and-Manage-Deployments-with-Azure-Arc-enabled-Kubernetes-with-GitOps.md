@@ -6,9 +6,9 @@ To create your deployments, begin by declaring the desired state of your AI Appl
 
 ## Prerequisites 
 
-Before proceeding, we recommend completing the “Azure Percept Open-Source Project: Setup guide” to successfully set up your KAN experience onto your Kubernetes environment. See the following resources: 
+Before proceeding, we recommend completing the setup tutorial to successfully set up your KAN experience onto your Kubernetes environment. See the following resources: 
 
-* [KAN/setup-guide.md at KAN](https://github.com/Azure/KAN/blob/KAN/docs/tutorial/setup-guide.md) to set up your portal experience 
+* [KAN: Setup guide](https://github.com/Azure/KAN/blob/KAN/docs/tutorial/setup-guide.md) to set up your portal experience 
 * [Quickstart: Connect an existing Kubernetes cluster to Azure Arc - Azure Arc](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/quickstart-connect-cluster?tabs=azure-cli%2Cazure-cloud) for guidance on how to Arc-enable your cluster 
 * [Azure Kubernetes Service (AKS)](https://learn.microsoft.com/en-us/azure/aks/) documentation for more information on AKS 
 
@@ -21,7 +21,7 @@ Here are samples of definition files.
 
 
 Sample #1 
----
+```azurecli-interactive
 apiVersion: ai.kan/v1 
 
 kind: Skill 
@@ -143,12 +143,12 @@ spec:
     rtsp: invalid 
 
     skill_displayname: invalid 
----
+```
  
 
 Sample #2 
 
---- 
+```azurecli-interactive
 
 apiVersion: solution.kan/v1 
 
@@ -193,13 +193,12 @@ spec:
       env.WEBMODULE_URL: <url> 
 
   displayName: <display name> 
-
- ---
+```
 
 Sample #3  
 
  
----
+```azurecli-interactive
 apiVersion: solution.kan/v1 
 
 kind: Instance 
@@ -242,7 +241,7 @@ spec:
 
     name: <Target name> 
 
- ---
+```
 
  
 Add, commit, and then push these files to your repository.  
@@ -270,5 +269,5 @@ kubectl get solution <solution name> -o yaml
 
 To update your YAML files, make your edits directly in your Git environment. Then add, commit, and push your changes to your repository. You can view the changes in your repo. Flux will automatically reconcile any changes to your cluster state. 
 
-Use the kubectl commands from Step 3: View your objects to view the changes in your object definitions. It may take some time to see the changes as it takes Flux a few minutes to update the configuration. 
+Use the kubectl commands from __Step 3: View your objects__ to view the changes in your object definitions. It may take some time to see the changes as it takes Flux a few minutes to update the configuration. 
  

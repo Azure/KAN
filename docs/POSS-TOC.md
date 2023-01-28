@@ -12,7 +12,7 @@
 
 ### Advanced
 
-[Tutorial: How to Create and Manage Deployments with Azure Arc enabled Kubernetes with GitOps](docs/tutorial/How-to-Create-and-Manage-Deployments-with-Azure-Arc-enabled-Kubernetes-with-GitOps.md)
+[Tutorial: How to Create and Manage Deployments with Azure Arc enabled Kubernetes with GitOps](/docs/tutorial/How-to-Create-and-Manage-Deployments-with-Azure-Arc-enabled-Kubernetes-with-GitOps.md)
 
 ### API docs
 

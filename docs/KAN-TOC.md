@@ -10,6 +10,8 @@
 
 [How-to guide: Create a custom model using KAN Portal](/docs/tutorial/Create-a-custom-model.md)
 
+[How-to guide: Bring your own ML model and processing logic for your AI Skill using gRPC Custom Processing (BYOM)](/docs/tutorial/How-to-BYOM.md)
+
 
 ### API Docs
 

@@ -68,7 +68,7 @@ Now that you understand what BYOM is and how to add models through the portal, y
   
 
 
-# How-to use gRPC
+# How-to use gRPC Custom Processing
 
 Users are able to create AI Skills to manage the flow of deployments. The drag-and-drop control is the core method of AI Skill page to compose the flow of an AI Skill. One of the provided nodes is gRPC Custom Processing node, which allows users to host by themselves or let us host on the edge.
 
@@ -132,5 +132,166 @@ The AI Skill creation is the same as Type 1: Endpoint URL, except for selecting 
 The following step will be the same as Type 1: Endpoint URL.
 
 
+## gRPC Contract Explain
+
+The protobuf file for the gRPC contract is [here](../../src/grpc/custom_node.proto)
+
+```
+service CustomNodeHandler {
+	rpc Handshake(HandshakeRequest) returns (HandshakeResponse) {}
+    rpc Process (ProcessRequest) returns (ProcessResponse) {}
+}
+```
+
+### Handshaking
+
+Client and server need to follow this protocol to setup the connection before starting sending frame
+
+During the handshaking, client should send a sequence number `seq` and following attributes:
+1. instance_id
+2. skill_id
+3. device_id
+
+And server should respond an `ack` with followings
+1. Image Type for the image that client must send to server latr
+2. The format for Request and Response we'll use in Process stage
+
+There're 3 kinds of `ImageType`s: numpy, bmp, and jpeg
+```proto
+enum ImageType {
+
+    // Use Numpy Bytes
+    IMAGE_TYPE_NUMPY = 0;
+
+    // Use BMP
+    IMAGE_TYPE_BMP   = 1;
+
+    // Use JPEG
+    IMAGE_TYPE_JPEG  = 2;
+}
+```
+
+There're 2 kinds of Request (client -> server): image and without-image
+```proto
+enum ProcessRequestType {
+    // Client sends the whole Frame to Server
+    FRAME_WITH_IMAGE          = 0;
+
+    // Client sends the Frame without Image to Server
+    FRAME_WITHOUT_IMAGE       = 1;
+}
+```
+
+A `Frame` contains many information, the root message is
+```proto
+message Frame {
+    Image        image         = 1;
+    InsightsMeta insights_meta = 2;
+    Timestamp    timestamp     = 3;
+    Roi          roi           = 4;
+    string       frame_id      = 5;
+    string       datetime      = 6;
+}
+```
+Most of the information (e.g. boundingbox, class, ...) is in `InsightsMeta`. The largest size one is `Image`. Sometimes custom_node might not need the Image itself (e.g. a pure bounding box location-based tracker), that's why we have the without-image option here.
+
+```proto
+message Image {
+    bytes image_pointer        = 1;
+    ImageProperties properties = 2;
+}
+```
+image_pointer contains the image itself, might be numpy, bmp, or jpeg according to what server specified during the handshaking stage. If the server asks for `FRAME_WITHOUT_IMAGE`, then client should just leave `image_pointer` empty
+
+
+`ProcessResponseType` specify the server's behavior during the Process Stage
+```proto
+enum ProcessResponseType {
+    // Server returns Image to Client
+    IMAGE_ONLY = 0;
+
+    // Server returns InsightsMeta to Client
+    INSIGHTS_META_ONLY = 1;
+
+    // Server returns Image and InsightsMeta to client
+    IMAGE_AND_INSIGHTS_META = 2;
+
+    // Server returns Response with only ack
+    EMPTY = 3;
+}
+```
+
+Following is what server sends back to client
+```proto
+message ProcessResponse {
+    int64 ack = 1;
+    Image image = 2;
+    InsightsMeta insights_meta = 3;
+}
+```
+1. every kind of response contains `ack`
+2. `IMAGE_ONLY`: insights_meta is empty, the reponse contains `image`. the example for this is to build a flip node that only flip the image and send it back to the client. And then client(streaming) will send the new image to the next node
+3. `INSIGHTS_META_ONLY`: insights_meta only, e.g. an object detection server should response the bounding boxes, confidence scores, and classes without the image
+4. `IMAGE_AND_INSIGHTS_META`: send both of them
+5. `EMPTY`: send none of them
+
+
+
+## Sample custom node
+
+You could find the sample node [here](../../src/grpc/custom_node_server.py)
+
+```python
+
+from custom_node_server import CustomNode
+
+class FakeDetection(CustomNode):
+
+
+	def Handshake(self, request: custom_node_pb2.HandshakeRequest, context) -> custom_node_pb2.HandshakeResponse:
+		return custom_node_pb2.HandshakeResponse(
+			ack=request.seq, 
+			image_type=custom_node_pb2.ImageType.IMAGE_TYPE_NUMPY,
+			process_request_type=custom_node_pb2.ProcessRequestType.FRAME_WITH_IMAGE,
+			process_response_type=custom_node_pb2.ProcessResponseType.INSIGHTS_META_ONLY,
+		)
+
+
+	def Process(self, request: custom_node_pb2.ProcessRequest, context) -> custom_node_pb2.ProcessResponse:
+		print('processing ...')
+		insights_meta = custom_node_pb2.InsightsMeta(
+			objects_meta=[
+				custom_node_pb2.ObjectMeta(    
+					timestamp=request.frame.timestamp,
+					label='car',
+					confidence=0.9,
+					inference_id='inference_1',
+					bbox=custom_node_pb2.BBox(l=0.1, t=0.2, w=0.3, h=0.4)
+				)
+			]
+		)
+
+		return custom_node_pb2.ProcessResponse(ack=request.seq, insights_meta=insights_meta)
+```
+
+
+
+### Build Custom Node grpc server
+
+```python
+
+from custom_node_server import CustomNodeServer
+
+server = CustomNodeServer(6677, FakeDetection())
+server.serve()
+```
+
+
+### Others
+
+to generate py codes
+```python
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. custom_node.proto
+```
 
 

@@ -1,0 +1,217 @@
+syntax = "proto3";
+
+package custom_node;
+
+
+service CustomNodeHandler {
+    // Client should begin with this Handshake with server
+    rpc Handshake(HandshakeRequest) returns (HandshakeResponse) {}
+
+    // After Handshake, client can start to data to server for processing
+    //rpc Process (stream ProcessRequest) returns (stream ProcessResponse) {}
+    rpc Process (ProcessRequest) returns (ProcessResponse) {}
+}
+
+// **** Handshae Phase ****
+//
+//             [Handshake Request]
+// Client ------------------------------------------> Server
+//        <------------------------------------------
+//             [Handshake Response]
+//                specify 1. ImageType
+//                        2. ProcessRequestType
+//                        3. ProcessResponseType
+//
+//
+//
+//
+// **** Process Phase  ****
+//
+//              [Process Request]
+//                 formated as ProcessRequestType
+// Client ------------------------------------------> Server
+//        <------------------------------------------
+//              [Process Response]
+//                 formated as ProcessResponseType
+
+
+message HandshakeRequest {
+    int64 seq = 1;
+    string instance_id = 2;
+    string skill_id    = 3;
+    string device_id   = 4;
+}
+
+message HandshakeResponse {
+    int64 ack = 1;
+
+    // Server ask Client to send the specified image type
+    ImageType image_type = 2;
+    
+    // Server ask Client to send the specified request in Process RPC 
+    ProcessRequestType process_request_type = 3;
+
+    // Server notify Client the response type in Process RPC
+    ProcessResponseType process_response_type = 4;
+}
+
+enum ImageType {
+
+    // Use Numpy Bytes
+    IMAGE_TYPE_NUMPY = 0;
+    
+    // Use BMP
+    IMAGE_TYPE_BMP   = 1;
+    
+    // Use JPEG
+    IMAGE_TYPE_JPEG  = 2;
+}
+
+
+// This request should be filled according to ProcessResponseTYpe
+enum ProcessRequestType {
+    // Client sends the whole Frame to Server
+    FRAME_WITH_IMAGE          = 0;
+
+    // Client sends the Frame without Image to Server
+    FRAME_WITHOUT_IMAGE       = 1;
+}
+
+message ProcessRequest {
+    int64 seq = 1;
+    Frame frame = 2;
+}
+
+enum ProcessResponseType {
+    // Server returns Image to Client
+    IMAGE_ONLY = 0;
+
+    // Server returns InsightsMeta to Client
+    INSIGHTS_META_ONLY = 1;
+
+    // Server returns Image and InsightsMeta to client
+    IMAGE_AND_INSIGHTS_META = 2;
+
+    // Server returns Response without only ack
+    EMPTY = 3;
+}
+
+// This response should be filled according to ProcessResponseTYpe
+message ProcessResponse {
+    int64 ack = 1;
+    Image image = 2;
+    InsightsMeta insights_meta = 3;
+}
+
+
+
+// Frame
+
+message Frame {
+    Image        image         = 1;
+    InsightsMeta insights_meta = 2;
+    Timestamp    timestamp     = 3;
+    Roi          roi           = 4;
+    string       frame_id      = 5;
+    string       datetime      = 6;
+}
+
+message Image {
+    bytes image_pointer        = 1;
+    ImageProperties properties = 2;
+}
+
+
+message ImageProperties {
+    int64 height = 1;
+    int64 width  = 2;
+    ColorFormat color_format = 3;
+}
+
+enum ColorFormat {
+    COLOR_FORMAT_BGR = 0;
+    COLOR_FORMAT_RGB = 1;
+}
+
+message InsightsMeta {
+    repeated ObjectMeta objects_meta = 1;
+    repeated EventMeta  events_meta = 2;
+    map<string, string> other_meta  = 3;
+}
+
+message ObjectMeta {
+    Timestamp timestamp = 1;
+    string label = 2;
+    float confidence = 3;
+    string inference_id = 4;
+    repeated ObjectMetaAttribute attributes = 5;
+    BBox bbox = 6;
+    TrackingInfo tracking_info = 7;
+}
+
+message ObjectMetaAttribute {
+    Timestamp timestamp = 1; 
+    string name = 2;
+    string label = 3;
+    float confidence = 4;
+    string inference_id = 5;
+}
+
+message BBox {
+    float l = 1;
+    float t = 2;
+    float w = 3;
+    float h = 4;
+}
+
+message TrackingInfo {
+    Timestamp timestamp     = 1;
+    string tracking_id  = 2;
+    float speed         = 3;
+    Direction direction = 4;
+}
+
+message Direction {
+    float x = 1;
+    float y = 2;
+}
+
+
+message EventMeta {
+    Timestamp timestamp = 1; 
+    string type = 2;
+    string event_id = 3;
+    repeated string related_ids = 4;
+    map<string, string> properties = 5;
+
+}
+
+message Point {
+    float x = 1;
+    float y = 2;
+}
+
+message Roi {
+    string name = 1;
+    RoiType type = 2;
+    string id = 3;
+    string value = 4;
+}
+
+enum RoiType {
+    LINE = 0;
+    POLYGON = 1;
+}
+
+message Timestamp {
+    // Represents seconds of UTC time since Unix epoch
+    // 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to
+    // 9999-12-31T23:59:59Z inclusive.
+    int64 seconds = 1;
+  
+    // Non-negative fractions of a second at nanosecond resolution. Negative
+    // second values with fractions must still have non-negative nanos values
+    // that count forward in time. Must be from 0 to 999,999,999
+    // inclusive.
+    int32 nanos = 2;
+  }

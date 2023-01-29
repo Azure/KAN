@@ -134,7 +134,7 @@ The following step will be the same as Type 1: Endpoint URL.
 
 ## gRPC Contract Explain
 
-The protobuf file for the gRPC contract is [here](../../src/grpc/custom_node.proto)
+The protobuf file for the gRPC contract is [here](../../src/grpc_proto/custom_node.proto)
 
 ```
 service CustomNodeHandler {
@@ -143,7 +143,6 @@ service CustomNodeHandler {
 }
 ```
 
-### Handshaking
 
 Client and server need to follow this protocol to setup the connection before starting sending frame
 
@@ -239,7 +238,7 @@ message ProcessResponse {
 
 ## Sample custom node
 
-You could find the sample node [here](../../src/grpc/custom_node_server.py)
+You could find the sample node [here](../../src/grpc_proto/custom_node_server.py)
 
 ```python
 
@@ -274,22 +273,18 @@ class FakeDetection(CustomNode):
 		return custom_node_pb2.ProcessResponse(ack=request.seq, insights_meta=insights_meta)
 ```
 
+In this example, server picks `IMAGE_TYPE_NUMPY`, `FRAME_WITH_IMAGE`, and `INSIGHTS_META_ONLY`. So the behavior will be:
+1. client send frame with numpy bytes as image data
+2. server do the detection (note that it's a fake detection here) and send the information about the bounding box back
 
 
-### Build Custom Node grpc server
 
-```python
 
-from custom_node_server import CustomNodeServer
-
-server = CustomNodeServer(6677, FakeDetection())
-server.serve()
-```
 
 
 ### Others
 
-to generate py codes
+to generate py codes by `proto`
 ```python
 python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. custom_node.proto
 ```

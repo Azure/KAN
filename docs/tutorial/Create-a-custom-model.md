@@ -118,3 +118,4 @@ We also recommend the following tutorials to increase your experience:
 
 - [How-to guide: Create a complex AI skill with KAN Portal AI Skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
 - [KAN: API overview](/docs/api/README.md)
+- [How-to guide: Bring your own ML model and processing logic for your AI Skill using gRPC Custom Processing (BYOM)](/docs/tutorial/How-to-BYOM.md)

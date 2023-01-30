@@ -229,7 +229,7 @@ spec:
 
     <skill>.instance_displayname: Orin 
 
-    <skill>.rtsp: rtsp://:@20.163.55.24:554/media/peoplewaiting.mkv 
+    <skill>.rtsp: rtsp://<your camera's rtsp url with user/pass attached>  
 
     <skill>.skill_displayname: Orin People Skill 
 

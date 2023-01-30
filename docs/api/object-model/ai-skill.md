@@ -33,7 +33,7 @@ nodes:
     delay_buffer: "$param(delay_buffer)"  
 ```
 ## Overwrite parameters
-A ```instance.solution.symphony``` object can overwrite AI skill parameter values in its own ```parameters``` section.
+A ```instance.solution.kan``` object can overwrite AI skill parameter values in its own ```parameters``` section.
 
 ```yaml
 parameters:

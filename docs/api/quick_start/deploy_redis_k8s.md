@@ -4,9 +4,6 @@ Ready to jump into actions right away? This quick start walks you through the st
 
 > **NOTE**: The following steps are tested under a Ubuntu 20.04.4 TLS WSL system on Windows 11. However, they should work for Linux, Windows, and MacOS systems as well.
 
-![Deploying a Redis server to a Kubernetes cluster](/docs/api/quick_start/media/redis-k8s.png)
-
-
 ## 0. Prerequisites
 
 * [Helm 3](https://helm.sh/): Required to deploy KAN API.
@@ -18,14 +15,7 @@ Ready to jump into actions right away? This quick start walks you through the st
 The easiest way to install KAN API is to use Helm:
 
   ```bash
-  helm install kan oci://possprod.azurecr.io/helm/kan --version 0.40.58
-  ```
-
-Or, if you already have the ```kan-k8s``` repository cloned, use:
-
-  ```bash
-  cd kan-k8s/helm
-  helm install kan ./kan
+  helm install kan oci://kanprod.azurecr.io/helm/kan --version 0.41.40
   ```
 
 ## 2. Register the current cluster as a KAN API Target
@@ -158,4 +148,4 @@ To remove KAN API control plane, use:
 
 # Next step
 
-* [KAN Quickstart: Deploying a simulated temperature sensor solution to an Azure IoT Edge device](/docs/api/quick_start/deploy_solution_to_azure_iot_edge.md)
+* [KAN API Quickstart: Deploying a simulated temperature sensor solution to an Azure IoT Edge device](./deploy_solution_to_azure_iot_edge.md)

@@ -188,7 +188,7 @@ spec:
 
       env.IOTEDGE_CONNECTION_STRING:<Connection String> 
 
-      env.SYMPHONY_AGENT_ADDRESS: target-runtime-symphony-agent 
+      env.KAN_AGENT_ADDRESS: target-runtime-kan-agent 
 
       env.WEBMODULE_URL: <url> 
 
@@ -207,7 +207,7 @@ metadata:
 
   finalizers: 
 
-  - instance.solution.symphony/finalizer 
+  - instance.solution.kan/finalizer 
 
   name: <Instance name> 
 

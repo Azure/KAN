@@ -10,6 +10,5 @@ This article offers quickstarts you can choose from. Select the appropriate link
 |--------|--------|--------|--------|--------|--------|
 | [Deploying a simulated temperature sensor solution to an Azure IoT Edge device](./deploy_solution_to_azure_iot_edge.md) | **Yes** | **Yes** | **Yes** | - | - |
 | [Deploying a Redis server to a K8s cluster](./deploy_redis_k8s.md) | **Yes** | - | - | - | - |
-| [Managing RTSP cameras attached to a gateway](./manage_rtsp_cameras.md) | **Yes**| **Yes**| - | - |  **Yes** |
 
 

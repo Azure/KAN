@@ -1,6 +1,6 @@
-# KAN: API overview
+# KAN API overview
 
-KAN API defines a common object model that describes the full stack of intelligent Edge solutions, from AI models to solutions to devices and sensors. Because these objects are defined as standard Kubernetes [custom resources](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), you can use popular Kubernetes tools like [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/) to manipulate these objects.
+KubeAI Application Nucleus for edge (KAN) API defines a common object model that describes the full stack of intelligent Edge solutions, from AI models to solutions to devices and sensors. Because these objects are defined as standard Kubernetes [custom resources](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), you can use popular Kubernetes tools like [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/) to manipulate these objects.
 
 ## KAN API object models
 
@@ -36,13 +36,13 @@ Depending on your focus, you can start with the AI workflow, the device workflow
 
 ### Device workflow
 
-1. Register your computational devices with KAN API as ```Target``` objects. You can also specify desired runtime components, such as a KAN agent, in your target definition.
+1. Register your computational devices with KAN as ```Target``` objects. You can also specify desired runtime components, such as a KAN agent, in your target definition.
 2. Manually register your non-computational devices, such as sensors and actuators, as ```Device``` objects. You can also leverage projects like [Akri](https://github.com/project-akri/akri) to auto-discover devices.
 
 ### Solution workflow
 
 1. Define your intelligent solution as a ```Solution``` object, which consists of a number of ```Component``` elements. A component is usually a container, and it may refer to AI ```Skill``` objects in its properties.
-2. Define a ```Instance``` object that maps a ```Solution``` to one or multiple ```Target``` objects. Once the instance object is created, KAN API ensures the impacted targets are updated according to the desired solution state and target state.
+2. Define a ```Instance``` object that maps a ```Solution``` to one or multiple ```Target``` objects. Once the instance object is created, KAN ensures the impacted targets are updated according to the desired solution state and target state.
 
 > [!NOTE]
 > The current version of KAN portal doesn't explicitly expose the ```Solution``` object. Behind the scenes, you always work with a single ```Solution``` object that is automatically managed. However, you can use KAN API to examine and update the object.
@@ -52,16 +52,16 @@ Depending on your focus, you can start with the AI workflow, the device workflow
 Assume that you are creating an intelligent edge solution that uses a website to show number of cars passing an intersection each hour. The following workflow describes how to create and deploy such a solution using KAN API.
 
 1. Create or select a car detection model. KAN comes with a model zoo, which contains a car detection model you can use.
-2. Register the model as a KAN API ```Model``` object.
-3. Define a KAN API ```Skill``` object that defines a pipeline that:
+2. Register the model as a KAN ```Model``` object.
+3. Define a KAN ```Skill``` object that defines a pipeline that:
 
     * Takes input from a camera;
     * Sends frames to the car detection model;
     * Collects inference results and sends detection events to an output (such as IoT Hub or an HTTP endpoint).
     
-4. Define a KAN API ```Solution``` object that will create a Docker container ```Component``` that takes the ```Skill``` as input and drives the inference process. 
+4. Define a KAN ```Solution``` object that will create a Docker container ```Component``` that takes the ```Skill``` as input and drives the inference process. 
 
-   Since KAN Portal provides some containers out-of-the-box, you don't have to create these containers yousrelf.
+   Since KAN provides some containers out-of-the-box, you don't have to create these containers yousrelf.
    
 6. Create your website container and add it as a ```Component``` of your ```Solution```.
 7. Define a ```Target``` that represents a computer to which you want to deploy your solution.
@@ -70,10 +70,8 @@ Assume that you are creating an intelligent edge solution that uses a website to
 
 ## Getting started
 
-Visit the [Symphony Quickstart](./quick_start/quick_start.md) to try out the tutorials.
+Visit the [KAN API Quickstart](./quick_start/quick_start.md) to try out the tutorials.
 
 ## Next steps
 
-* For more information about POSS configuration, visit [KAN: Setup guide](/docs/tutorial/setup-guide.md).
-* [KAN API Quickstart](/docs/api/quick_start/quick_start.md)
-
+* For more information about KAN configuration, visit [KAN Project: Setup guide](/docs/tutorial/setup-guide.md).

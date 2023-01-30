@@ -5,8 +5,6 @@ Ready to jump into actions right away? This quickstart walks you through the ste
 > [!NOTE]
 > The following steps are tested under a Ubuntu 20.04.4 TLS WSL system on Windows 11. However, they should work for Linux, Windows, and MacOS systems as well.
 
-<!-- ![IoT Edge](../../assets/quick-start-iot-edge.png)-->
-
 ## 0. Prerequisites
 
 * [Helm 3](https://helm.sh/) - Required to deploy KAN API.
@@ -17,13 +15,7 @@ Ready to jump into actions right away? This quickstart walks you through the ste
 
 The easiest way to install KAN API is to use Helm:
 ```bash
-helm install kan oci://possprod.azurecr.io/helm/kan --version 0.40.58
-```
-
-Or, if you already have the ```kan-k8s``` repository cloned:
-```bash
-cd kan-k8s/helm
-helm install kan ./kan
+helm install kan oci://kanprod.azurecr.io/helm/kan --version 0.41.40
 ```
 
 ## 2. Create an IoT Edge device
@@ -35,16 +27,20 @@ These steps create a new resource group, a new IoT Hub, and a new IoT Edge devic
 az extension add --name azure-iot
 
 # create resource group
-az group create --name s8c-demo --location westus2
+# sample: az group create --name s8c-demo --location westus2
+az group create --name <resource group> --location <location>
 
 # create IoT Hub
-az iot hub create --name s8chub --resource-group s8c-demo --sku S1
+# sample: az iot hub create --name s8chub --resource-group s8c-demo --sku S1
+az iot hub create --name <IoT Hub name> --resource-group <resource group> --sku <IoT Hub sku>
 
 # create a IoT Edge device
-az iot hub device-identity create --device-id s8c-vm --hub-name s8chub --edge-enabled
+# sample: az iot hub device-identity create --device-id s8c-vm --hub-name s8chub --edge-enabled
+az iot hub device-identity create --device-id <device id> --hub-name <Iot Hub name> --edge-enabled
 
 # get IoT Edge device connection string
-az iot hub device-identity connection-string show --device-id s8c-vm --resource-group s8c-demo --hub-name s8chub
+# sample: az iot hub device-identity connection-string show --device-id s8c-vm --resource-group s8c-demo --hub-name s8chub
+az iot hub device-identity connection-string show --device-id <device id> --resource-group <resource group> --hub-name <IoT Hub name>
 ```
 
 ## 3. Register a Linux VM as an IoT Edge device
@@ -53,10 +49,11 @@ You need to prepare a Linux VM or physical device for IoT Edge. In this guide, y
 
 ```bash
 # create vm
-az vm create --resource-group s8c-demo --name s8c-vm --image UbuntuLTS --admin-username hbai --generate-ssh-keys --size Standard_D2s_v5
+# sample: az vm create --resource-group s8c-demo --name s8c-vm --image UbuntuLTS --admin-username <user> --generate-ssh-keys --size Standard_D2s_v5
+az vm create --resource-group <resource group> --name <vm name> --image <vm image> --admin-username <user> --generate-ssh-keys --size <vm size>
 
 # SSH into the machine
-ssh hbai@<public IP of your VM>
+ssh <user>@<vm public IP>
 
 # update repo and signing key
 wget https://packages.microsoft.com/config/ubuntu/18.04/multiarch/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -85,9 +82,6 @@ Use the following to apply any changes:
 
 ```kubectl apply -f <filename> ```
 
-> [!NOTE]
-> You can get a sample of this file under ```kan-k8s/samples/simulated-temperature-sensor/target.yaml```:
-
 ```yaml
 apiVersion: fabric.kan/v1
 kind: Target
@@ -107,9 +101,6 @@ spec:
         apiVersion: "2020-05-31-preview"
         deviceName: "<Your device name>"
 ```
-
-> [!NOTE]
-> The above sample doesn't deploy a **KAN Agent**, which is optional. To deploy an KAN agent as an  IoT Edge module, see a sample target definition in the ```kan-k8s/samples/voe/default/target.yaml``` folder.
 
 ## 5. Create the KAN API Solution
 
@@ -147,9 +138,6 @@ Use the following to apply any changes:
 
 ```kubectl apply -f <filename> ```
 
-> [!NOTE]
-> You can get a sample of this file in the ```kan-k8s/samples/simulated-temperature-sensor/instance.yaml``` folder.
-
 ```yaml
 apiVersion: solution.kan/v1
 kind: Instance
@@ -173,8 +161,6 @@ kubectl get instances
 
 On the IoT Hub page, verify all IoT Edge modules are up and running.
 
-<!-- ![IoT Edge](../images/iot-edge.png)-->
-
 ## 8. Clean up KAN API objects
 
 To delete all KAN API objects:
@@ -195,7 +181,4 @@ helm delete kan
 
 # Next step
 
-* [KAN API Quick Start - Deploying a Redis server to a Kubernetes cluster](deploy_redis_k8s.md)
-
- * [KAN API Quickstart - Managing RTSP cameras connected to a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)
-
+* [KAN API Quick Start - Deploying a Redis server to a Kubernetes cluster](./deploy_redis_k8s.md)

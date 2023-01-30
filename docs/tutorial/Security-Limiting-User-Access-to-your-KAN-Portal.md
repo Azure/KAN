@@ -35,7 +35,7 @@ Once your KAN portal has been set up, it is accessible to anyone via the IP. In 
 
 ## Limit External Access Using Ingress Rules 
 
-Modify ingress resource “webmodule” that was automatically created during installation on your Kubernetes cluster with: [Using nginx-ingress controller to restrict access by IP](https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Fmedium.com%2F%40maninder.bindra%2Fusing-nginx-ingress-controller-to-restrict-access-by-ip-ip-whitelisting-for-a-service-deployed-to-bd5c86dc66d6&data=05%7C01%7Csmohanselvan%40microsoft.com%7C02ac0660e0d9411ad65e08dac281338e%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7C638036157433315152%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=LUZLi4W7sf1Y2Gs2iCkNOs3wwEa0VN15s2NJQpiJCPo%3D&reserved=0) (ip whitelisting) for a service deployed to a Kubernetes (AKS) cluster . Make sure to apply your changes after modifying the YAML file. 
+Modify ingress resource “webmodule” that was automatically created during installation on your Kubernetes cluster with: [Using nginx-ingress controller to restrict access by IP](https://medium.com/@maninder.bindra/using-nginx-ingress-controller-to-restrict-access-by-ip-ip-whitelisting-for-a-service-deployed-to-bd5c86dc66d6) (ip whitelisting) for a service deployed to a Kubernetes (AKS) cluster . Make sure to apply your changes after modifying the YAML file. 
 
 
 
@@ -258,7 +258,9 @@ For more information on authentication and authorization with Azure API Manageme
 ## Next Steps
 
 Now that you have secured your portal, we recommend completing the following tutorials:
-* [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](https://github.com/smshreyah/KAN/blob/main/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)
-* [Tutorial: Create a complex AI skill with Azure Percept Open-Source Project](https://github.com/smshreyah/KAN/blob/main/docs/tutorial/Create-a-complex-AI-skill.md)
+- [Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
+- [How-to guide: Create a complex AI skill with KAN Portal AI Skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
+- [KAN: API overview](/docs/api/README.md)
+- [How-to guide: Bring your own ML model and processing logic for your AI Skill using gRPC Custom Processing (BYOM)](/docs/tutorial/How-to-BYOM.md)
 
  

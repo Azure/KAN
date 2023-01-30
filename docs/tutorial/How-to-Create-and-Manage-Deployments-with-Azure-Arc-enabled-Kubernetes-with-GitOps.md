@@ -270,4 +270,10 @@ kubectl get solution <solution name> -o yaml
 To update your YAML files, make your edits directly in your Git environment. Then add, commit, and push your changes to your repository. You can view the changes in your repo. Flux will automatically reconcile any changes to your cluster state. 
 
 Use the kubectl commands from __Step 3: View your objects__ to view the changes in your object definitions. It may take some time to see the changes as it takes Flux a few minutes to update the configuration. 
+
+## Next Steps
  
+Now that you learned more about how to interact with KAN API through Gitops, we recommend reviewing the following documents:
+
+- [KAN: API overview](/docs/api/README.md)
+- [How-to guide: Bring your own ML model and processing logic for your AI Skill using gRPC Custom Processing (BYOM)](/docs/tutorial/How-to-BYOM.md)

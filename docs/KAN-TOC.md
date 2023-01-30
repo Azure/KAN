@@ -4,6 +4,8 @@
 
 [KAN: Setup guide](/docs/tutorial/setup-guide.md)
 
+[Security: Limiting User Access to your KAN Portal](/docs/tutorial/Security-Limiting-User-Access-to-your-KAN-Portal.md)
+
 [Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
 
 [How-to guide: Create a complex AI skill with KAN Portal AI Skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
@@ -12,6 +14,9 @@
 
 [How-to guide: Bring your own ML model and processing logic for your AI Skill using gRPC Custom Processing (BYOM)](/docs/tutorial/How-to-BYOM.md)
 
+### Advanced
+
+[Tutorial: How to Create and Manage Deployments with Azure Arc enabled Kubernetes with GitOps](/docs/tutorial/How-to-Create-and-Manage-Deployments-with-Azure-Arc-enabled-Kubernetes-with-GitOps.md)
 
 ### API Docs
 

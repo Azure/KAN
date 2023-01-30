@@ -165,5 +165,5 @@ Now that you have successfully setup KAN experience onto your Kubernetes environ
   
 After doing so, continue with the following resources:
 
--   [Tutorial: Create an Edge AI solution with Azure Percept Open-Source Project using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)
--   [Introduction to Azure Percept for Open-Source Project: Core concepts](concepts-azure-percept-for-open-source%20.md)
+-   [Tutorial: Create an Edge AI solution with KAN portal using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
+-   [Introduction to KAN: Core concepts](/docs/tutorial/concepts-kan.md)

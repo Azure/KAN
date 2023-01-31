@@ -1,15 +1,42 @@
 #!/bin/bash
-
-az account show -o none
-if [ $? != "0" ];  then
-    echo "not login"
-    return 1
-fi
-
-current_step=1
-
+kan_version=0.41.34
+kanportal_version=0.39.0-main-fa40e13-amd64
+current_step=0
 while [ $current_step -lt 6 ]; do
     case $current_step in
+    0 ) # azure user
+        while true; do
+            read -p "azure user?(y/n): " -r; echo
+            case $REPLY in
+            [Yy]* ) 
+                az account show -o none
+                if [ $? != "0" ];  then
+                    echo "not login"
+                    exit 1
+                else
+                    current_step=1
+                    break
+                fi
+            ;;
+            [Nn]* )                
+                read -p "kan will install on current kubeconfig: (y/n) " -r; echo
+                case $REPLY in
+                [Yy]* )
+                    create_aks_selection=2
+                    create_storage_account_selection=3
+                    create_blob_container_selection=4            
+                    create_custom_vision_selection=3
+                    create_sp_selection=4
+                    current_step=5
+                    break
+                ;;
+                *) 
+                    echo "stop installing"
+                    exit 1
+                esac
+            esac
+        done
+    ;;
     1 ) # --- aks ---
         echo "Would you like to use a exists aks, or use current kubeconfig?"        
         echo "1) use an existing one"
@@ -55,7 +82,8 @@ while [ $current_step -lt 6 ]; do
                         echo "Would you like to create a new storage account, or use an existing one?"
                         echo "1) create a new one"
                         echo "2) use an existing one"
-                        echo "3) back to previous step"
+                        echo "3) skip"
+                        echo "4) back to previous step"
                         read -p "Your answer: " -r; echo
                         create_storage_account_selection=$REPLY
                         case $create_storage_account_selection in
@@ -116,7 +144,13 @@ while [ $current_step -lt 6 ]; do
                             current_storage_step=2
                             break
                             ;;
-                        3 ) 
+                        3 )
+                            current_storage_step=3
+                            create_blob_container_selection=4
+                            current_step=`expr $current_step + 1`
+                            break
+                            ;;
+                        4 ) 
                             current_storage_step=3
                             current_step=`expr $current_step - 1`
                             break
@@ -189,7 +223,8 @@ while [ $current_step -lt 6 ]; do
             echo "Would you like to create a new cognitive services, or use an existing one?"
             echo "1) create a new one"
             echo "2) use an existing one"
-            echo "3) back to previous step"
+            echo "3) skip"
+            echo "4) back to previous step"
             read -p "Your answer: " -r; echo
             create_custom_vision_selection=$REPLY
             case  $create_custom_vision_selection in 
@@ -248,6 +283,10 @@ while [ $current_step -lt 6 ]; do
                 break
             ;;
             3 )
+                current_step=`expr $current_step + 1`
+                break
+            ;;
+            4 )
                 current_step=`expr $current_step - 1`
                 break
             ;;
@@ -263,7 +302,8 @@ while [ $current_step -lt 6 ]; do
             echo "1) create a new one"
             echo "2) use an existing one"
             echo "3) use an existing one by entering name"
-			echo "4) back to previous step"
+            echo "4) skip"
+			echo "5) back to previous step"
             read -p "Your answer: " -r; echo
             create_sp_selection=$REPLY
             case $create_sp_selection in 
@@ -309,6 +349,10 @@ while [ $current_step -lt 6 ]; do
                 fi
             ;;
             4 ) 
+                current_step=`expr $current_step + 1`   
+                break   
+            ;;
+            5 ) 
                 current_step=`expr $current_step - 1`   
                 break         
             ;;
@@ -324,18 +368,35 @@ while [ $current_step -lt 6 ]; do
         if [ $create_aks_selection == "1" ]; then
             echo -e "aks:\t\t\t$(echo $selected_aks | jq -r '. | "\(.rg)/\(.name)"')"
         else 
-            echo -e "aks:\t\t\tUse current kubeconfig"
+            echo -e "aks:\t\t\t\tUse current kubeconfig"
         fi
-        echo -e "service_principal:\t$selected_sp_name"
-        echo -e "storage account:\t"$selected_storage_account_rg/$selected_storage_account_name
-        echo -e "storage account location:\t"$selected_storage_account_location
-        echo -e "blob container:\t\t"$selected_blob_container_name
-        echo -e "cognitive services:\t"$selected_custom_vision_rg/$selected_custom_vision_name
-        echo -e "cognitive services location:\t"$selected_custom_vision_location        
+
+        if [ $create_sp_selection == 4 ]; then
+            echo -e "service_principal:\t\tskip"
+        else 
+            echo -e "service_principal:\t\t$selected_sp_name"
+        fi
+
+        if [ $create_storage_account_selection == 3 ]; then
+            echo -e "storage account:\t\tskip"
+            echo -e "storage account location:\tskip"
+            echo -e "blob container:\t\t\tskip"
+        else 
+            echo -e "storage account:\t\t"$selected_storage_account_rg/$selected_storage_account_name
+            echo -e "storage account location:\t"$selected_storage_account_location
+            echo -e "blob container:\t\t\t"$selected_blob_container_name            
+        fi
+
+        if [ $create_custom_vision_selection == 3 ]; then
+            echo -e "cognitive services:\t\tskip"
+            echo -e "cognitive services location:\tskip"
+        else
+            echo -e "cognitive services:\t\t"$selected_custom_vision_rg/$selected_custom_vision_name
+            echo -e "cognitive services location:\t"$selected_custom_vision_location    
+        fi
         read -p "Are you sure (y or n)? " -r; echo
         case $REPLY in 
-            [Yy]* )
-            
+            [Yy]* )            
                 if [ $create_aks_selection == "1" ]; then
                     subscription=$(echo $selected_aks | jq ".id" | awk -F/ '{print $3}')
                     az account set --subscription=$subscription
@@ -348,9 +409,11 @@ while [ $current_step -lt 6 ]; do
                     az storage account create --resource-group $selected_storage_account_rg --name $selected_storage_account_name --location $selected_storage_account_location
                 fi 
 
-                storage_account_subscription=$(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r .id | awk -F/ '{print $3}')
+                if [ $create_storage_account_selection != "3"  ]; then
+                    storage_account_subscription=$(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r .id | awk -F/ '{print $3}')
+                fi
 
-                if [ $create_blob_container_selection == "1" ]; then
+                if [ -n $create_blob_container_selection ] && [ $create_blob_container_selection == "1" ]; then
                     creation_result=$(az storage container create --account-name $selected_storage_account_name -n $selected_blob_container_name --auth-mode login | jq -r ".created" )
                     if [ $creation_result == "true" ]; then
                         echo -e "blob container create \e[32msuccessfully\e[0m"
@@ -380,60 +443,66 @@ while [ $current_step -lt 6 ]; do
                     done
                     
                     echo $app_id
-                else 
+                elif [  $create_sp_selection != "4" ]; then
                     selected_service_principal=$(az ad app list --filter "displayname eq '$selected_sp_name'")
                     app_id=$(echo $selected_service_principal | jq -r ".[0].appId")
                 fi
                 
-                echo "creating credential"
-                new_cred=$(az ad sp credential reset --id $app_id --append --display-name voe --only-show-errors)
-                echo $new_cred
-                sp_password=$(echo $new_cred | jq -r ".password")
-                sp_tenant=$(echo $new_cred | jq -r ".tenant")
+                if [  $create_sp_selection != "4" ]; then
+                    echo "creating credential"
+                    new_cred=$(az ad sp credential reset --id $app_id --append --display-name kan --only-show-errors)
+                    echo $new_cred
+                    sp_password=$(echo $new_cred | jq -r ".password")
+                    sp_tenant=$(echo $new_cred | jq -r ".tenant")
 
-                echo "creating custom role"
-                subscriptionId=$(az account show --query "id" -o tsv)
+                    echo "creating custom role"
+                    
+                
+                  subscriptionId=$(az account show --query "id" -o tsv)
 
-                if [  $(az role definition list --custom-role-only true --name "voe contributor $subscriptionId" | jq ". | length") -lt 1 ]; 
-                then
-                    az role definition create --role-definition "{
-                        \"Name\": \"voe contributor $subscriptionId\",
-                        \"Description\": \"voe contributor $subscriptionId\",
-                        \"Actions\": [
-                            \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
-                            \"Microsoft.Devices/iotHubs/listkeys/Action\"
-                        ],
-                        \"AssignableScopes\": [\"/subscriptions/$subscriptionId\"]
-                    }"
-		    echo "Waiting for custom role to be created..."
-		    sleep 120
-                else
-                    az role definition update --role-definition "{
-                        \"Name\": \"voe contributor $subscriptionId\",
-                        \"Description\": \"voe contributor $subscriptionId\",
-                        \"Actions\": [
-                            \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
-                            \"Microsoft.Devices/iotHubs/listkeys/Action\"
-                        ],
-                        \"AssignableScopes\": [\"/subscriptions/$subscriptionId\"]
-                    }"
-                fi                
+                    if [  $(az role definition list --custom-role-only true --name "kan contributor $subscriptionId" | jq ". | length") -lt 1 ]; 
+                    then
+                        az role definition create --role-definition "{
+                            \"Name\": \"kan contributor $subscriptionId\",
+                            \"Description\": \"kan contributor $subscriptionId\",
+                            \"Actions\": [
+                                \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
+                                \"Microsoft.Devices/iotHubs/listkeys/Action\"
+                            ],
+                            \"AssignableScopes\": [\"/subscriptions/$subscriptionId\"]
+                        }"
+                    echo "Waiting for custom role to be created..."
+                    sleep 120
+                    else
+                        az role definition update --role-definition "{
+                            \"Name\": \"kan contributor $subscriptionId\",
+                            \"Description\": \"kan contributor $subscriptionId\",
+                            \"Actions\": [
+                                \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
+                                \"Microsoft.Devices/iotHubs/listkeys/Action\"
+                            ],
+                            \"AssignableScopes\": [\"/subscriptions/$subscriptionId\"]
+                        }"
+                    fi                
+            
 
-                sleep 5
-                echo "assigning Symphonyportal contributor role to subscription"
-                az role assignment create --role "voe contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv) 
+                    sleep 5
 
-                echo "assigning reader role to subscription"
-                az role assignment create --role "Reader" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv) 
+                    echo "assigning KANportal contributor role to subscription"
+                    az role assignment create --role "kan contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv) 
 
-                echo "assigning role Storage Account Contributor to storage account"
-                az role assignment create --role "Storage Account Contributor"  --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
+                    echo "assigning reader role to subscription"
+                    az role assignment create --role "Reader" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv) 
 
-                echo "assigning role Storage Blob Data Contributor to storage account"
-                az role assignment create --role "Storage Blob Data Contributor"  --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
+                    echo "assigning role Storage Account Contributor to storage account"
+                    az role assignment create --role "Storage Account Contributor"  --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
 
-                echo "assigning role IoT Hub Data Contributor to subscription"
-                az role assignment create --role "IoT Hub Data Contributor"  --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)                               
+                    echo "assigning role Storage Blob Data Contributor to storage account"
+                    az role assignment create --role "Storage Blob Data Contributor"  --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
+
+                    echo "assigning role IoT Hub Data Contributor to subscription"
+                    az role assignment create --role "IoT Hub Data Contributor"  --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)                               
+                fi
 
                 echo -e "\e[32mInstalling ingress\e[0m"
                 helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
@@ -442,33 +511,43 @@ while [ $current_step -lt 6 ]; do
                 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
                 
                 echo -e "\e[32mRemoving terminating CRDs\e[0m"
-                kubectl get target --no-headers=true | awk '{print $1}' | xargs kubectl patch target.fabric.symphony -p '{"metadata":{"finalizers":null}}' --type=merge                
-                kubectl get instance --no-headers=true | awk '{print $1}' | xargs kubectl patch instance.solution.symphony -p '{"metadata":{"finalizers":null}}' --type=merge
+                kubectl get target --no-headers=true | awk '{print $1}' | xargs kubectl patch target.fabric.kan -p '{"metadata":{"finalizers":null}}' --type=merge                
+                kubectl get instance --no-headers=true | awk '{print $1}' | xargs kubectl patch instance.solution.kan -p '{"metadata":{"finalizers":null}}' --type=merge
 
-                echo -e "\e[32mInstalling symphony\e[0m"
-                helm upgrade --install symphony oci://possprod.azurecr.io/helm/symphony --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version 0.38.0 --wait
+                echo -e "\e[32mInstalling kan\e[0m"
+                if [ $create_custom_vision_selection == 3 ]; then
+                    helm upgrade -n default --install kan oci://kanprod.azurecr.io/helm/kan --version $kan_version --wait
+                else 
+                    helm upgrade -n default --install kan oci://kanprod.azurecr.io/helm/kan --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version $kan_version --wait
+                fi
+                
                 if [ $? != "0" ];  then
-                    echo -e "\e[31mWe faced some issues while pull symphony from container registry. Please try the installer again a few minutes later\e[0m"
+                    echo -e "\e[31mWe faced some issues while pull kan from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
                 echo -e "\e[32mInstalling Portal\e[0m"
-                helm upgrade --install symphonyportal oci://possprod.azurecr.io/helm/voe --version 0.38.2-amd64 \
-                    --set "storage.storageResourceGroup=$selected_storage_account_rg" \
-                    --set "storage.storageAccount=$selected_storage_account_name" \
-                    --set "storage.storageContainer=$selected_blob_container_name" \
-                    --set "storage.subscriptionId=$storage_account_subscription" \
-                    --set "customvision.endpoint=$(az cognitiveservices account show -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r .properties.endpoint)" \
-                    --set "customvision.trainingKey=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1")" \
-                    --set "servicePrincipal.tenantId=$sp_tenant" \
-                    --set "servicePrincipal.clientId=$app_id" \
-                    --set "servicePrincipal.clientSecret=$sp_password" 
+
+                
+                values=""
+                if [ $create_storage_account_selection != 3 ]; then
+                    values="$values --set storage.storageResourceGroup=$selected_storage_account_rg --set storage.storageAccount=$selected_storage_account_name --set storage.storageContainer=$selected_blob_container_name --set storage.subscriptionId=$storage_account_subscription"
+                fi
+                if [ $create_custom_vision_selection != 3 ]; then
+                    values="$values --set customvision.endpoint=$(az cognitiveservices account show -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r .properties.endpoint) --set customvision.trainingKey=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r .key1)"
+                fi
+                if [ $create_sp_selection != 4 ]; then
+                    values="$values --set servicePrincipal.tenantId=$sp_tenant --set servicePrincipal.clientId=$app_id --set servicePrincipal.clientSecret=$sp_password"
+                fi
+
+                helm upgrade -n default --install kanportal oci://kanpro.azurecr.io/helm/kan --version $kanportal_version $values --set image.image=kanpro.azurecr.io/kanportal
+
                 if [ $? != "0" ];  then
-                    echo -e "\e[31mWe faced some issues while pull voe from container registry. Please try the installer again a few minutes later\e[0m"
+                    echo -e "\e[31mWe faced some issues while pull KANportal from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
 
                 current_step=`expr $current_step + 1`
                 break
             ;;
-            *)
+            * )
                 current_step=`expr $current_step - 1`
         esac
     ;;

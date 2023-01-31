@@ -538,7 +538,7 @@ while [ $current_step -lt 6 ]; do
                     values="$values --set servicePrincipal.tenantId=$sp_tenant --set servicePrincipal.clientId=$app_id --set servicePrincipal.clientSecret=$sp_password"
                 fi
 
-                helm upgrade -n default --install kanportal oci://kanpro.azurecr.io/helm/kan --version $kanportal_version $values --set image.image=kanpro.azurecr.io/kanportal
+                helm upgrade -n default --install kanportal oci://kanprod.azurecr.io/helm/kan --version $kanportal_version $values --set image.image=kanprod.azurecr.io/kanportal
 
                 if [ $? != "0" ];  then
                     echo -e "\e[31mWe faced some issues while pull KANportal from container registry. Please try the installer again a few minutes later\e[0m"

@@ -15,6 +15,8 @@ import { CreateDeploymentPayload, DeploymentConfigureSkill } from '../../../stor
 import { getFilteredTagList } from '../../Common/TagTab';
 import { Url } from '../../../constant';
 import { getFooterClasses } from '../../Common/styles';
+import { selectAllCascades } from '../../../store/cascadeSlice';
+import { getK8sWarning } from '../utils';
 
 interface Props {
   currentStep: PivotTabKey;
@@ -40,14 +42,15 @@ const CreationFooter = (props: Props) => {
   } = props;
 
   const deviceList = useSelector((state: RootState) => selectAllComputeDevices(state));
+  const aiSkillList = useSelector((state: RootState) => selectAllCascades(state));
 
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = getFooterClasses();
-  const isWarningDisplay =
-    (currentStep === 'configure' &&
-      deviceList.find((_device) => _device.kan_id === localFormData.device.key)?.is_k8s) ??
-    false;
+
+  const isK8sWarning =
+    deviceList.find((_device) => _device.kan_id === localFormData.device.key)?.is_k8s &&
+    getK8sWarning(localFormData.cameraList, aiSkillList);
 
   const onCreateClick = useCallback(async () => {
     if (onFormDateValidate(currentStep)) return;
@@ -88,10 +91,10 @@ const CreationFooter = (props: Props) => {
   return (
     <Stack
       styles={{
-        root: isWarningDisplay ? classes.warningFooter : classes.root,
+        root: isK8sWarning ? classes.warningFooter : classes.root,
       }}
     >
-      {isWarningDisplay && (
+      {isK8sWarning && (
         <MessageBar
           messageBarType={MessageBarType.warning}
           messageBarIconProps={{ iconName: 'IncidentTriangle' }}

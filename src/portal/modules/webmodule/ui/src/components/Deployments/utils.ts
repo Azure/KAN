@@ -1,6 +1,7 @@
 import { pick, groupBy, mapObjIndexed } from 'ramda';
 
-import { FormattedDeployment } from './types';
+import { FormattedDeployment, ConfigureCamera } from './types';
+import { AiSkill } from '../../store/types';
 
 export type DeploymentFieldKey = keyof Pick<FormattedDeployment, 'deviceName'>;
 export type DeploymentFieldMap = Record<DeploymentFieldKey, number[]>;
@@ -49,4 +50,33 @@ export const getMinContentList = (deploymentList: FormattedDeployment[], fieldMa
 
   if (minFilterFieldList.length === 0) return deploymentList;
   return deploymentList.filter((deployment) => minFilterFieldList.includes(deployment.id));
+};
+
+const IotNameList = ['iothub_export', 'iotedge_export'];
+
+export const getSingleK8sWarning = ({ flow }: AiSkill) =>
+  flow.nodes.filter((node) => IotNameList.includes(node.name)).length > 0;
+
+export const getK8sWarning = (configureCameraList: ConfigureCamera[], aiSkillList: AiSkill[]): boolean => {
+  const skillList = configureCameraList.map((camera) => camera.skillList.map((skill) => skill.id)).flat(1);
+
+  console.log(
+    skillList
+      .map((id) =>
+        aiSkillList
+          .find((sk) => sk.kan_id === id)
+          .flow.nodes.filter((node) => IotNameList.includes(node.name)),
+      )
+      .flat(1),
+  );
+
+  return (
+    skillList
+      .map((id) =>
+        aiSkillList
+          .find((sk) => sk.kan_id === id)
+          .flow.nodes.filter((node) => IotNameList.includes(node.name)),
+      )
+      .flat(1).length > 0
+  );
 };

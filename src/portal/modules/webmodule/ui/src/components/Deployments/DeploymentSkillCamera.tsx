@@ -28,9 +28,12 @@ import { selectAiSkillByKanIdSelectorFactory } from '../../store/cascadeSlice';
 import { wrapperPadding } from './styles';
 import { getFooterClasses } from '../Common/styles';
 import { getSingleComputeDevice, selectDeviceByKanIdSelectorFactory } from '../../store/computeDeviceSlice';
+import { getSingleK8sWarning } from './utils';
 
 import SkillCameraDetail from './SkillCameraDetail';
 import PageLoading from '../Common/PageLoading';
+
+const k8sTabKey = ['insight', 'video'];
 
 const DeploymentSkillCamera = () => {
   const { deployment: deploymentId, skill: skillId } = useParams<{ deployment: string; skill: string }>();
@@ -43,11 +46,12 @@ const DeploymentSkillCamera = () => {
   const cameraList = useSelector((state: RootState) => selectAllCameras(state));
   const device = useSelector(selectDeviceByKanIdSelectorFactory(deployment.compute_device));
   const skill = useSelector(selectAiSkillByKanIdSelectorFactory(skillId));
-  const isWarningDisplay = device.is_k8s;
 
   const [selectedCamera, setseLectedCamera] = useState<Camera | null>(null);
   const [filterInput, setFilterInput] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedKey, setSelectedKey] = useState('general');
+  const isK8sWarning = device.is_k8s && k8sTabKey.includes(selectedKey) && getSingleK8sWarning(skill);
 
   useEffect(() => {
     (async () => {
@@ -115,7 +119,10 @@ const DeploymentSkillCamera = () => {
             />
             <ChoiceGroup
               options={cameraOptions}
-              onChange={(_, option) => onCameraOptionsChange(option)}
+              onChange={(_, option) => {
+                onCameraOptionsChange(option);
+                setSelectedKey('general');
+              }}
               label="Cameras"
               required={true}
             />
@@ -128,7 +135,8 @@ const DeploymentSkillCamera = () => {
                 deviceKanId={device.kan_id}
                 deployment={deployment}
                 skill={skill}
-                tabKey="general"
+                tabKey={selectedKey}
+                onTabKeySelect={setSelectedKey}
               />
             )}
           </Stack>
@@ -136,10 +144,10 @@ const DeploymentSkillCamera = () => {
       </Stack>
       <Stack
         styles={{
-          root: isWarningDisplay ? footerClasses.warningFooter : footerClasses.root,
+          root: isK8sWarning ? footerClasses.warningFooter : footerClasses.root,
         }}
       >
-        {isWarningDisplay && (
+        {isK8sWarning && (
           <MessageBar
             messageBarType={MessageBarType.warning}
             messageBarIconProps={{ iconName: 'IncidentTriangle' }}

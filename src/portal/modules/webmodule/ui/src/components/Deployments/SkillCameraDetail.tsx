@@ -22,16 +22,16 @@ interface Props {
   skill: AiSkill;
   deployment: Deployment;
   tabKey: string;
+  onTabKeySelect: (key: string) => void;
 }
 
 const SkillCameraDetail = (props: Props) => {
-  const { camera, skill, deployment, deviceId, deviceKanId } = props;
+  const { camera, skill, deployment, deviceId, deviceKanId, tabKey, onTabKeySelect } = props;
 
   const dispatch = useDispatch();
 
   const device = useSelector((state: RootState) => selectComputeDeviceById(state, deviceId));
 
-  const [selectedKey, setSelectedKey] = useState('general');
   const [localCamera, setLocalCamera] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -47,19 +47,18 @@ const SkillCameraDetail = (props: Props) => {
 
   useEffect(() => {
     setLocalCamera(camera);
-    setSelectedKey('general');
   }, [camera]);
 
   if (loading) return <></>;
 
   return (
     <>
-      <Pivot selectedKey={selectedKey} onLinkClick={(item: PivotItem) => setSelectedKey(item.props.itemKey)}>
+      <Pivot selectedKey={tabKey} onLinkClick={(item: PivotItem) => onTabKeySelect(item.props.itemKey)}>
         <PivotItem headerText="General" itemKey="general" />
         <PivotItem headerText="Insights" itemKey="insight" />
         <PivotItem headerText="Video Recordings" itemKey="video" />
       </Pivot>
-      {selectedKey === 'general' && (
+      {tabKey === 'general' && (
         <GeneralCamera
           camera={localCamera}
           status={isEmpty(device.status[camera.name]) ? 'disconnected' : device.status[camera.name]}
@@ -67,7 +66,7 @@ const SkillCameraDetail = (props: Props) => {
           acceleration={skill.acceleration}
         />
       )}
-      {selectedKey === 'insight' && (
+      {tabKey === 'insight' && (
         <Insights
           deploymentKanId={deployment.kan_id}
           skillKanId={skill.kan_id}
@@ -75,7 +74,7 @@ const SkillCameraDetail = (props: Props) => {
           status={deployment.iothub_insights}
         />
       )}
-      {selectedKey === 'video' && (
+      {tabKey === 'video' && (
         <VidoeRecroding
           deploymentName={deployment.name}
           skillName={skill.name}

@@ -516,9 +516,9 @@ while [ $current_step -lt 6 ]; do
 
                 echo -e "\e[32mInstalling kan\e[0m"
                 if [ $create_custom_vision_selection == 3 ]; then
-                    helm upgrade -n default --install kan oci://posstest.azurecr.io/helm/kan --version $kan_version --wait
+                    helm upgrade -n default --install kan oci://possprod.azurecr.io/helm/kan-api --version $kan_version --wait
                 else 
-                    helm upgrade -n default --install kan oci://posstest.azurecr.io/helm/kan --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version $kan_version --wait
+                    helm upgrade -n default --install kan oci://possprod.azurecr.io/helm/kan-api --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version $kan_version --wait
                 fi
                 
                 if [ $? != "0" ];  then

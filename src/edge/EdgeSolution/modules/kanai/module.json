@@ -4,7 +4,7 @@
   "image": {
     "repository": "${CONTAINER_REGISTRY_NAME}/voe/kanai",
     "tag": {
-      "version": "0.39.0-dev.8",
+      "version": "0.40.0",
       "platforms": {
         "amd64": "./dockerfiles/Dockerfile.amd64",
         "gpuamd64": "./dockerfiles/Dockerfile.gpuamd64",

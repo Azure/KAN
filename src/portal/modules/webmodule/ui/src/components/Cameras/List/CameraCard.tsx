@@ -111,7 +111,7 @@ const CameraCard = (props: Props) => {
                 Not Available {'\n'} No Storage Account
               </Stack>
             )}
-            {/* {isEmpty(camera.snapshot) && !isNoAzureStorage ? (
+            {isEmpty(camera.snapshot) && !isNoAzureStorage ? (
               <Stack
                 styles={{ root: { width: '135px', height: '80px', backgroundColor: '#000', color: '#FFF' } }}
                 verticalAlign="center"
@@ -121,7 +121,7 @@ const CameraCard = (props: Props) => {
               </Stack>
             ) : (
               <img style={{ width: '135px', height: '80px' }} src={camera.snapshot} alt="" />
-            )} */}
+            )}
 
             <Stack tokens={{ childrenGap: 10 }} horizontal verticalAlign="center" horizontalAlign="end">
               <ActionButton

@@ -417,14 +417,14 @@ class KanSolutionClient(KanClient):
                 })
 
         # container image
-        container_version = "0.39.0-dev.8"
+        container_version = "0.40.0"
         # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
         # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
         # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"
-        voeedge_image = f"p4etest.azurecr.io/voe/kanai:{container_version}-{image_suffix}amd64"
+        voeedge_image = f"kanprod.azurecr.io/voe/kanai:{container_version}-{image_suffix}amd64"
 
         if 'arm' in architecture.lower():
-            voeedge_image = f"p4etest.azurecr.io/voe/kanai:{container_version}-jetson"
+            voeedge_image = f"kanprod.azurecr.io/voe/kanai:{container_version}-jetson"
             managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-jetson"
             streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-jetson"
             predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-jetson"

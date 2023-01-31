@@ -15,6 +15,8 @@ import { updateDeployment } from '../../../store/deploymentSlice';
 import { UpdateDeploymentPayload, DeploymentConfigureSkill } from '../../../store/types';
 import { getFilteredTagList } from '../../Common/TagTab';
 import { Url } from '../../../constant';
+import { getK8sWarning } from '../utils';
+import { selectAllCascades } from '../../../store/cascadeSlice';
 
 interface Props {
   deploymentId: number;
@@ -35,11 +37,11 @@ const EditFooter = (props: Props) => {
   const history = useHistory();
 
   const deviceList = useSelector((state: RootState) => selectAllComputeDevices(state));
+  const aiSkillList = useSelector((state: RootState) => selectAllCascades(state));
 
   const isWarningDisplay =
-    (currentStep === 'configure' &&
-      deviceList.find((_device) => _device.kan_id === localFormData.device.key)?.is_k8s) ??
-    false;
+    deviceList.find((_device) => _device.kan_id === localFormData.device.key)?.is_k8s &&
+    getK8sWarning(localFormData.cameraList, aiSkillList);
 
   const onUpdateClick = useCallback(async () => {
     const payload: UpdateDeploymentPayload = {

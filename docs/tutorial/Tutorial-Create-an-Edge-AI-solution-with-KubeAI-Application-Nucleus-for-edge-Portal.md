@@ -78,7 +78,7 @@ KAN supports internet protocol (IP) cameras that use RTSP.
 
     -   Each camera must have an **RTSP URL** that the RTSP protocol can use for managing its feed. For this tutorial we created an RTSP simulator for you that you can use it if you don’t have a real camera available at the moment. You can leverage it easily by running the following commands and get rtsp urls showing real scenarios:
     -   view your clusters by running: kubectl config view
-    -   Pick one from the list and set by running: kubectl config set-cluster <YourClusterName>
+    -   Pick one from the list and set by running: kubectl config set-cluster YourClusterName
     -   kubectl create deployment rtspsim --image=mcr.microsoft.com/azureedgedevices/p4drtspsim:d923853-amd64
     -   kubectl get deployments
     -   kubectl get pods

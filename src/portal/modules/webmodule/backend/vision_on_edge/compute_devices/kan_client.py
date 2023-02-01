@@ -111,7 +111,7 @@ class KanTargetClient(KanClient):
                         "properties": {
                             "container.version": "1.0",
                             "container.type": "docker",
-                            "container.image": "possprod.azurecr.io/kan-agent:"+kan_agent_version,
+                            "container.image": "kanprod.azurecr.io/kan-agent:"+kan_agent_version,
                             "container.createOptions": "{\"HostConfig\":{\"Binds\":[\"/etc/iotedge/storage:/snapshots\"],\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
                             "container.restartPolicy": "always",
                             "env.AZURE_CLIENT_ID": client_id,
@@ -417,7 +417,7 @@ class KanSolutionClient(KanClient):
                 })
 
         # container image
-        container_version = "0.40.0"
+        container_version = "0.41.40"
         # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
         # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
         # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"

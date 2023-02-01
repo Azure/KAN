@@ -1,6 +1,6 @@
 #!/bin/bash
-kan_version=0.41.38
-kanportal_version=0.40.0-dev.1-amd64
+kan_version=0.41.40
+kanportal_version=0.41.40-amd64
 current_step=0
 while [ $current_step -lt 6 ]; do
     case $current_step in

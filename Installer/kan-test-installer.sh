@@ -122,7 +122,7 @@ while [ $current_step -lt 6 ]; do
                             current_step=3
                             current_storage_step=3
                             create_blob_container_selection=1
-                            selected_blob_container_name="perceptoos"
+                            selected_blob_container_name="kan"
                             break
                             ;;
                         2 ) 
@@ -162,7 +162,7 @@ while [ $current_step -lt 6 ]; do
                 2 )                    
                     if [ $create_storage_account_selection == "1" ]; then
                         create_blob_container_selection=1
-                        selected_blob_container_name="perceptOSS"
+                        selected_blob_container_name="kan"
                     else 
                         while true; do
                             echo "Would you like to create a new blob container, or use an existing one?"

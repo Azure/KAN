@@ -111,7 +111,7 @@ class KanTargetClient(KanClient):
                         "properties": {
                             "container.version": "1.0",
                             "container.type": "docker",
-                            "container.image": "possprod.azurecr.io/kan-agent:"+kan_agent_version,
+                            "container.image": "kanprod.azurecr.io/kan-agent:"+kan_agent_version,
                             "container.createOptions": "{\"HostConfig\":{\"Binds\":[\"/etc/iotedge/storage:/snapshots\"],\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
                             "container.restartPolicy": "always",
                             "env.AZURE_CLIENT_ID": client_id,

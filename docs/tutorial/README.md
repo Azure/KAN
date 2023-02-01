@@ -18,7 +18,7 @@ To get a deeper understanding of KAN and find out how to proceed next, review th
 
 [KAN: Setup guide](setup-guide.md)
 
-[Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-Azure-Percept-Open-Source-Project.md)
+[Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](./Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
 
 [How-to guide: Create a complex AI skill with KAN Portal AI Skill builder](Create-a-complex-AI-skill.md)
 
@@ -36,5 +36,3 @@ To get a deeper understanding of KAN and find out how to proceed next, review th
 [Deploying a Redis server to a K8s cluster](../api/quick_start/deploy_redis_k8s.md)
   
 [Deploying a simulated temperature sensor solution to an Azure IoT Edge device](../api/quick_start/deploy_solution_to_azure_iot_edge.md)
-
-[Managing RTSP cameras connected to a gateway](/docs/api/quick_start/manage_rtsp_cameras.md)

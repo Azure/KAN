@@ -14,7 +14,7 @@ With KAN, you have your own no- to low-code portal experience as well as APIs th
 Follow [this document](docs/tutorial/setup-guide.md) to get started in minutes. Once done learn about our concepts and follow one of the tutorials [here](./docs/KAN-TOC.md), we recommend you to start with the tutorial to [create a solution with a pre-built model](./docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md).
 
 > [!NOTE]
-> The project is provided as a sample of how you might bring AI to the edge. Significant portions of these experiences may change without warning. The code uses some binaries (closed source) that are under non MIT license - add link. We advise you not to use the experince in production.
+> The project is provided as a sample of how you might bring AI to the edge. Significant portions of these experiences may change without warning. The code project uses some binaries (closed source) that are under non MIT license [viewable here](/KAN%20EULA/). We advise you not to use the experince in production.
 
 # Characteristics
 

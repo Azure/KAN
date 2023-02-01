@@ -31,7 +31,7 @@ const CustomVisionVModelDashboard = (props: Props) => {
   const [deleteModel, setDeleteModel] = useState<FormattedModel | null>(null);
   const [selectedDefinition, setSelectedDefinition] = useState<FormattedModel | null>(null);
 
-  const hasModelUsed = useSelector(selectHasUseAiSkillSelectorFactory(deleteModel?.symphony_id ?? ''));
+  const hasModelUsed = useSelector(selectHasUseAiSkillSelectorFactory(deleteModel?.kan_id ?? ''));
 
   const history = useHistory();
   const dispatch = useDispatch();

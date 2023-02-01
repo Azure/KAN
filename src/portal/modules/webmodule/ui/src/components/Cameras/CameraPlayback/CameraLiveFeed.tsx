@@ -30,13 +30,13 @@ const LiveFeed = (props: Props) => {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      await dispatch(getSingleCamera({ id: camera.id, symphony_id: camera.symphony_id }));
+      await dispatch(getSingleCamera({ id: camera.id, kan_id: camera.kan_id }));
       setLoading(false);
     })();
-  }, [dispatch, camera.id, camera.symphony_id]);
+  }, [dispatch, camera.id, camera.kan_id]);
 
   const onSingleCameraDelete = useCallback(async () => {
-    await dispatch(deleteCameras({ id: deletedCamera.id, symphony_id: deletedCamera.symphony_id }));
+    await dispatch(deleteCameras({ id: deletedCamera.id, kan_id: deletedCamera.kan_id }));
 
     setLocalSelectedCamera(null);
     setDeletedCamera(null);
@@ -71,12 +71,12 @@ const LiveFeed = (props: Props) => {
     <>
       <CommandBar items={commandBarItems} styles={{ root: { paddingLeft: '0', marginBottom: '10px' } }} />
       <div style={{ height: '80%' }}>
-        <RTSPVideo cameraId={camera.symphony_id} />
+        <RTSPVideo cameraId={camera.kan_id} />
       </div>
       {localSelectedCamera && (
         <CameraSidePanel
           camereId={camera.id}
-          symphonyId={camera.symphony_id}
+          kanId={camera.kan_id}
           onPanelClose={() => setLocalSelectedCamera(null)}
           onDeleteModalOpen={() => setDeletedCamera(localSelectedCamera)}
         />

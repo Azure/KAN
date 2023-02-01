@@ -29,7 +29,7 @@ const ConfigureSidePanel = (props: Props) => {
   const matchedAiSkillList = useSelector(matchDeviceAccelerationSelectorFactory(deivceId));
 
   const cascadeListOptions: IDropdownOption[] = matchedAiSkillList.map((cascade) => ({
-    key: cascade.symphony_id,
+    key: cascade.kan_id,
     text: cascade.name,
   }));
 
@@ -65,10 +65,10 @@ const ConfigureSidePanel = (props: Props) => {
           <Text styles={{ root: { color: theme.palette.neutralSecondaryAlt, paddingBottom: '5px' } }}>
             Cameras
           </Text>
-          {selectedCameras.map((symphonyId) => {
-            const selectedCamera = cameraList.find((camera) => camera.symphony_id === symphonyId);
+          {selectedCameras.map((kanId) => {
+            const selectedCamera = cameraList.find((camera) => camera.kan_id === kanId);
 
-            return <Text key={symphonyId}>{selectedCamera.name}</Text>;
+            return <Text key={kanId}>{selectedCamera.name}</Text>;
           })}
         </Stack>
         {/* <SidePanelDropdown

@@ -1,0 +1,46 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+FROM nvcr.io/nvidia/l4t-ml:r34.1.1-py3 
+
+RUN apt update
+RUN apt install ffmpeg libsm6 libxext6 -y
+RUN apt install wget zip unzip -y
+
+### Install requirements ###
+
+# Install onnxruntime
+#COPY kanai/onnxruntime_gpu-1.12.0-cp38-cp38-linux_aarch64.whl /app/
+RUN mkdir -p /app
+RUN wget https://nvidia.box.com/shared/static/v59xkrnvederwewo2f1jtv6yurl92xso.whl -O /app/onnxruntime_gpu-1.12.0-cp38-cp38-linux_aarch64.whl
+RUN pip install /app/onnxruntime_gpu-1.12.0-cp38-cp38-linux_aarch64.whl
+
+# common libs
+COPY common/requirements.txt /app/requirements-common.txt
+RUN pip install -r /app/requirements-common.txt
+
+# this module
+COPY kanai/requirements-jetson.txt /app/
+RUN pip install -r /app/requirements-jetson.txt
+
+
+
+### Copy Files ###
+
+# common libs
+COPY common/common /app/common
+
+# this module
+COPY kanai/app/*.py /app/
+#COPY kanai/app/models/*.py /app/models/
+COPY kanai/app/customvision /app/customvision
+COPY kanai/app/downloaders /app/downloaders
+COPY kanai/app/grpc_proto /app/grpc_proto
+
+RUN rm /app/openvino_classification.py 
+RUN rm /app/openvino_object_detection.py
+
+
+WORKDIR /app/
+
+CMD ["python3", "main.py"]

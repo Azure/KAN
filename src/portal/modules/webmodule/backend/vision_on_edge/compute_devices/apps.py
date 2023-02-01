@@ -23,7 +23,6 @@ class ComputeDeviceConfig(AppConfig):
         """ready."""
 
         if "runserver" in sys.argv:
-            from .symphony_client import SymphonyTargetClient
 
             logger.info("App ready ready while running server")
             # az login
@@ -38,8 +37,5 @@ class ComputeDeviceConfig(AppConfig):
                 #     ['az', 'login', '--service-principal', '-u', client_id, '-p', client_secret, '--tenant', tenant_id])
             else:
                 logger.warning("Cannot login azure, missing service principal")
-
-            # target_client = SymphonyTargetClient()
-            # target_client.load_symphony_objects()
 
             logger.info("App ready end while running server")

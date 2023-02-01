@@ -19,11 +19,11 @@ from .constants import gen_default_lines, gen_default_zones
 from .exceptions import CameraRtspInvalid
 from .utils import verify_rtsp
 from ..azure_app_insight.utils import get_app_insight_logger
-from.symphony_client import SymphonyDeviceClient
+from.kan_client import KanDeviceClient
 
 logger = logging.getLogger(__name__)
 
-device_client = SymphonyDeviceClient()
+device_client = KanDeviceClient()
 
 
 class Camera(models.Model):
@@ -44,7 +44,7 @@ class Camera(models.Model):
     username = models.CharField(max_length=200, blank=True, default="")
     password = models.CharField(max_length=200, blank=True, default="")
     allowed_devices = models.CharField(max_length=1000, blank=True, default="[]")
-    symphony_id = models.CharField(max_length=200, blank=True, default="")
+    kan_id = models.CharField(max_length=200, blank=True, default="")
     snapshot = models.CharField(max_length=1000, blank=True, default="", null=True)
     status = models.CharField(max_length=1000, blank=True, default="")
 
@@ -55,14 +55,14 @@ class Camera(models.Model):
             return []
 
     def get_snapshot_url(self):
-        return device_client.get_snapshot_url(self.symphony_id)
+        return device_client.get_snapshot_url(self.kan_id)
 
     def get_status(self):
         from ..compute_devices.models import ComputeDevice
         compute_device_table = {
-            i.symphony_id: i.name for i in ComputeDevice.objects.all()}
+            i.kan_id: i.name for i in ComputeDevice.objects.all()}
         status_table = {}
-        status = device_client.get_status(self.symphony_id)
+        status = device_client.get_status(self.kan_id)
         if status:
             for key in status.keys():
                 compute_device = key.split('.')[0]
@@ -79,7 +79,7 @@ class Camera(models.Model):
             return ""
 
     def get_properties(self):
-        prop = device_client.get_config_from_symphony(self.symphony_id)
+        prop = device_client.get_config_from_kan(self.kan_id)
         if prop:
             return yaml.dump(prop)
         else:
@@ -105,23 +105,23 @@ class Camera(models.Model):
         if not verify_rtsp(rtsp=rtsp):
             instance.is_live = False
 
-        if not instance.symphony_id:
-            instance.symphony_id = 'device-' + str(uuid.uuid4())
+        if not instance.kan_id:
+            instance.kan_id = 'device-' + str(uuid.uuid4())
 
-        az_logger = get_app_insight_logger()
-        properties = {
-            "custom_dimensions": {
-                "create_camera": json.dumps({
-                    "name": instance.name,
-                    "rtsp_url": instance.rtsp,
-                    "location": instance.location.name if instance.location else "",
-                })
-            }
-        }
-        az_logger.warning(
-            "create_camera",
-            extra=properties,
-        )
+        # az_logger = get_app_insight_logger()
+        # properties = {
+        #     "custom_dimensions": {
+        #         "create_camera": json.dumps({
+        #             "name": instance.name,
+        #             "rtsp_url": instance.rtsp,
+        #             "location": instance.location.name if instance.location else "",
+        #         })
+        #     }
+        # }
+        # az_logger.warning(
+        #     "create_camera",
+        #     extra=properties,
+        # )
 
     @staticmethod
     def post_save(**kwargs):
@@ -133,7 +133,7 @@ class Camera(models.Model):
 
         device_client.set_attr(
             {
-                "name": instance.symphony_id,
+                "name": instance.kan_id,
                 "rtsp": instance.rtsp,
                 "username": instance.username,
                 "password": instance.password,
@@ -149,12 +149,12 @@ class Camera(models.Model):
             device_client.deploy_config()
         else:
             # update
-            device_client.patch_config(name=instance.symphony_id)
+            device_client.patch_config(name=instance.kan_id)
 
     @staticmethod
     def post_delete(**kwargs):
         instance = kwargs["instance"]
-        device_client.remove_config(name=instance.symphony_id)
+        device_client.remove_config(name=instance.kan_id)
 
 
 pre_save.connect(Camera.pre_save, Camera, dispatch_uid="Camera_pre")

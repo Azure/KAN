@@ -24,7 +24,7 @@ class DeploymentSerializer(serializers.ModelSerializer):
 
 class UploadRelabelSerializer(serializers.Serializer):
     """UploadRelabelSerializer."""
-    project_symphony_id = serializers.CharField()
+    project_kan_id = serializers.CharField()
     part_name = serializers.CharField()
     labels = serializers.CharField()
     img = Base64ImageField(required=True)

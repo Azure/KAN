@@ -66,7 +66,7 @@ export const CameraDetails: React.FC = () => {
           // eslint-disable-next-line no-restricted-globals
           if (!confirm('Sure you want to delete?')) return;
 
-          await dispatch(deleteCameras({ id: cameraId, symphony_id: 'testing' }));
+          await dispatch(deleteCameras({ id: cameraId, kan_id: 'testing' }));
           history.push('/cameras');
         })();
       },

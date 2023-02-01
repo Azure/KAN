@@ -2,10 +2,12 @@
 // Licensed under the MIT License.
 
 import React, { useCallback } from 'react';
-import { Stack, DefaultButton, PrimaryButton } from '@fluentui/react';
-import { useDispatch } from 'react-redux';
+import { Stack, DefaultButton, PrimaryButton, MessageBar, MessageBarType } from '@fluentui/react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
+import { State as RootState } from 'RootStateType';
+import { selectAllComputeDevices } from '../../../store/computeDeviceSlice';
 import { PivotTabKey, CreateDeploymentFormData } from '../types';
 import { getStepKey } from '../../utils';
 import { createDeployment } from '../../../store/deploymentSlice';
@@ -13,6 +15,8 @@ import { CreateDeploymentPayload, DeploymentConfigureSkill } from '../../../stor
 import { getFilteredTagList } from '../../Common/TagTab';
 import { Url } from '../../../constant';
 import { getFooterClasses } from '../../Common/styles';
+import { selectAllCascades } from '../../../store/cascadeSlice';
+import { getK8sWarning } from '../utils';
 
 interface Props {
   currentStep: PivotTabKey;
@@ -37,9 +41,16 @@ const CreationFooter = (props: Props) => {
     onValidationRedirect,
   } = props;
 
+  const deviceList = useSelector((state: RootState) => selectAllComputeDevices(state));
+  const aiSkillList = useSelector((state: RootState) => selectAllCascades(state));
+
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = getFooterClasses();
+
+  const isK8sWarning =
+    deviceList.find((_device) => _device.kan_id === localFormData.device.key)?.is_k8s &&
+    getK8sWarning(localFormData.cameraList, aiSkillList);
 
   const onCreateClick = useCallback(async () => {
     if (onFormDateValidate(currentStep)) return;
@@ -79,41 +90,51 @@ const CreationFooter = (props: Props) => {
 
   return (
     <Stack
-      horizontal
-      tokens={{ childrenGap: 8 }}
       styles={{
-        root: classes.root,
+        root: isK8sWarning ? classes.warningFooter : classes.root,
       }}
     >
-      {['configure', 'tag'].includes(currentStep) && (
-        <PrimaryButton
-          text="Review + Deploy"
-          onClick={() => onValidationRedirect('preview', currentStep)}
-          disabled={
-            localFormData.cameraList.length === 0 ||
-            localFormData.cameraList.some((camera) => camera.skillList.length === 0)
-          }
-        />
+      {isK8sWarning && (
+        <MessageBar
+          messageBarType={MessageBarType.warning}
+          messageBarIconProps={{ iconName: 'IncidentTriangle' }}
+          styles={{ icon: { color: '#DB7500' } }}
+        >
+          Your AI Skill has some nodes that are not configurable on Kubernetes based Targets (IoThub Export)
+          so AI Skill configuration may not succeed.
+        </MessageBar>
       )}
-      {currentStep === 'preview' && (
-        <PrimaryButton text="Deploy" onClick={onCreateClick} disabled={isCreating} />
-      )}
-      {['configure', 'tag', 'preview'].includes(currentStep) && (
-        <DefaultButton
-          text="Previous"
-          styles={{ flexContainer: { flexDirection: 'row-reverse' } }}
-          iconProps={{ iconName: 'ChevronLeft' }}
-          onClick={() => onLinkClick(getStepKey(currentStep, stepList, -1))}
-        />
-      )}
-      {['basics', 'configure', 'tag'].includes(currentStep) && (
-        <DefaultButton
-          text="Next"
-          styles={{ flexContainer: { flexDirection: 'row-reverse' } }}
-          iconProps={{ iconName: 'ChevronRight' }}
-          onClick={() => onValidationRedirect(getStepKey(currentStep, stepList, 1), currentStep)}
-        />
-      )}
+      <Stack horizontal tokens={{ childrenGap: 8 }}>
+        {['configure', 'tag'].includes(currentStep) && (
+          <PrimaryButton
+            text="Review + Deploy"
+            onClick={() => onValidationRedirect('preview', currentStep)}
+            disabled={
+              localFormData.cameraList.length === 0 ||
+              localFormData.cameraList.some((camera) => camera.skillList.length === 0)
+            }
+          />
+        )}
+        {currentStep === 'preview' && (
+          <PrimaryButton text="Deploy" onClick={onCreateClick} disabled={isCreating} />
+        )}
+        {['configure', 'tag', 'preview'].includes(currentStep) && (
+          <DefaultButton
+            text="Previous"
+            styles={{ flexContainer: { flexDirection: 'row-reverse' } }}
+            iconProps={{ iconName: 'ChevronLeft' }}
+            onClick={() => onLinkClick(getStepKey(currentStep, stepList, -1))}
+          />
+        )}
+        {['basics', 'configure', 'tag'].includes(currentStep) && (
+          <DefaultButton
+            text="Next"
+            styles={{ flexContainer: { flexDirection: 'row-reverse' } }}
+            iconProps={{ iconName: 'ChevronRight' }}
+            onClick={() => onValidationRedirect(getStepKey(currentStep, stepList, 1), currentStep)}
+          />
+        )}
+      </Stack>
     </Stack>
   );
 };

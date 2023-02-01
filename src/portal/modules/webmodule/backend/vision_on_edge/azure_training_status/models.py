@@ -56,7 +56,7 @@ class TrainingStatus(models.Model):
         """pre_save."""
         instance = kwargs["instance"]
         if instance.status == "Success" or instance.status == "Failed":
-            az_logger = get_app_insight_logger()
+            # az_logger = get_app_insight_logger()
             properties = {
                 "custom_dimensions": {
                     "training_status": json.dumps({
@@ -66,10 +66,11 @@ class TrainingStatus(models.Model):
                     })
                 }
             }
-            az_logger.warning(
-                "training_status",
-                extra=properties,
-            )
+            # az_logger.warning(
+            #     "training_status",
+            #     extra=properties,
+            # )
 
 
-pre_save.connect(TrainingStatus.pre_save, TrainingStatus, dispatch_uid="Training_status_pre")
+pre_save.connect(TrainingStatus.pre_save, TrainingStatus,
+                 dispatch_uid="Training_status_pre")

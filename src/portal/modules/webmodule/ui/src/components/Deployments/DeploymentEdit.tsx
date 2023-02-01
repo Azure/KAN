@@ -49,9 +49,9 @@ const DeploymentEdit = () => {
   useEffect(() => {
     if (!deployment || !cameraList.length || !deviceList.length || !skillList.length) return;
 
-    const matchedDevice = deviceList.find((device) => device.symphony_id === deployment.compute_device);
+    const matchedDevice = deviceList.find((device) => device.kan_id === deployment.compute_device);
     const cameraMap = cameraList.reduce((accMap, camera) => {
-      if (!accMap[camera.id]) return { ...accMap, [camera.symphony_id]: camera.name };
+      if (!accMap[camera.id]) return { ...accMap, [camera.kan_id]: camera.name };
       return { ...accMap };
     }, {});
     const skillMap = skillList.reduce((accMap, skill) => {
@@ -61,7 +61,7 @@ const DeploymentEdit = () => {
 
     setLocalFormData({
       name: deployment.name,
-      device: { key: matchedDevice.symphony_id, text: matchedDevice.name },
+      device: { key: matchedDevice.kan_id, text: matchedDevice.name },
       cameraList: deployment.configure.map((configureCamera) => {
         return {
           camera: configureCamera.camera,
@@ -253,7 +253,7 @@ const DeploymentEdit = () => {
       </Stack>
       <EditFooter
         deploymentId={deployment.id}
-        symphony_id={deployment.symphony_id}
+        kan_id={deployment.kan_id}
         currentStep={localPivotKey}
         onLinkClick={onLinkClick}
         localFormData={localFormData}

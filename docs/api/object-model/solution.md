@@ -1,5 +1,5 @@
 # Solution
-```solution.solution.symphony``` describes an intelligent edge application, which consists of a list of components (like containers).
+```solution.solution.kan``` describes an intelligent edge application, which consists of a list of components (like containers).
 
 ## Schema
 | Field | Type | Description |

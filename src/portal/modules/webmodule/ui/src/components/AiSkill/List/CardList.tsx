@@ -24,12 +24,10 @@ const List = (props: Props) => {
 
   const [deletedSkill, setDeletedSkill] = useState<AiSkill | null>(null);
   const [selectedDefinition, setSelectedDefinition] = useState<AiSkill | null>(null);
-  const hasAiSkillDeployment = useSelector(
-    selectHasUseAiSkillSelectorFactory(deletedSkill?.symphony_id ?? ''),
-  );
+  const hasAiSkillDeployment = useSelector(selectHasUseAiSkillSelectorFactory(deletedSkill?.kan_id ?? ''));
 
   const onSingleCascadeDelete = useCallback(async () => {
-    await dispatch(deleteAiSkill({ id: deletedSkill.id, symphony_id: deletedSkill.symphony_id }));
+    await dispatch(deleteAiSkill({ id: deletedSkill.id, kan_id: deletedSkill.kan_id }));
     setDeletedSkill(null);
   }, [dispatch, deletedSkill]);
 
@@ -62,7 +60,7 @@ const List = (props: Props) => {
       {selectedDefinition && (
         <DefinitionPanel
           onPanelClose={() => setSelectedDefinition(null)}
-          selectedTargetId={selectedDefinition.symphony_id}
+          selectedTargetId={selectedDefinition.kan_id}
           pageType="skill"
           onDeleteModalOpen={() => setDeletedSkill(selectedDefinition)}
         />

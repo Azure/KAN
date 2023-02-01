@@ -29,7 +29,7 @@ class Object(BaseModel):
 #class UploadInfo(BaseModel):
 #    objects: List[Object]
 
-def upload_relabel_image(symphony_model_name, img, objs, max_images):
+def upload_relabel_image(kan_model_name, img, objs, max_images):
 
     #FIXME
     if len(objs) == 0: return
@@ -52,7 +52,7 @@ def upload_relabel_image(symphony_model_name, img, objs, max_images):
         'labels': json.dumps([label]),
         'part_name': part_name,
         'img': base64.b64encode(cv2.imencode('.jpg', img)[1].tobytes()), #FIXME
-        'project_symphony_id': symphony_model_name,
+        'project_kan_id': kan_model_name,
         'max_images': max_images
     }
 

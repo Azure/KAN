@@ -2,168 +2,141 @@
 
 ## Prerequisites
 
-You need the following items before you start working with the self-hosting setup experience:
+KAN runs with or without Azure. When you configure KAN with Azure, you get additional features like:
+* Sending inference results to IoT Hub
+* Automatic uploading video snippets to Azure Storage account
+* Leveraging Azure Custom Vision models
+On the other hand, you can get started with KAN without an Azure account.
 
-- An active **Azure subscription** with **Owner** role access. 
-- A **resource group** created in a geographical location where [Azure Custom Vision](https://azure.microsoft.com/en-us/global-infrastructure/services/?products=cognitive-services&regions=all) is available.
-- A **Kubernetes cluster** accessible using [Azure CLI](https://github.com/Azure/cli). 
+### Run without Azure
+
+* A **Kubernetes cluster**. 
 
   If you don't have an existing Kubernetes cluster, you can easily create one using the Azure Kubernetes Service (AKS). For more information, visit [Quickstart: Deploy an Azure Kubernetes Service (AKS) cluster using the Azure Portal](https://docs.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli). Make sure to choose Standard DS3 v2 for the node size.
-    
-- If you plan to use an **IoT Edge device**, you need an **IoT Hub account**. 
 
-  To onboard an IoT Edge device to Azure IoT Hub,  visit [Quickstart: Deploy your first IoT Edge module to a virtual Linux device](CreateIoTEdgeDevice.md) for information on how to do so. 
+* A **Bash Shell**, such as WSL, Azure Cloud CLI, or a Terminal on Mac.
+* **Helm** v3.8 or higher.
 
-- Have **Storage account contributor** role assignment under your subscription. 
+### Run with Azure
 
-  If you don't have the required role assignment, add a new role assignment to your subscription for **Storage account contributor** by following these steps: 
-  
-    1. Select your subscription. 
-    2. Select **Access control**, and then select **Add role assignment** (see screenshot).
-      
-    ![Screenshot of Access control AIM](./media/access-control-aim.png)
+To run with Azure, in addition to above items, you’ll also need:
 
-    3. Search for **Storage account contributor** (not the classic one).
-    4. Then select **Next**, select **Add member**, select your account, and then select **Review and assign**.
+* An active **Azure subscription** with **Owner** role access. 
 
-## Setup process
+KAN installer script will guide you through the steps of creating related Azure resources (see more details below).
 
-To begin the setup process:
+## Setup process 
 
-1. Go to your [Azure portal](https://portal.azure.com/).
-2. Open Azure Cloud CLI by selecting the **CLI** button in the top right corner of the portal.
+1. Open your shell terminal.
+2. Download and launch the installer script:
+   ```bash
+   wget -q https://raw.githubusercontent.com/Azure/KAN/main/Installer/kan-installer.sh -O - | /bin/bash
+   ```
+3. The first question the script asks is if you want to run KAN with or without Azure. Enter ```y``` to deploy KAN with Azure, otherwise enter ```n```.
+   ```bash
+   azure user?(y/n):
+   ```
+   > **NOTE**: Later, you can run the installer script again to choose a different route.
 
-    ![Screenshot of Azure Services portal](https://user-images.githubusercontent.com/10191339/186480918-c366a912-c036-4ee7-ada8-d7ca4ad4d054.png)
+## Setup process - with Azure
+4. Next, you can choose to configure KAN on an existing AKS cluster, or to use your current Kubernetes context, which can point to any local or remote Kubernetes clusters.
+   ```bash
+   Would you like to use a exists aks, or use current kubeconfig?
+   1) use an existing one
+   2) use current kubeconfig
+   Your answer:
+   ```
+   If your chose ```1```, the script lists out all your AKS clusters, and you can select the cluster by entering the cluster index. If you chose ```2```, the script continues with your current Kubernetes context.
 
-3. Run the following two commands; one at a time, and in the order shown here. 
+5. Next, you have options to create a new Azure Storage Account, use an existing one, or skip the step:
+   ```bash
+   Would you like to create a new storage account, or use an existing one?
+   1) create a new one
+   2) use an existing one
+   3) skip
+   4) back to previous step
+   Your answer:
+   ```
+   > **NOTE**: You won't be able to view camera snapshots or uploaded video clips without an Azure Storage Account.
 
-   In your Azure Cloud CLI environment (note run in home, not in a subdirectory), update the Helm version of your environment as there is an issue with the current version of Helm installed as part of Azure Cloud CLI environment:
+   If you chose either ```1``` or ```2```, you then need to choose whether you want to create new storage container, or use an existing one.
+   ```bash
+   Would you like to create a new blob container, or use an existing one?
+   In order to perform this operation please make sure you have a Storage contributor role on your subscription
+   1) create a new one
+   2) use an existing one
+   3) back to previous step
+   Your answer:
+   ```
+6. Next, you can choose which Azure Cognitive Services account to use, or to create a new one:
+   ```bash
+   Would you like to create a new cognitive services, or use an existing one?
+   1) create a new one
+   2) use an existing one
+   3) skip
+   4) back to previous step
+   ```
+7. The next step is to choose an Azure Service Principal to use. We recommend creating a new one with the script in your initial setup, and reuse the same principal in subsequent script runs. Also, if you work with an Azure AD tenant with many service principals, we recommend choosing ```3``` instead of ```2``` as enumerating all service principals may take a long time.
+   ```bash
+   Would you like to create a new service principal, or use an existing one?
+   1) create a new one
+   2) use an existing one
+   3) use an existing one by entering name
+   4) skip
+   5) back to previous step
+   ```
+8. Once you've made all selections, answer ```y``` to confirm. And the script will setup all required Azure resources for you.
+   ```bash
+   your selections:
+   aks:                            Use current kubeconfig
+   service_principal:              kan-sp
+   storage account:                byom/byom
+   storage account location:
+   blob container:                 clips
+   cognitive services:             byom/vision
+   cognitive services location:
+   Are you sure (y or n)?
+   ```
+9. After all resources are configured and KAN installed, the script displays your portal URL. Open the URL with a browser and you are ready to go!
+## Setup process - without Azure
 
-```
-    wget -O fix-helm-issue.sh "https://possfiles.blob.core.windows.net/setup/Private-Alpha/fix-helm-issue.sh"
-    
-    source fix-helm-issue.sh
-```
-
-4. Run the following command to download the setup installer. Substitute <download-url> with the required download URL corresponding to a specific version of installer and KAN release using the table below:
-
-```
-    wget -O kan-installer.sh "download-url"
-```
-
-**Installation Options**
-
-|Setup Installer Version	|KAN Version	|Download URL	|Supported Accelerators for Edge Workloads	|Released Date|
-|---------------------------|---------------|---------------|-------------------------------------------|-------------|
-|0.38.2	|0.38.2 |[https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.2-Installer0.38.2.sh](https://github.com/Azure/PerceptOSS/blob/main/Installer/poss-test-installer.sh)	|Nvidia dGPU (for example, T4, A2, etc), Nvidia Jetson (for example, Orin), x64 CPU	|09/02/2022 |
-|0.38.1	|0.38.0 |[https://possfiles.blob.core.windows.net/setup/Private-Alpha/POSS-V0.38.2-Installer0.38.2.sh](https://github.com/Azure/PerceptOSS/blob/main/Installer/poss-test-installer.sh)	|Nvidia dGPU (e.g. T4, A2, etc), Nvidia Jetson (for example, Orin), x64 CPU	|08/30/2022 |
- 
-    
-> [!NOTE]
-> Before starting the installation process using the above command, make sure Azure CLI's `az` context is set to your Azure subscription: 
->    
->    `az account show`
->
->If the subscription context is not correct, you can use the following command to set the right Azure subscription context: 
->    
->    `az account set -s <your subscription name or id>`
-
-5. Start the installation process by running the following command:
-
-    `bash kan-installer.sh`
-
-6. When you're asked to select whether you want to install KAN onto an AKS cluster or your existing K8s cluster which is included in your kubeconfig context. 
-    
-    1. If you want to install on AKS select **1**, otherwise select **2**. 
-    
-       For this guide, select **1** to use an AKS cluster. 
-    
-    2. After you select **1**, a list of AKS clusters appears under your subscription. 
-    
-       Select the AKS cluster that you want to install KAN on.
-
-    ![Screenshot of AKS cluster](https://user-images.githubusercontent.com/10191339/186487409-c325c76c-0771-409c-9c4a-4babb666d9de.png)
-    
-7. Next you're asked whether you want to create a new storage account or use an already existing one. 
-  
-    - To create a new one, make a selection from the list of resource groups available under your subscription and then enter a name for your storage account. 
-    
-    - To choose an already existing storage accounts, make a selection from the list of storage accounts under your subscription.
-
-    ![Screenshot of choose a storage account](https://user-images.githubusercontent.com/10191339/186487829-cda5b6db-85c2-49af-9c3f-0f97cef4b019.png)
-
-8. Next, you're asked whether you want to create a new blob container within your storage account or use an already existing one. 
-    
-    - To create a new one, enter a name for your blob container within your storage account. 
-    
-    - To choose from already existing blob container, make a selection from the list of storage accounts under your storage account.
-
-    ![Screenshot of choose a blob container](https://user-images.githubusercontent.com/10191339/186488033-4bd85dfc-550e-4320-b242-30013828aefe.png)
-
-9. Next you're asked whether you want to create a new custom vision account or use an already existing one. 
-    
-    - To create a new one, make a selection from the displayed list of resource groups available under your subscription and then enter a name for your custom vision account. 
-    
-    - If you want to select from already existing custom vision accounts, make a selection from the displayed list of custom vision accounts under your subscription.
-
-    ![Screenshot of create a cognitive service](https://user-images.githubusercontent.com/10191339/186488323-da75715d-9128-4bff-821e-d88547abc77c.png)
-
-10. Next, you're asked whether you want to create a service principal or use an already existing one. 
-    
-    - To create a new one, enter a name for your service principal. 
-    
-    - To choose an already existing one, make a selection from the list of existing service principals or provide the name of your existing service principal directly. (This option is recommended as there can be too many service principals to show with the first option).
-
-     ![Screenshot of create service principal](https://user-images.githubusercontent.com/10191339/186488469-ff1ae26e-2674-482e-a2f8-0717860fdad2.png)
-
-11. Lastly, the installer asks you to confirm your choices. Confirm your selections by answering **y** to the question.
-
-    ![Screenshot of confirm choices](https://user-images.githubusercontent.com/10191339/186488549-4c74bbc5-4f49-4bb7-a103-18e6452adfca.png)
-
-
-The installation may take a few minutes. 
-    
-> [!NOTE]
-> If you face any issues towards the end of the installation to download our Helm charts to install either **kan** or **kanportal**, uninstall the experience using the commands below and retry running the installer script in a few minutes. 
->
-> Azure is currently facing some issues with the Azure Container Registry not handling all download requests successfully due to high load. Trying again in a few minutes may resolve the issue.  
-    
-12. When the installation has completed, you can find the IP address of the portal to access it by running the following command in your Azure Cloud CLI command line: 
-
-    ``kubectl get svc -A``
-
-    Use the LoadBalancer IP address as shown below:
-
-    ![Screenshot of LoadBalancer IP address](https://user-images.githubusercontent.com/10191339/186488705-03d3af9b-4536-4575-afe8-978b8a692a73.png)
+4. Scripts asks you to confirm to install KAN to the Kubernetes cluster configured as your current cluster. Answer `y` to continue.
+   ```bash
+   kan will install on current kubeconfig: (y/n)
+   ```
+5. Answer `y` to confirm installation:
+   ```bash
+    your selections:
+    aks:                            Use current kubeconfig
+    service_principal:              skip
+    storage account:                skip
+    storage account location:       skip
+    blob container:                 skip
+    cognitive services:             skip
+    cognitive services location:    skip
+    Are you sure (y or n)?
+   ```
+6. After all resources are configured and KAN installed, the script displays your portal URL. Open the URL with a browser and you are ready to go!
 
 ## Limit access to the KAN portal
-    
-Once you have the LoadBalancer IP address as shown above:
-1. Open the resource group associated with your AKS cluster (not the AKS cluster itself).
-2. In a separate tab, open the network security (NSG) resource.
-3. For each line that references the LoadBalancer IP address:
+Now that you have successfully setup KAN experience onto your Kubernetes environment, we recommend first securing your portal. 
   
-   1. Select the inbound security rule.
-   2. Change the source IP address range to the network you want to allow access to the portal. For example, your home or corporate IP address space in CIDR notation.
-  
+-   [Security: Limiting User Access to your KAN Portal](/docs/tutorial/Security-Limiting-User-Access-to-your-KAN-Portal.md)
+
 
 ## Uninstall KAN
-To uninstall KAN, in your Azure Cloud CLI instance, run the following two commands in the order shown below:
+You can uninstall KAN using Helm:
 
-    1. `helm uninstall kanportal`
-    2. `helm uninstall kan`
+```bash
+helm uninstall kanportal
+helm uninstall kan
+```
  
 ## Reporting Issues and Bugs
     
 Report any issues or bugs you face using the [repository's issues page](https://github.com/Azure/KAN/issues).
 
 ## Next steps
-
-Now that you have successfully setup KAN experience onto your Kubernetes environment, we recommend first securing your portal. 
-  
--   [Security: Limiting User Access to your KAN Portal](/docs/tutorial/Security-Limiting-User-Access-to-your-KAN-Portal.md)
-  
-After doing so, continue with the following resources:
 
 -   [Tutorial: Create an Edge AI solution with KAN portal using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
 -   [Introduction to KAN: Core concepts](/docs/tutorial/concepts-kan.md)

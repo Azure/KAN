@@ -6,6 +6,7 @@ KAN runs with or without Azure. When you configure KAN with Azure, you get addit
 * Sending inference results to IoT Hub
 * Automatic uploading video snippets to Azure Storage account
 * Leveraging Azure Custom Vision models
+
 On the other hand, you can get started with KAN without an Azure account.
 
 ### Run without Azure

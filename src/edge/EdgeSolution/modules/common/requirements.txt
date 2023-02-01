@@ -1,0 +1,4 @@
+pydantic
+kubernetes
+httpx
+azure-storage-blob

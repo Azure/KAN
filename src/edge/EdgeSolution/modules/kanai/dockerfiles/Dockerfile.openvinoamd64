@@ -1,0 +1,61 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+#FROM python:3.8-slim-buster
+FROM waitingkuo/onnxruntime_ep_ubuntu18:latest
+
+RUN apt update
+RUN apt install ffmpeg libsm6 libxext6 -y
+RUN apt install wget unzip -y
+
+RUN apt install git -y
+
+### Install protobuf ###
+
+RUN git clone https://github.com/protocolbuffers/protobuf.git
+RUN cd protobuf && \
+    git checkout v3.16.0 && \
+    git submodule update --init --recursive && \
+    mkdir build_source && cd build_source && \
+    cmake ../cmake -Dprotobuf_BUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_POSITION_INDEPENDENT_CODE=ON -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release && \
+    make -j$(nproc) && \
+    make install
+
+### install onnx
+
+RUN git clone --recursive https://github.com/onnx/onnx.git
+RUN cd onnx && \
+    CMAKE_ARGS=-DONNX_USE_LITE_PROTO=ON pip install -e .
+
+### Install requirements ###
+
+# common libs
+COPY common/requirements.txt /app/requirements-common.txt
+RUN pip install -r /app/requirements-common.txt
+
+# this module
+COPY kanai/requirements-openvino.txt /app/
+RUN pip install -r /app/requirements-openvino.txt
+# move onnxruntimethis to acclerator specific
+
+
+### Copy Files ###
+
+# common libs
+COPY common/common /app/common
+
+# this module
+COPY kanai/app/*.py /app/
+#COPY kanai/app/models/*.py /app/models/
+COPY kanai/app/customvision /app/customvision
+COPY kanai/app/downloaders /app/downloaders
+COPY kanai/app/grpc_proto /app/grpc_proto
+
+
+
+WORKDIR /app/
+
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+CMD ["python3", "main.py"]

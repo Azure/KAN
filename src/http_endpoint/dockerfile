@@ -1,0 +1,24 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+FROM python:3.8-slim-buster
+
+RUN apt update
+RUN apt install ffmpeg libsm6 libxext6 -y
+RUN apt install wget zip unzip -y
+
+RUN pip3 install --upgrade pip
+RUN pip3 install -U flask
+
+### Copy Files ###
+
+
+# this module
+COPY . /app/http_endpoint
+
+
+
+WORKDIR /app/http_endpoint
+
+
+CMD ["flask", "run", "-h", "0.0.0.0"]

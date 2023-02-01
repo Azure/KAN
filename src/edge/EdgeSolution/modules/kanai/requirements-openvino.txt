@@ -1,0 +1,13 @@
+FastAPI
+python-multipart
+opencv-python
+uvicorn
+numpy
+pillow
+pydantic
+networkx
+requests
+httpx
+azure-iot-device
+pytz
+grpcio

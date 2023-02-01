@@ -18,6 +18,10 @@ Follow [this document](docs/tutorial/setup-guide.md) to get started in minutes. 
 
 # Characteristics
 
+<p align="center">
+<a href="https://www.youtube.com/watch?v=YyhlNqHqesw"><img src="docs/images/KAN portal guide GH thumbnail.png" width="500"></a>
+</p>
+
 - **An integrated developer experience.** 
     
     You can easily build camera-based Edge AI apps using first- and third-party ML models. In one seamless flow, you can leverage pre-built models from our partner’s Model Zoo and create your own ML models with [Azure Custom Vision](https://azure.microsoft.com/en-us/services/cognitive-services/custom-vision-service/#overview).

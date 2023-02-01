@@ -14,7 +14,9 @@ This article cover the following six key concepts to provide you with a deep und
     2.  Targets
     3.  Solution instances
 
-![Screenshot of KAN Portal](./media/13fc6b9fb936ac86d478fecb8e519eca.png)
+<p align="left">
+<a href="https://www.youtube.com/watch?v=YyhlNqHqesw"><img src="../images/KAN portal guide GH thumbnail.png" width="500"></a>
+</p>
 
 After reviewing this article, visit the [Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md) for step-by-step guidance on how to create an end-to-end Edge artificial intelligence (AI) solution.
 

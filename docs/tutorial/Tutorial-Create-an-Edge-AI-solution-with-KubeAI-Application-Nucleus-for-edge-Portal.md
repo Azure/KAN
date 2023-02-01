@@ -18,6 +18,10 @@ The five major steps we will cover in this tutorial are:
 
     In this step you also identify parts from your camera streams.
 
+<p align="left">
+<a href="https://www.youtube.com/watch?v=YyhlNqHqesw"><img src="../images/KAN portal guide GH thumbnail.png" width="500"></a>
+</p>
+
 ## Prerequisites
 
 -   An Azure subscription. If you don't have one, create it before you begin. Microsoft allows you to create a [free account](https://azure.microsoft.com/en-us/free/cloud-services/search/?OCID=AIDcmm5edswduu_SEM_1fae5b7734e9177481a238088f013eeb:G:s&ef_id=1fae5b7734e9177481a238088f013eeb:G:s&msclkid=1fae5b7734e9177481a238088f013eeb)

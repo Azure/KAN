@@ -28,10 +28,10 @@ KAN installer script will guide you through the steps of creating related Azure 
 
 ## Setup process 
 
-1. Open your shell terminal.
+1. Open your shell terminal ([Azure Cloud Shell](https://learn.microsoft.com/en-us/azure/cloud-shell/overview) recommended).
 2. Download and launch the installer script:
    ```bash
-   wget -q https://raw.githubusercontent.com/Azure/KAN/main/Installer/kan-installer.sh -O - | /bin/bash
+   bash <(wget -qO- https://raw.githubusercontent.com/Azure/KAN/main/Installer/kan-installer.sh)
    ```
 3. The first question the script asks is if you want to run KAN with or without Azure. Enter ```y``` to deploy KAN with Azure, otherwise enter ```n```.
    ```bash

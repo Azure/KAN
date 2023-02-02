@@ -72,8 +72,6 @@ KAN supports internet protocol (IP) cameras that use RTSP.
 
 1. To add a camera and configure its properties, on the left navigation, select **Cameras,** and then select **Add Camera**.
 
-    ![Screenshot of Cameras page]](media/ea5b909ca6cf9ac4373f90d24e468544.png)
-
     The **Cameras** page appears.
 
     ![Screenshot of Basics tab](media/dd0478599669ebe5314c179e1bd51958.png)
@@ -91,13 +89,13 @@ KAN supports internet protocol (IP) cameras that use RTSP.
     -   copy the external_Ip for the rtspsim LoadBalancer and paste it instead of the "Ingress_IP" in any of the rtsp urls below:
     ![image](https://user-images.githubusercontent.com/8229075/214940346-3125550b-1843-4cc6-85f2-5f3ce6bec3c6.png)
     - Then you will be able to use the following simulated videos:
-    rtsp://<Ingress_IP>:554/media/cafeteria1.mkv
-    rtsp://<Ingress_IP>:554/media/camera-300s.mkv
-    rtsp://<Ingress_IP>:554/media/co-final.mkv
-    rtsp://<Ingress_IP>:554/media/homes_00425.mkv
-    rtsp://<Ingress_IP>:554/media/lots_015.mkv
-    rtsp://<Ingress_IP>:554/media/peoplewaiting.mkv
-    rtsp://<Ingress_IP>:554/media/retailshop-15fps.mkv
+    - rtsp://<Ingress_IP>:554/media/cafeteria1.mkv
+    - rtsp://<Ingress_IP>:554/media/camera-300s.mkv
+    - rtsp://<Ingress_IP>:554/media/co-final.mkv
+    - rtsp://<Ingress_IP>:554/media/homes_00425.mkv
+    - rtsp://<Ingress_IP>:554/media/lots_015.mkv
+    - rtsp://<Ingress_IP>:554/media/peoplewaiting.mkv
+    - rtsp://<Ingress_IP>:554/media/retailshop-15fps.mkv
     -  Alternatively, you can the use the following publicly avaialble rtsp url -  **rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4**
 
     -   The **Compute Device** field associates a camera feed with devices will have access to that feed. Since this is a “many-to-many” relationship, one camera feed may be processed by several compute devices and one compute device may process several camera feeds.

@@ -84,7 +84,7 @@ KAN supports internet protocol (IP) cameras that use RTSP.
     -   kubectl create deployment rtspsim --image=mcr.microsoft.com/azureedgedevices/p4drtspsim:d923853-amd64
     -   kubectl get deployments
     -   kubectl get pods
-    -   kubectl expose deployment rtspsim --type=LoadBalancer --port=554kubectl get services -A -w
+    -   kubectl expose deployment rtspsim --type=LoadBalancer --port=554
     -   kubectl get services -A -w
     -   copy the external_Ip for the rtspsim LoadBalancer and paste it instead of the "Ingress_IP" in any of the rtsp urls below:
     ![image](https://user-images.githubusercontent.com/8229075/214940346-3125550b-1843-4cc6-85f2-5f3ce6bec3c6.png)

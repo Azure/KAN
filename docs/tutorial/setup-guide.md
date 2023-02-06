@@ -28,8 +28,9 @@ KAN installer script will guide you through the steps of creating related Azure 
 
 ## Setup process 
 
-1. Open your shell terminal ([Azure Cloud Shell](https://learn.microsoft.com/en-us/azure/cloud-shell/overview) recommended).
-2. Download and launch the installer script:
+1. Open your shell terminal ([Azure Cloud Shell](https://learn.microsoft.com/en-us/azure/cloud-shell/overview) recommended). Ensure that you switch to Bash option in Azure Cloud Shell
+![image](https://user-images.githubusercontent.com/4857092/216773245-e7a0b7d1-16af-4ad1-a10a-da6a5a8cdc97.png)
+3. Download and launch the installer script:
    ```bash
    bash <(wget -qO- https://raw.githubusercontent.com/Azure/KAN/main/Installer/kan-installer.sh)
    ```

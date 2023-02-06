@@ -2,15 +2,15 @@
 kan_version=0.41.40
 kanportal_version=0.41.40-amd64
 current_step=0
-while [ $current_step -lt 6 ]; do
+while [ $current_step -lt 7 ]; do
     case $current_step in
     0 ) # azure user
         while true; do
             read -p "azure user?(y/n): " -r; echo
             case $REPLY in
-            [Yy]* ) 
+            [Yy]* )
                 az account show -o none
-                if [ $? != "0" ];  then
+                if [ $? != "0" ]; then
                     echo "not login"
                     exit 1
                 else
@@ -18,19 +18,19 @@ while [ $current_step -lt 6 ]; do
                     break
                 fi
             ;;
-            [Nn]* )                
+            [Nn]* )
                 read -p "kan will install on current kubeconfig: (y/n) " -r; echo
                 case $REPLY in
                 [Yy]* )
                     create_aks_selection=2
                     create_storage_account_selection=3
-                    create_blob_container_selection=4            
+                    create_blob_container_selection=4
                     create_custom_vision_selection=3
                     create_sp_selection=4
                     current_step=5
                     break
                 ;;
-                *) 
+                *)
                     echo "stop installing"
                     exit 1
                 esac
@@ -38,40 +38,40 @@ while [ $current_step -lt 6 ]; do
         done
     ;;
     1 ) # --- aks ---
-        echo "Would you like to use a exists aks, or use current kubeconfig?"        
+        echo "Would you like to use a exists aks, or use current kubeconfig?"
         echo "1) use an existing one"
         echo "2) use current kubeconfig"
         while true; do
             read -p "Your answer: " -r; echo
             create_aks_selection=$REPLY
             case $create_aks_selection in
-            1 )         
+            1 )
                 aks=$(az resource list --resource-type='Microsoft.ContainerService/ManagedClusters' --query='[].{name: name, rg: resourceGroup, id: id }')
-                echo $aks  | jq -r '.[] | "\(.rg)/\(.name)"' | awk '{$1=++b")" FS $1}1'
+                echo $aks | jq -r '.[] | "\(.rg)/\(.name)"' | awk '{$1=++b")" FS $1}1'
                 while true; do
                     read -p "Select a azure kubernetes: " -r; echo
                     case $REPLY in
-                    [1-9]* ) 
+                    [1-9]* )
                         selected_aks_index=`expr $REPLY - 1`
                         selected_aks=$(echo $aks | jq ".[$selected_aks_index]")
                         selected_aks_name=$(echo $selected_aks | jq -r ".name")
                         selected_aks_rg=$(echo $selected_aks | jq -r ".rg")
-                    
+ 
                         break
                     ;;
                     *) echo "Please enter a number"
-                    esac     
+                    esac
                 done
                 break
                 ;;
-            2 ) 
+            2 )
                 break
                 ;;
             *) echo "Please enter a number"
-            esac     
+            esac
         done
         current_step=`expr $current_step + 1`
-                   
+ 
     ;;
     2 ) # --- storage account ---
         current_storage_step=1
@@ -87,21 +87,21 @@ while [ $current_step -lt 6 ]; do
                         read -p "Your answer: " -r; echo
                         create_storage_account_selection=$REPLY
                         case $create_storage_account_selection in
-                        1 ) 
+                        1 )
                             while true; do
                                 rgs=$(az group list --query='[].{name: name }' | jq 'sort_by(.name)')
                                 echo $rgs | jq -r ".[].name" | awk '{$1=++b")" FS $1}1'
                                 while true; do
                                     read -p "select a resource group: " -r; echo
                                     case $REPLY in
-                                    [0-9]* ) 
+                                    [0-9]* )
                                         selected_rg_index=`expr $REPLY - 1`
                                         selected_storage_account_rg=$(echo $rgs | jq -r ".[$selected_rg_index].name")
                                         break
                                         ;;
                                     *) echo "Please enter a number"
                                     esac
-                                done           
+                                done
 
                                 while true; do
                                     read -p "storage account name: " -r; echo
@@ -109,7 +109,7 @@ while [ $current_step -lt 6 ]; do
                                     result=$(az storage account check-name --name $selected_storage_account_name)
                                     if [ $(echo $result | jq -r .nameAvailable) == "true" ]; then
                                         break
-                                    else 
+                                    else
                                         echo $result | jq -r .message
                                     fi
                                 done
@@ -117,21 +117,21 @@ while [ $current_step -lt 6 ]; do
                                 read -p "enter a location [$(az group show -g $selected_storage_account_rg --query="location" -o tsv)]:" -r; echo
                                 selected_storage_account_location=${REPLY:-$(az group show -g $selected_storage_account_rg --query="location" -o tsv)}
                                 echo $selected_storage_account_location
-                                break        
+                                break
                             done
                             current_step=3
                             current_storage_step=3
                             create_blob_container_selection=1
-                            selected_blob_container_name="kan"
+                            selected_blob_container_name="perceptoos"
                             break
                             ;;
-                        2 ) 
+                        2 )
                             storage_account=$(az storage account list --query='[].{name: name, rg: resourceGroup, id: id }' | jq 'sort_by(.id)')
-                            echo $storage_account  | jq -r '.[] | "\(.rg)/\(.name)"' | awk '{$1=++b")" FS $1}1'
+                            echo $storage_account | jq -r '.[] | "\(.rg)/\(.name)"' | awk '{$1=++b")" FS $1}1'
                             while true; do
                                 read -p "Select a storage account: " -r; echo
                                 case $REPLY in
-                                [1-9]* ) 
+                                [1-9]* )
                                     selected_storage_account_index=`expr $REPLY - 1`
                                     selected_storage_account=$(echo $storage_account | jq ".[$selected_storage_account_index]")
                                     selected_storage_account_name=$(echo $selected_storage_account | jq -r ".name")
@@ -139,7 +139,7 @@ while [ $current_step -lt 6 ]; do
                                     break
                                 ;;
                                 *) echo "Please enter a number"
-                                esac     
+                                esac
                             done
                             current_storage_step=2
                             break
@@ -150,56 +150,56 @@ while [ $current_step -lt 6 ]; do
                             current_step=`expr $current_step + 1`
                             break
                             ;;
-                        4 ) 
+                        4 )
                             current_storage_step=3
                             current_step=`expr $current_step - 1`
                             break
                             ;;
                         *) echo "Please enter a number"
-                        esac     
+                        esac
                     done
                 ;;
-                2 )                    
+                2 )
                     if [ $create_storage_account_selection == "1" ]; then
                         create_blob_container_selection=1
-                        selected_blob_container_name="kan"
-                    else 
+                        selected_blob_container_name="perceptOSS"
+                    else
                         while true; do
                             echo "Would you like to create a new blob container, or use an existing one?"
                             echo "In order to perform this operation please make sure you have a Storage contributor role on your subscription"
-                            echo "1) create a new one"     
+                            echo "1) create a new one"
                             echo "2) use an existing one"
                             echo "3) back to previous step"
                             read -p "Your answer: " -r; echo
                             create_blob_container_selection=$REPLY
                             case $create_blob_container_selection in
-                            1 ) 
+                            1 )
                                 read -p "name: " -r; echo
                                 selected_blob_container_name=$REPLY
-                                if [ $(az storage container exists --auth-mode login --account-name $selected_storage_account_name  -n $selected_blob_container_name | jq -r ".exists") == "true" ]; then
+                                if [ $(az storage container exists --auth-mode login --account-name $selected_storage_account_name -n $selected_blob_container_name | jq -r ".exists") == "true" ]; then
                                     echo "blob container exists"
                                 else
-                                    current_step=`expr $current_step + 1` 
+                                    current_step=`expr $current_step + 1`
                                     break
                                 fi
                             ;;
-                            2 )  # --- blob container ---
+                            2 ) # --- blob container ---
                                 blob_containers=$(az storage container list --account-name $selected_storage_account_name --auth-mode login --query='[].{name: name }' | jq 'sort_by(.name)')
                                 if [ $(echo $blob_containers | jq "length") == "0" ]; then
                                     echo "no container found"
                                     continue
                                 fi
-                                echo $blob_containers  | jq -r '.[].name' | awk '{$1=++b")" FS $1}1'
+                                echo $blob_containers | jq -r '.[].name' | awk '{$1=++b")" FS $1}1'
                                 while true; do
                                     read -p "Select a blob container: " -r; echo
                                     case $REPLY in
-                                    [1-9]* ) 
+                                    [1-9]* )
                                         selected_blob_container_index=`expr $REPLY - 1`
                                         selected_blob_container_name=$(echo $blob_containers | jq -r ".[$selected_blob_container_index].name")
                                         break
                                     ;;
                                     *) echo "Please enter a number"
-                                    esac     
+                                    esac
                                 done
                                 current_step=`expr $current_step + 1`
                                 break
@@ -207,18 +207,18 @@ while [ $current_step -lt 6 ]; do
                             3 )
                                 current_storage_step=1
                                 break
-                            ;; 
+                            ;;
                             * ) echo "Please enter a number"
-                            esac     
+                            esac
                         done
                     fi
                     break
                 ;;
-            esac  
+            esac
         done
-    
+ 
     ;;
-    3 ) # --- custom vision ---        
+    3 ) # --- custom vision ---
         while true; do
             echo "Would you like to create a new cognitive services, or use an existing one?"
             echo "1) create a new one"
@@ -227,7 +227,7 @@ while [ $current_step -lt 6 ]; do
             echo "4) back to previous step"
             read -p "Your answer: " -r; echo
             create_custom_vision_selection=$REPLY
-            case  $create_custom_vision_selection in 
+            case $create_custom_vision_selection in
             1 )
                 # select rg
                 rgs=$(az group list --query='[].{name: name, location: location }' | jq 'sort_by(.name)')
@@ -235,33 +235,33 @@ while [ $current_step -lt 6 ]; do
                 while true; do
                     read -p "select a resource group: " -r; echo
                     case $REPLY in
-                    [0-9]* ) 
+                    [0-9]* )
                         selected_rg_index=`expr $REPLY - 1`
                         selected_custom_vision_rg=$(echo $rgs | jq -r ".[$selected_rg_index].name")
                         selected_custom_vision_location=$(echo $rgs | jq -r ".[$selected_rg_index].location")
                         break
                         ;;
                     *) echo "Please enter a number"
-                    esac     
-                done                   
-                
+                    esac
+                done
+ 
                 read -p "Enter a name: " -r; echo
                 selected_custom_vision_name=$REPLY
-                
-                # need check name                
+ 
+                # need check name
                 if [ $(az cognitiveservices account list -g $selected_custom_vision_rg | jq "[.[] | select (.name == \"$selected_custom_vision_name\")] | length") -eq 0 ]; then
-                
+ 
                     read -p "enter a location [$(az group show -g $selected_custom_vision_rg --query="location" -o tsv)]:" -r; echo
-                    selected_custom_vision_location=${REPLY:-$(az group show -g $selected_custom_vision_rg --query="location" -o tsv)}                
+                    selected_custom_vision_location=${REPLY:-$(az group show -g $selected_custom_vision_rg --query="location" -o tsv)}
                     echo $selected_custom_visiont_location
 
                     current_step=`expr $current_step + 1`
                     break
-                else 
+                else
                     echo "This name is already taken"
                 fi
 
-                
+ 
             ;;
             2 )
                 while true; do
@@ -270,14 +270,14 @@ while [ $current_step -lt 6 ]; do
                     echo $cognitiveservices | jq -r '.[] | "\(.rg)/\(.name)"' | awk '{$1=++b")" FS $1}1'
                     read -p "Select a cognitive services: " -r; echo
                     case $REPLY in
-                    [0-9]* ) 
+                    [0-9]* )
                         selected_custom_vision_index=`expr $REPLY - 1`
                         selected_custom_vision_name=$(echo $cognitiveservices | jq -r ".[$selected_custom_vision_index].name")
                         selected_custom_vision_rg=$(echo $cognitiveservices | jq -r ".[$selected_custom_vision_index].rg")
                         break
                     ;;
                     *) echo "Please enter a number"
-                    esac     
+                    esac
                 done
                 current_step=`expr $current_step + 1`
                 break
@@ -306,55 +306,55 @@ while [ $current_step -lt 6 ]; do
 			echo "5) back to previous step"
             read -p "Your answer: " -r; echo
             create_sp_selection=$REPLY
-            case $create_sp_selection in 
+            case $create_sp_selection in
             1 )
                 while true; do
                     read -p "name: " -r; echo
-                    if [ $(az ad app list --filter "displayname eq '$REPLY'" | jq length) -gt 0 ]; then 
+                    if [ $(az ad app list --filter "displayname eq '$REPLY'" | jq length) -gt 0 ]; then
                         echo "service principal with displayName '$REPLY' already exists"
                         continue
                     fi
                     selected_sp_name=$REPLY
                     break
                 done
-                current_step=`expr $current_step + 1`   
+                current_step=`expr $current_step + 1`
                 break
             ;;
-            2 ) 
+            2 )
                 echo "listing all service principal"
                 service_principal=$(az ad app list --all --query='[].{id: id, name: displayName }' | jq 'sort_by(.name)' )
                 echo $service_principal | jq -r ".[].name" | awk '{$1=++b")" FS $1}1'
                 while true; do
                     read -p "Select a service prinvipal: " -r; echo
                     case $REPLY in
-                    [0-9]* ) 
+                    [0-9]* )
                         selected_sp_index=`expr $REPLY - 1`
                         selected_sp_name=$(echo $service_principal | jq -r ".[$selected_sp_index].name")
                         break
                     ;;
                     *) echo "Please enter a number"
-                    esac     
+                    esac
                 done
-                current_step=`expr $current_step + 1`   
+                current_step=`expr $current_step + 1`
                 break
             ;;
-            3 )               
+            3 )
                 read -p "please type your service principal name: "
                 selected_sp_name=$REPLY
                 if [ $(az ad app list --filter "displayname eq '$selected_sp_name'" | jq -r "length") -gt 0 ]; then
                     current_step=`expr $current_step + 1`
-				    break                     
-                else 
+				    break
+                else
                     echo "Service principal $selected_sp_name not exists"
                 fi
             ;;
-            4 ) 
-                current_step=`expr $current_step + 1`   
-                break   
+            4 )
+                current_step=`expr $current_step + 1`
+                break
             ;;
-            5 ) 
-                current_step=`expr $current_step - 1`   
-                break         
+            5 )
+                current_step=`expr $current_step - 1`
+                break
             ;;
             * )
                 echo "please enter a number"
@@ -363,17 +363,31 @@ while [ $current_step -lt 6 ]; do
 
     ;;
     5 )
+        echo "Agree to collect telemetry? (y/n)"
+        read -p "To turn it off, run this installer again: " -r; echo
+        case $REPLY in
+            [y]* )
+                enable_app_insight=true
+            ;;
+            *)
+                enable_app_insight=false
+        esac
+ 
+        current_step=`expr $current_step + 1`
+        echo $current_step
+    ;;
+    6 )
         # # --- confirm ---
         echo "your selections:"
         if [ $create_aks_selection == "1" ]; then
             echo -e "aks:\t\t\t$(echo $selected_aks | jq -r '. | "\(.rg)/\(.name)"')"
-        else 
+        else
             echo -e "aks:\t\t\t\tUse current kubeconfig"
         fi
 
         if [ $create_sp_selection == 4 ]; then
             echo -e "service_principal:\t\tskip"
-        else 
+        else
             echo -e "service_principal:\t\t$selected_sp_name"
         fi
 
@@ -381,10 +395,10 @@ while [ $current_step -lt 6 ]; do
             echo -e "storage account:\t\tskip"
             echo -e "storage account location:\tskip"
             echo -e "blob container:\t\t\tskip"
-        else 
+        else
             echo -e "storage account:\t\t"$selected_storage_account_rg/$selected_storage_account_name
             echo -e "storage account location:\t"$selected_storage_account_location
-            echo -e "blob container:\t\t\t"$selected_blob_container_name            
+            echo -e "blob container:\t\t\t"$selected_blob_container_name
         fi
 
         if [ $create_custom_vision_selection == 3 ]; then
@@ -392,24 +406,25 @@ while [ $current_step -lt 6 ]; do
             echo -e "cognitive services location:\tskip"
         else
             echo -e "cognitive services:\t\t"$selected_custom_vision_rg/$selected_custom_vision_name
-            echo -e "cognitive services location:\t"$selected_custom_vision_location    
+            echo -e "cognitive services location:\t"$selected_custom_vision_location
         fi
+        echo -e "enable collect telemetry:\t$enable_app_insight"
         read -p "Are you sure (y or n)? " -r; echo
-        case $REPLY in 
-            [Yy]* )            
+        case $REPLY in
+            [Yy]* )
                 if [ $create_aks_selection == "1" ]; then
                     subscription=$(echo $selected_aks | jq ".id" | awk -F/ '{print $3}')
                     az account set --subscription=$subscription
                     az aks get-credentials --resource-group $selected_aks_rg --name $selected_aks_name
-                else 
+                else
                     echo "use current kubeconfig"
                 fi
 
                 if [ $create_storage_account_selection == "1" ]; then
                     az storage account create --resource-group $selected_storage_account_rg --name $selected_storage_account_name --location $selected_storage_account_location
-                fi 
+                fi
 
-                if [ $create_storage_account_selection != "3"  ]; then
+                if [ $create_storage_account_selection != "3" ]; then
                     storage_account_subscription=$(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r .id | awk -F/ '{print $3}')
                 fi
 
@@ -417,17 +432,17 @@ while [ $current_step -lt 6 ]; do
                     creation_result=$(az storage container create --account-name $selected_storage_account_name -n $selected_blob_container_name --auth-mode login | jq -r ".created" )
                     if [ $creation_result == "true" ]; then
                         echo -e "blob container create \e[32msuccessfully\e[0m"
-                    else 
+                    else
                         echo -e "blob container create \e[31mfail\e[0m (possible in soft delete)"
                     fi
                 fi
 
                 if [ $create_custom_vision_selection == "1" ]; then
-                    echo "creating custom vision"            
+                    echo "creating custom vision"
                     az cognitiveservices account create -n $selected_custom_vision_name -g $selected_custom_vision_rg --kind CustomVision.Training --sku S0 -l $selected_custom_vision_location
                 fi
 
-       
+ 
                 if [ $create_sp_selection == "1" ]; then
                     echo "creating service principal"
                     # az ad app create --display-name $selected_sp_name
@@ -441,14 +456,14 @@ while [ $current_step -lt 6 ]; do
                             break
                         fi
                     done
-                    
+ 
                     echo $app_id
-                elif [  $create_sp_selection != "4" ]; then
+                elif [ $create_sp_selection != "4" ]; then
                     selected_service_principal=$(az ad app list --filter "displayname eq '$selected_sp_name'")
                     app_id=$(echo $selected_service_principal | jq -r ".[0].appId")
                 fi
-                
-                if [  $create_sp_selection != "4" ]; then
+ 
+                if [ $create_sp_selection != "4" ]; then
                     echo "creating credential"
                     new_cred=$(az ad sp credential reset --id $app_id --append --display-name kan --only-show-errors)
                     echo $new_cred
@@ -456,11 +471,11 @@ while [ $current_step -lt 6 ]; do
                     sp_tenant=$(echo $new_cred | jq -r ".tenant")
 
                     echo "creating custom role"
-                    
-                
+ 
+ 
                   subscriptionId=$(az account show --query "id" -o tsv)
 
-                    if [  $(az role definition list --custom-role-only true --name "kan contributor $subscriptionId" | jq ". | length") -lt 1 ]; 
+                    if [ $(az role definition list --custom-role-only true --name "kan contributor $subscriptionId" | jq ". | length") -lt 1 ];
                     then
                         az role definition create --role-definition "{
                             \"Name\": \"kan contributor $subscriptionId\",
@@ -483,25 +498,25 @@ while [ $current_step -lt 6 ]; do
                             ],
                             \"AssignableScopes\": [\"/subscriptions/$subscriptionId\"]
                         }"
-                    fi                
-            
+                    fi
+ 
 
                     sleep 5
 
                     echo "assigning KANportal contributor role to subscription"
-                    az role assignment create --role "kan contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv) 
+                    az role assignment create --role "kan contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
 
                     echo "assigning reader role to subscription"
-                    az role assignment create --role "Reader" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv) 
+                    az role assignment create --role "Reader" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
 
                     echo "assigning role Storage Account Contributor to storage account"
-                    az role assignment create --role "Storage Account Contributor"  --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
+                    az role assignment create --role "Storage Account Contributor" --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
 
                     echo "assigning role Storage Blob Data Contributor to storage account"
-                    az role assignment create --role "Storage Blob Data Contributor"  --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
+                    az role assignment create --role "Storage Blob Data Contributor" --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
 
                     echo "assigning role IoT Hub Data Contributor to subscription"
-                    az role assignment create --role "IoT Hub Data Contributor"  --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)                               
+                    az role assignment create --role "IoT Hub Data Contributor" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
                 fi
 
                 echo -e "\e[32mInstalling ingress\e[0m"
@@ -509,24 +524,24 @@ while [ $current_step -lt 6 ]; do
 
                 echo -e "\e[32mInstalling cert-manager\e[0m"
                 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
-                
+ 
                 echo -e "\e[32mRemoving terminating CRDs\e[0m"
-                kubectl get target --no-headers=true | awk '{print $1}' | xargs kubectl patch target.fabric.kan -p '{"metadata":{"finalizers":null}}' --type=merge                
+                kubectl get target --no-headers=true | awk '{print $1}' | xargs kubectl patch target.fabric.kan -p '{"metadata":{"finalizers":null}}' --type=merge
                 kubectl get instance --no-headers=true | awk '{print $1}' | xargs kubectl patch instance.solution.kan -p '{"metadata":{"finalizers":null}}' --type=merge
 
                 echo -e "\e[32mInstalling kan\e[0m"
                 if [ $create_custom_vision_selection == 3 ]; then
-                    helm upgrade -n default --install kan oci://kantest.azurecr.io/helm/kan --version $kan_version --wait
-                else 
-                    helm upgrade -n default --install kan oci://kantest.azurecr.io/helm/kan --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version $kan_version --wait
+                    helm upgrade -n default --install kan oci://kantest.azurecr.io/helm/kan --set ENABLE_APP_INSIGHT=$enable_app_insight --version $kan_version --wait
+                else
+                    helm upgrade -n default --install kan oci://kantest.azurecr.io/helm/kan --set ENABLE_APP_INSIGHT=$enable_app_insight --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version $kan_version --wait
                 fi
-                
-                if [ $? != "0" ];  then
+ 
+                if [ $? != "0" ]; then
                     echo -e "\e[31mWe faced some issues while pull kan from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
                 echo -e "\e[32mInstalling Portal\e[0m"
 
-                
+ 
                 values=""
                 if [ $create_storage_account_selection != 3 ]; then
                     values="$values --set storage.storageResourceGroup=$selected_storage_account_rg --set storage.storageAccount=$selected_storage_account_name --set storage.storageContainer=$selected_blob_container_name --set storage.subscriptionId=$storage_account_subscription"
@@ -540,7 +555,7 @@ while [ $current_step -lt 6 ]; do
 
                 helm upgrade -n default --install kanportal oci://kantest.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kantest.azurecr.io/kanportal
 
-                if [ $? != "0" ];  then
+                if [ $? != "0" ]; then
                     echo -e "\e[31mWe faced some issues while pull KANportal from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
 
@@ -548,7 +563,7 @@ while [ $current_step -lt 6 ]; do
                 break
             ;;
             * )
-                current_step=`expr $current_step - 1`
+                current_step=`expr $current_step - 2`
         esac
     ;;
     * )

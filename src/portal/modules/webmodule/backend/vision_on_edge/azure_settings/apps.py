@@ -41,8 +41,10 @@ class AzureSettingsConfig(AppConfig):
 
             logger.info("Azure Settings AppConfig ready while running server")
             logger.info("Setting azure http logging level to WARNING")
+            logger.info("Setting django.channels.server logging level to WARNING")
             logging.getLogger("azure.core.pipeline.policies.http_logging_policy").setLevel(
                 logging.WARNING)
+            logging.getLogger("django.channels.server").setLevel(logging.WARNING)
             logger.info(ENDPOINT)
             logger.info(TRAINING_KEY)
             existing_settings = Setting.objects.filter(

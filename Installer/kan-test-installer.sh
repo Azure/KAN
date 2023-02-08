@@ -363,7 +363,7 @@ while [ $current_step -lt 7 ]; do
 
     ;;
     5 )
-        echo "Agree to collect telemetry? (y/n)"
+        echo "May we collect anonymous usage data to help improve the app's performance and user experience? (y/n)"
         read -p "To turn it off, run this installer again: " -r; echo
         case $REPLY in
             [y]* )

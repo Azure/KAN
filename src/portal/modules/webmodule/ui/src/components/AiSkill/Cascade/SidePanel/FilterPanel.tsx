@@ -34,7 +34,7 @@ type FormData = Pick<FilterTransformPanelForm, 'labels'> & {
 
 const ERROR_CONFIDENCE_THRESHOLD_RANGE = 'Please enter a whole number from 0 to 100.';
 const getParseLables = (labels: string): string[] => {
-  return labels.match(/(\S+?)(?:,|$)/g);
+  return labels.split(/[\s,]+/);
 };
 
 const initialValues = {

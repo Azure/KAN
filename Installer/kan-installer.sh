@@ -364,7 +364,9 @@ while [ $current_step -lt 8 ]; do
     ;;
     5 )
         while true; do
-            echo "We need to use a KAN agent to capture camera thumbnails, which requires the use of ffmpeg. However, the default KAN agent Docker image does not include ffmpeg. Please choose: \n1) Use the default agent without camera thumbnail feature; \n2) Use a community-contributed image from hbai/kan-agent:$kan_version that supports the thumbnail feature."
+            echo "We need to use a KAN agent to capture camera thumbnails, which requires the use of ffmpeg. However, the default KAN agent Docker image does not include ffmpeg. Please choose:"
+            echo "1) Use the default agent without camera thumbnail feature."
+            echo "2) Use a community-contributed image from hbai/kan-agent:$kan_version that supports the thumbnail feature."
             read -p "Your Answer:" -r; echo
             case $REPLY in
                 1 )

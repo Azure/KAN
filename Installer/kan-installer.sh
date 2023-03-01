@@ -383,9 +383,8 @@ while [ $current_step -lt 8 ]; do
         done
         current_step=`expr $current_step + 1`        
     ;;
-    6 )
-        echo "May we collect anonymous usage data to help improve the app's performance and user experience? (y/n)"
-        read -p "To turn it off, run this installer again: " -r; echo
+    6 )      
+        read -p "May we collect anonymous usage data to help improve the app's performance and user experience (to turn it off, run this installer again)? (y/n)" -r; echo
         case $REPLY in
             [y]* )
                 enable_app_insight=true

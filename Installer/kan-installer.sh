@@ -1,8 +1,9 @@
 #!/bin/bash
-kan_version=0.41.41
-kanportal_version=0.41.41-amd64
+kan_version=0.41.43
+agent_version=0.41.43
+kanportal_version=0.41.43-amd64
 current_step=0
-while [ $current_step -lt 7 ]; do
+while [ $current_step -lt 8 ]; do
     case $current_step in
     0 ) # azure user
         while true; do
@@ -363,8 +364,27 @@ while [ $current_step -lt 7 ]; do
 
     ;;
     5 )
-        echo "May we collect anonymous usage data to help improve the app's performance and user experience? (y/n)"
-        read -p "To turn it off, run this installer again: " -r; echo
+        while true; do
+            echo "We need to use a KAN agent to capture camera thumbnails, which requires the use of ffmpeg. However, the default KAN agent Docker image does not include ffmpeg. Please choose:"
+            echo "1) Use the default agent without camera thumbnail feature."
+            echo "2) Use a community-contributed image from hbai/kan-agent:$agent_version that supports the thumbnail feature."
+            read -p "Your Answer:" -r; echo
+            case $REPLY in
+                1 )
+                    agent_image=kanprod.azurecr.io/kan-agent
+                    break
+                ;;
+                2 )
+                    agent_image=hbai/kan-agent
+                    break
+                ;;
+                *)                
+            esac
+        done
+        current_step=`expr $current_step + 1`        
+    ;;
+    6 )      
+        read -p "May we collect anonymous usage data to help improve the app's performance and user experience (to turn it off, run this installer again)? (y/n)" -r; echo
         case $REPLY in
             [y]* )
                 enable_app_insight=true
@@ -374,9 +394,8 @@ while [ $current_step -lt 7 ]; do
         esac
  
         current_step=`expr $current_step + 1`
-        echo $current_step
     ;;
-    6 )
+    7 )
         # # --- confirm ---
         echo "your selections:"
         if [ $create_aks_selection == "1" ]; then
@@ -553,7 +572,7 @@ while [ $current_step -lt 7 ]; do
                     values="$values --set servicePrincipal.tenantId=$sp_tenant --set servicePrincipal.clientId=$app_id --set servicePrincipal.clientSecret=$sp_password"
                 fi
 
-                helm upgrade -n default --install kanportal oci://kanprod.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kanprod.azurecr.io/kanportal
+                helm upgrade -n default --install kanportal oci://kanprod.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kanprod.azurecr.io/kanportal --set kanAgentImage=$agent_image --set kanAgentVersion=$agent_version
 
                 if [ $? != "0" ]; then
                     echo -e "\e[31mWe faced some issues while pull KANportal from container registry. Please try the installer again a few minutes later\e[0m"
@@ -563,7 +582,7 @@ while [ $current_step -lt 7 ]; do
                 break
             ;;
             * )
-                current_step=`expr $current_step - 2`
+                current_step=`expr $current_step - 3`
         esac
     ;;
     * )

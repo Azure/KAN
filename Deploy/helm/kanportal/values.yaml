@@ -1,7 +1,6 @@
 # Default values for kan.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-kanAgentVersion: "0.41.41"
 image:
   pullPolicy: Always
   image: p4etest.azurecr.io/kanportal
@@ -20,3 +19,5 @@ servicePrincipal:
   tenantId: ""
   clientId: ""
   clientSecret: ""
+kanAgentImage: ""
+kanAgentVersion: "0.41.43"

@@ -39,6 +39,7 @@ class KanTargetClient(KanClient):
         storage_container = os.getenv('STORAGE_CONTAINER')
         # kan_url = os.getenv('KAN_URL')
         kan_agent_version = os.getenv('KAN_AGENT_VERSION')
+        kan_agent_image = os.getenv('KAN_AGENT_IMAGE', 'kanprod.azurecr.io/kan-agent')
 
         service_api = self.get_service_client()
         res = service_api.read_namespaced_service(
@@ -111,7 +112,7 @@ class KanTargetClient(KanClient):
                         "properties": {
                             "container.version": "1.0",
                             "container.type": "docker",
-                            "container.image": "kanprod.azurecr.io/kan-agent:"+kan_agent_version,
+                            "container.image": kan_agent_image + ":" + kan_agent_version,
                             "container.createOptions": "{\"HostConfig\":{\"Binds\":[\"/etc/iotedge/storage:/snapshots\"],\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}}}}",
                             "container.restartPolicy": "always",
                             "env.AZURE_CLIENT_ID": client_id,
@@ -417,7 +418,7 @@ class KanSolutionClient(KanClient):
                 })
 
         # container image
-        container_version = "0.41.42"
+        container_version = "0.41.43"
         # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
         # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
         # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"

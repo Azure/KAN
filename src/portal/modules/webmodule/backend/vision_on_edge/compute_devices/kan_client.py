@@ -418,17 +418,17 @@ class KanSolutionClient(KanClient):
                 })
 
         # container image
-        container_version = "0.41.43"
-        # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-amd64"
-        # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-amd64"
-        # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-{image_suffix}amd64"
-        voeedge_image = f"kanprod.azurecr.io/kanai:{container_version}-{image_suffix}amd64"
+        kanai_version = "0.41.44"
+        # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{kanai_version}-amd64"
+        # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{kanai_version}-amd64"
+        # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{kanai_version}-{image_suffix}amd64"
+        voeedge_image = f"kanprod.azurecr.io/kanai:{kanai_version}-{image_suffix}amd64"
 
         if 'arm' in architecture.lower():
-            voeedge_image = f"kanprod.azurecr.io/kanai:{container_version}-jetson"
-            managermodule_image = f"possprod.azurecr.io/voe/managermodule:{container_version}-jetson"
-            streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{container_version}-jetson"
-            predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{container_version}-jetson"
+            voeedge_image = f"kanprod.azurecr.io/kanai:{kanai_version}-jetson"
+            managermodule_image = f"possprod.azurecr.io/voe/managermodule:{kanai_version}-jetson"
+            streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{kanai_version}-jetson"
+            predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{kanai_version}-jetson"
 
         config_json = {
             "apiVersion": "solution.kan/v1",
@@ -445,7 +445,7 @@ class KanSolutionClient(KanClient):
                     #         "container.image": managermodule_image,
                     #         "container.restartPolicy": "always",
                     #         "container.type": "docker",
-                    #         "container.version": container_version,
+                    #         "container.version": kanai_version,
                     #         "env.AISKILLS": skills,
                     #         "env.INSTANCE": "$instance()",
                     #         "env.KAN_AGENT_ADDRESS": kan_agent_address
@@ -458,7 +458,7 @@ class KanSolutionClient(KanClient):
                     #         "container.image": streamingmodule_image,
                     #         "container.restartPolicy": "always",
                     #         "container.type": "docker",
-                    #         "container.version": container_version,
+                    #         "container.version": kanai_version,
                     #         "env.INSTANCE": "$instance()",
                     #         "env.BLOB_STORAGE_CONNECTION_STRING": storage_conn_str,
                     #         "env.BLOB_STORAGE_CONTAINER": storage_container,
@@ -475,7 +475,7 @@ class KanSolutionClient(KanClient):
                     #         "container.image": predictmodule_image,
                     #         "container.restartPolicy": "always",
                     #         "container.type": "docker",
-                    #         "container.version": container_version,
+                    #         "container.version": kanai_version,
                     #         "env.INSTANCE": "$instance()"
                     #     }
                     # },
@@ -488,7 +488,7 @@ class KanSolutionClient(KanClient):
                             "container.resources": container_resources,
                             "container.restartPolicy": "always",
                             "container.type": "docker",
-                            "container.version": container_version,
+                            "container.version": kanai_version,
                             "env.INSTANCE": "$instance()",
                             # "env.AISKILLS": skills,
                             "env.BLOB_STORAGE_CONNECTION_STRING": storage_conn_str,

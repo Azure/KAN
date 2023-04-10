@@ -12,12 +12,16 @@ from enum import Enum, auto
 import threading
 import subprocess
 import queue
+import json
 
 import httpx
 
 from common.azure_utils import get_blob_client
 from azure.iot.device import IoTHubModuleClient
-from common.env import IOTEDGE_CONNECTION_STRING
+from common.env import IOTEDGE_CONNECTION_STRING, INSTANCE
+from common.voe_ipc import is_iotedge
+
+import paho.mqtt.client as mqtt
 
 
 class VideoSnippetStatus(str, Enum):
@@ -127,6 +131,26 @@ class VideoSnippetExport(Export):
                 self._append_image(frame)
 
 
+# MQTT setup
+
+def on_connect(client: mqtt.Client, userdata, flags, rc, properties=None):
+    print("connected", flush=True)
+
+
+def send_message(message):
+    # payload = json.dumps(message)
+    payload = message
+    mqtt_client.reconnect()
+    mqtt_client.publish("iothubmessage", payload=payload)
+    print("Sent message: " + payload)
+
+
+mqtt_client = mqtt.Client(INSTANCE, protocol=4)
+mqtt_client.on_connect = on_connect
+
+mqtt_client.connect("mqtt.default.svc.cluster.local", 1883, 60)
+
+
 try:
     if IOTEDGE_CONNECTION_STRING:
         iot = IoTHubModuleClient.create_from_connection_string(
@@ -134,6 +158,7 @@ try:
     else:
         iot = IoTHubModuleClient.create_from_edge_environment()
 except Exception as e:
+    iot = None
     print(f"Iotedge config error: {e}", flush=True)
 
 
@@ -151,7 +176,10 @@ class IothubExport(Export):
                 j = self._export_q.get()
                 try:
                     print('IotHubExport: send a message to metrics')
-                    iot.send_message_to_output(j, 'metrics')
+                    if iot:
+                        iot.send_message_to_output(j, 'metrics')
+                    else:
+                        send_message(j)
                 except Exception as e:
                     print(
                         f"IotHubExport: An error occurred while sending message to metrics: {e}.")

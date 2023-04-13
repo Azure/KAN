@@ -6,89 +6,90 @@ Ready to jump into actions right away? This quick start walks you through the st
 
 ## 0. Prerequisites
 
-- [Helm 3](https://helm.sh/): Required to deploy KAN API.
-- [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/): Configured with the Kubernetes cluster you want to use as the default context. Note that if you use cloud shell, kubectl is already configured.
-- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/)
+* [Helm 3](https://helm.sh/): Required to deploy KAN API.
+* [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/): Configured with the Kubernetes cluster you want to use as the default context. Note that if you use cloud shell, kubectl is already configured.
+* [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/)
 
 ## 1. Deploy KAN API using Helm
 
 The easiest way to install KAN API is to use Helm:
 
-```bash
-helm install kan oci://kanprod.azurecr.io/helm/kan --version 0.41.44
-```
+  ```bash
+  helm install kan oci://kanprod.azurecr.io/helm/kan --version 0.41.40
+  ```
 
 ## 2. Register the current cluster as a KAN API Target
 
 To create a new YAML file that describes a KAN API Target, use the following to submit the file:
 
-`kubectl create -f <filename>`
+  ```kubectl create -f <filename>```
 
 Use the following to apply any changes:
 
-`kubectl apply -f <filename> `
+  ```kubectl apply -f <filename> ```
+
 
 ```yaml
 apiVersion: fabric.kan/v1
 kind: Target
 metadata:
   name: basic-k8s-target
-spec:
+spec:  
   forceRedeploy: true
   topologies:
-    - bindings:
-        - role: instance
-          provider: providers.target.k8s
-          config:
-            inCluster: "true"
+  - bindings:
+    - role: instance
+      provider: providers.target.k8s
+      config:
+        inCluster: "true"    
 ```
 
-> **NOTE**: The above sample doesn't deploy a **KAN Agent**, which is optional.
+> **NOTE**: The above sample doesn't deploy a **KAN Agent**, which is optional. 
 
 ## 3. Create the KAN API Solution
 
 The following YAMl file describes a KAN API Solution with a single Redis server component. Use the following to submit the file:
 
-`kubectl create -f <filename>`
+  ```kubectl create -f <filename>```
 
 Use the following to apply any changes:
 
-`kubectl apply -f <filename> `
+  ```kubectl apply -f <filename> ```
 
 ```yaml
 apiVersion: solution.kan/v1
 kind: Solution
-metadata:
+metadata: 
   name: redis-server
-spec:
+spec:  
   metadata:
     deployment.replicas: "#1"
-    service.ports: 'JA.[{"name":"port6379","port": 6379}]'
+    service.ports: "JA.[{\"name\":\"port6379\",\"port\": 6379}]"
     service.type: "ClusterIP"
   components:
-    - name: redis-server
-      type: container
-      properties:
-        container.ports: 'JA.[{"containerPort":6379,"protocol":"TCP"}]'
-        container.imagePullPolicy: "Always"
-        container.resources: 'JO.{"requests":{"cpu":"100m","memory":"100Mi"}}'
-        container.image: "docker.io/redis:6.0.5"
+  - name: redis-server
+    type: container
+    properties:
+      container.ports: "JA.[{\"containerPort\":6379,\"protocol\":\"TCP\"}]"
+      container.imagePullPolicy: "Always"
+      container.resources: "JO.{\"requests\":{\"cpu\":\"100m\",\"memory\":\"100Mi\"}}"        
+      container.image: "docker.io/redis:6.0.5"
 ```
 
 > [!NOTE]
-> This solution uses the default deployment strategy, which is to deploy all component containers in the solution into a same pod.
+> This solution uses the default deployment strategy, which is to deploy all component containers in the solution into a same pod. 
 
 ## 4. Create the KAN API Solution Instance
 
 A KAN API Solution Instance maps a KAN API Solution to one or multiple Targets. Use the following to submit the file:
 
-`kubectl create -f <filename>`
+  ```kubectl create -f <filename>```
 
 Use the following to apply any changes:
 
-`kubectl apply -f <filename> `
+  ```kubectl apply -f <filename> ```
 
-The following artifacts maps the `redis-server` soltuion to the `k8s-target` target above:
+The following artifacts maps the ```redis-server``` soltuion to the ```k8s-target``` target above:
 
 ```yaml
 apiVersion: solution.kan/v1
@@ -98,8 +99,8 @@ metadata:
 spec:
   scope: basic-k8s
   solution: redis-server
-  target:
-    name: basic-k8s-target
+  target: 
+    name: basic-k8s-target    
 ```
 
 ## 5. Verification
@@ -119,13 +120,12 @@ NAME             STATUS      TARGETS   DEPLOYED
 redis-instance   OK          1         1
 ```
 
-Use `kubectl` to examin pods and services:
+Use ```kubectl``` to examin pods and services:
 
 ```bash
 kubectl get all -n basic-k8s
 ```
-
-Notice that a `redis-instance` pod and a `redis-instance` service have been created. By default, the service is created as a ClusterIP service, which is accessible only by pods on the same cluster. You can change the service type by modifying the `service.type` metadata.
+Notice that a ```redis-instance``` pod and a ```redis-instance``` service have been created. By default, the service is created as a ClusterIP service, which is accessible only by pods on the same cluster. You can change the service type by modifying the ```service.type``` metadata. 
 
 ## 6. Clean up KAN API objects
 
@@ -142,10 +142,10 @@ kubectl delete ns basic-k8s #KAN API doesn't remove namespaces
 
 To remove KAN API control plane, use:
 
-```bash
-helm delete kan
-```
+  ```bash
+  helm delete kan
+  ```
 
 # Next step
 
-- [KAN API Quickstart: Deploying a simulated temperature sensor solution to an Azure IoT Edge device](./deploy_solution_to_azure_iot_edge.md)
+* [KAN API Quickstart: Deploying a simulated temperature sensor solution to an Azure IoT Edge device](./deploy_solution_to_azure_iot_edge.md)

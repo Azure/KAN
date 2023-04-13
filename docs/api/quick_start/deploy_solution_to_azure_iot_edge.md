@@ -7,15 +7,16 @@ Ready to jump into actions right away? This quickstart walks you through the ste
 
 ## 0. Prerequisites
 
-* [Helm 3](https://helm.sh/) - Required to deploy KAN API.
-* [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/): Configured with the Kubernetes cluster you want to use as the default context. Note that if you use cloud shell, kubectl is already configured.
-* [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/)
+- [Helm 3](https://helm.sh/) - Required to deploy KAN API.
+- [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/): Configured with the Kubernetes cluster you want to use as the default context. Note that if you use cloud shell, kubectl is already configured.
+- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/)
 
 ## 1. Deploy KAN API using Helm
 
 The easiest way to install KAN API is to use Helm:
+
 ```bash
-helm install kan oci://kanprod.azurecr.io/helm/kan --version 0.41.40
+helm install kan oci://kanprod.azurecr.io/helm/kan --version 0.41.44
 ```
 
 ## 2. Create an IoT Edge device
@@ -76,11 +77,11 @@ sudo iotedge config mp --connection-string '<IoT Edge device connection string>'
 
 Create a new YAML file that describes a KAN API Target. Use the following to submit the file:
 
-```kubectl create -f <filename>```
+`kubectl create -f <filename>`
 
 Use the following to apply any changes:
 
-```kubectl apply -f <filename> ```
+`kubectl apply -f <filename> `
 
 ```yaml
 apiVersion: fabric.kan/v1
@@ -90,27 +91,27 @@ metadata:
 spec:
   forceRedeploy: true
   topologies:
-  - bindings:
-    - role: instance
-      provider: providers.target.azure.iotedge
-      config:
-        name: "iot-edge"
-        keyName: "iothubowner"
-        key: "<Your IoT Hub Key>"
-        iotHub: "<Yout IoT Hub Hostname>"
-        apiVersion: "2020-05-31-preview"
-        deviceName: "<Your device name>"
+    - bindings:
+        - role: instance
+          provider: providers.target.azure.iotedge
+          config:
+            name: "iot-edge"
+            keyName: "iothubowner"
+            key: "<Your IoT Hub Key>"
+            iotHub: "<Yout IoT Hub Hostname>"
+            apiVersion: "2020-05-31-preview"
+            deviceName: "<Your device name>"
 ```
 
 ## 5. Create the KAN API Solution
 
-The following YAMl file describes a KAN API Solution with a single component, which is based on the ```mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0``` container. Use the following to submit the file:
+The following YAMl file describes a KAN API Solution with a single component, which is based on the `mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0` container. Use the following to submit the file:
 
-```kubectl create -f <filename>```
+`kubectl create -f <filename>`
 
 Use the following to apply any changes:
 
-```kubectl apply -f <filename> ```
+`kubectl apply -f <filename> `
 
 ```yaml
 apiVersion: solution.kan/v1
@@ -119,24 +120,24 @@ metadata:
   name: simulated-temperature-sensor
 spec:
   components:
-  - name: "simulated-temperature-sensor"
-    properties:
-      container.version: "1.0"
-      container.type: "docker"
-      container.image: "mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0"
-      container.createOptions: ""
-      container.restartPolicy: "always"
+    - name: "simulated-temperature-sensor"
+      properties:
+        container.version: "1.0"
+        container.type: "docker"
+        container.image: "mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0"
+        container.createOptions: ""
+        container.restartPolicy: "always"
 ```
 
 ## 6. Create the KAN API Solution Instance
 
-A KAN API Solution Instance maps a KAN API Solution to one or multiple Targets. The following artifacts maps the ```simulated-temperature-sensor``` solution to the ```voe``` target above. Use the following to submit the file:
+A KAN API Solution Instance maps a KAN API Solution to one or multiple Targets. The following artifacts maps the `simulated-temperature-sensor` solution to the `voe` target above. Use the following to submit the file:
 
-```kubectl create -f <filename>```
+`kubectl create -f <filename>`
 
 Use the following to apply any changes:
 
-```kubectl apply -f <filename> ```
+`kubectl apply -f <filename> `
 
 ```yaml
 apiVersion: solution.kan/v1
@@ -170,6 +171,7 @@ kubectl delete instance my-instance-2
 kubectl delete solution simulated-temperature-sensor
 kubectl delete target voe-target
 ```
+
 ## 9. Remove the KAN API control plane (optional)
 
 To remove the KAN API control plane:
@@ -178,7 +180,6 @@ To remove the KAN API control plane:
 helm delete kan
 ```
 
-
 # Next step
 
-* [KAN API Quick Start - Deploying a Redis server to a Kubernetes cluster](./deploy_redis_k8s.md)
+- [KAN API Quick Start - Deploying a Redis server to a Kubernetes cluster](./deploy_redis_k8s.md)

@@ -15,7 +15,6 @@ import { PivotTabKey, UpdateAiSkillFormData, STEP_ORDER } from './types';
 import { Url, theme } from '../../constant';
 import { selectCascadeById } from '../../store/cascadeSlice';
 import { selectAllTrainingProjects } from '../../store/trainingProjectSlice';
-import { selectHasUseAiSkillSelectorFactory } from '../../store/deploymentSlice';
 import {
   getCascadeErrorMessage,
   convertElementsPayload,
@@ -78,7 +77,6 @@ const AiSkillEdit = () => {
 
   const skill = useSelector((state: RootState) => selectCascadeById(state, id));
   const modelList = useSelector((state: RootState) => selectAllTrainingProjects(state));
-  const hasAiSkillDeployment = useSelector(selectHasUseAiSkillSelectorFactory(skill.kan_id));
 
   const reactFlowRef = useRef(null);
   const [elements, setElements] = useState<(Node | Edge)[]>([]);
@@ -293,7 +291,6 @@ const AiSkillEdit = () => {
                 }
                 reactFlowRef={reactFlowRef}
                 selectedAcceleraction={localFormData.acceleration}
-                hasUseAiSkill={!!hasAiSkillDeployment}
               />
             )}
           />
@@ -314,7 +311,6 @@ const AiSkillEdit = () => {
         onCreatingChange={(value: boolean) => setIsCreating(value)}
         stepList={['basics', 'cascade', 'tag', 'preview']}
         onValidationRedirect={onValidationRedirect}
-        hasUseAiSkill={!!hasAiSkillDeployment}
       />
     </>
   );

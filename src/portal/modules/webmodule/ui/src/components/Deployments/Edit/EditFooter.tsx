@@ -2,12 +2,10 @@
 // Licensed under the MIT License.
 
 import React, { useCallback } from 'react';
-import { Stack, DefaultButton, PrimaryButton, MessageBar, MessageBarType } from '@fluentui/react';
+import { Stack, DefaultButton, PrimaryButton } from '@fluentui/react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { State as RootState } from 'RootStateType';
-import { selectAllComputeDevices } from '../../../store/computeDeviceSlice';
 import { getFooterClasses } from '../../Common/styles';
 import { PivotTabKey, UpdateDeploymentFormData } from '../types';
 import { getStepKey } from '../../utils';
@@ -15,8 +13,6 @@ import { updateDeployment } from '../../../store/deploymentSlice';
 import { UpdateDeploymentPayload, DeploymentConfigureSkill } from '../../../store/types';
 import { getFilteredTagList } from '../../Common/TagTab';
 import { Url } from '../../../constant';
-import { getK8sWarning } from '../utils';
-import { selectAllCascades } from '../../../store/cascadeSlice';
 
 interface Props {
   deploymentId: number;
@@ -35,13 +31,6 @@ const EditFooter = (props: Props) => {
   const classes = getFooterClasses();
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const deviceList = useSelector((state: RootState) => selectAllComputeDevices(state));
-  const aiSkillList = useSelector((state: RootState) => selectAllCascades(state));
-
-  const isWarningDisplay =
-    deviceList.find((_device) => _device.kan_id === localFormData.device.key)?.is_k8s &&
-    getK8sWarning(localFormData.cameraList, aiSkillList);
 
   const onUpdateClick = useCallback(async () => {
     const payload: UpdateDeploymentPayload = {
@@ -77,19 +66,9 @@ const EditFooter = (props: Props) => {
   return (
     <Stack
       styles={{
-        root: isWarningDisplay ? classes.warningFooter : classes.root,
+        root: classes.root,
       }}
     >
-      {isWarningDisplay && (
-        <MessageBar
-          messageBarType={MessageBarType.warning}
-          messageBarIconProps={{ iconName: 'IncidentTriangle' }}
-          styles={{ icon: { color: '#DB7500' } }}
-        >
-          Your AI Skill has some nodes that are not configurable on Kubernetes based Targets (IoThub Export)
-          so AI Skill configuration may not succeed.
-        </MessageBar>
-      )}
       <Stack horizontal tokens={{ childrenGap: 8 }}>
         {['configure', 'tag'].includes(currentStep) && (
           <PrimaryButton

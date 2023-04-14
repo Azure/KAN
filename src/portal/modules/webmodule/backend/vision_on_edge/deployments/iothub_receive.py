@@ -4,6 +4,7 @@
 import os
 import re
 import sys
+import logging
 import time
 import json
 import subprocess
@@ -13,12 +14,15 @@ from hmac import HMAC
 from urllib.parse import urlencode, quote_plus
 from uamqp import ReceiveClient, Source
 from uamqp.errors import LinkRedirect
+import paho.mqtt.client as mqtt
 
 from azure.eventhub import EventHubConsumerClient
 
 
 from .models import Deployment
 
+
+logger = logging.getLogger(__name__)
 
 iothub_insights = {}
 
@@ -144,6 +148,46 @@ def receive_events_from_iothub(iothub_name):
             on_event_batch,
             starting_position=-1  # "-1" is from the beginning of the partition.
         )
+
+
+# mqtt receiver
+
+def on_connect(client: mqtt.Client, userdata, flags, rc, properties=None):
+    client.subscribe("iothubmessage")
+    logger.warning("connected")
+
+
+def on_message(client, userdata, msg: mqtt.MQTTMessage):
+    logger.warning("receive message:")
+    logger.warning(msg.payload)
+    try:
+        body = json.loads(msg.payload)
+    except:
+        body = {}
+
+    if body:
+        instance_id = body.get("instance_id", "")
+        device_id = body.get("device_id", "")
+        skill_id = body.get("skill_id", "")
+        if instance_id and device_id and skill_id:
+            if instance_id not in iothub_insights.keys():
+                iothub_insights[instance_id] = {}
+            if skill_id not in iothub_insights[instance_id].keys():
+                iothub_insights[instance_id][skill_id] = {}
+            if device_id not in iothub_insights[instance_id][skill_id].keys():
+                iothub_insights[instance_id][skill_id][device_id] = []
+            iothub_insights[instance_id][skill_id][device_id].insert(0, body)
+            if len(iothub_insights[instance_id][skill_id][device_id]) > 100:
+                iothub_insights[instance_id][skill_id][device_id].pop()
+
+
+def mqtt_setup():
+    client = mqtt.Client("portal", protocol=5)
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.connect("mqtt.default.svc.cluster.local", 1883, 60)
+    logger.warning("Starting MQTT server...")
+    client.loop_start()
 
 
 # if __name__ == '__main__':

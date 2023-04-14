@@ -36,3 +36,39 @@ spec:
             value: {{.Values.kanportal.videoSource}}
           - name: IS_K8S
             value: "true"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqtt
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: mqtt
+    spec:
+      serviceAccountName: kan-user
+      containers:
+      - name: mqtt
+        image: "eclipse-mosquitto:2.0.11"
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 1883
+        volumeMounts:
+          - name: config
+            mountPath: "/mosquitto/config/mosquitto.conf"
+            subPath: "mosquitto.conf"
+      volumes:
+        - name: config
+          configMap:
+            name: mqtt-config

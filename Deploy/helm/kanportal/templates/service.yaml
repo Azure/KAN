@@ -13,3 +13,19 @@ spec:
       name: http
   selector:
     app: kanportal
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt
+  labels:
+    app: mqtt
+spec:
+  type: ClusterIP
+  ports:
+    - port: 1883
+      targetPort: 1883
+      protocol: TCP
+      name: mqtt
+  selector:
+    app: mqtt

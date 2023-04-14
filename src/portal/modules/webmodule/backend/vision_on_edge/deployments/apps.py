@@ -19,6 +19,9 @@ class AzureDeploymentsConfig(AppConfig):
 
         if "runserver" in sys.argv:
 
+            from .iothub_receive import mqtt_setup
             logger.info("App ready ready while running server")
+            logger.warning("Setup MQTT receiver")
+            mqtt_setup()
 
             logger.info("App ready end while running server")

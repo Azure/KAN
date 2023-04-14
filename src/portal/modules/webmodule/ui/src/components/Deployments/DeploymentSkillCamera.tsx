@@ -14,8 +14,6 @@ import {
   IconButton,
   SearchBox,
   DefaultButton,
-  MessageBar,
-  MessageBarType,
 } from '@fluentui/react';
 import { isEmpty } from 'ramda';
 
@@ -28,12 +26,9 @@ import { selectAiSkillByKanIdSelectorFactory } from '../../store/cascadeSlice';
 import { wrapperPadding } from './styles';
 import { getFooterClasses } from '../Common/styles';
 import { getSingleComputeDevice, selectDeviceByKanIdSelectorFactory } from '../../store/computeDeviceSlice';
-import { getSingleK8sWarning } from './utils';
 
 import SkillCameraDetail from './SkillCameraDetail';
 import PageLoading from '../Common/PageLoading';
-
-const k8sTabKey = ['insight', 'video'];
 
 const DeploymentSkillCamera = () => {
   const { deployment: deploymentId, skill: skillId } = useParams<{ deployment: string; skill: string }>();
@@ -51,7 +46,6 @@ const DeploymentSkillCamera = () => {
   const [filterInput, setFilterInput] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedKey, setSelectedKey] = useState('general');
-  const isK8sWarning = device.is_k8s && k8sTabKey.includes(selectedKey) && getSingleK8sWarning(skill);
 
   useEffect(() => {
     (async () => {
@@ -144,19 +138,9 @@ const DeploymentSkillCamera = () => {
       </Stack>
       <Stack
         styles={{
-          root: isK8sWarning ? footerClasses.warningFooter : footerClasses.root,
+          root: footerClasses.root,
         }}
       >
-        {isK8sWarning && (
-          <MessageBar
-            messageBarType={MessageBarType.warning}
-            messageBarIconProps={{ iconName: 'IncidentTriangle' }}
-            styles={{ icon: { color: '#DB7500' } }}
-          >
-            Your AI Skill has some nodes that are not configurable on Kubernetes based Targets (IoThub Export)
-            so AI Skill configuration may not succeed.
-          </MessageBar>
-        )}
         <DefaultButton
           styles={{ root: { width: '205px' } }}
           iconProps={{ iconName: 'ChevronLeft' }}

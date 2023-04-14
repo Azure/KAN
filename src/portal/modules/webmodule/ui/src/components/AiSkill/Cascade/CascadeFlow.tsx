@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, DragEvent } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
   removeElements,
@@ -41,21 +41,12 @@ interface Props {
   onErrorCancel: () => void;
   reactFlowRef: React.MutableRefObject<any>;
   selectedAcceleraction: string;
-  hasUseAiSkill?: boolean;
 }
 
 const getNodeId = (length: number) => length + 1;
 
 const CascadeFlow = (props: Props) => {
-  const {
-    elements,
-    setElements,
-    cascadeError,
-    onErrorCancel,
-    reactFlowRef,
-    selectedAcceleraction,
-    hasUseAiSkill,
-  } = props;
+  const { elements, setElements, cascadeError, onErrorCancel, reactFlowRef, selectedAcceleraction } = props;
 
   const classes = getCascadeFlowClasses();
 
@@ -73,8 +64,9 @@ const CascadeFlow = (props: Props) => {
   const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
   const onLoad = (_reactFlowInstance) => setReactFlowInstance(_reactFlowInstance);
 
-  const onDragOver = (event) => {
+  const onDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+    // eslint-disable-next-line no-param-reassign
     event.dataTransfer.dropEffect = 'move';
   };
 
@@ -173,21 +165,9 @@ const CascadeFlow = (props: Props) => {
     <>
       <div className="dndflow">
         {cascadeError && (
-          <div className={classes.errorWrapper} style={{ top: hasUseAiSkill ? 40 : 0 }}>
+          <div className={classes.errorWrapper} style={{ top: 0 }}>
             <MessageBar messageBarType={MessageBarType.error} onDismiss={onErrorCancel}>
               {cascadeError}
-            </MessageBar>
-          </div>
-        )}
-        {hasUseAiSkill && (
-          <div className={classes.errorWrapper}>
-            <MessageBar
-              messageBarType={MessageBarType.warning}
-              messageBarIconProps={{ iconName: 'IncidentTriangle' }}
-              styles={{ icon: { color: '#DB7500' } }}
-            >
-              Warning! This skill is referenced in at least one deployment. Changing this skill will modify
-              your deployments that have a reference to this skill.
             </MessageBar>
           </div>
         )}

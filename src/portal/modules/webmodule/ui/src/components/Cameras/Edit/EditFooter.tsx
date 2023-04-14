@@ -74,10 +74,6 @@ const EditFooter = (props: Props) => {
     );
   }, [dispatch, localFormData, cameraId, kan_id]);
 
-  const onMediaSourceUpdate = useCallback(async () => {
-    console.log('onMediaSourceUpdate');
-  }, []);
-
   const onUpdateClick = useCallback(async () => {
     if (onFormDateValidate(currentStep)) return;
 

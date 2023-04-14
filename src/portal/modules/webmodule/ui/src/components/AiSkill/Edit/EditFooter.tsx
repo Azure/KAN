@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useCallback } from 'react';
-import { Stack, DefaultButton, PrimaryButton, MessageBar, MessageBarType } from '@fluentui/react';
+import { Stack, DefaultButton, PrimaryButton } from '@fluentui/react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -24,7 +24,6 @@ interface Props {
   isCreating: boolean;
   onCreatingChange: (value: boolean) => void;
   onValidationRedirect: (nextStep: PivotTabKey, currentStep: PivotTabKey) => void;
-  hasUseAiSkill?: boolean;
 }
 
 const EditFooter = (props: Props) => {
@@ -33,20 +32,17 @@ const EditFooter = (props: Props) => {
     onLinkClick,
     stepList,
     localFormData,
-    // onFormDateValidate,
-    // onFormDataChange,
+
     onCreatingChange,
     isCreating,
     id,
     kan_id,
     onValidationRedirect,
-    hasUseAiSkill,
   } = props;
 
   const classes = getFooterClasses();
   const dispatch = useDispatch();
   const history = useHistory();
-  const isWarningDisplay = currentStep === 'preview' && hasUseAiSkill;
 
   const onUpdateClick = useCallback(async () => {
     onCreatingChange(true);
@@ -77,19 +73,9 @@ const EditFooter = (props: Props) => {
   return (
     <Stack
       styles={{
-        root: isWarningDisplay ? classes.warningFooter : classes.root,
+        root: classes.root,
       }}
     >
-      {isWarningDisplay && (
-        <MessageBar
-          messageBarType={MessageBarType.warning}
-          messageBarIconProps={{ iconName: 'IncidentTriangle' }}
-          styles={{ icon: { color: '#DB7500' } }}
-        >
-          Warning! This skill is referenced in at least one deployment. Changing this skill will modify your
-          deployments that have a reference to this skill. Do you want to continue?
-        </MessageBar>
-      )}
       <Stack horizontal tokens={{ childrenGap: 8 }}>
         {currentStep === 'cascade' && (
           <PrimaryButton

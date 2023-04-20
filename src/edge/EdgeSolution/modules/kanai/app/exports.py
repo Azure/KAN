@@ -145,10 +145,17 @@ def send_message(message):
     print("Sent message: " + payload)
 
 
-mqtt_client = mqtt.Client(INSTANCE, protocol=4)
-mqtt_client.on_connect = on_connect
+if not is_iotedge():
+    try:
+        mqtt_client = mqtt.Client(INSTANCE, protocol=4)
+        mqtt_client.on_connect = on_connect
 
-mqtt_client.connect("mqtt.default.svc.cluster.local", 1883, 60)
+        mqtt_client.connect("mqtt.default.svc.cluster.local", 1883, 60)
+    except Exception as e:
+        mqtt_client = None
+        print(f"MQTT client error: {e}", flush=True)
+else:
+    mqtt_client = None
 
 
 try:
@@ -178,7 +185,7 @@ class IothubExport(Export):
                     print('IotHubExport: send a message to metrics')
                     if iot:
                         iot.send_message_to_output(j, 'metrics')
-                    else:
+                    elif mqtt_client:
                         send_message(j)
                 except Exception as e:
                     print(

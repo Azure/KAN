@@ -418,7 +418,7 @@ class KanSolutionClient(KanClient):
                 })
 
         # container image
-        kanai_version = "0.41.44"
+        kanai_version = "0.41.45"
         # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{kanai_version}-amd64"
         # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{kanai_version}-amd64"
         # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{kanai_version}-{image_suffix}amd64"

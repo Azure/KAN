@@ -145,7 +145,7 @@ def send_message(message):
     print("Sent message: " + payload)
 
 
-if is_iotedge():
+if not is_iotedge():
     try:
         mqtt_client = mqtt.Client(INSTANCE, protocol=4)
         mqtt_client.on_connect = on_connect

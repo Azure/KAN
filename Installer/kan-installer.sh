@@ -1,8 +1,8 @@
 #!/bin/bash
 kan_version=0.41.44
 agent_version=0.41.44
-kanportal_version=0.41.45-amd64
-kanai_version=0.41.45
+kanportal_version=0.41.46-amd64
+kanai_version=0.41.46
 current_step=0
 while [ $current_step -lt 8 ]; do
     case $current_step in

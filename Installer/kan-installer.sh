@@ -2,6 +2,7 @@
 kan_version=0.41.44
 agent_version=0.41.44
 kanportal_version=0.41.45-amd64
+kanai_version=0.41.45
 current_step=0
 while [ $current_step -lt 8 ]; do
     case $current_step in
@@ -572,7 +573,7 @@ while [ $current_step -lt 8 ]; do
                     values="$values --set servicePrincipal.tenantId=$sp_tenant --set servicePrincipal.clientId=$app_id --set servicePrincipal.clientSecret=$sp_password"
                 fi
 
-                helm upgrade -n default --install kanportal oci://kanprod.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kanprod.azurecr.io/kanportal --set kanAgentImage=$agent_image --set kanAgentVersion=$agent_version
+                helm upgrade -n default --install kanportal oci://kanprod.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kanprod.azurecr.io/kanportal --set kanAgentImage=$agent_image --set kanAgentVersion=$agent_version --set kanaiVersion=$kanai_version
 
                 if [ $? != "0" ]; then
                     echo -e "\e[31mWe faced some issues while pull KANportal from container registry. Please try the installer again a few minutes later\e[0m"

@@ -1,7 +1,0 @@
-# Release helm chart to ACR
-
-Run the script and follow the instructions
-
-```
-bash release.sh <ACR name>
-```

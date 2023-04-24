@@ -477,3 +477,7 @@ dmypy.json
 # Dependency directories (remove the comment below to include it)
 vendor/
 bin/
+
+
+# ignore .env files
+**/.env

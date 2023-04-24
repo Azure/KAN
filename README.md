@@ -1,5 +1,7 @@
 # KubeAI Application Nucleus for edge (KAN)
 
+_(last edit: 4/24/2021)_
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 KubeAI Application Nucleus for edge (KAN - 看 in Mandarin means “to watch”, “to see”) is a solution accelerator for creating, deploying, and operating environment-aware solutions at scale that use artificial intelligence (AI) at the edge with the control and flexibility natively on your environment. Many of the KAN elements are open-sourced and leverage the open-source software (OSS) community to deliver enhanced experiences. And, as a self-managed solution, you can host the experience on your own [Kubernetes](https://kubernetes.io/) clusters.
@@ -54,6 +56,15 @@ KAN has three high-level components: portal, controller-API and agent. You can i
 # KAN and API documentation
 
 To view a list of links to information about KAN and the APIs, go to [KubeAI Application Nucleus for edge (KAN) documentation](./docs/KAN-TOC.md).
+
+# Building KAN
+
+Please follow these links to:
+
+* [Build KAN Portal container](./src/portal/README.md)
+* [Build KAN AI containers](./src/edge/README.md)
+* [Build Kan Portal Helm chart](./Deploy/helm/README.md)
+* [Update KAN installer](./Installer/README.md)
 
 # Contributing
 

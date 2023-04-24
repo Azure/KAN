@@ -351,6 +351,7 @@ class KanSolutionClient(KanClient):
         is_grpc = self.args.get("is_grpc", False)
         grpc_components = self.args.get("grpc_components", [])
         # workaround for kan 0.39.7
+        kanai_version = os.getenv('KANAI_VERSION')
         is_k8s = self.args.get("is_k8s", False)
         if is_k8s:
             kan_agent_address = "target-runtime.default.svc.cluster.local"
@@ -418,7 +419,7 @@ class KanSolutionClient(KanClient):
                 })
 
         # container image
-        kanai_version = "0.41.45"
+        # kanai_version = "0.41.45"
         # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{kanai_version}-amd64"
         # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{kanai_version}-amd64"
         # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{kanai_version}-{image_suffix}amd64"

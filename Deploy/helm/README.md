@@ -9,7 +9,7 @@ Follow these steps to package and push KAN Portal Helm chart:
 Edit the ```Deploy/helm/kanportal/chart.yaml``` file and the ```Deploy/helm/kanportal/values.yaml``` file to update all the version numbers to desired values.
 
 ## 2. Run build script
-We provide a ```releas.sh``` script that packages Kan Portal Helm chart can pushes it to a container registry. To run the script:
+We provide a ```release.sh``` script that packages Kan Portal Helm chart and pushes it to a container registry. To run the script:
 
 ```bash
 bash release.sh <Azure Container Registry name> # for example: bash release.sh kanprod.azurecr.io

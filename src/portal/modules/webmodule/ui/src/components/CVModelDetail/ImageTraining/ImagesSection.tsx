@@ -93,7 +93,7 @@ const Images = (props: Props) => {
   }, []);
 
   function onUploadFileInput(e: React.ChangeEvent<HTMLInputElement>): void {
-    for (let i = 0; i < e.target.files.length; i++) {
+    for (let i = 0; i < e.target.files.length; i += 1) {
       const formData = new FormData();
       formData.append('image', e.target.files[i]);
       formData.append('project', modelId.toString());

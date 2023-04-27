@@ -7,16 +7,17 @@ import { Stack, DefaultButton, Label, TextField, Text } from '@fluentui/react';
 
 import { trainingProjectPartsSelectorFactory, postPartByProject } from '../../../store/partSlice';
 import { getTagsClasses } from './styles';
-import { updateCustomVisionProjectTags } from '../../../store/trainingProjectSlice';
+import { ProjectType, updateCustomVisionProjectTags } from '../../../store/trainingProjectSlice';
 
 import Tag from '../../Models/Tag';
 
 interface Props {
   modelId: number;
+  projectType: ProjectType;
 }
 
 const Tags = (props: Props) => {
-  const { modelId } = props;
+  const { modelId, projectType } = props;
 
   const partSelector = useMemo(() => trainingProjectPartsSelectorFactory(modelId), [modelId]);
   const parts = useSelector(partSelector);
@@ -89,7 +90,7 @@ const Tags = (props: Props) => {
             {isAdd && <TextField value={localPart} onChange={(_, newValue) => setLocalPart(newValue)} />}
           </Stack>
           <Stack horizontalAlign="space-between" horizontal>
-            <Text>Add at least 2 tags to Save</Text>
+            <Text>{`Add at least ${projectType === 'Classification' ? '2 tags' : '1 tag'} to Save`}</Text>
             {isAdd ? (
               <DefaultButton
                 className={classes.button}

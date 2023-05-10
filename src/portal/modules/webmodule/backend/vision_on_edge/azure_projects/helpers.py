@@ -218,6 +218,20 @@ def create_default_nodes():
     )
 
     Project.objects.update_or_create(
+        name="mqtt_export",
+        defaults={
+            "is_cascade": True,
+            "node_type": "export",
+            "inputs": json.dumps([
+                {
+                    "route": "f",
+                    "type": "frame"
+                }
+            ])
+        },
+    )
+
+    Project.objects.update_or_create(
         name="iotedge_export",
         defaults={
             "is_cascade": True,

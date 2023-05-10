@@ -145,17 +145,14 @@ def send_message(message):
     print("Sent message: " + payload)
 
 
-if not is_iotedge():
-    try:
-        mqtt_client = mqtt.Client(INSTANCE, protocol=4)
-        mqtt_client.on_connect = on_connect
+try:
+    mqtt_client = mqtt.Client(INSTANCE, protocol=4)
+    mqtt_client.on_connect = on_connect
 
-        mqtt_client.connect("mqtt.default.svc.cluster.local", 1883, 60)
-    except Exception as e:
-        mqtt_client = None
-        print(f"MQTT client error: {e}", flush=True)
-else:
+    mqtt_client.connect("mqtt.default.svc.cluster.local", 1883, 60)
+except Exception as e:
     mqtt_client = None
+    print(f"MQTT client error: {e}", flush=True)
 
 
 try:
@@ -190,6 +187,41 @@ class IothubExport(Export):
                 except Exception as e:
                     print(
                         f"IotHubExport: An error occurred while sending message to metrics: {e}.")
+
+        self._export_thread = threading.Thread(target=_exporter)
+        self._export_thread.start()
+
+    def process(self, frame):
+
+        cur_timestamp = time.time()
+        if cur_timestamp > self.last_timestamp + self.delay_buffer:
+
+            if len(frame.insights_meta.objects_meta) > 0:
+                if not self._export_q.full():
+                    self._export_q.put(frame.json())
+                else:
+                    print(f'IotHubExport: drop result since queue is full', flush=True)
+                self.last_timestamp = cur_timestamp
+
+class MqttExport(Export):
+    def __init__(self, delay_buffer=6, **kwargs):
+        super().__init__()
+        self.delay_buffer = float(delay_buffer)
+
+        self.last_timestamp = -1
+
+        self._export_q = queue.Queue(30)
+
+        def _exporter():
+            while True:
+                j = self._export_q.get()
+                try:
+                    print('MqttExport: send a message to metrics')
+                    if mqtt_client:
+                        send_message(j)
+                except Exception as e:
+                    print(
+                        f"MqttExport: An error occurred while sending message to metrics: {e}.")
 
         self._export_thread = threading.Thread(target=_exporter)
         self._export_thread.start()

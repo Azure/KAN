@@ -4,10 +4,12 @@
 #FROM python:3.8-slim-buster
 FROM nvidia/cuda:11.7.0-runtime-ubuntu20.04
 
-COPY kanai/libcudnn/* /usr/local/cuda/lib64/
+# COPY kanai/libcudnn/* /usr/local/cuda/lib64/
 
 RUN apt update
 RUN apt install ffmpeg libsm6 libxext6 -y
+RUN apt install libcudnn8=8.5.0.96-1+cuda11.7
+RUN cp /usr/lib/x86_64-linux-gnu/*cudnn* /usr/local/cuda/lib64/
 RUN apt install wget unzip -y
 RUN apt install python3.8 pip -y
 RUN pip install -U pip

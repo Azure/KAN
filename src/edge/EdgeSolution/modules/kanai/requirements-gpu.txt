@@ -14,3 +14,4 @@ httpx
 azure-iot-device
 pytz
 grpcio
+protobuf==3.20.*

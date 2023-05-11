@@ -65,6 +65,7 @@ const getModelDisplayName = (modelName: string, nodeType: ModelNodeType) => {
   if (nodeType === 'export' && modelName === 'iothub_export') return 'Send Insights to IoT Hub';
   if (nodeType === 'export' && modelName === 'iotedge_export') return 'Send Insights to IoT Edge Module';
   if (nodeType === 'export' && modelName === 'http_export') return 'Send Insights to HTTP Endpoint';
+  if (nodeType === 'export' && modelName === 'mqtt_export') return 'Send Insights to MQTT Endpoint';
 
   return modelName;
 };

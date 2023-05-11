@@ -41,6 +41,8 @@ export const getExportType = (name: string): ExportType => {
       return 'iotEdge';
     case 'http_export':
       return 'http';
+    case 'mqtt_export':
+      return 'mqtt';
     default:
       return null;
   }

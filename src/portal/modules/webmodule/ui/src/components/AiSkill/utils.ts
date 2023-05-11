@@ -246,7 +246,7 @@ const parseNodePayload = (node: Node<SkillNodeData>) => {
     };
   }
 
-  if (node.type === 'export' && ['snippet', 'iotHub', 'iotEdge'].includes(node.data.exportType)) {
+  if (node.type === 'export' && ['snippet', 'iotHub', 'iotEdge', 'mqtt'].includes(node.data.exportType)) {
     const configurationsPayload: ConfigurationsPayload = {
       delay_buffer: configurations.delay_buffer,
     };

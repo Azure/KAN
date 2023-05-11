@@ -201,7 +201,7 @@ const ModelPanel = (props: Props) => {
       return true;
     }
 
-    if (['iotHub', 'iotEdge'].includes(data.exportType) && +localForm.delay_buffer <= 0) {
+    if (['iotHub', 'iotEdge', 'mqtt'].includes(data.exportType) && +localForm.delay_buffer <= 0) {
       setLocalForm((prev) => ({
         ...prev,
         error: { ...prev.error, delay_buffer: ERROR_GREAT_THAN_ZERO },

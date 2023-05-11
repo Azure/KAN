@@ -5,7 +5,7 @@ import { ModelNodeType, ModelCategory, ModelProjectType, TrainingProject } from 
 
 export type PivotTabKey = 'basics' | 'preview' | 'tag' | 'cascade';
 export type TransformType = 'filter' | 'grpc';
-export type ExportType = 'snippet' | 'iotHub' | 'iotEdge' | 'http';
+export type ExportType = 'snippet' | 'iotHub' | 'iotEdge' | 'http' | 'mqtt';
 
 export const STEP_ORDER = ['basics', 'cascade', 'tag', 'preview'] as PivotTabKey[];
 

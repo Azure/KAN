@@ -10,6 +10,7 @@ export const NODE_CONSTANT_Y_POSITION = 50;
 
 type ConfigurationsPayload = Partial<{
   delay_buffer: string;
+  broker_address: string;
   filename_prefix: string;
   instance_displayname: string;
   device_displayname: string;
@@ -251,6 +252,10 @@ const parseNodePayload = (node: Node<SkillNodeData>) => {
       delay_buffer: configurations.delay_buffer,
     };
 
+    if (node.data.exportType === 'mqtt'){
+      configurationsPayload.broker_address = configurations.broker_address;
+    }
+
     if (node.data.exportType === 'snippet') {
       configurationsPayload.filename_prefix = configurations.filename_prefix;
       configurationsPayload.instance_displayname = '$param(instance_displayname)';
@@ -406,6 +411,7 @@ export const recoverRawElements = (
       data.configurations.recording_duration = node.configurations.recording_duration;
       data.configurations.insights_overlay = node.configurations.insights_overlay;
       data.configurations.delay_buffer = node.configurations.delay_buffer;
+      data.configurations.broker_address = node.configurations.broker_address;
       data.configurations.module_name = node.configurations.module_name;
       data.configurations.module_input = node.configurations.module_input;
       data.configurations.url = node.configurations.url;
@@ -413,6 +419,7 @@ export const recoverRawElements = (
         filename_prefix: '',
         recording_duration: '',
         insights_overlay: '',
+        broker_address: '',
         delay_buffer: '',
         module_name: '',
         url: '',

@@ -22,6 +22,7 @@ import { theme, ERROR_BLANK_VALUE } from '../../../../constant';
 import { InsightsOverLayType, ExportPanelFromData, SkillNodeData, ExportType } from '../../types';
 
 import DelayBufferToolTip from './ToolTip/DelayBufferToolTip';
+import BrokerAddressToolTop from './ToolTip/BrokerAddressToolTip';
 
 interface Props {
   node: Node<SkillNodeData>;
@@ -101,6 +102,7 @@ const ModelPanel = (props: Props) => {
     filename_prefix: '',
     recording_duration: '',
     insights_overlay: '',
+    broker_address: 'mqtt.default.svc.cluster.local:1883',
     delay_buffer: getDelayBufferDefaultValue(data.exportType),
     module_name: '',
     module_input: '',
@@ -109,6 +111,7 @@ const ModelPanel = (props: Props) => {
       filename_prefix: '',
       recording_duration: '',
       insights_overlay: '',
+      broker_address: '',
       delay_buffer: '',
       module_name: '',
       module_input: '',
@@ -124,6 +127,7 @@ const ModelPanel = (props: Props) => {
           filename_prefix: '',
           recording_duration: '',
           insights_overlay: '',
+          broker_address: '',
           delay_buffer: '',
           module_name: '',
           url: '',
@@ -189,6 +193,14 @@ const ModelPanel = (props: Props) => {
       setLocalForm((prev) => ({
         ...prev,
         error: { ...prev.error, delay_buffer: ERROR_BLANK_VALUE },
+      }));
+      return true;
+    }
+
+    if ((data.exportType as ExportType) === 'mqtt' && localForm.broker_address === '') {
+      setLocalForm((prev) => ({
+        ...prev,
+        error: { ...prev.error, broker_address: ERROR_BLANK_VALUE },
       }));
       return true;
     }
@@ -335,6 +347,23 @@ const ModelPanel = (props: Props) => {
               errorMessage={localForm.error.module_input}
             />
           </>
+        )}
+        {data.exportType === 'mqtt' &&(
+          <TextField
+            label="Broker Address"
+            value={localForm.broker_address}
+            onRenderLabel={(props: ITextFieldProps) => <BrokerAddressToolTop {...props} />}
+            required
+            placeholder={'address:port'}
+            onChange={(_, newValue) =>
+              setLocalForm((prev) => ({
+                ...prev,
+                broker_address: newValue,
+                error: { ...prev.error, broker_address: '' },
+              }))
+            }
+            errorMessage={localForm.error.broker_address}
+          />
         )}
         {['snippet', 'iotHub', 'iotEdge', 'mqtt'].includes(data.exportType) && (
           <TextField

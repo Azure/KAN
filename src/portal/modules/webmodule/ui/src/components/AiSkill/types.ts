@@ -89,6 +89,7 @@ export type ExportPanelFromData = {
   filename_prefix: string;
   recording_duration: string;
   insights_overlay: InsightsOverLayType;
+  broker_address: string;
   delay_buffer: string;
   module_name: string;
   module_input: string;
@@ -97,6 +98,7 @@ export type ExportPanelFromData = {
     filename_prefix: string;
     recording_duration: string;
     insights_overlay: string;
+    broker_address: string;
     delay_buffer: string;
     module_name: string;
     module_input: string;

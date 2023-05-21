@@ -5,7 +5,7 @@ import { ModelNodeType, ModelCategory, ModelProjectType, TrainingProject } from 
 
 export type PivotTabKey = 'basics' | 'preview' | 'tag' | 'cascade';
 export type TransformType = 'filter' | 'grpc';
-export type ExportType = 'snippet' | 'iotHub' | 'iotEdge' | 'http';
+export type ExportType = 'snippet' | 'iotHub' | 'iotEdge' | 'http' | 'mqtt';
 
 export const STEP_ORDER = ['basics', 'cascade', 'tag', 'preview'] as PivotTabKey[];
 
@@ -89,6 +89,7 @@ export type ExportPanelFromData = {
   filename_prefix: string;
   recording_duration: string;
   insights_overlay: InsightsOverLayType;
+  broker_address: string;
   delay_buffer: string;
   module_name: string;
   module_input: string;
@@ -97,6 +98,7 @@ export type ExportPanelFromData = {
     filename_prefix: string;
     recording_duration: string;
     insights_overlay: string;
+    broker_address: string;
     delay_buffer: string;
     module_name: string;
     module_input: string;

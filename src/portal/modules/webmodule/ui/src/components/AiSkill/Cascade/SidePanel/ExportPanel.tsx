@@ -22,6 +22,7 @@ import { theme, ERROR_BLANK_VALUE } from '../../../../constant';
 import { InsightsOverLayType, ExportPanelFromData, SkillNodeData, ExportType } from '../../types';
 
 import DelayBufferToolTip from './ToolTip/DelayBufferToolTip';
+import BrokerAddressToolTop from './ToolTip/BrokerAddressToolTip';
 
 interface Props {
   node: Node<SkillNodeData>;
@@ -48,6 +49,8 @@ const getExportNodeHeader = (exportType: ExportType) => {
       return 'Export Video Snippet';
     case 'iotHub':
       return 'Export (Send Insights to IoT Hub)';
+    case 'mqtt':
+      return 'Export (Send Insights to MQTT Endpoint)';
     case 'iotEdge':
       return 'Export (Send Insights to IoT Edge Module)';
     case 'http':
@@ -67,6 +70,8 @@ const getExportNodeDesc = (exportType: ExportType) => {
       return 'Use this node to send metadata from this skill directly to your IoT Edge Modules.';
     case 'http':
       return 'Use this node to send insights from this skill directly to your HTTP endpoint.';
+    case 'mqtt':
+      return 'Use this node to send insights from this skill directly to your MQTT endpoint.';
     default:
       return '';
   }
@@ -77,6 +82,8 @@ const getDelayBufferDefaultValue = (exportType: ExportType) => {
     case 'snippet':
       return '2'; // unit: minutes
     case 'iotHub':
+      return '30'; // unit: second
+    case 'mqtt':
       return '30'; // unit: second
     case 'iotEdge':
       return '10'; // unit: second
@@ -95,6 +102,7 @@ const ModelPanel = (props: Props) => {
     filename_prefix: '',
     recording_duration: '',
     insights_overlay: '',
+    broker_address: 'mqtt.default.svc.cluster.local:1883',
     delay_buffer: getDelayBufferDefaultValue(data.exportType),
     module_name: '',
     module_input: '',
@@ -103,6 +111,7 @@ const ModelPanel = (props: Props) => {
       filename_prefix: '',
       recording_duration: '',
       insights_overlay: '',
+      broker_address: '',
       delay_buffer: '',
       module_name: '',
       module_input: '',
@@ -118,6 +127,7 @@ const ModelPanel = (props: Props) => {
           filename_prefix: '',
           recording_duration: '',
           insights_overlay: '',
+          broker_address: '',
           delay_buffer: '',
           module_name: '',
           url: '',
@@ -179,10 +189,18 @@ const ModelPanel = (props: Props) => {
       }
     }
 
-    if (['iotHub', 'iotEdge', 'snippet'].includes(data.exportType) && localForm.delay_buffer === '') {
+    if (['iotHub', 'iotEdge', 'snippet', 'mqtt'].includes(data.exportType) && localForm.delay_buffer === '') {
       setLocalForm((prev) => ({
         ...prev,
         error: { ...prev.error, delay_buffer: ERROR_BLANK_VALUE },
+      }));
+      return true;
+    }
+
+    if ((data.exportType as ExportType) === 'mqtt' && localForm.broker_address === '') {
+      setLocalForm((prev) => ({
+        ...prev,
+        error: { ...prev.error, broker_address: ERROR_BLANK_VALUE },
       }));
       return true;
     }
@@ -195,7 +213,7 @@ const ModelPanel = (props: Props) => {
       return true;
     }
 
-    if (['iotHub', 'iotEdge'].includes(data.exportType) && +localForm.delay_buffer <= 0) {
+    if (['iotHub', 'iotEdge', 'mqtt'].includes(data.exportType) && +localForm.delay_buffer <= 0) {
       setLocalForm((prev) => ({
         ...prev,
         error: { ...prev.error, delay_buffer: ERROR_GREAT_THAN_ZERO },
@@ -330,7 +348,24 @@ const ModelPanel = (props: Props) => {
             />
           </>
         )}
-        {['snippet', 'iotHub', 'iotEdge'].includes(data.exportType) && (
+        {data.exportType === 'mqtt' &&(
+          <TextField
+            label="Broker Address"
+            value={localForm.broker_address}
+            onRenderLabel={(props: ITextFieldProps) => <BrokerAddressToolTop {...props} />}
+            required
+            placeholder={'address:port'}
+            onChange={(_, newValue) =>
+              setLocalForm((prev) => ({
+                ...prev,
+                broker_address: newValue,
+                error: { ...prev.error, broker_address: '' },
+              }))
+            }
+            errorMessage={localForm.error.broker_address}
+          />
+        )}
+        {['snippet', 'iotHub', 'iotEdge', 'mqtt'].includes(data.exportType) && (
           <TextField
             label="Delay Buffer"
             onRenderLabel={(props: ITextFieldProps) => <DelayBufferToolTip {...props} />}

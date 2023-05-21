@@ -153,7 +153,7 @@ def receive_events_from_iothub(iothub_name):
 # mqtt receiver
 
 def on_connect(client: mqtt.Client, userdata, flags, rc, properties=None):
-    client.subscribe("iothubmessage")
+    client.subscribe("mqttmessage")
     logger.warning("connected")
 
 

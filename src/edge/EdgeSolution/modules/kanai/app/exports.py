@@ -132,31 +132,37 @@ class VideoSnippetExport(Export):
 
 
 # MQTT setup
+mqtt_client = None
 
 def on_connect(client: mqtt.Client, userdata, flags, rc, properties=None):
     print("connected", flush=True)
 
 
-def send_message(message):
-    # payload = json.dumps(message)
-    payload = message
-    mqtt_client.reconnect()
-    mqtt_client.publish("iothubmessage", payload=payload)
-    print("Sent message: " + payload)
-
-
-if not is_iotedge():
+def mqtt_init(broker_address):
+    global mqtt_client
+    print("MQTT init")
     try:
-        mqtt_client = mqtt.Client(INSTANCE, protocol=4)
+        addr, port = broker_address.split(":")
+        print(f"Connecting MQTT broker: {addr}:{port} for instance {INSTANCE}")
+        mqtt_client = mqtt.Client(INSTANCE, protocol=5)
         mqtt_client.on_connect = on_connect
 
-        mqtt_client.connect("mqtt.default.svc.cluster.local", 1883, 60)
+        mqtt_client.connect(addr, int(port), 60)
     except Exception as e:
         mqtt_client = None
         print(f"MQTT client error: {e}", flush=True)
-else:
-    mqtt_client = None
 
+
+def send_message(message):
+    global mqtt_client
+    if mqtt_client:
+        # payload = json.dumps(message)
+        payload = message
+        mqtt_client.reconnect()
+        mqtt_client.publish("mqttmessage", payload=payload)
+        print("Sent message: " + payload)
+    else:
+        print("MQTT client not set.")
 
 try:
     if IOTEDGE_CONNECTION_STRING:
@@ -185,7 +191,9 @@ class IothubExport(Export):
                     print('IotHubExport: send a message to metrics')
                     if iot:
                         iot.send_message_to_output(j, 'metrics')
-                    elif mqtt_client:
+                    else:
+                        global mqtt_client
+                        mqtt_init("mqtt.default.svc.cluster.local:1883")
                         send_message(j)
                 except Exception as e:
                     print(
@@ -204,6 +212,41 @@ class IothubExport(Export):
                     self._export_q.put(frame.json())
                 else:
                     print(f'IotHubExport: drop result since queue is full', flush=True)
+                self.last_timestamp = cur_timestamp
+
+class MqttExport(Export):
+    def __init__(self, delay_buffer=6, broker_address="mqtt.default.svc.cluster.local:1883", **kwargs):
+        super().__init__()
+        mqtt_init(broker_address)
+        self.delay_buffer = float(delay_buffer)
+
+        self.last_timestamp = -1
+
+        self._export_q = queue.Queue(30)
+
+        def _exporter():
+            while True:
+                j = self._export_q.get()
+                try:
+                    print('MqttExport: send a message to metrics')
+                    send_message(j)
+                except Exception as e:
+                    print(
+                        f"MqttExport: An error occurred while sending message to metrics: {e}.")
+
+        self._export_thread = threading.Thread(target=_exporter)
+        self._export_thread.start()
+
+    def process(self, frame):
+
+        cur_timestamp = time.time()
+        if cur_timestamp > self.last_timestamp + self.delay_buffer:
+
+            if len(frame.insights_meta.objects_meta) > 0:
+                if not self._export_q.full():
+                    self._export_q.put(frame.json())
+                else:
+                    print(f'MqttExport: drop result since queue is full', flush=True)
                 self.last_timestamp = cur_timestamp
 
 

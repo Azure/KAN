@@ -6,7 +6,7 @@ from common.voe_cascade_config import CascadeConfig
 
 from sources import RtspSource
 from transforms import FilterTransform, GrpcTransform
-from exports import VideoSnippetExport, IothubExport, IotedgeExport, Cv2ImshowExport, HttpExport
+from exports import VideoSnippetExport, IothubExport, MqttExport, IotedgeExport, Cv2ImshowExport, HttpExport
 from models import FakeModel, ObjectDetectionModel, ClassificationModel
 
 
@@ -22,6 +22,7 @@ supported_transforms = {
 supported_exports = {
     'video_snippet_export': VideoSnippetExport,
     'iothub_export': IothubExport,
+    'mqtt_export': MqttExport,
     'iotedge_export': IotedgeExport,
     'cv2_imshow_export': Cv2ImshowExport,
     'http_export': HttpExport

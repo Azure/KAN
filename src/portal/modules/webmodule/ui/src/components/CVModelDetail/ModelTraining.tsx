@@ -18,7 +18,7 @@ const ModelTraining = (props: Props) => {
 
   return (
     <>
-      <TagsSection modelId={model.id} />
+      <TagsSection modelId={model.id} projectType={model.projectType} />
       <ImagesSection modelId={model.id} />
       <TrainingFooter cvModelId={model.id} projectType={model.projectType} />
     </>

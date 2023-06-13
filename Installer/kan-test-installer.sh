@@ -1,7 +1,7 @@
 #!/bin/bash
 kan_version=0.41.44
 agent_version=0.41.44
-kanportal_version=0.41.47-amd64
+kanportal_version=0.41.47-amd64.1
 kanai_version=0.41.47
 current_step=0
 while [ $current_step -lt 8 ]; do
@@ -573,7 +573,25 @@ while [ $current_step -lt 8 ]; do
                     values="$values --set servicePrincipal.tenantId=$sp_tenant --set servicePrincipal.clientId=$app_id --set servicePrincipal.clientSecret=$sp_password"
                 fi
 
-                helm upgrade -n default --install kanportal oci://kantest.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kantest.azurecr.io/kanportal --set kanAgentImage=$agent_image --set kanAgentVersion=$agent_version --set kanaiVersion=$kanai_version
+                # wait for ingress service ready
+                while true; do
+                    portalIp=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+                    if [[ $portalIp != "" ]]; then
+                        break
+                    fi
+                    sleep 3                
+                done
+
+                # wait for KAN service ready
+                while true; do
+                    kanIp=$(kubectl get svc -n kan-k8s-system kan-service-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+                    if [[ $kanIp != "" ]]; then
+                        break
+                    fi
+                    sleep 3                
+                done
+
+                helm upgrade -n default --install kanportal oci://kantest.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kantest.azurecr.io/kanportal --set kanAgentImage=$agent_image --set kanAgentVersion=$agent_version --set kanaiVersion=$kanai_version --set kanportal.portalIp=$portalIp --set kanportal.kanIp=$kanIp
 
                 if [ $? != "0" ]; then
                     echo -e "\e[31mWe faced some issues while pull KANportal from container registry. Please try the installer again a few minutes later\e[0m"

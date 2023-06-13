@@ -7,6 +7,8 @@ image:
   tag:
 kanportal:
   videoSource: opencv
+  portalIp:
+  kanIp:
 storage:
   storageResourceGroup: ""
   storageAccount: ""

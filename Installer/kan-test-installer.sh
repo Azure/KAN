@@ -1,7 +1,7 @@
 #!/bin/bash
 kan_version=0.41.44
 agent_version=0.41.44
-kanportal_version=0.41.47-amd64.1
+kanportal_version=0.41.47-amd64
 kanai_version=0.41.47
 current_step=0
 while [ $current_step -lt 8 ]; do

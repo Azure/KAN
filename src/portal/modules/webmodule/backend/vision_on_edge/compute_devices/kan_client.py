@@ -42,9 +42,10 @@ class KanTargetClient(KanClient):
         kan_agent_image = os.getenv('KAN_AGENT_IMAGE', 'kanprod.azurecr.io/kan-agent')
 
         service_api = self.get_service_client()
-        res = service_api.read_namespaced_service(
-            name='kan-service-ext', namespace='kan-k8s-system')
-        kan_ip = res.status.load_balancer.ingress[0].ip
+        # res = service_api.read_namespaced_service(
+        #     name='kan-service-ext', namespace='kan-k8s-system')
+        # kan_ip = res.status.load_balancer.ingress[0].ip
+        kan_ip = os.getenv('KAN_IP')
         kan_url = "http://" + kan_ip + ":8080/v1alpha2/agent/references"
 
         labels = {}
@@ -368,10 +369,11 @@ class KanSolutionClient(KanClient):
             image_suffix = 'gpu'
             container_resources = "{\"limits\":{\"nvidia.com/gpu\":\"1\"}}"
             create_options = "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"runtime\":\"nvidia\"}}"
-        network_api = self.get_network_client()
-        res = network_api.read_namespaced_ingress(
-            name='kanportal', namespace='default')
-        webmodule_ip = res.status.load_balancer.ingress[0].ip
+        # network_api = self.get_network_client()
+        # res = network_api.read_namespaced_ingress(
+        #     name='kanportal', namespace='default')
+        # webmodule_ip = res.status.load_balancer.ingress[0].ip
+        webmodule_ip = os.getenv('PORTAL_IP')
         webmodule_url = "http://" + webmodule_ip
 
         # get storage acount connection string

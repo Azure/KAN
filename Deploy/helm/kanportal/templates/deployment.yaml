@@ -36,6 +36,10 @@ spec:
             value: {{.Values.kanportal.videoSource}}
           - name: IS_K8S
             value: "true"
+          - name: PORTAL_IP
+            value: {{.Values.kanportal.portalIp}}
+          - name: KAN_IP
+            value: {{.Values.kanportal.kanIp}}
 ---
 apiVersion: apps/v1
 kind: Deployment

@@ -18,6 +18,7 @@ class KanTargetClient(KanClient):
         super().__init__()
         self.group = "fabric.kan"
         self.plural = "targets"
+        self.kan_api_url = "http://" + self.kan_ip + ":8080/v1alpha2/targets/registry"
 
     def get_config(self):
         name = self.args.get("name", "")
@@ -337,6 +338,7 @@ class KanSolutionClient(KanClient):
         super().__init__()
         self.group = "solution.kan"
         self.plural = "solutions"
+        self.kan_api_url = "http://" + self.kan_ip + ":8080/v1alpha2/solutions"
 
     def get_config(self):
 

@@ -16,6 +16,7 @@ class KanInstanceClient(KanClient):
         super().__init__()
         self.group = "solution.kan"
         self.plural = "instances"
+        self.kan_api_url = "http://" + self.kan_ip + ":8080/v1alpha2/instances"
 
     def get_config(self):
 

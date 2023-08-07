@@ -94,7 +94,12 @@ class KanClient:
         '''
 
         obj["metadata"] = {"name": obj.get("id", "")}
-        obj["spec"]["properties"] = {"status": obj["spec"].get("status")}
+        status = obj.get("status", "")
+        if status:
+            status_ = status.copy()
+        else:
+            status_ = status
+        obj["status"]["properties"] = status_
 
         return obj
 
@@ -172,6 +177,7 @@ class KanClient:
     def get_objects(self):
 
         kan_objects = self.get_configs_from_kan()
+        logger.warning(f"get objects: {kan_objects}")
         res = []
         for kan_object in kan_objects:
             res.append(self.process_data(kan_object, multi=True))

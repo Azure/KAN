@@ -10,7 +10,7 @@ except:
 from pydantic import BaseModel
 
 class ModelConfig(BaseModel):
-    #kan_name: str
+    #symphony_name: str
     name: str 
     provider: Literal['customvision', 'modelzoo']
     executor: Literal['customvision', 'openvino', 'onnxruntime']

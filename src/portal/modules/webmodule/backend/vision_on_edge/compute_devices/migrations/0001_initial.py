@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('architecture', models.CharField(blank=True, default='', max_length=1000, null=True)),
                 ('acceleration', models.CharField(blank=True, default='', max_length=1000, null=True)),
                 ('tag_list', models.CharField(blank=True, default='', max_length=1000, null=True)),
-                ('kan_id', models.CharField(blank=True, default='', max_length=1000, null=True)),
+                ('symphony_id', models.CharField(blank=True, default='', max_length=1000, null=True)),
                 ('solution_id', models.CharField(blank=True, default='', max_length=1000, null=True)),
                 ('status', models.CharField(blank=True, default='', max_length=1000)),
                 ('is_k8s', models.BooleanField(default=False)),

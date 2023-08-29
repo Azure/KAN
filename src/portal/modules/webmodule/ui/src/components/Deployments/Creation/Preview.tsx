@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { State as RootState } from 'RootStateType';
 import { CreateDeploymentFormData, UpdateDeploymentFormData, PivotTabKey } from '../types';
 import { selectAllCameras } from '../../../store/cameraSlice';
-import { selectDeviceByKanIdSelectorFactory } from '../../../store/computeDeviceSlice';
+import { selectDeviceBySymphonyIdSelectorFactory } from '../../../store/computeDeviceSlice';
 import { theme } from '../../../constant';
 
 import PreviewLabel from '../../Common/PreviewLabel';
@@ -23,7 +23,7 @@ interface Props {
 const Preview = (props: Props) => {
   const { localFormData, onLinkClick } = props;
 
-  // const device = useSelector(selectDeviceByKanIdSelectorFactory(localFormData.device.key));
+  // const device = useSelector(selectDeviceBySymphonyIdSelectorFactory(localFormData.device.key));
   const cameraList = useSelector((state: RootState) => selectAllCameras(state));
 
   return (
@@ -34,7 +34,7 @@ const Preview = (props: Props) => {
         title="Linked cameras"
         content={localFormData.cameraList
           .map(
-            (configureCamera) => cameraList.find((camera) => camera.kan_id === configureCamera.camera).name,
+            (configureCamera) => cameraList.find((camera) => camera.symphony_id === configureCamera.camera).name,
           )
           .join(', ')}
       />

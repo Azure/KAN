@@ -64,7 +64,7 @@ export const getK8sWarning = (configureCameraList: ConfigureCamera[], aiSkillLis
     skillList
       .map((id) =>
         aiSkillList
-          .find((sk) => sk.kan_id === id)
+          .find((sk) => sk.symphony_id === id)
           .flow.nodes.filter((node) => IotNameList.includes(node.name)),
       )
       .flat(1),
@@ -74,7 +74,7 @@ export const getK8sWarning = (configureCameraList: ConfigureCamera[], aiSkillLis
     skillList
       .map((id) =>
         aiSkillList
-          .find((sk) => sk.kan_id === id)
+          .find((sk) => sk.symphony_id === id)
           .flow.nodes.filter((node) => IotNameList.includes(node.name)),
       )
       .flat(1).length > 0

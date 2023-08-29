@@ -1,8 +1,8 @@
-# KAN AI Container
+# SYMPHONY AI Container
 
 _(last edit: 4/24/2023)_
 
-KAN AI container is a Docker container that gets deployed when you deploy your AI solution to a computer device. It runs as an IoT Edge module when deployed to Azure IoT Edge, or as a Kubernetes pod when deployed to Kubernetes. You can use the provided ```devops.py``` Python script to build this container image yourself.
+SYMPHONY AI container is a Docker container that gets deployed when you deploy your AI solution to a computer device. It runs as an IoT Edge module when deployed to Azure IoT Edge, or as a Kubernetes pod when deployed to Kubernetes. You can use the provided ```devops.py``` Python script to build this container image yourself.
 
 ## 0. Prerequisites
 * [Docker](https://www.docker.com/products/docker-desktop)
@@ -23,13 +23,13 @@ pip install -r requirements.txt
 ```bash    
 python devops.py build-all
 ```
-The above command build four KAN AI container images for different infrastructures:
+The above command build four SYMPHONY AI container images for different infrastructures:
 | Image name| Infrastructure|
 |--------|--------|
-|```kanai:<version>-openvionamd64```|x64 CPU with OpenVino|
-|```kanai:<version>-gpuamd64```|x64 CPU with Nvidia GPU|
-|```kanai:<version>-amd64```|x64 CPU only|
-|```kanai:<version>-jetson```|Nvidia Jetson platform|
+|```symphonyai:<version>-openvionamd64```|x64 CPU with OpenVino|
+|```symphonyai:<version>-gpuamd64```|x64 CPU with Nvidia GPU|
+|```symphonyai:<version>-amd64```|x64 CPU only|
+|```symphonyai:<version>-jetson```|Nvidia Jetson platform|
 
 ## 4. Push images
 ```bash

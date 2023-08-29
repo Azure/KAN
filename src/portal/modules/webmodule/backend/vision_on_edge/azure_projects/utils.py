@@ -176,7 +176,7 @@ def update_tags_helper(project_id, tags=None):
         part_obj.delete()
 
 
-def pull_cv_project_helper(customvision_project_id: str, is_partial: bool, name: str = "", kan_id: str = ""):
+def pull_cv_project_helper(customvision_project_id: str, is_partial: bool, name: str = "", symphony_id: str = ""):
     """pull_cv_project_helper.
 
     Args:
@@ -242,7 +242,7 @@ def pull_cv_project_helper(customvision_project_id: str, is_partial: bool, name:
 
     project_obj = Project.objects.create(
         name=name,
-        kan_id=kan_id,
+        symphony_id=symphony_id,
         project_type=project_type,
         customvision_id=customvision_project_id,
         setting=setting_obj,

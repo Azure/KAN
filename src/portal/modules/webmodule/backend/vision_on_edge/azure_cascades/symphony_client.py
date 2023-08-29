@@ -4,18 +4,19 @@
 import logging
 import json
 
-from ..general.kan_client import KanClient
+from ..general.symphony_client import SymphonyClient
 
 
 logger = logging.getLogger(__name__)
 
 
-class KanSkillClient(KanClient):
+class SymphonySkillClient(SymphonyClient):
 
     def __init__(self):
         super().__init__()
-        self.group = "ai.kan"
+        self.group = "ai.symphony"
         self.plural = "skills"
+        self.symphony_api_url = "http://" + self.symphony_ip + ":8080/v1alpha2/skills"
 
     def get_config(self):
 
@@ -29,8 +30,8 @@ class KanSkillClient(KanClient):
                 labels[tag["name"]] = tag["value"]
 
         config_json = {
-            "apiVersion": "ai.kan/v1",
-            "kind": "Model",
+            "apiVersion": "ai.symphony/v1",
+            "kind": "Skill",
             "metadata": {
                 "name": name,
                 "labels": labels
@@ -57,13 +58,13 @@ class KanSkillClient(KanClient):
         ]
         return patch_config
 
-    def load_kan_objects(self):
+    def load_symphony_objects(self):
         from .models import Cascade
 
         api = self.get_client()
         if api:
             res = api.list_namespaced_custom_object(
-                group="ai.kan",
+                group="ai.symphony",
                 version="v1",
                 namespace="default",
                 plural="skills"
@@ -72,7 +73,7 @@ class KanSkillClient(KanClient):
 
             for skill in skills:
                 name = skill['spec']['displayName']
-                kan_id = skill['metadata']['name']
+                symphony_id = skill['metadata']['name']
                 spec = skill['spec']
                 fps = skill['spec']['parameters'].get("fpsRetrieve", "")
                 acceleration = skill['spec']['parameters'].get(
@@ -81,7 +82,7 @@ class KanSkillClient(KanClient):
                 skill_obj, created = Cascade.objects.update_or_create(
                     name=name,
                     defaults={
-                        "kan_id": kan_id,
+                        "symphony_id": symphony_id,
                         "flow": json.dumps(spec),
                         "fps": fps,
                         "acceleration": acceleration,
@@ -90,12 +91,12 @@ class KanSkillClient(KanClient):
                 logger.info("Cascade: %s %s.", skill_obj,
                             "created" if created else "updated")
         else:
-            logger.warning("Not loading kan skills")
+            logger.warning("Not loading symphony skills")
 
     def process_data(self, skill, multi):
 
         name = skill['spec']['displayName']
-        kan_id = skill['metadata']['name']
+        symphony_id = skill['metadata']['name']
         spec = skill['spec']
         fps = skill['spec']['parameters'].get("fpsRetrieve", "")
         acceleration = skill['spec']['parameters'].get("accelerationRetrieve", "")
@@ -108,7 +109,7 @@ class KanSkillClient(KanClient):
 
         return {
             "name": name,
-            "kan_id": kan_id,
+            "symphony_id": symphony_id,
             "flow": spec,
             "acceleration": acceleration,
             "fps": fps,

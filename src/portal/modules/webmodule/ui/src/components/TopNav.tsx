@@ -145,7 +145,7 @@ export const TopNav: React.FC<TopNavProps> = ({ onSettingClick }) => {
     },
     {
       key: 'title',
-      text: 'KAN Portal',
+      text: 'SYMPHONY Portal',
       buttonStyles: commandBarBtnStyles,
       onClick: () => history.push(Url.HOME),
     },

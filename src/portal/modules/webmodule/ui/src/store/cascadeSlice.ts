@@ -14,7 +14,7 @@ export type Cascade = {
   prediction_uri: string;
   raw_data: string;
   screenshot: string;
-  kan_id: string;
+  symphony_id: string;
 };
 
 export type CascadePayload = {
@@ -39,7 +39,7 @@ type AiSkillFromServer = {
   flow: string;
   screenshot: string;
   tag_list: string;
-  kan_id: string;
+  symphony_id: string;
   fps: string;
   acceleration: string;
 };
@@ -64,15 +64,15 @@ const normalizeAiSkill = (aiSkill: AiSkillFromServer, id: number): AiSkill => {
 const cascadesAdapter = createEntityAdapter<AiSkill>();
 
 export const getAiSkillList = createWrappedAsync('AI-Skill/Get', async () => {
-  const response = await rootRquest.get(`/api/cascades/get_kan_objects`);
+  const response = await rootRquest.get(`/api/cascades/get_symphony_objects`);
 
   return response.data.map((aiSkill, idx) => normalizeAiSkill(aiSkill, idx + 1));
 });
 
 export const getAiSkillDefinition = createWrappedAsync<any, string>(
   'AI-Skill/GetDefinition',
-  async (kan_id) => {
-    const response = await rootRquest.get(`/api/cascades/get_properties?kan_id=${kan_id}`);
+  async (symphony_id) => {
+    const response = await rootRquest.get(`/api/cascades/get_properties?symphony_id=${symphony_id}`);
 
     return response.data;
   },
@@ -93,7 +93,7 @@ export const createAiSkill = createWrappedAsync<any, CreateAiSkillPayload, { sta
       return max(m, id);
     }, 0);
 
-    const response = await rootRquest.post(`/api/cascades/create_kan_object`, payload);
+    const response = await rootRquest.post(`/api/cascades/create_symphony_object`, payload);
 
     return normalizeAiSkill(response.data, +maxId + 1);
   },
@@ -112,8 +112,8 @@ export const updateCascade = createWrappedAsync<any, UpdateCascadePayload>(
 
 export const updateAiSkill = createWrappedAsync<any, UpdateAiSkillPayload>(
   'AI-Skill/Update',
-  async ({ id, kan_id, body }) => {
-    const response = await rootRquest.patch(`/api/cascades/update_kan_object?kan_id=${kan_id}`, body);
+  async ({ id, symphony_id, body }) => {
+    const response = await rootRquest.patch(`/api/cascades/update_symphony_object?symphony_id=${symphony_id}`, body);
 
     return normalizeAiSkill(response.data, id);
   },
@@ -126,8 +126,8 @@ export const deleteCascade = createWrappedAsync<any, number>('cascade/Delete', a
 
 export const deleteAiSkill = createWrappedAsync<any, DeleteAiSkillPayload>(
   'AiSkill/Delete',
-  async ({ id, kan_id }) => {
-    await rootRquest.delete(`/api/cascades/delete_kan_object?kan_id=${kan_id}`);
+  async ({ id, symphony_id }) => {
+    await rootRquest.delete(`/api/cascades/delete_symphony_object?symphony_id=${symphony_id}`);
 
     return id;
   },
@@ -156,7 +156,7 @@ export const {
   selectEntities: selectCascadeEntities,
 } = cascadesAdapter.getSelectors<State>((state) => state.cascade);
 
-export const selectHasUseAiSkillSelectorFactory = (modelKanId: string) =>
+export const selectHasUseAiSkillSelectorFactory = (modelSymphonyId: string) =>
   createSelector(selectAllCascades, (skillList) => {
     if (skillList.length === 0) return false;
 
@@ -168,10 +168,10 @@ export const selectHasUseAiSkillSelectorFactory = (modelKanId: string) =>
         ],
         [],
       )
-      .some((model) => model.name === modelKanId);
+      .some((model) => model.name === modelSymphonyId);
 
     return isUsed;
   });
 
-export const selectAiSkillByKanIdSelectorFactory = (kanId: string) =>
-  createSelector(selectAllCascades, (skillList) => skillList.find((skill) => skill.kan_id === kanId));
+export const selectAiSkillBySymphonyIdSelectorFactory = (symphonyId: string) =>
+  createSelector(selectAllCascades, (skillList) => skillList.find((skill) => skill.symphony_id === symphonyId));

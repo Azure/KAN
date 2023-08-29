@@ -1,16 +1,16 @@
-# KubeAI Application Nucleus for edge (KAN) documentation
+# KubeAI Application Nucleus for edge (SYMPHONY) documentation
 
-[Introduction to KAN: Core concepts](/docs/tutorial/concepts-kan.md)
+[Introduction to SYMPHONY: Core concepts](/docs/tutorial/concepts-symphony.md)
 
-[KAN: Setup guide](/docs/tutorial/setup-guide.md)
+[SYMPHONY: Setup guide](/docs/tutorial/setup-guide.md)
 
-[Security: Limiting User Access to your KAN Portal](/docs/tutorial/Security-Limiting-User-Access-to-your-KAN-Portal.md)
+[Security: Limiting User Access to your SYMPHONY Portal](/docs/tutorial/Security-Limiting-User-Access-to-your-SYMPHONY-Portal.md)
 
-[Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
+[Tutorial: Create an Edge AI solution with SYMPHONY Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
 
-[How-to guide: Create a complex AI skill with KAN Portal AI Skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
+[How-to guide: Create a complex AI skill with SYMPHONY Portal AI Skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
 
-[How-to guide: Create a custom model using KAN Portal](/docs/tutorial/Create-a-custom-model.md)
+[How-to guide: Create a custom model using SYMPHONY Portal](/docs/tutorial/Create-a-custom-model.md)
 
 [How-to guide: Bring your own ML model and processing logic for your AI Skill using gRPC Custom Processing (BYOM)](/docs/tutorial/How-to-BYOM.md)
 
@@ -20,9 +20,9 @@
 
 ### API Docs
 
-[KAN: API overview](/docs/api/README.md)
+[SYMPHONY: API overview](/docs/api/README.md)
 
-[KAN API Quickstart](/docs/api/quick_start/quick_start.md)
+[SYMPHONY API Quickstart](/docs/api/quick_start/quick_start.md)
 
 [Deploying a Redis server to a K8s cluster](/docs/api/quick_start/deploy_redis_k8s.md)
   

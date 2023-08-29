@@ -9,14 +9,14 @@ import { JSONTree } from 'react-json-tree';
 import { getDeploymentInsight } from '../../../store/deploymentSlice';
 
 interface Props {
-  deploymentKanId: string;
-  skillKanId: string;
-  cameraKanId: string;
+  deploymentSymphonyId: string;
+  skillSymphonyId: string;
+  cameraSymphonyId: string;
   status?: any;
 }
 
 const Insight = (props: Props) => {
-  const { deploymentKanId, skillKanId, cameraKanId } = props;
+  const { deploymentSymphonyId, skillSymphonyId, cameraSymphonyId } = props;
 
   const dispatch = useDispatch();
 
@@ -29,13 +29,13 @@ const Insight = (props: Props) => {
     (async () => {
       setIsFetching(true);
       const response = (await dispatch(
-        getDeploymentInsight({ deploymentKanId, skillKanId, cameraKanId }),
+        getDeploymentInsight({ deploymentSymphonyId, skillSymphonyId, cameraSymphonyId }),
       )) as any;
 
       setLocalInsight(response.payload);
       setIsFetching(false);
     })();
-  }, [dispatch, deploymentKanId, skillKanId, cameraKanId, localInsight]);
+  }, [dispatch, deploymentSymphonyId, skillSymphonyId, cameraSymphonyId, localInsight]);
 
   return (
     <Stack styles={{ root: { padding: '25px 30px' } }} tokens={{ childrenGap: 10 }}>

@@ -1,13 +1,13 @@
-# KAN: Setup guide
+# SYMPHONY: Setup guide
 
 ## Prerequisites
 
-KAN runs with or without Azure. When you configure KAN with Azure, you get additional features like:
+SYMPHONY runs with or without Azure. When you configure SYMPHONY with Azure, you get additional features like:
 * Sending inference results to IoT Hub
 * Automatic uploading video snippets to Azure Storage account
 * Leveraging Azure Custom Vision models
 
-On the other hand, you can get started with KAN without an Azure account.
+On the other hand, you can get started with SYMPHONY without an Azure account.
 
 ### Run without Azure
 
@@ -24,7 +24,7 @@ To run with Azure, in addition to above items, you’ll also need:
 
 * An active **Azure subscription** with **Owner** role access. 
 
-KAN installer script will guide you through the steps of creating related Azure resources (see more details below).
+SYMPHONY installer script will guide you through the steps of creating related Azure resources (see more details below).
 
 ## Setup process 
 
@@ -32,16 +32,16 @@ KAN installer script will guide you through the steps of creating related Azure 
 ![image](https://user-images.githubusercontent.com/4857092/216773245-e7a0b7d1-16af-4ad1-a10a-da6a5a8cdc97.png)
 3. Download and launch the installer script:
    ```bash
-   bash <(wget -qO- https://raw.githubusercontent.com/Azure/KAN/main/Installer/kan-installer.sh)
+   bash <(wget -qO- https://raw.githubusercontent.com/Azure/SYMPHONY/main/Installer/symphony-installer.sh)
    ```
-3. The first question the script asks is if you want to run KAN with or without Azure. Enter ```y``` to deploy KAN with Azure, otherwise enter ```n```.
+3. The first question the script asks is if you want to run SYMPHONY with or without Azure. Enter ```y``` to deploy SYMPHONY with Azure, otherwise enter ```n```.
    ```bash
    azure user?(y/n):
    ```
    > **NOTE**: Later, you can run the installer script again to choose a different route.
 
 ## Setup process - with Azure
-4. Next, you can choose to configure KAN on an existing AKS cluster, or to use your current Kubernetes context, which can point to any local or remote Kubernetes clusters.
+4. Next, you can choose to configure SYMPHONY on an existing AKS cluster, or to use your current Kubernetes context, which can point to any local or remote Kubernetes clusters.
    ```bash
    Would you like to use a exists aks, or use current kubeconfig?
    1) use an existing one
@@ -91,7 +91,7 @@ KAN installer script will guide you through the steps of creating related Azure 
    ```bash
    your selections:
    aks:                            Use current kubeconfig
-   service_principal:              kan-sp
+   service_principal:              symphony-sp
    storage account:                byom/byom
    storage account location:
    blob container:                 clips
@@ -99,12 +99,12 @@ KAN installer script will guide you through the steps of creating related Azure 
    cognitive services location:
    Are you sure (y or n)?
    ```
-9. After all resources are configured and KAN installed, the script displays your portal URL. Open the URL with a browser and you are ready to go!
+9. After all resources are configured and SYMPHONY installed, the script displays your portal URL. Open the URL with a browser and you are ready to go!
 ## Setup process - without Azure
 
-4. Scripts asks you to confirm to install KAN to the Kubernetes cluster configured as your current cluster. Answer `y` to continue.
+4. Scripts asks you to confirm to install SYMPHONY to the Kubernetes cluster configured as your current cluster. Answer `y` to continue.
    ```bash
-   kan will install on current kubeconfig: (y/n)
+   symphony will install on current kubeconfig: (y/n)
    ```
 5. Answer `y` to confirm installation:
    ```bash
@@ -118,27 +118,27 @@ KAN installer script will guide you through the steps of creating related Azure 
     cognitive services location:    skip
     Are you sure (y or n)?
    ```
-6. After all resources are configured and KAN installed, the script displays your portal URL. Open the URL with a browser and you are ready to go!
+6. After all resources are configured and SYMPHONY installed, the script displays your portal URL. Open the URL with a browser and you are ready to go!
 
-## Limit access to the KAN portal
-Now that you have successfully setup KAN experience onto your Kubernetes environment, we recommend first securing your portal. 
+## Limit access to the SYMPHONY portal
+Now that you have successfully setup SYMPHONY experience onto your Kubernetes environment, we recommend first securing your portal. 
   
--   [Security: Limiting User Access to your KAN Portal](/docs/tutorial/Security-Limiting-User-Access-to-your-KAN-Portal.md)
+-   [Security: Limiting User Access to your SYMPHONY Portal](/docs/tutorial/Security-Limiting-User-Access-to-your-SYMPHONY-Portal.md)
 
 
-## Uninstall KAN
-You can uninstall KAN using Helm:
+## Uninstall SYMPHONY
+You can uninstall SYMPHONY using Helm:
 
 ```bash
-helm uninstall kanportal
-helm uninstall kan
+helm uninstall symphonyportal
+helm uninstall symphony
 ```
  
 ## Reporting Issues and Bugs
     
-Report any issues or bugs you face using the [repository's issues page](https://github.com/Azure/KAN/issues).
+Report any issues or bugs you face using the [repository's issues page](https://github.com/Azure/SYMPHONY/issues).
 
 ## Next steps
 
--   [Tutorial: Create an Edge AI solution with KAN portal using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
--   [Introduction to KAN: Core concepts](/docs/tutorial/concepts-kan.md)
+-   [Tutorial: Create an Edge AI solution with SYMPHONY portal using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
+-   [Introduction to SYMPHONY: Core concepts](/docs/tutorial/concepts-symphony.md)

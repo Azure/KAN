@@ -28,7 +28,7 @@ const CameraList = (props: Props) => {
   const [deletedCamera, setDeletedCamera] = useState<Camera | null>(null);
   const [selectedDefinition, setSelectedDefinition] = useState<Camera | null>(null);
   const hasCameraDeployed = useSelector(
-    selectHasCameraDeploymentSelectorFactory(deletedCamera?.kan_id ?? ''),
+    selectHasCameraDeploymentSelectorFactory(deletedCamera?.symphony_id ?? ''),
   );
 
   const onSingleCameraDelete = useCallback(async () => {
@@ -37,7 +37,7 @@ const CameraList = (props: Props) => {
       setDeletedCamera(null);
     };
 
-    await dispatch(deleteCameras({ id: deletedCamera.id, kan_id: deletedCamera.kan_id, resolve }));
+    await dispatch(deleteCameras({ id: deletedCamera.id, symphony_id: deletedCamera.symphony_id, resolve }));
   }, [dispatch, deletedCamera]);
 
   return (
@@ -63,7 +63,7 @@ const CameraList = (props: Props) => {
       {localSelectedCamera && (
         <CameraSidePanel
           camereId={localSelectedCamera.id}
-          kanId={localSelectedCamera.kan_id}
+          symphonyId={localSelectedCamera.symphony_id}
           onPanelClose={() => setLocalSelectedCamera(null)}
           onDeleteModalOpen={() => setDeletedCamera(localSelectedCamera)}
         />
@@ -80,7 +80,7 @@ const CameraList = (props: Props) => {
       {selectedDefinition && (
         <DefinitionPanel
           onPanelClose={() => setSelectedDefinition(null)}
-          selectedTargetId={selectedDefinition.kan_id}
+          selectedTargetId={selectedDefinition.symphony_id}
           pageType="camera"
           onDeleteModalOpen={() => setDeletedCamera(selectedDefinition)}
         />

@@ -9,9 +9,9 @@ try:
 except:
     from typing_extensions import Literal
 
-from common.kan_params import crd_params
+from common.symphony_params import crd_params
 
-from common.kan_skill import Node, Edge
+from common.symphony_skill import Node, Edge
 
 ############
 # Skilli   #
@@ -27,7 +27,7 @@ class SkillSpec(BaseModel):
 #    properties: 'SkillModelProperties'
 
 #class SkillModelProperties(BaseModel):
-#    cascade: str #FIXME should be CascadeConfig, need kan change crd def
+#    cascade: str #FIXME should be CascadeConfig, need symphony change crd def
 
 #SkillModel.update_forward_refs()
 #SkillSpec.update_forward_refs()

@@ -29,7 +29,7 @@ export const accelerationOptions: IDropdownOption[] = [
 ];
 
 export const FEEDBACK_URL = 'https://go.microsoft.com/fwlink/?linkid=2205447';
-export const TROUBLE_SHOOTING_URL = 'https://raw.githubusercontent.com/Azure/KAN/main/docs/guide/troubleshoot.md';
+export const TROUBLE_SHOOTING_URL = 'https://raw.githubusercontent.com/Azure/SYMPHONY/main/docs/guide/troubleshoot.md';
 
 export type PageType = 'deivce' | 'camera' | 'model' | 'skill' | 'deployment';
 

@@ -11,9 +11,9 @@ import pytz
 from node import Source
 from frame import Frame, Image, ImageProperties, ColorFormat
 
-from common.kan_agent_client import KanAgentClient
+from common.symphony_agent_client import SymphonyAgentClient
 
-client = KanAgentClient()
+client = SymphonyAgentClient()
 instance_name = os.environ.get('INSTANCE')
 
 class RtspSource(Source):
@@ -71,7 +71,7 @@ class RtspSource(Source):
                     self.frame_interval = self.frame_interval * 7/8 + (timestamp-self.last_timestamp) * 1/8
                     self.fps = 1 / self.frame_interval
 
-                    # update fps to kan
+                    # update fps to symphony
                     if timestamp > self.last_update_fps_timestamp + 5:
                         client.post_instance_fps(instance_name, self.skill_name, int(self.fps*10)/10)
                         self.last_update_fps_timestamp = timestamp

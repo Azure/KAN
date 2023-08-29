@@ -1,6 +1,6 @@
-# Security: Limiting User Access to your KAN Portal  
+# Security: Limiting User Access to your SYMPHONY Portal  
 
-Once your KAN portal has been set up, it is accessible to anyone via the IP. In other words, it is open to users for whom access may not be intended. This can be a security and compliance loophole. To prevent unwanted users from accessing your portal, use one of the following approaches to limit access: 
+Once your SYMPHONY portal has been set up, it is accessible to anyone via the IP. In other words, it is open to users for whom access may not be intended. This can be a security and compliance loophole. To prevent unwanted users from accessing your portal, use one of the following approaches to limit access: 
 
 1. Limit portal access from Azure portal to certain IPs (if using Azure Kubernetes Service (AKS)) 
 
@@ -18,7 +18,7 @@ Once your KAN portal has been set up, it is accessible to anyone via the IP. In 
 
    Note: This option is available only if you are using AKS. 
 
-1. When you’ve finished installing the KAN-controller, you can find the IP address (the first one) of the portal by running the following command in your Azure Cloud CLI command line: 
+1. When you’ve finished installing the SYMPHONY-controller, you can find the IP address (the first one) of the portal by running the following command in your Azure Cloud CLI command line: 
 
   ```azurecli-interactive
     kubectl get svc -A 
@@ -231,7 +231,7 @@ kubectl get secret basic-auth -o yaml
    
 ## Set Up and Manage Authentication with Azure API Management (APIM) 
 
-Install an API Management gateway and add your KAN endpoint as a backend target. APIM is integrated with other Azure services such as Azure Active Directory (AAD). The use of AAD as an identity provider will now be enabled for user sign in on the developer portal. 
+Install an API Management gateway and add your SYMPHONY endpoint as a backend target. APIM is integrated with other Azure services such as Azure Active Directory (AAD). The use of AAD as an identity provider will now be enabled for user sign in on the developer portal. 
 
 1. [Create an Azure API Management Instance: Quickstart - Create an Azure API Management instance](https://learn.microsoft.com/en-us/azure/api-management/vscode-create-service-instance) 
 
@@ -258,9 +258,9 @@ For more information on authentication and authorization with Azure API Manageme
 ## Next Steps
 
 Now that you have secured your portal, we recommend completing the following tutorials:
-- [Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
-- [How-to guide: Create a complex AI skill with KAN Portal AI Skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
-- [KAN: API overview](/docs/api/README.md)
+- [Tutorial: Create an Edge AI solution with SYMPHONY Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
+- [How-to guide: Create a complex AI skill with SYMPHONY Portal AI Skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
+- [SYMPHONY: API overview](/docs/api/README.md)
 - [How-to guide: Bring your own ML model and processing logic for your AI Skill using gRPC Custom Processing (BYOM)](/docs/tutorial/How-to-BYOM.md)
 
  

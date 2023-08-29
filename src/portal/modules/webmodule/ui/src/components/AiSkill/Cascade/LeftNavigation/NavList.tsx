@@ -133,7 +133,7 @@ const SideNavList = (props: Props) => {
                       name: importNode.name,
                       inputs: importNode.inputs,
                       outputs: importNode.outputs,
-                      kan_id: importNode.kan_id,
+                      symphony_id: importNode.symphony_id,
                     }}
                   />
                 ))}
@@ -173,7 +173,7 @@ const SideNavList = (props: Props) => {
                             name: processNode.name,
                             inputs: processNode.inputs,
                             outputs: processNode.outputs,
-                            kan_id: processNode.kan_id,
+                            symphony_id: processNode.symphony_id,
                           }
                     }
                   />
@@ -211,7 +211,7 @@ const SideNavList = (props: Props) => {
                       name: ex.name,
                       inputs: ex.inputs,
                       outputs: ex.outputs,
-                      kan_id: ex.kan_id,
+                      symphony_id: ex.symphony_id,
                     }}
                   />
                 ))}

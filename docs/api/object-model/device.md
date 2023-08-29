@@ -1,6 +1,6 @@
 # Devices
 
-```device.fabric.kan``` represents a non-computational device, such as a sensor (camera, microphone, vibration, pressure, etc.) or an actuator (motor, controller, I/O device, etc.).
+```device.fabric.symphony``` represents a non-computational device, such as a sensor (camera, microphone, vibration, pressure, etc.) or an actuator (motor, controller, I/O device, etc.).
 
 ## Schema
 | Field | Type | Description |

@@ -46,14 +46,14 @@ RELABEL_INTERVAL = 10 #second
 
 class ObjectDetectionModel(Model):
 
-    def __init__(self, model, kan_name, provider, confidence_lower=None, confidence_upper=None, max_images=None):
+    def __init__(self, model, symphony_name, provider, confidence_lower=None, confidence_upper=None, max_images=None):
         super().__init__()
         self.model = model
 
         self.confidence_lower = confidence_lower
         self.confidence_upper = confidence_upper
         self.max_images = max_images
-        self.kan_name = kan_name
+        self.symphony_name = symphony_name
         self.provider = provider
 
         self.is_relabel = False
@@ -122,7 +122,7 @@ class ObjectDetectionModel(Model):
                         if self.confidence_lower <= obj.confidence <= self.confidence_upper:
                             self.relabel_count += 1
                             self.last_relabel = time.time()
-                            upload_relabel_image(self.kan_name, img, [obj], self.max_images)
+                            upload_relabel_image(self.symphony_name, img, [obj], self.max_images)
                        
 
 
@@ -140,7 +140,7 @@ class ObjectDetectionModel(Model):
 class ClassificationModel(Model):
 
 
-    def __init__(self, model, kan_name, provider, confidence_lower=None, confidence_upper=None, max_images=None):
+    def __init__(self, model, symphony_name, provider, confidence_lower=None, confidence_upper=None, max_images=None):
         super().__init__()
         self.model = model
 

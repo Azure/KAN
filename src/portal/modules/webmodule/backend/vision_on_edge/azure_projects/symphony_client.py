@@ -4,18 +4,19 @@
 import logging
 import json
 
-from ..general.kan_client import KanClient
+from ..general.symphony_client import SymphonyClient
 
 
 logger = logging.getLogger(__name__)
 
 
-class KanModelClient(KanClient):
+class SymphonyModelClient(SymphonyClient):
 
     def __init__(self):
         super().__init__()
-        self.group = "ai.kan"
+        self.group = "ai.symphony"
         self.plural = "models"
+        self.symphony_api_url = "http://" + self.symphony_ip + ":8080/v1alpha2/models"
 
     def get_config(self):
 
@@ -35,7 +36,7 @@ class KanModelClient(KanClient):
                 labels[tag["name"]] = tag["value"]
 
         config_json = {
-            "apiVersion": "ai.kan/v1",
+            "apiVersion": "ai.symphony/v1",
             "kind": "Model",
             "metadata": {
                 "name": name,
@@ -47,7 +48,7 @@ class KanModelClient(KanClient):
                     "model.project": project_id,
                     "model.subtype": model_subtype,
                     "model.type": model_type,
-                    "model.kan.id": name,
+                    "model.symphony.id": name,
                     "model.version.1": iteration_id,
                     "state": "trained",
                     "tags": tags
@@ -72,7 +73,7 @@ class KanModelClient(KanClient):
         ]
         return patch_config
 
-    def load_kan_objects(self):
+    def load_symphony_objects(self):
         from .models import Project
         from ..azure_settings.models import Setting
         from .utils import pull_cv_project_helper
@@ -81,7 +82,7 @@ class KanModelClient(KanClient):
 
         if api:
             res = api.list_namespaced_custom_object(
-                group="ai.kan",
+                group="ai.symphony",
                 version="v1",
                 namespace="default",
                 plural="models"
@@ -93,12 +94,12 @@ class KanModelClient(KanClient):
                 node_type="model").values_list('name', 'pk')}
 
             for target in targets:
-                kan_id = target['metadata']['name']
+                symphony_id = target['metadata']['name']
                 project_type = target['spec']['properties'].get("model.subtype", "").split('.')[
                     1]
                 _type = target['spec']['properties'].get(
                     "model.subtype", "").split('.')[0]
-                display_name = target['spec'].get("displayName", kan_id)
+                display_name = target['spec'].get("displayName", symphony_id)
                 category = target['spec']['properties'].get("model.type", "")
                 project = target['spec']['properties'].get("model.project", "")
 
@@ -112,7 +113,7 @@ class KanModelClient(KanClient):
 
                 if _type == "customvision":
                     pull_cv_project_helper(
-                        customvision_project_id=project, is_partial=True, name=display_name, kan_id=kan_id)
+                        customvision_project_id=project, is_partial=True, name=display_name, symphony_id=symphony_id)
                 else:
                     project_obj = Project.objects.create(
                         setting=setting_obj,
@@ -123,7 +124,7 @@ class KanModelClient(KanClient):
                         type=_type,
                         category=category,
                         node_type="model",
-                        kan_id=kan_id,
+                        symphony_id=symphony_id,
                         inputs=json.dumps([
                             {
                                 "route": "f",
@@ -145,4 +146,4 @@ class KanModelClient(KanClient):
             Project.objects.filter(id__in=to_delete).all().delete()
 
         else:
-            logger.warning("Not loading kan models")
+            logger.warning("Not loading symphony models")

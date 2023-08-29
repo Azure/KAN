@@ -19,12 +19,12 @@ import SidePanelStatus from '../Common/SidePanel/SidePanelStatus';
 interface Props {
   onPanelClose: () => void;
   camereId: number;
-  kanId: string;
+  symphonyId: string;
   onDeleteModalOpen: () => void;
 }
 
 const CameraSidePanel = (props: Props) => {
-  const { onPanelClose, camereId, onDeleteModalOpen, kanId } = props;
+  const { onPanelClose, camereId, onDeleteModalOpen, symphonyId } = props;
 
   const camera = useSelector((state: RootState) => selectCameraById(state, camereId));
   const locationList = useSelector((state: RootState) => selectAllLocations(state));
@@ -38,11 +38,11 @@ const CameraSidePanel = (props: Props) => {
     (async () => {
       setIsFetching(true);
 
-      await dispatch(getSingleCamera({ id: camereId, kan_id: kanId }));
+      await dispatch(getSingleCamera({ id: camereId, symphony_id: symphonyId }));
 
       setIsFetching(false);
     })();
-  }, [dispatch, camereId, kanId]);
+  }, [dispatch, camereId, symphonyId]);
 
   const onRenderFooterContent = useCallback(
     () => (

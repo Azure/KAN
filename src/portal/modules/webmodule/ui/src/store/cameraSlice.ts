@@ -41,7 +41,7 @@ type CameraFromServer = {
   snapshot: string;
   is_live: boolean;
   status: string;
-  kan_id: string;
+  symphony_id: string;
 };
 
 // type CameraFromServerWithSerializeArea = Omit<CameraFromServer, 'area' | 'line' | 'danger_zones'> & {
@@ -98,7 +98,7 @@ export type Camera = {
   snapshot: string;
   is_live: boolean;
   status: Record<string, ConntectedStatus>;
-  kan_id: string;
+  symphony_id: string;
 };
 
 // const mapPurpose = (purpose: Purpose, annos) => annos.map((a) => ({ ...a, purpose }));
@@ -126,7 +126,7 @@ export type Camera = {
 //     tag_list: response.tag_list,
 //     allowed_devices: response.allowed_devices,
 //     status: response.status,
-//     kan_id: response.kan_id,
+//     symphony_id: response.symphony_id,
 //   };
 // };
 
@@ -217,7 +217,7 @@ const normalizeFromServer = (res: CameraFromServer, id: number): Camera => {
     location: res.location,
     password: res.password,
     rtsp: res.rtsp,
-    // kan_id: '',
+    // symphony_id: '',
     tag_list: getArrayObject(res.tag_list),
     username: res.username,
     snapshot: res.snapshot,
@@ -226,7 +226,7 @@ const normalizeFromServer = (res: CameraFromServer, id: number): Camera => {
     media_type: 'Camera',
     name: res.name,
     isDemo: false,
-    kan_id: res.kan_id,
+    symphony_id: res.symphony_id,
   };
 };
 
@@ -236,7 +236,7 @@ export const getCameras = createWrappedAsync<any, boolean, { state: State }>(
   'Cameras/get',
   async () => {
     // const response = await getSliceApiByDemo('cameras', isDemo);
-    const response = await rootRquest.get('/api/cameras/get_kan_objects');
+    const response = await rootRquest.get('/api/cameras/get_symphony_objects');
 
     return response.data.map((res, i) => normalizeFromServer(res, i + 1));
   },
@@ -247,8 +247,8 @@ export const getCameras = createWrappedAsync<any, boolean, { state: State }>(
 
 export const getSingleCamera = createWrappedAsync<any, GetSingleCameraPayload, { state: State }>(
   'Cameras/getSingle',
-  async ({ id, kan_id }) => {
-    const response = await rootRquest.get(`/api/cameras/get_kan_object?kan_id=${kan_id}`);
+  async ({ id, symphony_id }) => {
+    const response = await rootRquest.get(`/api/cameras/get_symphony_object?symphony_id=${symphony_id}`);
 
     return normalizeFromServer(response.data, id);
   },
@@ -259,8 +259,8 @@ export const getSingleCamera = createWrappedAsync<any, GetSingleCameraPayload, {
 
 export const getCameraDefinition = createWrappedAsync<any, string>(
   'Cameras/getDefinition',
-  async (kan_id) => {
-    const response = await rootRquest.get(`/api/cameras/get_properties?kan_id=${kan_id}`);
+  async (symphony_id) => {
+    const response = await rootRquest.get(`/api/cameras/get_properties?symphony_id=${symphony_id}`);
 
     return response.data;
   },
@@ -273,7 +273,7 @@ export const postRTSPCamera = createWrappedAsync<any, CreateCameraPayload, { sta
       return max(m, id);
     }, 0);
 
-    const response = await rootRquest.post(`/api/cameras/create_kan_object`, payload);
+    const response = await rootRquest.post(`/api/cameras/create_symphony_object`, payload);
 
     return normalizeFromServer(response.data, +maxId + 1);
   },
@@ -296,8 +296,8 @@ export const postMediaSourceCamera = createWrappedAsync(
 
 export const updateCamera = createWrappedAsync<any, UpdateCameraPayload, { state: State }>(
   'Cameras/update',
-  async ({ id, kan_id, body }) => {
-    const response = await rootRquest.patch(`/api/cameras/update_kan_object?kan_id=${kan_id}`, body);
+  async ({ id, symphony_id, body }) => {
+    const response = await rootRquest.patch(`/api/cameras/update_symphony_object?symphony_id=${symphony_id}`, body);
 
     return normalizeFromServer(response.data, id);
   },
@@ -325,8 +325,8 @@ export const putMediaSourceCamera = createWrappedAsync('Cameras/mediaSource/put'
 
 export const deleteCameras = createWrappedAsync<any, DeleteCameraPayload>(
   'Cameras/delete',
-  async ({ id, kan_id, resolve }) => {
-    const url = `/api/cameras/delete_kan_object?kan_id=${kan_id}`;
+  async ({ id, symphony_id, resolve }) => {
+    const url = `/api/cameras/delete_symphony_object?symphony_id=${symphony_id}`;
 
     if (resolve) {
       resolve();
@@ -399,7 +399,7 @@ export const cameraOptionsSelector = createSelector(selectAllCameras, (cameras) 
   cameras
     .filter((e) => !e.isDemo)
     .map((e) => ({
-      key: e.kan_id,
+      key: e.symphony_id,
       text: e.name,
     })),
 );
@@ -424,10 +424,10 @@ export const cameraOptionsSelectorFactoryInConfig = (trainingProjectId: number, 
 export const camerasSelectorFactory = (ids) =>
   createSelector(selectCameraEntities, (entities) => ids.map((id) => entities[id]));
 
-export const belongDeviceCameraSelectorFactory = (kanId: string) =>
+export const belongDeviceCameraSelectorFactory = (symphonyId: string) =>
   createSelector(selectAllCameras, (cameraList) =>
-    cameraList.filter((camera) => camera.allowed_devices.includes(kanId)),
+    cameraList.filter((camera) => camera.allowed_devices.includes(symphonyId)),
   );
 
-export const selectCameraByKanId = (kanId: string) =>
-  createSelector(selectAllCameras, (cameraList) => cameraList.find((camera) => camera.kan_id === kanId));
+export const selectCameraBySymphonyId = (symphonyId: string) =>
+  createSelector(selectAllCameras, (cameraList) => cameraList.find((camera) => camera.symphony_id === symphonyId));

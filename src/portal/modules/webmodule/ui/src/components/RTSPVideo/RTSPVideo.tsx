@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import rootRquest from '../../store/rootRquest';
 import { useInterval } from '../../hooks/useInterval';
 import { handleAxiosError } from '../../utils/handleAxiosError';
-import { selectCameraByKanId } from '../../store/cameraSlice';
+import { selectCameraBySymphonyId } from '../../store/cameraSlice';
 
 type RTSPVideoProps = {
   cameraId: string;
@@ -23,7 +23,7 @@ export const RTSPVideoComponent: React.FC<RTSPVideoProps> = ({
   partId = null,
   onStreamConnected,
 }) => {
-  const camera = useSelector(selectCameraByKanId(cameraId));
+  const camera = useSelector(selectCameraBySymphonyId(cameraId));
 
   const [streamId, setStreamId] = useState<string>('');
 

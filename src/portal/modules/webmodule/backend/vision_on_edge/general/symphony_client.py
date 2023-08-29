@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-"""Kan utils.
+"""Symphony utils.
 """
 
 import logging
@@ -15,18 +15,18 @@ from kubernetes import client, config
 logger = logging.getLogger(__name__)
 
 
-class KanClient:
-    '''kan sdk operation
+class SymphonyClient:
+    '''symphony sdk operation
     '''
 
     def __init__(self, **kwargs):
         self.args = {}
         self.group = ""
         self.plural = ""
-        self.kan_ip = os.getenv("KAN_IP", "")
-        self.kan_url = "http://" + self.kan_ip + ":8080/v1alpha2/agent/references"
-        self.kan_auth_url = "http://" + self.kan_ip + ":8080/v1alpha2/users/auth"
-        self.kan_api_url = ""
+        self.symphony_ip = os.getenv("SYMPHONY_IP", "")
+        self.symphony_url = "http://" + self.symphony_ip + ":8080/v1alpha2/agent/references"
+        self.symphony_auth_url = "http://" + self.symphony_ip + ":8080/v1alpha2/users/auth"
+        self.symphony_api_url = ""
         for k, v in kwargs.items():
             self.args[k] = v
 
@@ -64,22 +64,22 @@ class KanClient:
 
         return api
 
-    def get_token_from_kan(self):
-        '''get bearer token from KAN service
+    def get_token_from_symphony(self):
+        '''get bearer token from SYMPHONY service
         '''
         auth_headers = {'username': 'admin', 'password':''} 
-        res = requests.post(self.kan_auth_url, json=auth_headers)
+        res = requests.post(self.symphony_auth_url, json=auth_headers)
         data = json.loads(res.content.decode('utf8'))
         if 'accessToken' not in data:
-            raise Exception("Cannot get token from KAN.")
+            raise Exception("Cannot get token from SYMPHONY.")
         return data['accessToken']
 
 
-    def load_kan_objects(self):
+    def load_symphony_objects(self):
         raise NotImplementedError
 
     def process_data(self, obj, multi=False):
-        '''transform kan object into key-value json
+        '''transform symphony object into key-value json
         '''
         raise NotImplementedError
 
@@ -94,26 +94,27 @@ class KanClient:
         '''
 
         obj["metadata"] = {"name": obj.get("id", "")}
-        status = obj.get("status", "")
-        if status:
-            status_ = status.copy()
-        else:
-            status_ = status
-        obj["status"]["properties"] = status_
+        if "status" in obj.keys():
+            status = obj.get("status", "")
+            if status:
+                status_ = status.copy()
+            else:
+                status_ = status
+            obj["status"]["properties"] = status_
 
         return obj
 
-    def get_config_from_kan(self, name):
+    def get_config_from_symphony(self, name):
 
-        if self.plural in ["targets", "solutions", "instances"]:
+        if self.plural in ["targets", "solutions", "instances", "devices", "skills", "models"]:
             # get object from symphony
             try:
-                auth_token = self.get_token_from_kan()
+                auth_token = self.get_token_from_symphony()
                 headers = {"Authorization": f"Bearer {auth_token}"}      
-                res = requests.get(self.kan_api_url + f'/{name}', headers=headers) 
-                kan_object = self.process_symphony_data(json.loads(res.content))
+                res = requests.get(self.symphony_api_url + f'/{name}', headers=headers) 
+                symphony_object = self.process_symphony_data(json.loads(res.content))
 
-                return kan_object
+                return symphony_object
             except Exception as e:
                 logger.warning(e)
                 return {}
@@ -122,30 +123,31 @@ class KanClient:
             api = self.get_client()
             if api:
                 try:
-                    kan_object = api.get_namespaced_custom_object(
+                    symphony_object = api.get_namespaced_custom_object(
                         group=self.group,
                         version="v1",
                         namespace="default",
                         plural=self.plural,
                         name=name
                     )
-                    return kan_object
+                    return symphony_object
                 except Exception as e:
                     logger.warning(e)
                     return {}
 
-    def get_configs_from_kan(self):
+    def get_configs_from_symphony(self):
 
-        if self.plural in ["targets", "solutions", "instances"]:
+        if self.plural in ["targets", "solutions", "instances", "devices", "skills", "models"]:
             # get object from symphony
             try:
-                auth_token = self.get_token_from_kan()
-                headers = {"Authorization": f"Bearer {auth_token}"}      
-                res = requests.get(self.kan_api_url, headers=headers) 
-                kan_objects = []
-                for kan_object in json.loads(res.content):
-                    kan_objects.append(self.process_symphony_data(kan_object))
-                return kan_objects
+                auth_token = self.get_token_from_symphony()
+                headers = {"Authorization": f"Bearer {auth_token}"}
+                logger.warning(f"Retrieving configs from {self.symphony_api_url}, headers={headers}")      
+                res = requests.get(self.symphony_api_url, headers=headers) 
+                symphony_objects = []
+                for symphony_object in json.loads(res.content):
+                    symphony_objects.append(self.process_symphony_data(symphony_object))
+                return symphony_objects
             except Exception as e:
                 logger.warning(e)
                 return []
@@ -159,39 +161,39 @@ class KanClient:
                     namespace="default",
                     plural=self.plural
                 )
-                kan_objects = res['items']
+                symphony_objects = res['items']
 
-                return kan_objects
+                return symphony_objects
             else:
-                logger.warning("No kan detected")
+                logger.warning("No symphony detected")
                 return []      
 
     def get_object(self, name):
 
-        kan_object = self.get_config_from_kan(name)
-        if kan_object:
-            return(self.process_data(kan_object, multi=False))
+        symphony_object = self.get_config_from_symphony(name)
+        if symphony_object:
+            return(self.process_data(symphony_object, multi=False))
         else:
             return {}
 
     def get_objects(self):
 
-        kan_objects = self.get_configs_from_kan()
-        logger.warning(f"get objects: {kan_objects}")
+        symphony_objects = self.get_configs_from_symphony()
+        logger.warning(f"get objects: {symphony_objects}")
         res = []
-        for kan_object in kan_objects:
-            res.append(self.process_data(kan_object, multi=True))
+        for symphony_object in symphony_objects:
+            res.append(self.process_data(symphony_object, multi=True))
 
         return res
 
     def deploy_config(self):
-        if self.plural in ["targets", "solutions", "instances"]:
+        if self.plural in ["targets", "solutions", "instances", "devices", "skills", "models"]:
             resource_json = self.get_config()
             # get object from symphony
             try:
-                auth_token = self.get_token_from_kan()
+                auth_token = self.get_token_from_symphony()
                 headers = {"Authorization": f"Bearer {auth_token}"}      
-                res = requests.post(self.kan_api_url + f'/{resource_json["metadata"]["name"]}', headers=headers, json=resource_json['spec']) 
+                res = requests.post(self.symphony_api_url + f'/{resource_json["metadata"]["name"]}', headers=headers, json=resource_json['spec']) 
 
             except Exception as e:
                 logger.warning(e)
@@ -215,13 +217,13 @@ class KanClient:
                 logger.warning("not deployed")
 
     def update_config(self, name):
-        if self.plural in ["targets", "solutions", "instances"]:
+        if self.plural in ["targets", "solutions", "instances", "devices", "skills", "models"]:
             resource_json = self.get_config()
             # get object from symphony
             try:
-                auth_token = self.get_token_from_kan()
+                auth_token = self.get_token_from_symphony()
                 headers = {"Authorization": f"Bearer {auth_token}"}      
-                res = requests.post(self.kan_api_url + f'/{name}', headers=headers, json=resource_json['spec']) 
+                res = requests.post(self.symphony_api_url + f'/{name}', headers=headers, json=resource_json['spec']) 
 
             except Exception as e:
                 logger.warning(e)
@@ -248,13 +250,13 @@ class KanClient:
     def patch_config(self, name):
         '''patch k8s object using api_call directly to set the patch strategy 
         '''
-        if self.plural in ["targets", "solutions", "instances"]:
+        if self.plural in ["targets", "solutions", "instances", "devices", "skills", "models"]:
             resource_json = self.get_config()
             # get object from symphony
             try:
-                auth_token = self.get_token_from_kan()
+                auth_token = self.get_token_from_symphony()
                 headers = {"Authorization": f"Bearer {auth_token}"}      
-                res = requests.post(self.kan_api_url + f'/{name}', headers=headers, json=resource_json['spec']) 
+                res = requests.post(self.symphony_api_url + f'/{name}', headers=headers, json=resource_json['spec']) 
 
             except Exception as e:
                 logger.warning(e)
@@ -286,12 +288,12 @@ class KanClient:
                 logger.warning("not patched")
 
     def remove_config(self, name):
-        if self.plural in ["targets", "solutions", "instances"]:
+        if self.plural in ["targets", "solutions", "instances", "devices", "skills", "models"]:
             # get object from symphony
             try:
-                auth_token = self.get_token_from_kan()
+                auth_token = self.get_token_from_symphony()
                 headers = {"Authorization": f"Bearer {auth_token}"}      
-                res = requests.delete(self.kan_api_url + f'/{name}', headers=headers) 
+                res = requests.delete(self.symphony_api_url + f'/{name}', headers=headers) 
 
             except Exception as e:
                 logger.warning(e)

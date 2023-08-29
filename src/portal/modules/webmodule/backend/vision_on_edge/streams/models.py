@@ -13,12 +13,12 @@ import cv2
 from configs.general_configs import PRINT_THREAD
 
 from ..cameras.utils import normalize_rtsp, verify_rtsp
-from ..cameras.kan_client import KanDeviceClient
+from ..cameras.symphony_client import SymphonyDeviceClient
 from .exceptions import StreamOpenRTSPError
 
 logger = logging.getLogger(__name__)
 
-device_client = KanDeviceClient()
+device_client = SymphonyDeviceClient()
 
 # Stream
 KEEP_ALIVE_THRESHOLD = 10  # Seconds
@@ -30,11 +30,11 @@ STREAM_GC_TIME_THRESHOLD = 5  # Seconds
 class Stream:
     """Stream Class"""
 
-    def __init__(self, rtsp, camera_id, kan_id, part_id=None):
+    def __init__(self, rtsp, camera_id, symphony_id, part_id=None):
         self.rtsp = normalize_rtsp(rtsp=rtsp)
         self.camera_id = camera_id
         self.part_id = part_id
-        self.kan_id = kan_id
+        self.symphony_id = symphony_id
         self.last_active = time.time()
         self.status = "init"
         self.cur_img_index = 0
@@ -43,13 +43,13 @@ class Stream:
 
         # test rtsp
         if not verify_rtsp(self.rtsp):
-            self.rtsp = device_client.get_snapshot_url(self.kan_id)
+            self.rtsp = device_client.get_snapshot_url(self.symphony_id)
             # raise StreamOpenRTSPError
         self.cap = cv2.VideoCapture(self.rtsp)
         self.last_img = self.cap.read()[1]
 
     def get_snapshop_url(self):
-        return device_client.get_snapshot_url(self.kan_id)
+        return device_client.get_snapshot_url(self.symphony_id)
 
     def update_keep_alive(self):
         """update_keep_alive."""

@@ -1,14 +1,14 @@
-# KAN Troubleshooting Guide
+# SYMPHONY Troubleshooting Guide
 
 Troubleshooting intelligent edge solutions can be challenging due to their complex nature with multiple interdependent components. This guide provides a systematic approach to identifying and resolving issues when the inference results deviate from expectations, by evaluating various stages of the AI pipeline.
 
-The KAN platform accommodates two distinct types of computing devices - IoT Edge devices and Kubernetes clusters as devices. For efficient troubleshooting, please refer to the appropriate section that corresponds to your device type.
+The SYMPHONY platform accommodates two distinct types of computing devices - IoT Edge devices and Kubernetes clusters as devices. For efficient troubleshooting, please refer to the appropriate section that corresponds to your device type.
 
 ## IoT Edge Compute Device
 
 ### 1. Is your Deployment stuck at the "deploying" state?
 
-1. On the Deployment page of the KAN portal, check the status of the deployment tile.
+1. On the Deployment page of the SYMPHONY portal, check the status of the deployment tile.
 2. If the tile is stuck in a ```deploying``` state, it typically indicates errors with the corresponding IoT Edge module.In this case, continue with steps 2 and 3 to identify the cause of the issue.
 3. If the deployment tile is in a ```running``` state, proceed to step 4.
 
@@ -67,25 +67,25 @@ Lowering the confidence threshold or bypassing the filter node may allow for pre
 
 ### 1. Is your Deployment stuck at the "deploying" state?
 
-1. On the Deployment page of the KAN portal, check the status of the deployment tile.
+1. On the Deployment page of the SYMPHONY portal, check the status of the deployment tile.
 2. If the tile is stuck in a ```deploying``` state, it typically indicates errors with the corresponding IoT Edge module.In this case, continue with steps 2 and 3 to identify the cause of the issue.
 3. If the deployment tile is in a ```running``` state, proceed to step 4.
 
 ### 2. Is your Kubernetes compute device working?
 
-To verify the functionality of the KAN agent, follow these steps:
+To verify the functionality of the SYMPHONY agent, follow these steps:
 
-1. Check the status of the KAN agent by running the following command:
+1. Check the status of the SYMPHONY agent by running the following command:
    ```bash
-   kubectl get pods | grep kan-agent
+   kubectl get pods | grep symphony-agent
    ```
 2. The command should return a pod in the ```Running``` state. If no pods are returned, your Kubernetes compute device has not been properly configured.
 3. If the pod is in a failed state, examine the pod log using this command:
    ```bash
-   kubectl logs <name of the kan-agent pod>
+   kubectl logs <name of the symphony-agent pod>
    ```
 
-These steps will help you determine if the KAN agent is running properly and provide insight into any potential issues.
+These steps will help you determine if the SYMPHONY agent is running properly and provide insight into any potential issues.
 
 > **NOTE**: It is important to ensure sufficient memory on your device when working with AI models. As a general guideline, your device should have a minimum of 4GB of memory to support the IoT Edge runtime and AI modules.
 

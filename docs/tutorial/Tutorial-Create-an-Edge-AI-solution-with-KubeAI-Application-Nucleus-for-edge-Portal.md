@@ -1,6 +1,6 @@
-# Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model
+# Tutorial: Create an Edge AI solution with SYMPHONY Portal using a prebuilt model
 
-This tutorial demonstrates how you can create an Edge artificial intelligence (AI) solution with KAN  using the prebuilt model path.
+This tutorial demonstrates how you can create an Edge artificial intelligence (AI) solution with SYMPHONY  using the prebuilt model path.
 
 Using an example use case to help you understand pedestrian and vehicle activity and occupancy in a parking lot or on a street, you’ll learn how to process a video stream via a pre-built machine learning (ML) model from Model Zoo. You’ll enrich the model with business logic and derive insights in real time, and then use an Azure virtual machine (VM) with four vCPUs as your IoT Edge device and prerecorded video as your Real-Time Streaming Protocol (RTSP) stream.
 
@@ -19,7 +19,7 @@ The five major steps we will cover in this tutorial are:
     In this step you also identify parts from your camera streams.
 
 <p align="left">
-<a href="https://www.youtube.com/watch?v=YyhlNqHqesw"><img src="../images/KAN portal guide GH thumbnail.png" width="500"></a>
+<a href="https://www.youtube.com/watch?v=YyhlNqHqesw"><img src="../images/SYMPHONY portal guide GH thumbnail.png" width="500"></a>
 </p>
 
 ## Prerequisites
@@ -29,12 +29,12 @@ The five major steps we will cover in this tutorial are:
     -   Microsoft Edge
     -   Google Chrome
 -   An RTSP IP camera accessible by your IoT Edge device.
--   You must have configured an KAN in your environment. If you haven’t, follow the steps in the setup [guide](https://github.com/Azure/PerceptOSS/blob/main/docs/tutorial/setup-guide.md).
--   Launch the KAN Portal. To do this, paste the IP address displayed at the end of setup into your browser.
+-   You must have configured an SYMPHONY in your environment. If you haven’t, follow the steps in the setup [guide](https://github.com/Azure/PerceptOSS/blob/main/docs/tutorial/setup-guide.md).
+-   Launch the SYMPHONY Portal. To do this, paste the IP address displayed at the end of setup into your browser.
 
 ## Step 1: Connect a compute device to power your Edge AI solution
 
-KAN AI Skills are supported on many different devices and accelerators, such as NVIDIA Orin AGX/NX, Xavier AGX/NX, Azure Stack HCI, and Azure stack edge. In this tutorial we’ll be using an Azure VM with a CPU.
+SYMPHONY AI Skills are supported on many different devices and accelerators, such as NVIDIA Orin AGX/NX, Xavier AGX/NX, Azure Stack HCI, and Azure stack edge. In this tutorial we’ll be using an Azure VM with a CPU.
 
 1.  To create your first project, on the left navigation, select **Compute Devices**.
 2.  On the **Compute Devices** tab, select **Add Device** on the top menu.  
@@ -68,7 +68,7 @@ KAN AI Skills are supported on many different devices and accelerators, such as 
 
 ## Step 2: Connect a video feed pointing to pedestrians or vehicles by adding and configuring a camera
 
-KAN supports internet protocol (IP) cameras that use RTSP.
+SYMPHONY supports internet protocol (IP) cameras that use RTSP.
 
 1. To add a camera and configure its properties, on the left navigation, select **Cameras,** and then select **Add Camera**.
 
@@ -153,7 +153,7 @@ The **pedestrian-and-vehicle-detector** attribute box opens on the right side of
 
 ## Step 4: Build an AI skill to increase accuracy and efficiency
 
-KAN’s AI skill makes the inferences that power decision making and any follow-on actions. You can run them with a single model or multiple models and business logic. In this tutorial, we’ll be adding an AI skill based on the model we selected in the previous step and stream the inference results to IoT hub.
+SYMPHONY’s AI skill makes the inferences that power decision making and any follow-on actions. You can run them with a single model or multiple models and business logic. In this tutorial, we’ll be adding an AI skill based on the model we selected in the previous step and stream the inference results to IoT hub.
 
 1. From the left navigation, select **AI Skills**, and then select **Create AI Skill**.
 
@@ -255,13 +255,13 @@ Creating a deployment is the last major step in this tutorial. The last blade on
 
     ![Screenshot of Deployment page displaying deployment](media/ff8ab22c49ba2d28ac6a3d1ac8ec6792.png)
 
-    **You have now successfully created an Edge AI solution with KAN Portal.** The AI skill you selected on your compute device is now processing your video feeds and generating insights.
+    **You have now successfully created an Edge AI solution with SYMPHONY Portal.** The AI skill you selected on your compute device is now processing your video feeds and generating insights.
 
 ### View the deployment library
 
 Now that you’ve deployed your solution, you’ll see a digital representation of the physical world and be able to keep up with what’s going on in your environment. You can view inference results and actionable, event-based videos that help you understand your physical environment and then react in real time, using the inferences from IoT Hub to optimize your operations at the edge and integrate it with other Azure services. You can also view the performance of your AI skills and validate that your solution is working as you expect and is providing you with the information that you need.
 
-You can view the deployment you just created and a library of other deployments you’ve created on the **Deployments** page in KAN Portal.
+You can view the deployment you just created and a library of other deployments you’ve created on the **Deployments** page in SYMPHONY Portal.
 
 ![Screenshot of Deployment page displaying deployment](media/c650927e36a9e06efb73519eb2b1fc0d.png)
 
@@ -289,12 +289,12 @@ You can view the deployment you just created and a library of other deployments 
 
     ![Screenshot of Insights tab](media/7975c9eb8fd719f149255933ae28f50a.png)
 
-**Congratulations! You have now successfully created and deployed an Edge AI image classification solution with KAN Portal.**
+**Congratulations! You have now successfully created and deployed an Edge AI image classification solution with SYMPHONY Portal.**
 
 ## Next steps
 
-Now that you have successfully created an Edge AI solution with KAN Portal, we recommend the following resources:
+Now that you have successfully created an Edge AI solution with SYMPHONY Portal, we recommend the following resources:
 
-- [How-to guide: Create a complex AI skill with KAN Portal AI skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
+- [How-to guide: Create a complex AI skill with SYMPHONY Portal AI skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
 
-- [How-to guide: Create a custom model using KAN Portal](/docs/tutorial/Create-a-custom-model.md)
+- [How-to guide: Create a custom model using SYMPHONY Portal](/docs/tutorial/Create-a-custom-model.md)

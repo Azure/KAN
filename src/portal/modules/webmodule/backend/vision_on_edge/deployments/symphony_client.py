@@ -4,19 +4,19 @@
 import logging
 import json
 
-from ..general.kan_client import KanClient
+from ..general.symphony_client import SymphonyClient
 
 
 logger = logging.getLogger(__name__)
 
 
-class KanInstanceClient(KanClient):
+class SymphonyInstanceClient(SymphonyClient):
 
     def __init__(self):
         super().__init__()
-        self.group = "solution.kan"
+        self.group = "solution.symphony"
         self.plural = "instances"
-        self.kan_api_url = "http://" + self.kan_ip + ":8080/v1alpha2/instances"
+        self.symphony_api_url = "http://" + self.symphony_ip + ":8080/v1alpha2/instances"
 
     def get_config(self):
 
@@ -34,7 +34,7 @@ class KanInstanceClient(KanClient):
                 labels[tag["name"]] = tag["value"]
 
         config_json = {
-            "apiVersion": "solution.kan/v1",
+            "apiVersion": "solution.symphony/v1",
             "kind": "Instance",
             "metadata": {
                 "name": name,
@@ -71,7 +71,7 @@ class KanInstanceClient(KanClient):
         ]
         return patch_config
 
-    def load_kan_objects(self):
+    def load_symphony_objects(self):
         from .models import Deployment
         from ..cameras.models import Camera
         from ..azure_cascades.models import Cascade
@@ -80,7 +80,7 @@ class KanInstanceClient(KanClient):
         api = self.get_client()
         if api:
             res = api.list_namespaced_custom_object(
-                group="solution.kan",
+                group="solution.symphony",
                 version="v1",
                 namespace="default",
                 plural="instances"
@@ -89,13 +89,13 @@ class KanInstanceClient(KanClient):
 
             for instance in instances:
                 name = instance['spec']['displayName']
-                kan_id = instance['metadata']['name']
-                target_kan_id = instance['spec']['target']['name']
+                symphony_id = instance['metadata']['name']
+                target_symphony_id = instance['spec']['target']['name']
                 configure_data = json.loads(
                     instance['spec']['parameters']['configure_data'])
 
                 target = ComputeDevice.objects.filter(
-                    kan_id=target_kan_id).first()
+                    symphony_id=target_symphony_id).first()
                 configure = []
                 for cam in configure_data.keys():
                     cam_obj = Camera.objects.filter(name=cam).first()
@@ -116,7 +116,7 @@ class KanInstanceClient(KanClient):
                 deployment_obj, created = Deployment.objects.update_or_create(
                     name=name,
                     defaults={
-                        "kan_id": kan_id,
+                        "symphony_id": symphony_id,
                         "configure": json.dumps(configure),
                         "compute_device": target,
                     },
@@ -124,14 +124,14 @@ class KanInstanceClient(KanClient):
                 logger.info("Deployment: %s %s.", deployment_obj,
                             "created" if created else "updated")
         else:
-            logger.warning("Not loading kan skills")
+            logger.warning("Not loading symphony skills")
 
     def process_data(self, instance, multi):
 
         name = instance['spec']['displayName']
-        kan_id = instance['metadata']['name']
+        symphony_id = instance['metadata']['name']
         configure_data = json.loads(instance['spec']['parameters']['configure_data'])
-        target_kan_id = instance['spec']['target']['name']
+        target_symphony_id = instance['spec']['target']['name']
 
         labels = instance['metadata'].get('labels')
         if labels:
@@ -162,9 +162,9 @@ class KanInstanceClient(KanClient):
 
         return {
             "name": name,
-            "kan_id": kan_id,
+            "symphony_id": symphony_id,
             "configure": json.dumps(configure),
-            "compute_device": target_kan_id,
+            "compute_device": target_symphony_id,
             "status": processed_status,
             "tag_list": tag_list
         }
@@ -178,7 +178,7 @@ class KanInstanceClient(KanClient):
 
         if api:
             instance = api.get_namespaced_custom_object(
-                group="solution.kan",
+                group="solution.symphony",
                 version="v1",
                 namespace="default",
                 plural="instances",

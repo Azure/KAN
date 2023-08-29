@@ -4,7 +4,7 @@
 from kubernetes import client, config, watch
 from pydantic import BaseModel
 
-from common.kan_params import crd_params
+from common.symphony_params import crd_params
 
 # FIXME
 config.load_kube_config()
@@ -14,7 +14,7 @@ config.load_kube_config()
 
 
 
-class KanClient:
+class SymphonyClient:
     def __init__(self,namespace='default', version='v1'):
         self.version = version
         self.namespace = namespace
@@ -183,8 +183,8 @@ class KanClient:
 
 if __name__ == '__main__':
 
-    sc = KanClient()
-    from common.kan_objects import SkillSpec, ModelSpec, SolutionSpec, InstanceSpec
+    sc = SymphonyClient()
+    from common.symphony_objects import SkillSpec, ModelSpec, SolutionSpec, InstanceSpec
 
 
     solution_spec = SolutionSpec(components=[

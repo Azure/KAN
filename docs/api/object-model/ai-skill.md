@@ -1,6 +1,6 @@
 # AI skills
 
-```skill.ai.kan``` defines a processing graph that is comprised of ```edges``` and ```nodes```. 
+```skill.ai.symphony``` defines a processing graph that is comprised of ```edges``` and ```nodes```. 
 
 ## Schema
 | Field | Type | Description |
@@ -33,7 +33,7 @@ nodes:
     delay_buffer: "$param(delay_buffer)"  
 ```
 ## Overwrite parameters
-A ```instance.solution.kan``` object can overwrite AI skill parameter values in its own ```parameters``` section.
+A ```instance.solution.symphony``` object can overwrite AI skill parameter values in its own ```parameters``` section.
 
 ```yaml
 parameters:

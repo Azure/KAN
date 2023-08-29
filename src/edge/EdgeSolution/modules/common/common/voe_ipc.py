@@ -27,7 +27,7 @@ def is_iotedge():
     return False
 
 
-def is_kan():
+def is_symphony():
     if 'INSTANCE' in os.environ:
         return True
     return False
@@ -35,18 +35,18 @@ def is_kan():
 def get_instance_name():
     return os.environ['INSTANCE']
 
-def get_kan_agent_host():
-    return os.environ['KAN_AGENT_ADDRESS']
+def get_symphony_agent_host():
+    return os.environ['SYMPHONY_AGENT_ADDRESS']
 
-class KanAgent:
+class SymphonyAgent:
 
-    Url = 'http://localhost:8088' if is_local() else 'http://target-runtime-kan-agent:8088'
-    Url = f'http://{get_kan_agent_host()}:8088'
+    Url = 'http://localhost:8088' if is_local() else 'http://target-runtime-symphony-agent:8088'
+    Url = f'http://{get_symphony_agent_host()}:8088'
 
-#class KanAgent:
+#class SymphonyAgent:
 #
-#    Url = 'http://localhost:8088' if is_local() else 'http://target-runtime-kan-agent:8088'
-#    Url = 'http://target-runtime-kan-agent:8088'
+#    Url = 'http://localhost:8088' if is_local() else 'http://target-runtime-symphony-agent:8088'
+#    Url = 'http://target-runtime-symphony-agent:8088'
 
     
 class StreamingModule:
@@ -54,7 +54,7 @@ class StreamingModule:
     Url = 'http://streamingmodule:5002'
     if is_local(): 
         Url = 'http://localhost:5002' 
-    elif is_kan():
+    elif is_symphony():
         Url = f'http://{get_instance_name()}-streamingmodule:5002'
 
     class Status(BaseModel):
@@ -72,7 +72,7 @@ class PredictModule:
     Url = 'http://predictmodule:5004'
     if is_local(): 
         Url = 'http://localhost:5004' 
-    elif is_kan():
+    elif is_symphony():
         Url = f'http://{get_instance_name()}-predictmodule:5004'
 
     class Status(BaseModel):

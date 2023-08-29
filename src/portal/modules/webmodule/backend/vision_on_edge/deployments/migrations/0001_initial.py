@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(blank=True, default='', max_length=200, null=True)),
                 ('configure', models.CharField(blank=True, default='', max_length=2000, null=True)),
                 ('tag_list', models.CharField(blank=True, default='', max_length=1000, null=True)),
-                ('kan_id', models.CharField(blank=True, default='', max_length=200, null=True)),
+                ('symphony_id', models.CharField(blank=True, default='', max_length=200, null=True)),
                 ('status', models.CharField(blank=True, default='', max_length=1000)),
                 ('iothub_insights', models.CharField(blank=True, default='[]', max_length=100000)),
                 ('compute_device', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='compute_devices.ComputeDevice')),

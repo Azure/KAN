@@ -1,8 +1,8 @@
-# KAN Portal
+# SYMPHONY Portal
 
 _(last edit: 4/24/2023)_
 
-KAN Portal is packaged as a Docker container. We provide a ```Makefile``` for building the container and pushing the container to a container registry.
+SYMPHONY Portal is packaged as a Docker container. We provide a ```Makefile``` for building the container and pushing the container to a container registry.
 
 ## 0. Prerequisites
 * [Docker](https://www.docker.com/products/docker-desktop)
@@ -37,10 +37,10 @@ Maintain a ```.env``` file under the **portal** folder with the following enviro
 > **NOTE**: Django [SECRET_KEY](https://docs.djangoproject.com/en/dev/ref/settings/#secret-key) is a random string needed when starting django apps, which requires 50 characters in length with a minimum 5 unique characters.
 
 ## 2. Update version number
-Update ```portal/modules/webmodule/version.txt``` to set the container image version. The built container will be tagged as ```<CONTAINER_REGISTRY_NAME>/kanportal:<version>-<CPU architecture>```, such as ```kanprod.azurecr.io/kanportal:0.41.46-amd64```.
+Update ```portal/modules/webmodule/version.txt``` to set the container image version. The built container will be tagged as ```<CONTAINER_REGISTRY_NAME>/symphonyportal:<version>-<CPU architecture>```, such as ```kanprod.azurecr.io/symphonyportal:0.41.46-amd64```.
 > **NOTE**: The current ```Makefile``` builds for ```amd64``` only.
 
-## 3. Build KAN Portal container
+## 3. Build SYMPHONY Portal container
 
 Build webmodule image
 ```bash

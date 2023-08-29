@@ -70,9 +70,9 @@ const Basics = (props: Props) => {
                   label="Select compute devices"
                   selectedKeys={localFormData.selectedDeviceList.map((device) => device)}
                   options={computeDeviceList
-                    .filter((device) => localFormData.selectedDeviceList.includes(device.kan_id))
+                    .filter((device) => localFormData.selectedDeviceList.includes(device.symphony_id))
                     .map((device) => ({
-                      key: device.kan_id,
+                      key: device.symphony_id,
                       text: device.name,
                     }))}
                   required

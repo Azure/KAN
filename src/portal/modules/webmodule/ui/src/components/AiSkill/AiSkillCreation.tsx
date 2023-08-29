@@ -71,7 +71,7 @@ const AISkillCreation = (props: Props) => {
           name: 'rtsp',
           inputs: sourceModel.inputs,
           outputs: sourceModel.outputs,
-          kan_id: sourceModel.kan_id,
+          symphony_id: sourceModel.symphony_id,
         },
         configurations: SOURCE_CONFIGURATIONS,
       },
@@ -87,7 +87,7 @@ const AISkillCreation = (props: Props) => {
     },
     raw_data: '',
     tag_list: [{ name: '', value: '', errorMessage: '' }],
-    kan_id: '',
+    symphony_id: '',
     screenshot: '',
     error: {
       name: '',

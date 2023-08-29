@@ -2,7 +2,7 @@
 
 A binding binds a ```role``` to a ```provider```. 
 
-In KAN API, a role represents a set of actions that can be taken on an entity. For example, an **instance role** represents a set of operations that can be performed on an ```instance.solution.kan``` object, such as **Apply()**, **Get()** and **Remove()**. A binding binds a role to a provider, which implements the required interface. 
+In SYMPHONY API, a role represents a set of actions that can be taken on an entity. For example, an **instance role** represents a set of operations that can be performed on an ```instance.solution.symphony``` object, such as **Apply()**, **Get()** and **Remove()**. A binding binds a role to a provider, which implements the required interface. 
 
 ## Schema
 | Field | Type | Description | 

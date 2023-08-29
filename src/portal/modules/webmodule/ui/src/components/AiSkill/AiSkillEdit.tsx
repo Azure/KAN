@@ -90,7 +90,7 @@ const AiSkillEdit = () => {
     },
     raw_data: '',
     tag_list: [{ name: '', value: '', errorMessage: '' }],
-    kan_id: '',
+    symphony_id: '',
     screenshot: '',
   });
   const [localPivotKey, setLocalPivotKey] = useState<PivotTabKey>(editStep);
@@ -103,7 +103,7 @@ const AiSkillEdit = () => {
       name: skill.name,
       acceleration: skill.acceleration,
       fps: skill.fps,
-      kan_id: skill.kan_id,
+      symphony_id: skill.symphony_id,
       cascade: {
         flow: '',
         error: '',
@@ -303,7 +303,7 @@ const AiSkillEdit = () => {
       </Stack>
       <EditFooter
         id={skill.id}
-        kan_id={skill.kan_id}
+        symphony_id={skill.symphony_id}
         currentStep={localPivotKey}
         onLinkClick={onLinkClick}
         localFormData={localFormData}

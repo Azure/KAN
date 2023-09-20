@@ -11,31 +11,31 @@ help: ## show help message
 
 
 .PHONY: build
-build: check-env ## build symphonyportal image
+build: check-env ## build kanportal image
 	@DOCKER_BUILDKIT=1 docker build --rm -f "$(PWD)/modules/webmodule/dockerfiles/Dockerfile.amd64" \
 		--build-arg GIT_LOG=$(git rev-parse HEAD) \
 		--build-arg SECRET_KEY=$(SECRET_KEY) \
-		-t $(CONTAINER_REGISTRY_NAME)/symphonyportal:$(MODULE_VERSION)-amd64 \
+		-t $(CONTAINER_REGISTRY_NAME)/kanportal:$(MODULE_VERSION)-amd64 \
 		"$(WEBMODULE_PATH)"
 
 .PHONY: build-local
-build-local: check-env ## build symphonyportal image
+build-local: check-env ## build kanportal image
 	@DOCKER_BUILDKIT=1 docker build --rm -f "$(PWD)/modules/webmodule/dockerfiles/Dockerfile.amd64" \
                 --build-arg GIT_LOG=$(git rev-parse HEAD) \
                 --build-arg SECRET_KEY=$(SECRET_KEY) \
-                -t $(CONTAINER_REGISTRY_NAME_LOCAL)/symphonyportal:$(MODULE_VERSION)-amd64 \
+                -t $(CONTAINER_REGISTRY_NAME_LOCAL)/kanportal:$(MODULE_VERSION)-amd64 \
                 "$(WEBMODULE_PATH)"
 
 .PHONY: push
-push: check-env ## push symphonyportal image
-	@docker push $(CONTAINER_REGISTRY_NAME)/symphonyportal:$(MODULE_VERSION)-amd64
+push: check-env ## push kanportal image
+	@docker push $(CONTAINER_REGISTRY_NAME)/kanportal:$(MODULE_VERSION)-amd64
 
 .PHONY: push-local
-push-local: check-env ## push symphonyportal image
-	@docker push $(CONTAINER_REGISTRY_NAME_LOCAL)/symphonyportal:$(MODULE_VERSION)-amd64
+push-local: check-env ## push kanportal image
+	@docker push $(CONTAINER_REGISTRY_NAME_LOCAL)/kanportal:$(MODULE_VERSION)-amd64
 
 .PHONY: version
-version: ## check symphonyportal version
+version: ## check kanportal version
 	@echo $(MODULE_VERSION)
 
 check-env:

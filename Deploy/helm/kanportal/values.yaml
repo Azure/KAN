@@ -1,0 +1,26 @@
+# Default values for symphony.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+image:
+  pullPolicy: Always
+  image: factoryairegistry.azurecr.io/kanportal
+  tag: "0.45.2-dev.1-amd64"
+kanportal:
+  videoSource: opencv
+  portalIp: "20.27.153.105"
+  symphonyIp: "20.27.45.133"
+storage:
+  storageResourceGroup: "customvision"
+  storageAccount: "factoryai"
+  storageContainer: "voe"
+  subscriptionId: "091725d9-aeba-4638-8faf-d0e81a03a93d"
+customvision:
+  endpoint: "https://southcentralus.api.cognitive.microsoft.com/"
+  trainingKey: "0bdca2dca9bd4756b48f3e3f1fe136bf"
+servicePrincipal:
+  tenantId: "2cf4248e-4836-4202-b796-9a1589ff4613"
+  clientId: "1c83b86f-501b-41f0-8914-d015c4744113"
+  clientSecret: "R028Q~ZOKzgCYxhr1ZJNNKhP8gUcD3Dpy6jMqaXf"
+symphonyAgentImage: "kanprod.azurecr.io/kan-agent"
+symphonyAgentVersion: "0.41.44"
+kanaiVersion: "0.45.2"

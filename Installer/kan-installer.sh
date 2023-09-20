@@ -1,8 +1,8 @@
 #!/bin/bash
 symphony_version=0.41.44
 agent_version=0.41.44
-symphonyportal_version=0.41.47-amd64
-symphonyai_version=0.41.47
+kanportal_version=0.41.47-amd64
+kanai_version=0.41.47
 current_step=0
 while [ $current_step -lt 8 ]; do
     case $current_step in
@@ -495,11 +495,11 @@ while [ $current_step -lt 8 ]; do
  
                   subscriptionId=$(az account show --query "id" -o tsv)
 
-                    if [ $(az role definition list --custom-role-only true --name "symphony contributor $subscriptionId" | jq ". | length") -lt 1 ];
+                    if [ $(az role definition list --custom-role-only true --name "kan contributor $subscriptionId" | jq ". | length") -lt 1 ];
                     then
                         az role definition create --role-definition "{
-                            \"Name\": \"symphony contributor $subscriptionId\",
-                            \"Description\": \"symphony contributor $subscriptionId\",
+                            \"Name\": \"kan contributor $subscriptionId\",
+                            \"Description\": \"kan contributor $subscriptionId\",
                             \"Actions\": [
                                 \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
                                 \"Microsoft.Devices/iotHubs/listkeys/Action\"
@@ -510,8 +510,8 @@ while [ $current_step -lt 8 ]; do
                     sleep 120
                     else
                         az role definition update --role-definition "{
-                            \"Name\": \"symphony contributor $subscriptionId\",
-                            \"Description\": \"symphony contributor $subscriptionId\",
+                            \"Name\": \"kan contributor $subscriptionId\",
+                            \"Description\": \"kan contributor $subscriptionId\",
                             \"Actions\": [
                                 \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
                                 \"Microsoft.Devices/iotHubs/listkeys/Action\"
@@ -523,8 +523,8 @@ while [ $current_step -lt 8 ]; do
 
                     sleep 5
 
-                    echo "assigning SYMPHONYportal contributor role to subscription"
-                    az role assignment create --role "symphony contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
+                    echo "assigning Kanportal contributor role to subscription"
+                    az role assignment create --role "kan contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
 
                     echo "assigning reader role to subscription"
                     az role assignment create --role "Reader" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
@@ -591,10 +591,10 @@ while [ $current_step -lt 8 ]; do
                     sleep 3                
                 done
 
-                helm upgrade -n default --install symphonyportal oci://kanprod.azurecr.io/helm/symphonyportal --version $symphonyportal_version $values --set image.image=kanprod.azurecr.io/symphonyportal --set symphonyAgentImage=$agent_image --set symphonyAgentVersion=$agent_version --set symphonyaiVersion=$symphonyai_version --set symphonyportal.portalIp=$portalIp --set symphonyportal.symphonyIp=$symphonyIp
+                helm upgrade -n default --install kanportal oci://kanprod.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kanprod.azurecr.io/kanportal --set symphonyAgentImage=$agent_image --set symphonyAgentVersion=$agent_version --set kanaiVersion=$kanai_version --set kanportal.portalIp=$portalIp --set kanportal.symphonyIp=$symphonyIp
 
                 if [ $? != "0" ]; then
-                    echo -e "\e[31mWe faced some issues while pull SYMPHONYportal from container registry. Please try the installer again a few minutes later\e[0m"
+                    echo -e "\e[31mWe faced some issues while pull Kanportal from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
 
                 current_step=`expr $current_step + 1`

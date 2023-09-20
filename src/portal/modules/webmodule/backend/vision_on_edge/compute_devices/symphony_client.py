@@ -354,7 +354,7 @@ class SymphonySolutionClient(SymphonyClient):
         is_grpc = self.args.get("is_grpc", False)
         grpc_components = self.args.get("grpc_components", [])
         # workaround for symphony 0.39.7
-        symphonyai_version = os.getenv('SYMPHONYAI_VERSION')
+        kanai_version = os.getenv('KANAI_VERSION')
         is_k8s = self.args.get("is_k8s", False)
         if is_k8s:
             symphony_agent_address = "target-runtime.default.svc.cluster.local"
@@ -373,7 +373,7 @@ class SymphonySolutionClient(SymphonyClient):
             create_options = "{\"HostConfig\":{\"LogConfig\":{\"Type\":\"json-file\",\"Config\":{\"max-size\":\"10m\",\"max-file\":\"10\"}},\"runtime\":\"nvidia\"}}"
         # network_api = self.get_network_client()
         # res = network_api.read_namespaced_ingress(
-        #     name='symphonyportal', namespace='default')
+        #     name='kanportal', namespace='default')
         # webmodule_ip = res.status.load_balancer.ingress[0].ip
         webmodule_ip = os.getenv('PORTAL_IP')
         webmodule_url = "http://" + webmodule_ip
@@ -407,7 +407,7 @@ class SymphonySolutionClient(SymphonyClient):
             "route": "InferenceToIoTHub",
             "type": "iothub",
             "properties": {
-                "definition": f"FROM /messages/modules/{instance}-symphonyai/metrics INTO $upstream"
+                "definition": f"FROM /messages/modules/{instance}-kanai/metrics INTO $upstream"
             }
 
         })
@@ -417,23 +417,23 @@ class SymphonySolutionClient(SymphonyClient):
                     "route": f"InferenceTo{module_route['module_name']}",
                     "type": "iothub",
                     "properties": {
-                        "definition": f"FROM /messages/modules/{instance}-symphonyai/localmetrics INTO BrokeredEndpoint(\"/modules/{module_route['module_name']}/inputs/{module_route['module_input']}\")"
+                        "definition": f"FROM /messages/modules/{instance}-kanai/localmetrics INTO BrokeredEndpoint(\"/modules/{module_route['module_name']}/inputs/{module_route['module_input']}\")"
                     }
 
                 })
 
         # container image
-        # symphonyai_version = "0.41.45"
-        # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{symphonyai_version}-amd64"
-        # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{symphonyai_version}-amd64"
-        # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{symphonyai_version}-{image_suffix}amd64"
-        voeedge_image = f"kanprod.azurecr.io/symphonyai:{symphonyai_version}-{image_suffix}amd64"
+        # kanai_version = "0.41.45"
+        # managermodule_image = f"possprod.azurecr.io/voe/managermodule:{kanai_version}-amd64"
+        # streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{kanai_version}-amd64"
+        # predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{kanai_version}-{image_suffix}amd64"
+        voeedge_image = f"kanprod.azurecr.io/kanai:{kanai_version}-{image_suffix}amd64"
 
         if 'arm' in architecture.lower():
-            voeedge_image = f"kanprod.azurecr.io/symphonyai:{symphonyai_version}-jetson"
-            managermodule_image = f"possprod.azurecr.io/voe/managermodule:{symphonyai_version}-jetson"
-            streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{symphonyai_version}-jetson"
-            predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{symphonyai_version}-jetson"
+            voeedge_image = f"kanprod.azurecr.io/kanai:{kanai_version}-jetson"
+            managermodule_image = f"possprod.azurecr.io/voe/managermodule:{kanai_version}-jetson"
+            streamingmodule_image = f"possprod.azurecr.io/voe/streamingmodule:{kanai_version}-jetson"
+            predictmodule_image = f"possprod.azurecr.io/voe/predictmodule:{kanai_version}-jetson"
 
         config_json = {
             "apiVersion": "solution.symphony/v1",
@@ -450,7 +450,7 @@ class SymphonySolutionClient(SymphonyClient):
                     #         "container.image": managermodule_image,
                     #         "container.restartPolicy": "always",
                     #         "container.type": "docker",
-                    #         "container.version": symphonyai_version,
+                    #         "container.version": kanai_version,
                     #         "env.AISKILLS": skills,
                     #         "env.INSTANCE": "$instance()",
                     #         "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
@@ -463,7 +463,7 @@ class SymphonySolutionClient(SymphonyClient):
                     #         "container.image": streamingmodule_image,
                     #         "container.restartPolicy": "always",
                     #         "container.type": "docker",
-                    #         "container.version": symphonyai_version,
+                    #         "container.version": kanai_version,
                     #         "env.INSTANCE": "$instance()",
                     #         "env.BLOB_STORAGE_CONNECTION_STRING": storage_conn_str,
                     #         "env.BLOB_STORAGE_CONTAINER": storage_container,
@@ -480,12 +480,12 @@ class SymphonySolutionClient(SymphonyClient):
                     #         "container.image": predictmodule_image,
                     #         "container.restartPolicy": "always",
                     #         "container.type": "docker",
-                    #         "container.version": symphonyai_version,
+                    #         "container.version": kanai_version,
                     #         "env.INSTANCE": "$instance()"
                     #     }
                     # },
                     {
-                        "name": "symphonyai",
+                        "name": "kanai",
                         "type": "container",
                         "properties": {
                             "container.createOptions": create_options,
@@ -493,7 +493,7 @@ class SymphonySolutionClient(SymphonyClient):
                             "container.resources": container_resources,
                             "container.restartPolicy": "always",
                             "container.type": "docker",
-                            "container.version": symphonyai_version,
+                            "container.version": kanai_version,
                             "env.INSTANCE": "$instance()",
                             # "env.AISKILLS": skills,
                             "env.BLOB_STORAGE_CONNECTION_STRING": storage_conn_str,

@@ -26,10 +26,10 @@ python devops.py build-all
 The above command build four SYMPHONY AI container images for different infrastructures:
 | Image name| Infrastructure|
 |--------|--------|
-|```symphonyai:<version>-openvionamd64```|x64 CPU with OpenVino|
-|```symphonyai:<version>-gpuamd64```|x64 CPU with Nvidia GPU|
-|```symphonyai:<version>-amd64```|x64 CPU only|
-|```symphonyai:<version>-jetson```|Nvidia Jetson platform|
+|```kanai:<version>-openvionamd64```|x64 CPU with OpenVino|
+|```kanai:<version>-gpuamd64```|x64 CPU with Nvidia GPU|
+|```kanai:<version>-amd64```|x64 CPU only|
+|```kanai:<version>-jetson```|Nvidia Jetson platform|
 
 ## 4. Push images
 ```bash

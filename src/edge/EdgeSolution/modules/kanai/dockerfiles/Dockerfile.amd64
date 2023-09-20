@@ -14,7 +14,7 @@ COPY common/requirements.txt /app/requirements-common.txt
 RUN pip install -r /app/requirements-common.txt
 
 # this module
-COPY symphonyai/requirements.txt /app/
+COPY kanai/requirements.txt /app/
 RUN pip install -r /app/requirements.txt
 # move onnxruntimethis to acclerator specific
 
@@ -25,11 +25,11 @@ RUN pip install -r /app/requirements.txt
 COPY common/common /app/common
 
 # this module
-COPY symphonyai/app/*.py /app/
-#COPY symphonyai/app/models/*.py /app/models/
-COPY symphonyai/app/customvision /app/customvision
-COPY symphonyai/app/downloaders /app/downloaders
-COPY symphonyai/app/grpc_proto /app/grpc_proto
+COPY kanai/app/*.py /app/
+#COPY kanai/app/models/*.py /app/models/
+COPY kanai/app/customvision /app/customvision
+COPY kanai/app/downloaders /app/downloaders
+COPY kanai/app/grpc_proto /app/grpc_proto
 
 
 

@@ -1,8 +1,8 @@
-# Introduction to SYMPHONY: Core concepts
+# Introduction to KAN: Core concepts
 
-KubeAI Application Nucleus for edge (SYMPHONY) is a framework for creating, deploying, and operating Edge artificial intelligence (AI) solutions at scale with the control and flexibility of open-source natively on your environment. It is fully open-sourced and leverages the open-source software (OSS) community to deliver enhanced experiences. And, as a self-managed solution, you can host the experience on your own Kubernetes clusters.
+KubeAI Application Nucleus for edge (KAN) is a framework for creating, deploying, and operating Edge artificial intelligence (AI) solutions at scale with the control and flexibility of open-source natively on your environment. It is fully open-sourced and leverages the open-source software (OSS) community to deliver enhanced experiences. And, as a self-managed solution, you can host the experience on your own Kubernetes clusters.
 
-This article cover the following six key concepts to provide you with a deep understanding of SYMPHONY Portal concepts:
+This article cover the following six key concepts to provide you with a deep understanding of KAN Portal concepts:
 
 1.  Compute devices
 2.  Cameras
@@ -15,23 +15,23 @@ This article cover the following six key concepts to provide you with a deep und
     3.  Solution instances
 
 <p align="left">
-<a href="https://www.youtube.com/watch?v=YyhlNqHqesw"><img src="../images/SYMPHONY portal guide GH thumbnail.png" width="500"></a>
+<a href="https://www.youtube.com/watch?v=YyhlNqHqesw"><img src="../images/KAN portal guide GH thumbnail.png" width="500"></a>
 </p>
 
-After reviewing this article, visit the [Tutorial: Create an Edge AI solution with SYMPHONY Portal using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md) for step-by-step guidance on how to create an end-to-end Edge artificial intelligence (AI) solution.
+After reviewing this article, visit the [Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md) for step-by-step guidance on how to create an end-to-end Edge artificial intelligence (AI) solution.
 
 ## 1. **Compute devices**
 
-A compute device is an essential part of the [SYMPHONY](https://github.com/Azure/SYMPHONY) architecture. It holds all the components of the vision-based Edge AI deployments and executes close to the operating environment in real time. It is highly configurable and capable of processing several camera streams at once.
+A compute device is an essential part of the [KAN](https://github.com/Azure/KAN) architecture. It holds all the components of the vision-based Edge AI deployments and executes close to the operating environment in real time. It is highly configurable and capable of processing several camera streams at once.
 
-SYMPHONY and its Edge AI applications are supported on many different devices and accelerators; for example, NVIDIA Orin AGX/NX, Xavier AGX/NX, Azure Stack HCI, and Azure stack edge. SYMPHONY also allows you link your existing device on Kubernetes environments such as AKS-HCI and AKS-lite. Regardless of which environment(s) you use, you can run and manage them in the same way.
+KAN and its Edge AI applications are supported on many different devices and accelerators; for example, NVIDIA Orin AGX/NX, Xavier AGX/NX, Azure Stack HCI, and Azure stack edge. KAN also allows you link your existing device on Kubernetes environments such as AKS-HCI and AKS-lite. Regardless of which environment(s) you use, you can run and manage them in the same way.
 
 
 ### Configuration options
 
 You can configure either a Kubernetes Device or an IoT Edge Device as a compute device.
 
-To bring a Kubernetes cluster to the experience, onboard an existing cluster that is running  [SYMPHONY API](/docs/api/quick_start/quick_start.md) or your portal, or onboard other external clusters using your kubeconfig file (see [Organizing Cluster Access Using kubeconfig Files](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/)). You must link your desired cluster to a device and provide hardware specifications of your linked device.
+To bring a Kubernetes cluster to the experience, onboard an existing cluster that is running  [KAN API](/docs/api/quick_start/quick_start.md) or your portal, or onboard other external clusters using your kubeconfig file (see [Organizing Cluster Access Using kubeconfig Files](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/)). You must link your desired cluster to a device and provide hardware specifications of your linked device.
 
 The following table provides information about the compute devices and configuration options available to you.
 
@@ -91,7 +91,7 @@ You can also create your own custom model from scratch. Just supply any 15 image
 
 ## 4. AI skills
 
-In SYMPHONY, AI skills define a processing graph with cascaded models and other processing nodes like transformer and exporter. They make the inferences that power decision making and any follow-on actions. They can be run with single or multiple models and nodes.
+In KAN, AI skills define a processing graph with cascaded models and other processing nodes like transformer and exporter. They make the inferences that power decision making and any follow-on actions. They can be run with single or multiple models and nodes.
 
 There are three groups of nodes that comprise AI skills:
 
@@ -107,7 +107,7 @@ There are three groups of nodes that comprise AI skills:
 
     Export nodes help you export raw inference data and actionable insights to a broad range of locations to the edge or to the cloud. These nodes are located locally at the edge, so you can also connect custom IoT Edge modules that allow you to integrate with other applications and systems in your environment.
 
-This screenshot displays some of the nodes SYMPHONY supports:
+This screenshot displays some of the nodes KAN supports:
 
 ![Screenshot of supported nodes](./media/ec960a4d6611fe07fad6ae221393130d.png)
 
@@ -138,8 +138,8 @@ A solution instance is the combination of a solution and a target. From the port
 
 ## Next steps
 
-Now that you understand the main concepts in the SYMPHONY Portal and the key considerations for creating your Edge AI solution, we recommend the following resources to get started:
+Now that you understand the main concepts in the KAN Portal and the key considerations for creating your Edge AI solution, we recommend the following resources to get started:
 
--   [SYMPHONY: Setup guide](setup-guide.md)
--   [Tutorial: Create an Edge AI solution with SYMPHONY Portal using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
--   [SYMPHONY: API overview](/docs/api/README.md)
+-   [KAN: Setup guide](setup-guide.md)
+-   [Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
+-   [KAN: API overview](/docs/api/README.md)

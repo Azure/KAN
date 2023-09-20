@@ -1,0 +1,47 @@
+apiVersion: ai.symphony/v1
+kind: Model
+metadata:
+  name: "vehicle-attributes-recognition"
+spec:
+  properties:
+    displayName: "vehicle-attributes-recognition-barrier-0039"
+    model.type: "modelzoo"
+    model.subtype: "intel.Classification"
+    model.project: "vehicle-attributes-recognition-barrier-0039"
+    model.endpoint: ""
+    model.version.1: ""
+    model.symphony.id: "vehicle-attributes-recognition"
+    tags: "['white', 'gray', 'yellow', 'red', 'green', 'blue', 'black']"
+    state: trained
+---
+apiVersion: ai.symphony/v1
+kind: Model
+metadata:
+  name: "pedestrian-and-vehicle-detector"
+spec:
+  properties:
+    displayName: "pedestrian-and-vehicle-detector-adas-0001"
+    model.type: "modelzoo"
+    model.subtype: "intel.ObjectDetection"
+    model.project: "pedestrian-and-vehicle-detector-adas-0001"
+    model.endpoint: ""
+    model.version.1: ""
+    model.symphony.id: "pedestrian-and-vehicle-detector"
+    tags: "['vehicle', 'pedestrian']"
+    state: trained
+---
+apiVersion: ai.symphony/v1
+kind: Model
+metadata:
+  name: "person-detection"
+spec:
+  properties:
+    displayName: "person-detection-retail-0013"
+    model.type: "modelzoo"
+    model.subtype: "intel.ObjectDetection"
+    model.project: "person-detection-retail-0013"
+    model.endpoint: ""
+    model.version.1: ""
+    model.symphony.id: "person-detection"
+    tags: "['person']"
+    state: trained

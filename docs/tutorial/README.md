@@ -6,7 +6,7 @@ Welcome to our documentation page. There are several types of documents here so 
 
 **Tutorial** - Tutorials lead you through creating a proof of concept. The goal is to help you understand how to do the task later in a way that is specific for your environment. This a [SYMPHONY example](Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md).
 
-**Concept** - Concept articles are primarily distinguished by what they aren't: they aren't procedural articles. They don't have specific end states (other than conveying an underlying idea) and don't have concrete, sequential actions. The SYMPHONY concept document is [here](concepts-symphony.md).
+**Concept** - Concept articles are primarily distinguished by what they aren't: they aren't procedural articles. They don't have specific end states (other than conveying an underlying idea) and don't have concrete, sequential actions. The SYMPHONY concept document is [here](concepts-kan.md).
 
 **How-to guide** - How-to guides are primarily procedural and help you complete tasks in your own environment. They differ from tutorials in that they can include optional information, explanations, and information to help inform decisions. An example of a How-to guide is [Create a complex AI skill with SYMPHONY Portal AI Skill builder](Create-a-complex-AI-skill.md).
 
@@ -14,7 +14,7 @@ Welcome to our documentation page. There are several types of documents here so 
 
 To get a deeper understanding of SYMPHONY and find out how to proceed next, review the following articles: 
 
-[Introduction to SYMPHONY: Core concepts](concepts-symphony.md)
+[Introduction to SYMPHONY: Core concepts](concepts-kan.md)
 
 [SYMPHONY: Setup guide](setup-guide.md)
 

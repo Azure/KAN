@@ -1,8 +1,8 @@
-# How-to guide: Create a complex AI skill with SYMPHONY Portal AI Skill builder
+# How-to guide: Create a complex AI skill with KAN Portal AI Skill builder
 
 ## Overview
 
-SYMPHONY AI Skills are deployable packages to Edge devices. These packages are a cascade of stages or *nodes* where the video feed is consumed by an Edge device, inferences are calculated, results are filtered, and results and video clips are exported for further business logic processing or storage. 
+KAN AI Skills are deployable packages to Edge devices. These packages are a cascade of stages or *nodes* where the video feed is consumed by an Edge device, inferences are calculated, results are filtered, and results and video clips are exported for further business logic processing or storage. 
 
 There are three groups of nodes that comprise AI skills:
 
@@ -172,9 +172,9 @@ Now that you understand what AI skills are and how to use models to build, trans
 
 We also recommend the following tutorials to increase your experience:
 
-- [Tutorial: Create an Edge AI solution with SYMPHONY Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
+- [Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal.md)
 
-- [SYMPHONY: API overview](/docs/api/README.md)
+- [KAN: API overview](/docs/api/README.md)
 
 - [How-to guide: Bring your own ML model and processing logic for your AI Skill using gRPC Custom Processing (BYOM)](/docs/tutorial/How-to-BYOM.md)
 

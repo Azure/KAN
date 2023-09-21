@@ -1,8 +1,8 @@
-# SYMPHONY Portal
+# KAN Portal
 
 _(last edit: 4/24/2023)_
 
-SYMPHONY Portal is packaged as a Docker container. We provide a ```Makefile``` for building the container and pushing the container to a container registry.
+KAN Portal is packaged as a Docker container. We provide a ```Makefile``` for building the container and pushing the container to a container registry.
 
 ## 0. Prerequisites
 * [Docker](https://www.docker.com/products/docker-desktop)
@@ -40,7 +40,7 @@ Maintain a ```.env``` file under the **portal** folder with the following enviro
 Update ```portal/modules/webmodule/version.txt``` to set the container image version. The built container will be tagged as ```<CONTAINER_REGISTRY_NAME>/kanportal:<version>-<CPU architecture>```, such as ```kanprod.azurecr.io/kanportal:0.41.46-amd64```.
 > **NOTE**: The current ```Makefile``` builds for ```amd64``` only.
 
-## 3. Build SYMPHONY Portal container
+## 3. Build KAN Portal container
 
 Build webmodule image
 ```bash

@@ -1,6 +1,6 @@
 # How-to guide: Bring your own ML model and processing logic for your AI Skill using gRPC Custom Processing (BYOM)
 
-Bringing your model allows you to use your models in the SYMPHONY environment, either by themselves or in concert with other models. This flexibility enables both quick prototyping and building production pipelines. BYOM brings a plug-and-play capability found nowhere else. gRPC Custom Processing node enables you to add your own ML model or custom processing business logic to your AI Skills. gRPC Custom Processing node plays the role of a proxy. It converts the video frames to the specified image type. Then it relays the image over gRPC to another module that runs an AI model (or any other custom code) behind a gRPC endpoint (server). 
+Bringing your model allows you to use your models in the KAN environment, either by themselves or in concert with other models. This flexibility enables both quick prototyping and building production pipelines. BYOM brings a plug-and-play capability found nowhere else. gRPC Custom Processing node enables you to add your own ML model or custom processing business logic to your AI Skills. gRPC Custom Processing node plays the role of a proxy. It converts the video frames to the specified image type. Then it relays the image over gRPC to another module that runs an AI model (or any other custom code) behind a gRPC endpoint (server). 
 
 # How-to use gRPC Custom Processing
 
@@ -14,7 +14,7 @@ Users can create AI Skills to manage the flow of deployments. The drag-and-drop 
 ## Build your gRPC Endpoint/Server
 To be able to add your custom model and logic to your AI Skill, you need to build a gPRC endpoint/server that can receive camera frames and respond with appropriate metadata usable by nodes downstream from your gPRC Custom Processing node. To do so you have to use our gPRC contract to build your gRPC server. 
 
-### SYMPHONY Custom Processing node gRPC Contract
+### KAN Custom Processing node gRPC Contract
 
 The protobuf file for the gRPC contract is [here](../../src/grpc_proto/custom_node.proto)
 
@@ -231,10 +231,10 @@ The following step will be the same as Type 1: Endpoint URL.
 
 ## Next steps
 
-Now that you understand what BYOM is and how to add your own models and custom business logic to SYMPHONY, We recommend the following documents to continue learning more about SYMPHONY:
+Now that you understand what BYOM is and how to add your own models and custom business logic to KAN, We recommend the following documents to continue learning more about KAN:
 
-- [Tutorial: Create an Edge AI solution with SYMPHONY Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal)
+- [Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal)
 
-- [How-to guide: Create a complex AI skill with SYMPHONY Portal AI Skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
-- [SYMPHONY: API overview](/docs/api/README.md)
+- [How-to guide: Create a complex AI skill with KAN Portal AI Skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
+- [KAN: API overview](/docs/api/README.md)
 

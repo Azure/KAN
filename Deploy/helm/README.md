@@ -1,15 +1,15 @@
-# Release Symphony Portal Helm chart to Azure Container Registry
+# Release KAN Portal Helm chart to Azure Container Registry
 
 _(last edit: 4/24/2023)_
 
-Follow these steps to package and push SYMPHONY Portal Helm chart:
+Follow these steps to package and push KAN Portal Helm chart:
 
 ## 1. Update versions
 
 Edit the ```Deploy/helm/kanportal/chart.yaml``` file and the ```Deploy/helm/kanportal/values.yaml``` file to update all the version numbers to desired values.
 
 ## 2. Run build script
-We provide a ```release.sh``` script that packages Symphony Portal Helm chart and pushes it to a container registry. To run the script:
+We provide a ```release.sh``` script that packages KAN Portal Helm chart and pushes it to a container registry. To run the script:
 
 ```bash
 bash release.sh <Azure Container Registry name> # for example: bash release.sh kanprod.azurecr.io

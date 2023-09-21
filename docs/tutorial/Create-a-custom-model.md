@@ -1,4 +1,4 @@
-# How-to guide: Create a custom model using SYMPHONY Portal
+# How-to guide: Create a custom model using KAN Portal
 
 ## Overview
 
@@ -8,7 +8,7 @@ In this article, we’ll guide you through the process of adding and training cu
 
 For our example use case, we will add a custom model that detects when a store has low stock levels for its products based on images of the store shelves. This model provides real time evaluation that can be used to trigger business logic. An example is [just-in-time supply chains](https://www.liveabout.com/just-in-time-jit-2221262#:\~:text=A%20just%2Din%2Dtime%20supply%20chain%20is%20one%20that%20moves%20synchronized%20with%20the%20subsequent%20operations) that save significant costs on excess stock and storage overhead.
 
-## Add a model in SYMPHONY Portal
+## Add a model in KAN Portal
 
 The **Model** blade on the left navigation displays two options for adding models to the workspace: **Create Custom Model** or **Browse Model Zoo**.
 
@@ -114,8 +114,8 @@ Now that you understand what models are and how to add them from your model gall
 
 We also recommend the following tutorials to increase your experience:
 
-- [Tutorial: Create an Edge AI solution with SYMPHONY Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal)
+- [Tutorial: Create an Edge AI solution with KAN Portal using a prebuilt model](/docs/tutorial/Tutorial-Create-an-Edge-AI-solution-with-KubeAI-Application-Nucleus-for-edge-Portal)
 
-- [How-to guide: Create a complex AI skill with SYMPHONY Portal AI Skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
-- [SYMPHONY: API overview](/docs/api/README.md)
+- [How-to guide: Create a complex AI skill with KAN Portal AI Skill builder](/docs/tutorial/Create-a-complex-AI-skill.md)
+- [KAN: API overview](/docs/api/README.md)
 - [How-to guide: Bring your own ML model and processing logic for your AI Skill using gRPC Custom Processing (BYOM)](/docs/tutorial/How-to-BYOM.md)

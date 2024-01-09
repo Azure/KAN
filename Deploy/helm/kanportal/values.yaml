@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 image:
   pullPolicy: Always
-  image: p4etest.azurecr.io/kanportal
+  image: kanprod.azurecr.io/kanportal
   tag: ""
 kanportal:
   videoSource: opencv

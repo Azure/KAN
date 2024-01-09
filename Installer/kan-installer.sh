@@ -1,9 +1,12 @@
 #!/bin/bash
-symphony_version=0.41.44
+symphony_version=0.45.31
 agent_version=0.41.44
-kanportal_version=0.41.47-amd64
+#kanportal_version=0.41.47-amd64
+kanportal_version=0.47.2
 kanai_version=0.41.47
 current_step=0
+symphony_cr=oci://possprod.azurecr.io/helm/symphony
+symphony_ns=symphony-k8s-system
 while [ $current_step -lt 8 ]; do
     case $current_step in
     0 ) # azure user
@@ -551,9 +554,9 @@ while [ $current_step -lt 8 ]; do
 
                 echo -e "\e[32mInstalling symphony\e[0m"
                 if [ $create_custom_vision_selection == 3 ]; then
-                    helm upgrade -n default --install symphony oci://kanprod.azurecr.io/helm/symphony --set ENABLE_APP_INSIGHT=$enable_app_insight --version $symphony_version --wait
+                    helm upgrade --install symphony $symphony_cr --set ENABLE_APP_INSIGHT=$enable_app_insight --namespace $symphony_ns --version $symphony_version --create-namespace --wait
                 else
-                    helm upgrade -n default --install symphony oci://kanprod.azurecr.io/helm/symphony --set ENABLE_APP_INSIGHT=$enable_app_insight --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version $symphony_version --wait
+                    helm upgrade --install symphony $symphony_cr --set ENABLE_APP_INSIGHT=$enable_app_insight --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --namespace $symphony_ns --version $symphony_version --create-namespace --wait
                 fi
  
                 if [ $? != "0" ]; then
@@ -584,14 +587,14 @@ while [ $current_step -lt 8 ]; do
 
                 # wait for SYMPHONY service ready
                 while true; do
-                    symphonyIp=$(kubectl get svc -n symphony-k8s-system symphony-service-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+                    symphonyIp=$(kubectl get svc -n $symphony_ns symphony-service-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
                     if [[ $symphonyIp != "" ]]; then
                         break
                     fi
                     sleep 3                
                 done
 
-                helm upgrade -n default --install kanportal oci://kanprod.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kanprod.azurecr.io/kanportal --set symphonyAgentImage=$agent_image --set symphonyAgentVersion=$agent_version --set kanaiVersion=$kanai_version --set kanportal.portalIp=$portalIp --set kanportal.symphonyIp=$symphonyIp
+                helm upgrade --install -n default kanportal2 oci://kanprod.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kanprod.azurecr.io/kanportal --set symphonyAgentImage=$agent_image --set symphonyAgentVersion=$agent_version --set kanaiVersion=$kanai_version --set kanportal.portalIp=$portalIp --set kanportal.symphonyIp=$symphonyIp
 
                 if [ $? != "0" ]; then
                     echo -e "\e[31mWe faced some issues while pull Kanportal from container registry. Please try the installer again a few minutes later\e[0m"

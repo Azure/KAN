@@ -28,12 +28,12 @@ class SymphonySkillClient(SymphonyClient):
         if tag_list:
             for tag in json.loads(tag_list):
                 labels[tag["name"]] = tag["value"]
-
+        
         config_json = {
             "apiVersion": "ai.symphony/v1",
             "kind": "Skill",
             "metadata": {
-                "name": name,
+                "name": name,                
                 "labels": labels
             },
             "spec": spec
@@ -49,9 +49,9 @@ class SymphonySkillClient(SymphonyClient):
         if tag_list:
             for tag in json.loads(tag_list):
                 labels[tag["name"]] = tag["value"]
-
+        
         patch_config = [
-            {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
+             {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
             # separate the columns to preserve the parameters
             {'op': 'replace', 'path': '/spec/edges', 'value': spec.get("edges", "[]")},
             {'op': 'replace', 'path': '/spec/nodes', 'value': spec.get("nodes", "[]")},
@@ -101,6 +101,7 @@ class SymphonySkillClient(SymphonyClient):
         fps = skill['spec']['parameters'].get("fpsRetrieve", "")
         acceleration = skill['spec']['parameters'].get("accelerationRetrieve", "")
         labels = skill['metadata'].get('labels')
+
         if labels:
             tags = [{"name": k, "value": v} for k, v in labels.items()]
         else:

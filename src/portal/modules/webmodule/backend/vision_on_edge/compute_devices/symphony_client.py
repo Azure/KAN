@@ -52,7 +52,7 @@ class SymphonyTargetClient(SymphonyClient):
         labels = {}
         if tag_list:
             for tag in json.loads(tag_list):
-                labels[tag["name"]] = tag["value"]
+                labels[tag["name"]] = tag["value"]        
 
         if is_k8s:
             provider = "providers.target.k8s"
@@ -96,7 +96,7 @@ class SymphonyTargetClient(SymphonyClient):
             "kind": "Target",
             "metadata": {
                 "name": name,
-                "labels": labels
+                "labels": labels                
             },
             "spec": {
                 "name": name,
@@ -143,7 +143,7 @@ class SymphonyTargetClient(SymphonyClient):
                     "cpu": str(architecture),
                     "acceleration": str(acceleration),
                     "os": "Ubuntu 20.04",
-                    "solutionId": solution_id
+                    "solutionId": solution_id                    
                 }
             },
         }
@@ -203,6 +203,7 @@ class SymphonyTargetClient(SymphonyClient):
                     tags = [{"name": k, "value": v} for k, v in labels.items()]
                 else:
                     tags = []
+
                 tag_list = json.dumps(tags)
 
                 compute_device_obj, created = ComputeDevice.objects.update_or_create(
@@ -244,8 +245,10 @@ class SymphonyTargetClient(SymphonyClient):
                 cluster_type = "other"
         else:
             cluster_type = "current"
+        
+        labels_json_string = target['metadata'].get('labels', '{}')
+        labels = json.loads(labels_json_string)
 
-        labels = target['metadata'].get('labels')
         if labels:
             tags = [{"name": k, "value": v} for k, v in labels.items()]
         else:
@@ -268,7 +271,7 @@ class SymphonyTargetClient(SymphonyClient):
         # status
         if not multi:
             status = target.get("status", "")
-            if status:
+            if status and 'properties' in status:
                 processed_status = self.process_status(status['properties'])
             else:
                 processed_status = ""
@@ -561,7 +564,8 @@ class SymphonySolutionClient(SymphonyClient):
             for tag in json.loads(tag_list):
                 labels[tag["name"]] = tag["value"]
 
+
         patch_config = [
-            {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
+             {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
         ]
         return patch_config

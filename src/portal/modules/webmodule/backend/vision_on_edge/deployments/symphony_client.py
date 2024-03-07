@@ -32,13 +32,13 @@ class SymphonyInstanceClient(SymphonyClient):
         if tag_list:
             for tag in json.loads(tag_list):
                 labels[tag["name"]] = tag["value"]
-
+        
         config_json = {
             "apiVersion": "solution.symphony/v1",
             "kind": "Instance",
             "metadata": {
                 "name": name,
-                "labels": labels
+                "labels": labels                
             },
             "spec": {
                 "scope": "poss",
@@ -63,7 +63,7 @@ class SymphonyInstanceClient(SymphonyClient):
         if tag_list:
             for tag in json.loads(tag_list):
                 labels[tag["name"]] = tag["value"]
-
+      
         patch_config = [
             {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
             {'op': 'replace', 'path': '/spec/pipelines', 'value': pipelines},
@@ -155,7 +155,7 @@ class SymphonyInstanceClient(SymphonyClient):
 
         # status
         status = instance.get("status", "")
-        if status:
+        if status and 'properties' in status:
             processed_status = self.process_status(status['properties'])
         else:
             processed_status = ""

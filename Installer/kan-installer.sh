@@ -1,13 +1,12 @@
 #!/bin/bash
-symphony_version=0.45.31
-agent_version=0.41.44
-#kanportal_version=0.41.47-amd64
-kanportal_version=0.47.2
+symphony_version=0.48.4
+agent_version=0.48.4
+kanportal_version=0.47.4-dev.2-amd64
 kanai_version=0.41.47
 current_step=0
-symphony_cr=oci://possprod.azurecr.io/helm/symphony
+symphony_cr=oci://ghcr.io/eclipse-symphony/helm/symphony
 symphony_ns=symphony-k8s-system
-while [ $current_step -lt 8 ]; do
+while [ $current_step -lt 9 ]; do
     case $current_step in
     0 ) # azure user
         while true; do
@@ -32,7 +31,7 @@ while [ $current_step -lt 8 ]; do
                     create_blob_container_selection=4
                     create_custom_vision_selection=3
                     create_sp_selection=4
-                    current_step=5
+                    current_step=6
                     break
                 ;;
                 *)
@@ -367,7 +366,23 @@ while [ $current_step -lt 8 ]; do
         done
 
     ;;
-    5 )
+    5 ) while true; do
+            read -p "Use granular role assignments? (y/n): " -r; echo
+            case $REPLY in
+                [Yy]* )
+                    role_assignment=1
+                    break
+                ;;
+                [Nn]* )
+                    role_assignment=0
+                    break
+                ;;
+                *)
+            esac
+        done
+        current_step=`expr $current_step + 1` 
+    ;;
+    6 )
         while true; do
             echo "We need to use a SYMPHONY agent to capture camera thumbnails, which requires the use of ffmpeg. However, the default SYMPHONY agent Docker image does not include ffmpeg. Please choose:"
             echo "1) Use the default agent without camera thumbnail feature."
@@ -375,11 +390,11 @@ while [ $current_step -lt 8 ]; do
             read -p "Your Answer:" -r; echo
             case $REPLY in
                 1 )
-                    agent_image=kanprod.azurecr.io/symphony-agent
+                    agent_image=ghcr.io/eclipse-symphony/symphony-agent
                     break
                 ;;
                 2 )
-                    agent_image=hbai/symphony-agent
+                    agent_image=ghcr.io/eclipse-symphony/symphony-agent
                     break
                 ;;
                 *)                
@@ -387,7 +402,7 @@ while [ $current_step -lt 8 ]; do
         done
         current_step=`expr $current_step + 1`        
     ;;
-    6 )      
+    7 )      
         read -p "May we collect anonymous usage data to help improve the app's performance and user experience (to turn it off, run this installer again)? (y/n)" -r; echo
         case $REPLY in
             [y]* )
@@ -399,7 +414,7 @@ while [ $current_step -lt 8 ]; do
  
         current_step=`expr $current_step + 1`
     ;;
-    7 )
+    8 )
         # # --- confirm ---
         echo "your selections:"
         if [ $create_aks_selection == "1" ]; then
@@ -493,53 +508,61 @@ while [ $current_step -lt 8 ]; do
                     sp_password=$(echo $new_cred | jq -r ".password")
                     sp_tenant=$(echo $new_cred | jq -r ".tenant")
 
-                    echo "creating custom role"
- 
- 
-                  subscriptionId=$(az account show --query "id" -o tsv)
+                   if [ -z "$sp_password" ] || [ -z "$sp_tenant" ]; then
+                        echo "Failed to retrieve secret. Please enter the secret manually."
 
-                    if [ $(az role definition list --custom-role-only true --name "kan contributor $subscriptionId" | jq ". | length") -lt 1 ];
-                    then
-                        az role definition create --role-definition "{
-                            \"Name\": \"kan contributor $subscriptionId\",
-                            \"Description\": \"kan contributor $subscriptionId\",
-                            \"Actions\": [
-                                \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
-                                \"Microsoft.Devices/iotHubs/listkeys/Action\"
-                            ],
-                            \"AssignableScopes\": [\"/subscriptions/$subscriptionId\"]
-                        }"
-                    echo "Waiting for custom role to be created..."
-                    sleep 120
-                    else
-                        az role definition update --role-definition "{
-                            \"Name\": \"kan contributor $subscriptionId\",
-                            \"Description\": \"kan contributor $subscriptionId\",
-                            \"Actions\": [
-                                \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
-                                \"Microsoft.Devices/iotHubs/listkeys/Action\"
-                            ],
-                            \"AssignableScopes\": [\"/subscriptions/$subscriptionId\"]
-                        }"
+                        read -p "Please enter password for $app_id: " sp_password
+                        read -p "Please enter tenant for $app_id: " sp_tenant
                     fi
- 
 
-                    sleep 5
+                    subscriptionId=$(az account show --query "id" -o tsv)
+                    if [ $role_assignment == 1 ]; then
+                        echo "creating custom role"
+                        if [ $(az role definition list --custom-role-only true --name "kan contributor $subscriptionId" | jq ". | length") -lt 1 ];
+                        then
+                            az role definition create --role-definition "{
+                                \"Name\": \"kan contributor $subscriptionId\",
+                                \"Description\": \"kan contributor $subscriptionId\",
+                                \"Actions\": [
+                                    \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
+                                    \"Microsoft.Devices/iotHubs/listkeys/Action\"
+                                ],
+                                \"AssignableScopes\": [\"/subscriptions/$subscriptionId\"]
+                            }"
+                            echo "Waiting for custom role to be created..."
+                            sleep 120
+                        else
+                            az role definition update --role-definition "{
+                                \"Name\": \"kan contributor $subscriptionId\",
+                                \"Description\": \"kan contributor $subscriptionId\",
+                                \"Actions\": [
+                                    \"Microsoft.Devices/IotHubs/IotHubKeys/listkeys/action\",
+                                    \"Microsoft.Devices/iotHubs/listkeys/Action\"
+                                ],
+                                \"AssignableScopes\": [\"/subscriptions/$subscriptionId\"]
+                            }"
+                        fi
 
-                    echo "assigning Kanportal contributor role to subscription"
-                    az role assignment create --role "kan contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
+                        sleep 5
 
-                    echo "assigning reader role to subscription"
-                    az role assignment create --role "Reader" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
+                        echo "assigning Kanportal contributor role to subscription"
+                        az role assignment create --role "kan contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
 
-                    echo "assigning role Storage Account Contributor to storage account"
-                    az role assignment create --role "Storage Account Contributor" --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
+                        echo "assigning reader role to subscription"
+                        az role assignment create --role "Reader" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
 
-                    echo "assigning role Storage Blob Data Contributor to storage account"
-                    az role assignment create --role "Storage Blob Data Contributor" --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
+                        echo "assigning role Storage Account Contributor to storage account"
+                        az role assignment create --role "Storage Account Contributor" --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
 
-                    echo "assigning role IoT Hub Data Contributor to subscription"
-                    az role assignment create --role "IoT Hub Data Contributor" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
+                        echo "assigning role Storage Blob Data Contributor to storage account"
+                        az role assignment create --role "Storage Blob Data Contributor" --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
+
+                        echo "assigning role IoT Hub Data Contributor to subscription"
+                        az role assignment create --role "IoT Hub Data Contributor" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
+                    else
+                        echo "assigning contributor role to subscription"
+                        az role assignment create --role "Contributor" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
+                    fi
                 fi
 
                 echo -e "\e[32mInstalling ingress\e[0m"
@@ -586,15 +609,21 @@ while [ $current_step -lt 8 ]; do
                 done
 
                 # wait for SYMPHONY service ready
-                while true; do
-                    symphonyIp=$(kubectl get svc -n $symphony_ns symphony-service-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-                    if [[ $symphonyIp != "" ]]; then
-                        break
-                    fi
-                    sleep 3                
-                done
+                # while true; do
+                #    symphonyIp=$(kubectl get svc -n $symphony_ns symphony-service-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+                #    if [[ $symphonyIp != "" ]]; then
+                #        break
+                #    fi
+                #    sleep 3                
+                #done
 
-                helm upgrade --install -n default kanportal2 oci://kanprod.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kanprod.azurecr.io/kanportal --set symphonyAgentImage=$agent_image --set symphonyAgentVersion=$agent_version --set kanaiVersion=$kanai_version --set kanportal.portalIp=$portalIp --set kanportal.symphonyIp=$symphonyIp
+                symphonyIp="symphony-service"
+
+                if [ "$symphony_ns" != "default" ]; then
+                      symphonyIp="$symphonyIp.$symphony_ns"
+                fi
+
+                helm upgrade --install -n default kanportal3 oci://kanprod.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kanprod.azurecr.io/kanportal --set symphonyAgentImage=$agent_image --set symphonyAgentVersion=$agent_version --set kanaiVersion=$kanai_version --set kanportal.portalIp=$portalIp --set kanportal.symphonyIp=$symphonyIp
 
                 if [ $? != "0" ]; then
                     echo -e "\e[31mWe faced some issues while pull Kanportal from container registry. Please try the installer again a few minutes later\e[0m"
@@ -604,7 +633,7 @@ while [ $current_step -lt 8 ]; do
                 break
             ;;
             * )
-                current_step=`expr $current_step - 3`
+                current_step=`expr $current_step - 4`
         esac
     ;;
     * )

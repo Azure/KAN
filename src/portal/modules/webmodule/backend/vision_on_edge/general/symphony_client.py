@@ -93,14 +93,17 @@ class SymphonyClient:
         '''transform object from symphony to previous format
         '''
 
-        obj["metadata"] = {"name": obj.get("id", "")}
-        if "status" in obj.keys():
-            status = obj.get("status", "")
-            if status:
-                status_ = status.copy()
-            else:
-                status_ = status
-            obj["status"]["properties"] = status_
+        logger.info(f"Getting resource_json to Symphony: {obj}")
+
+        # TODO-MERGE: maybe we don't need this anymore
+        # obj["metadata"] = {"name": obj.get("id", "")}
+        # if "status" in obj.keys():
+        #     status = obj.get("status", "")
+        #     if status:
+        #         status_ = status.copy()
+        #     else:
+        #         status_ = status
+        #     obj["status"]["properties"] = status_
 
         return obj
 
@@ -193,7 +196,10 @@ class SymphonyClient:
             try:
                 auth_token = self.get_token_from_symphony()
                 headers = {"Authorization": f"Bearer {auth_token}"}      
-                res = requests.post(self.symphony_api_url + f'/{resource_json["metadata"]["name"]}', headers=headers, json=resource_json['spec']) 
+
+                logger.info(f"Sending resource_json to Symphony: {resource_json}")
+
+                res = requests.post(self.symphony_api_url + f'/{resource_json["metadata"]["name"]}', headers=headers, json=resource_json) 
 
             except Exception as e:
                 logger.warning(e)
@@ -223,7 +229,10 @@ class SymphonyClient:
             try:
                 auth_token = self.get_token_from_symphony()
                 headers = {"Authorization": f"Bearer {auth_token}"}      
-                res = requests.post(self.symphony_api_url + f'/{name}', headers=headers, json=resource_json['spec']) 
+
+                logger.info(f"Sending updated resource_json to Symphony: {resource_json}")
+
+                res = requests.post(self.symphony_api_url + f'/{name}', headers=headers, json=resource_json) 
 
             except Exception as e:
                 logger.warning(e)
@@ -256,7 +265,10 @@ class SymphonyClient:
             try:
                 auth_token = self.get_token_from_symphony()
                 headers = {"Authorization": f"Bearer {auth_token}"}      
-                res = requests.post(self.symphony_api_url + f'/{name}', headers=headers, json=resource_json['spec']) 
+                
+                logger.info(f"Sending patched resource_json to Symphony: {resource_json}")
+
+                res = requests.post(self.symphony_api_url + f'/{name}', headers=headers, json=resource_json) 
 
             except Exception as e:
                 logger.warning(e)

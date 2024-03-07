@@ -33,14 +33,14 @@ class SymphonyModelClient(SymphonyClient):
         labels = {}
         if tag_list:
             for tag in json.loads(tag_list):
-                labels[tag["name"]] = tag["value"]
+                labels[tag["name"]] = tag["value"]        
 
         config_json = {
             "apiVersion": "ai.symphony/v1",
             "kind": "Model",
             "metadata": {
                 "name": name,
-                "labels": labels
+                "labels": labels                
             },
             "spec": {
                 "properties": {
@@ -66,7 +66,7 @@ class SymphonyModelClient(SymphonyClient):
         if tag_list:
             for tag in json.loads(tag_list):
                 labels[tag["name"]] = tag["value"]
-
+        
         # can only patch labels on portal for now
         patch_config = [
             {'op': 'replace', 'path': '/metadata/labels', 'value': labels},

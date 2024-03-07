@@ -22,6 +22,7 @@ class SkillSpec(BaseModel):
     displayName: str
     nodes: List[Node]
     edges: List[Edge]
+    properties: dict
 
 #class SkillModel(BaseModel):
 #    properties: 'SkillModelProperties'
@@ -54,7 +55,7 @@ class SolutionComponentProperties(BaseModel):
     container_create_options: str = Field('',      alias='container.createOptions')
     container_restart_policy: str = Field('always', alias='container.restartPolicy')
     env_ai_skills           : str = Field(...,  alias='env.AISKILLS')
-    env_instance            : str = Field('$instance()', alias='env.INSTANCE')
+    env_instance            : str = Field('$instance()', alias='env.INSTANCE')    
 
 
 
@@ -73,6 +74,7 @@ SolutionSpec.update_forward_refs()
 
 class InstanceSpec(BaseModel):
     parameters: dict
+    metadata: dict
     solution: str
     target: 'InstanceTarget'
 
@@ -101,7 +103,7 @@ class ModelProperties(BaseModel):
     # ...
     # extra: model.version.n
     tags: str
-    state: str #FIXME trained?
+    state: str #FIXME trained?    
 
 class CustomVisionModelPropeties(ModelProperties):
     model_type    : Literal['customvision'] = Field('customvision', alias='model.type')

@@ -38,20 +38,20 @@ class SymphonyDeviceClient(SymphonyClient):
         if tag_list:
             for tag in json.loads(tag_list):
                 labels[tag["name"]] = tag["value"]
-
+        
         config_json = {
             "apiVersion": "fabric.symphony/v1",
             "kind": "Device",
             "metadata": {
                 "name": name,
-                "labels": labels
+                "labels": labels                
             },
             "spec": {
                 "properties": {
                     "ip": rtsp,
                     "user": username,
                     "password": password,
-                    "location": location
+                    "location": location                    
                 },
                 "displayName": display_name
             },
@@ -71,7 +71,7 @@ class SymphonyDeviceClient(SymphonyClient):
         logger.warning(f"setting camera tags: {tag_list}")
         if tag_list:
             for tag in json.loads(tag_list):
-                labels[tag["name"]] = tag["value"]
+                labels[tag["name"]] = tag["value"]        
 
         patch_config = [
             {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
@@ -231,7 +231,7 @@ class SymphonyDeviceClient(SymphonyClient):
 
         if not multi:
             status = device.get("status", "")
-            if status:
+            if status and 'properties' in status:
                 processed_status = self.process_status(status['properties'])
             else:
                 processed_status = ""
@@ -255,7 +255,6 @@ class SymphonyDeviceClient(SymphonyClient):
                     status_table[compute_device_table[compute_device]] = "connected"
                 else:
                     if compute_device not in status_table.keys():
-                        status_table[compute_device_table[compute_device]
-                                     ] = "disconnected"
+                        status_table[compute_device_table[compute_device]] = "disconnected"
 
         return json.dumps(status_table)

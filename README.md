@@ -5,7 +5,7 @@ _(last edit: 3/9/2024)_
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
-### Now using [Eclipse Symphony](https://github.com/eclipse-symphony/symphony) backend!
+### Now powered by [Eclipse Symphony](https://github.com/eclipse-symphony/symphony)!
 ---
 
 

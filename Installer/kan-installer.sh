@@ -367,7 +367,7 @@ while [ $current_step -lt 9 ]; do
 
     ;;
     5 ) while true; do
-            read -p "Use granular role assignments? (y/n): " -r; echo
+            read -p "Use custom role? (y/n): " -r; echo
             case $REPLY in
                 [Yy]* )
                     role_assignment=1
@@ -547,7 +547,7 @@ while [ $current_step -lt 9 ]; do
 
                         echo "assigning Kanportal contributor role to subscription"
                         az role assignment create --role "kan contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
-
+                    else 
                         echo "assigning reader role to subscription"
                         az role assignment create --role "Reader" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
 
@@ -559,7 +559,7 @@ while [ $current_step -lt 9 ]; do
 
                         echo "assigning role IoT Hub Data Contributor to subscription"
                         az role assignment create --role "IoT Hub Data Contributor" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
-                    else
+                    
                         echo "assigning contributor role to subscription"
                         az role assignment create --role "Contributor" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
                     fi

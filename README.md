@@ -1,8 +1,15 @@
 # KubeAI Application Nucleus for edge (KAN)
 
-_(last edit: 4/24/2021)_
+_(last edit: 3/9/2024)_
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+---
+### Now using [Eclipse Symphony](https://github.com/eclipse-symphony/symphony) backend!
+---
+
+
+
 
 KubeAI Application Nucleus for edge (KAN - 看 in Mandarin means “to watch”, “to see”) is a solution accelerator for creating, deploying, and operating environment-aware solutions at scale that use artificial intelligence (AI) at the edge with the control and flexibility natively on your environment. Many of the KAN elements are open-sourced and leverage the open-source software (OSS) community to deliver enhanced experiences. And, as a self-managed solution, you can host the experience on your own [Kubernetes](https://kubernetes.io/) clusters.
 

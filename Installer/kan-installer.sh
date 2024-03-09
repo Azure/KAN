@@ -1,8 +1,8 @@
 #!/bin/bash
-symphony_version=0.48.4
+symphony_version=0.48.6
 agent_version=0.48.4
 kanportal_version=0.47.4-dev.2-amd64
-kanai_version=0.41.47
+kanai_version=0.45.2
 current_step=0
 symphony_cr=oci://ghcr.io/eclipse-symphony/helm/symphony
 symphony_ns=symphony-k8s-system

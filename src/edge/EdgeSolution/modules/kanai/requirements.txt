@@ -7,7 +7,7 @@ numpy
 pillow
 onnx
 onnxruntime
-pydantic
+pydantic==2.6.3
 networkx==2.8.5
 requests
 httpx

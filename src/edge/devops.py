@@ -8,30 +8,28 @@ import json
 from pathlib import Path
 from enum import Enum
 
-import typer
+import click
 import dotenv
 from pydantic import BaseModel, Field
 import semantic_version
 
-
-
 # Prepare Environment Variables
 dotenv.load_dotenv('EdgeSolution/.env')
-CONTAINER_REGISTRY_NAME=os.environ['CONTAINER_REGISTRY_NAME']
+CONTAINER_REGISTRY_NAME = os.environ['CONTAINER_REGISTRY_NAME']
 
 MODULE_ROOT = Path('EdgeSolution/modules')
 ABSOLUTE_MODULE_ROOT = Path(os.path.abspath(MODULE_ROOT))
-PLATFORM = 'amd64' #FIXME this shouldn't be fixed value
+PLATFORM = 'amd64'  # FIXME this shouldn't be a fixed value
 
 MODULES = []
 for module_folder in os.listdir(MODULE_ROOT):
-    if module_folder == '.DS_Store': continue
-    if module_folder == 'common': continue
-    if not os.path.exists(MODULE_ROOT/module_folder/'module.json'):
-        typer.echo(f'***')
-        typer.echo(f'*** module.json not found in {module_folder}')
-        typer.echo(f'***')
-        typer.Exit()
+    if module_folder in ['.DS_Store', 'common']:
+        continue
+    if not os.path.exists(MODULE_ROOT / module_folder / 'module.json'):
+        click.echo('***')
+        click.echo(f'*** module.json not found in {module_folder}')
+        click.echo('***')
+        sys.exit(1)
     MODULES.append(module_folder)
 
 
@@ -71,9 +69,9 @@ class Docker:
         try:
             ret = subprocess.check_call(command.split())
         except:
-            typer.echo(f'***')
-            typer.echo(f'*** Unexpected error {sys.exc_info()[1]}')
-            typer.echo(f'***')
+            click.echo(f'***')
+            click.echo(f'*** Unexpected error {sys.exc_info()[1]}')
+            click.echo(f'***')
 
     @classmethod
     def build(cls, dockerfile_path, tag, folder):
@@ -87,13 +85,15 @@ class Docker:
         cls._do(command)
 
 
-app = typer.Typer()
-
+# Initialize a Click group
+@click.group()
+def cli():
+    pass
 
 def build_module(module_name):
-    typer.echo(f'***')
-    typer.echo(f'*** Building {module_name}')
-    typer.echo(f'***')
+    click.echo(f'***')
+    click.echo(f'*** Building {module_name}')
+    click.echo(f'***')
 
     #FIXME add platform and accelerator
     #platform = PLATFORM
@@ -123,9 +123,9 @@ def build_module(module_name):
 
 
 def push_module(module_name):
-    typer.echo(f'***')
-    typer.echo(f'*** Pushing {module_name}')
-    typer.echo(f'***')
+    click.echo(f'***')
+    click.echo(f'*** Pushing {module_name}')
+    click.echo(f'***')
 
     #FIXME add platform and accelerator
     #platform = PLATFORM
@@ -157,56 +157,57 @@ def module_version(module_name):
      
 
 
-@app.command()
+@cli.command()
+@click.argument('name')
 def build(name: str):
 
     if name not in MODULES:
-        typer.echo(f'***')
-        typer.echo(f'*** Uknown Module {name}')
-        typer.echo(f'***')
-        raise typer.Exit()
+        click.echo(f'***')
+        click.echo(f'*** Uknown Module {name}')
+        click.echo(f'***')
+        raise click.Exit()
 
     build_module(name)
 
 
-@app.command()
+@cli.command()
 def build_all():
     for module_name in MODULES:
         build_module(module_name)
 
 
-@app.command()
+@cli.command()
 def push(name: str):
 
     if name not in MODULES:
-        typer.echo(f'***')
-        typer.echo(f'*** Unknown Module {name}')
-        typer.echo(f'***')
-        raise typer.Exit()
+        click.echo(f'***')
+        click.echo(f'*** Unknown Module {name}')
+        click.echo(f'***')
+        raise click.Exit()
 
     push_module(name)
 
 
-@app.command()
+@cli.command()
 def push_all():
     for module_name in MODULES:
         push_module(module_name)
 
 
-@app.command()
+@cli.command()
 def list_versions():
-    typer.echo(f'***')
-    typer.echo(f'*** Modules')
-    typer.echo(f'***')
+    click.echo('***')
+    click.echo('*** Modules')
+    click.echo('***')
     for module_name in MODULES:
         version = module_version(module_name)
         typer.echo(f'{module_name: <20}: {version}')
 
-@app.command()
+@cli.command()
 def list_modules():
-    typer.echo(f'***')
-    typer.echo(f'*** Modules')
-    typer.echo(f'***')
+    click.echo('***')
+    click.echo('*** Modules')
+    click.echo('***')
     platform = PLATFORM
     for module_name in MODULES:
         module = IoTEdgeModule(module_name)
@@ -215,20 +216,17 @@ def list_modules():
         typer.echo(f'{module_name: <20}: {tag}')
 
 
+class VersionType(click.Choice):
+    def __init__(self):
+        super().__init__(["minor", "patch", "dev"])
 
-
-
-class VersionType(str, Enum):
-    #MAJOR = 'major'
-    MINOR = 'minor'
-    PATCH = 'patch'
-    DEV = 'dev'
-
-@app.command()
-def update_versions(type: VersionType, y: bool=typer.Option(default=False)):
-    typer.echo(f'***')
-    typer.echo(f'*** Update Versions')
-    typer.echo(f'***')
+@cli.command()
+@click.argument('type', type=click.Choice(["minor", "patch", "dev"]))
+@click.option('-y', is_flag=True, default=False)
+def update_versions(type, y):
+    click.echo('***')
+    click.echo('*** Update Versions')
+    click.echo('***')
 
     semvers = []
     for module_name in MODULES:
@@ -246,20 +244,18 @@ def update_versions(type: VersionType, y: bool=typer.Option(default=False)):
         else:
             new_semver.prerelease = ('dev', str(int(new_semver.prerelease[1])+1))
 
-    typer.echo ('---------------------------------')
+    click.echo ('---------------------------------')
     for module_name, semver in zip(MODULES, semvers):
-        typer.echo(f'{module_name: <20}: {semver} => {new_semver}')
-    typer.echo ('---------------------------------')
+        click.echo(f'{module_name: <20}: {semver} => {new_semver}')
+    click.echo ('---------------------------------')
 
     if not y:
         while True:
-            ok = typer.prompt('Is it ok? (y/n)')
-            if ok == 'y': 
-                y = True
+            ok = click.prompt('Is it ok? (y/n)')
+            if ok == 'y':
                 break
-            elif ok == 'n': 
-                n = False
-                break
+            elif ok == 'n':
+                click.exit()
 
     if y:
         for module_name, semver in zip(MODULES, semvers):
@@ -268,4 +264,4 @@ def update_versions(type: VersionType, y: bool=typer.Option(default=False)):
 
 
 if __name__ == '__main__':
-    app()
+    cli()

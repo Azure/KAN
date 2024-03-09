@@ -15,6 +15,6 @@ class ModelConfig(BaseModel):
     provider: Literal['customvision', 'modelzoo']
     executor: Literal['customvision', 'openvino', 'onnxruntime']
     type: Literal['ObjectDetection', 'Classification']
-    download_uri: Optional[str]
+    download_uri: Optional[str] = None
 
     

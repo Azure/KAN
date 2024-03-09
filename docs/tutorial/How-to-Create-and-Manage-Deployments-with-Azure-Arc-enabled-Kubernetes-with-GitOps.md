@@ -184,7 +184,7 @@ spec:
 
       env.BLOB_STORAGE_CONTAINER:<Storage name> 
 
-      env.INSTANCE: $instance() 
+      env.INSTANCE: ${{$instance()}} 
 
       env.IOTEDGE_CONNECTION_STRING:<Connection String> 
 

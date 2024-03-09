@@ -14,15 +14,15 @@ NodeId = str
 
 class Route(BaseModel):
     route: str
-    type: Literal['frame']
+    type: Literal['frame']    
 
 class Node(BaseModel):
     id: NodeId
     type: Literal['source', 'transform', 'export', 'model']
     name: str
-    inputs: Optional[List[Route]]
-    outputs: Optional[List[Route]]
-    configurations: Optional[Dict[str, object]]
+    inputs: Optional[List[Route]] = None
+    outputs: Optional[List[Route]] = None
+    configurations: Optional[Dict[str, object]] = None
 
 
 class SourceNode(Node):

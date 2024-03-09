@@ -3,7 +3,7 @@
 
 from platform import node
 from pydantic import BaseModel, Field, Extra
-from typing import List
+from typing import List, Optional, Dict
 try:
     from typing import Literal
 except:
@@ -20,9 +20,10 @@ from common.symphony_skill import Node, Edge
 class SkillSpec(BaseModel):
     #models: List['SkillModel']
     displayName: str
+    parameters: dict
     nodes: List[Node]
     edges: List[Edge]
-    properties: dict
+    properties: Optional[Dict] = None
 
 #class SkillModel(BaseModel):
 #    properties: 'SkillModelProperties'
@@ -55,7 +56,7 @@ class SolutionComponentProperties(BaseModel):
     container_create_options: str = Field('',      alias='container.createOptions')
     container_restart_policy: str = Field('always', alias='container.restartPolicy')
     env_ai_skills           : str = Field(...,  alias='env.AISKILLS')
-    env_instance            : str = Field('$instance()', alias='env.INSTANCE')    
+    env_instance            : str = Field('${{$instance()}}', alias='env.INSTANCE')    
 
 
 
@@ -71,12 +72,18 @@ SolutionSpec.update_forward_refs()
 # Instance #
 ############
 
+class Pipeline(BaseModel):
+    name: str
+    skill: str
+    parameters: dict
 
 class InstanceSpec(BaseModel):
     parameters: dict
-    metadata: dict
+    scope: str
+    displayName: str
     solution: str
     target: 'InstanceTarget'
+    pipelines: List['Pipeline']
 
 class InstanceTarget(BaseModel):
     name: str
@@ -129,5 +136,5 @@ class ModelExport(BaseModel):
 
 
 class ModelExports(BaseModel):
-    __root__: List[ModelExport]
+    root: List[ModelExport]
 

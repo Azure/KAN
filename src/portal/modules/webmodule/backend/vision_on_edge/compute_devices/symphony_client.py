@@ -455,7 +455,7 @@ class SymphonySolutionClient(SymphonyClient):
                     #         "container.type": "docker",
                     #         "container.version": kanai_version,
                     #         "env.AISKILLS": skills,
-                    #         "env.INSTANCE": "$instance()",
+                    #         "env.INSTANCE": "${{$instance()}}",
                     #         "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address
                     #     }
                     # },
@@ -467,7 +467,7 @@ class SymphonySolutionClient(SymphonyClient):
                     #         "container.restartPolicy": "always",
                     #         "container.type": "docker",
                     #         "container.version": kanai_version,
-                    #         "env.INSTANCE": "$instance()",
+                    #         "env.INSTANCE": "${{$instance()}}",
                     #         "env.BLOB_STORAGE_CONNECTION_STRING": storage_conn_str,
                     #         "env.BLOB_STORAGE_CONTAINER": storage_container,
                     #         "env.WEBMODULE_URL": webmodule_url,
@@ -484,7 +484,7 @@ class SymphonySolutionClient(SymphonyClient):
                     #         "container.restartPolicy": "always",
                     #         "container.type": "docker",
                     #         "container.version": kanai_version,
-                    #         "env.INSTANCE": "$instance()"
+                    #         "env.INSTANCE": "${{$instance()}}"
                     #     }
                     # },
                     {
@@ -493,11 +493,11 @@ class SymphonySolutionClient(SymphonyClient):
                         "properties": {
                             "container.createOptions": create_options,
                             "container.image": voeedge_image,
-                            "container.resources": container_resources,
+                            # "container.resources": container_resources,
                             "container.restartPolicy": "always",
                             "container.type": "docker",
                             "container.version": kanai_version,
-                            "env.INSTANCE": "$instance()",
+                            "env.INSTANCE": "${{$instance()}}",
                             # "env.AISKILLS": skills,
                             "env.BLOB_STORAGE_CONNECTION_STRING": storage_conn_str,
                             "env.BLOB_STORAGE_CONTAINER": storage_container,

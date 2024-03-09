@@ -3,7 +3,7 @@
 
 from enum import Enum
 
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel, Field
 import numpy as np
 from common.env import INSTANCE
@@ -47,7 +47,7 @@ class ObjectMeta(BaseModel):
     confidence: float
     inference_id: str
     attributes: List[Attribute] #FIXME
-    bbox: Bbox
+    bbox: Optional[Bbox] = None
 
 
 class InsightsMeta(BaseModel):

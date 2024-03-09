@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 symphony_version=0.48.6
 agent_version=0.48.4
 kanportal_version=0.47.4-dev.2-amd64
@@ -6,11 +10,53 @@ kanai_version=0.45.2
 current_step=0
 symphony_cr=oci://ghcr.io/eclipse-symphony/helm/symphony
 symphony_ns=symphony-k8s-system
+
+echo
+echo -e "*******************"
+echo -e "* Welcome to \033[0;36mKAN\033[0m! *"
+echo -e "*******************"
+echo 
+
+BACKGROUND_PROGRESS_ID=0
+
+start_progress_animation() {
+    local prompt="$1"
+    tput civis
+    
+    {
+        while :; do
+            for s in ⣾ ⣽ ⣻ ⢿ ⡿ ⣟ ⣯ ⣷; do
+                echo -ne "  \r\033[0;94m${prompt}\033[0m \033[0;93m$s\033[0m"
+                sleep 0.1
+            done
+        done
+    } &
+
+    BACKGROUND_PROGRESS_ID=$!
+}
+
+stop_progress_animation() {
+    if [[ $BACKGROUND_PROGRESS_ID -ne 0 ]]; then
+        kill $BACKGROUND_PROGRESS_ID > /dev/null 2>&1
+        echo -ne "\r\033[K"
+        tput cnorm
+        BACKGROUND_PROGRESS_ID=0
+    fi
+}
+
+display_error_message() {
+    local message="$1"
+    local red='\033[0;31m'
+    local no_color='\033[0m'
+    local exclamation='❗'
+    echo -e "${red}${exclamation} ERROR: ${message}${no_color}"
+}
+
 while [ $current_step -lt 9 ]; do
     case $current_step in
     0 ) # azure user
         while true; do
-            read -p "azure user?(y/n): " -r; echo
+            read -p "Use Azure services? (y/n): " -r; echo
             case $REPLY in
             [Yy]* )
                 az account show -o none
@@ -42,18 +88,22 @@ while [ $current_step -lt 9 ]; do
         done
     ;;
     1 ) # --- aks ---
-        echo "Would you like to use a exists aks, or use current kubeconfig?"
-        echo "1) use an existing one"
-        echo "2) use current kubeconfig"
+        echo "Would you like to use an existing AKS cluster or use the current kubeconfig?"
+        echo -e "  \033[0;33m1)\033[0m Use an existing AKS cluster"
+        echo -e "  \033[0;33m2)\033[0m Use current kubeconfig"
+
         while true; do
-            read -p "Your answer: " -r; echo
+            read -p "Your choice: " -r; echo
             create_aks_selection=$REPLY
             case $create_aks_selection in
             1 )
+                start_progress_animation "listing AKS clusters..."
                 aks=$(az resource list --resource-type='Microsoft.ContainerService/ManagedClusters' --query='[].{name: name, rg: resourceGroup, id: id }')
-                echo $aks | jq -r '.[] | "\(.rg)/\(.name)"' | awk '{$1=++b")" FS $1}1'
+                stop_progress_animation
+                echo "Select an AKS cluster:"
+                echo $aks | jq -r '.[] | "\(.rg)/\(.name)"' | awk '{$1="  \033[0;33m" ++b")\033[0m" FS $1}1'
                 while true; do
-                    read -p "Select a azure kubernetes: " -r; echo
+                    read -p "Your choice: " -r; echo
                     case $REPLY in
                     [1-9]* )
                         selected_aks_index=`expr $REPLY - 1`
@@ -83,32 +133,35 @@ while [ $current_step -lt 9 ]; do
             case $current_storage_step in
                 1 )
                     while true; do
-                        echo "Would you like to create a new storage account, or use an existing one?"
-                        echo "1) create a new one"
-                        echo "2) use an existing one"
-                        echo "3) skip"
-                        echo "4) back to previous step"
-                        read -p "Your answer: " -r; echo
+                        echo "Would you like to create a new storage account or use an existing one?"
+                        echo -e "  \033[0;33m1)\033[0m  Create a new one"
+                        echo -e "  \033[0;33m2)\033[0m  Use an existing one"
+                        echo -e "  \033[0;33m3)\033[0m  Skip"
+                        echo -e "  \033[0;33m4)\033[0m  Back to previous step"
+                        read -p "Your choice: " -r; echo
                         create_storage_account_selection=$REPLY
                         case $create_storage_account_selection in
                         1 )
                             while true; do
+                                start_progress_animation "listing resource groups..."
                                 rgs=$(az group list --query='[].{name: name }' | jq 'sort_by(.name)')
-                                echo $rgs | jq -r ".[].name" | awk '{$1=++b")" FS $1}1'
+                                stop_progress_animation
+                                echo "Select a resource group:"
+                                echo $rgs | jq -r ".[].name" | awk '{$1="  \033[0;33m" ++b")\033[0m" FS $1}1'
                                 while true; do
-                                    read -p "select a resource group: " -r; echo
+                                    read -p "Your choice: " -r; echo
                                     case $REPLY in
                                     [0-9]* )
                                         selected_rg_index=`expr $REPLY - 1`
                                         selected_storage_account_rg=$(echo $rgs | jq -r ".[$selected_rg_index].name")
                                         break
                                         ;;
-                                    *) echo "Please enter a number"
+                                    *) display_error_message "Please enter a number"
                                     esac
                                 done
 
                                 while true; do
-                                    read -p "storage account name: " -r; echo
+                                    read -p "Storage account name: " -r; echo
                                     selected_storage_account_name=$REPLY
                                     result=$(az storage account check-name --name $selected_storage_account_name)
                                     if [ $(echo $result | jq -r .nameAvailable) == "true" ]; then
@@ -118,7 +171,7 @@ while [ $current_step -lt 9 ]; do
                                     fi
                                 done
 
-                                read -p "enter a location [$(az group show -g $selected_storage_account_rg --query="location" -o tsv)]:" -r; echo
+                                read -p "Enter a location [$(az group show -g $selected_storage_account_rg --query="location" -o tsv)]:" -r; echo
                                 selected_storage_account_location=${REPLY:-$(az group show -g $selected_storage_account_rg --query="location" -o tsv)}
                                 echo $selected_storage_account_location
                                 break
@@ -126,14 +179,17 @@ while [ $current_step -lt 9 ]; do
                             current_step=3
                             current_storage_step=3
                             create_blob_container_selection=1
-                            selected_blob_container_name="perceptoos"
+                            selected_blob_container_name="kan"
                             break
                             ;;
                         2 )
+                            start_progress_animation "listing storage accounts..."                            
                             storage_account=$(az storage account list --query='[].{name: name, rg: resourceGroup, id: id }' | jq 'sort_by(.id)')
-                            echo $storage_account | jq -r '.[] | "\(.rg)/\(.name)"' | awk '{$1=++b")" FS $1}1'
+                            stop_progress_animation
+                            echo "Select a storage account:"                            
+                            echo $storage_account | jq -r '.[] | "\(.rg)/\(.name)"' | awk '{$1="  \033[0;33m" ++b ")\033[0m" FS $1}1'
                             while true; do
-                                read -p "Select a storage account: " -r; echo
+                                read -p "Your choice: " -r; echo
                                 case $REPLY in
                                 [1-9]* )
                                     selected_storage_account_index=`expr $REPLY - 1`
@@ -159,22 +215,22 @@ while [ $current_step -lt 9 ]; do
                             current_step=`expr $current_step - 1`
                             break
                             ;;
-                        *) echo "Please enter a number"
+                        *) display_error_message "Please enter a number"
                         esac
                     done
                 ;;
                 2 )
                     if [ $create_storage_account_selection == "1" ]; then
                         create_blob_container_selection=1
-                        selected_blob_container_name="perceptOSS"
+                        selected_blob_container_name="clips"
                     else
                         while true; do
-                            echo "Would you like to create a new blob container, or use an existing one?"
-                            echo "In order to perform this operation please make sure you have a Storage contributor role on your subscription"
-                            echo "1) create a new one"
-                            echo "2) use an existing one"
-                            echo "3) back to previous step"
-                            read -p "Your answer: " -r; echo
+                            echo "Would you like to create a new blob container or use an existing one?"
+                            echo -e "\033[0;94mIn order to perform this operation, please make sure you have a Storage contributor role on your subscription\033[0m"
+                            echo -e "  \033[0;33m1)\033[0m  Create a new one"
+                            echo -e "  \033[0;33m2)\033[0m  Use an existing one"
+                            echo -e "  \033[0;33m3)\033[0m  Back to previous step"
+                            read -p "Your choice: " -r; echo
                             create_blob_container_selection=$REPLY
                             case $create_blob_container_selection in
                             1 )
@@ -188,14 +244,17 @@ while [ $current_step -lt 9 ]; do
                                 fi
                             ;;
                             2 ) # --- blob container ---
+                                start_progress_animation "listing blob containers..."                            
                                 blob_containers=$(az storage container list --account-name $selected_storage_account_name --auth-mode login --query='[].{name: name }' | jq 'sort_by(.name)')
+                                stop_progress_animation
+                                echo "Select a blob container:"                                
                                 if [ $(echo $blob_containers | jq "length") == "0" ]; then
                                     echo "no container found"
                                     continue
                                 fi
-                                echo $blob_containers | jq -r '.[].name' | awk '{$1=++b")" FS $1}1'
+                                echo $blob_containers | jq -r '.[].name' | awk '{$1="  \033[0;33m" ++b ")\033[0m" FS $1}1'
                                 while true; do
-                                    read -p "Select a blob container: " -r; echo
+                                    read -p "Your choice: " -r; echo
                                     case $REPLY in
                                     [1-9]* )
                                         selected_blob_container_index=`expr $REPLY - 1`
@@ -212,7 +271,7 @@ while [ $current_step -lt 9 ]; do
                                 current_storage_step=1
                                 break
                             ;;
-                            * ) echo "Please enter a number"
+                            * ) display_error_message "Please enter a number"
                             esac
                         done
                     fi
@@ -224,12 +283,12 @@ while [ $current_step -lt 9 ]; do
     ;;
     3 ) # --- custom vision ---
         while true; do
-            echo "Would you like to create a new cognitive services, or use an existing one?"
-            echo "1) create a new one"
-            echo "2) use an existing one"
-            echo "3) skip"
-            echo "4) back to previous step"
-            read -p "Your answer: " -r; echo
+            echo "Would you like to create a new Azure Custom Vision service or use an existing one?"
+            echo  -e "  \033[0;33m1)\033[0m  Create a new one"
+            echo  -e "  \033[0;33m2)\033[0m  Use an existing one"
+            echo  -e "  \033[0;33m3)\033[0m  Skip"
+            echo  -e "  \033[0;33m4)\033[0m  Back to previous step"
+            read -p "Your choice: " -r; echo
             create_custom_vision_selection=$REPLY
             case $create_custom_vision_selection in
             1 )
@@ -245,7 +304,7 @@ while [ $current_step -lt 9 ]; do
                         selected_custom_vision_location=$(echo $rgs | jq -r ".[$selected_rg_index].location")
                         break
                         ;;
-                    *) echo "Please enter a number"
+                    *) display_error_message "Please enter a number"
                     esac
                 done
  
@@ -262,17 +321,17 @@ while [ $current_step -lt 9 ]; do
                     current_step=`expr $current_step + 1`
                     break
                 else
-                    echo "This name is already taken"
+                    display_error_message "This name is already taken"
                 fi
-
- 
             ;;
             2 )
                 while true; do
-                    echo "listing all cognitive services"
+                    start_progress_animation "listing all Cognitive Services..."                            
                     cognitiveservices=$(az cognitiveservices list --only-show-errors --query="[?kind == 'CustomVision.Training'].{id: id, name: name, rg: resourceGroup }" | jq 'sort_by(.id)' )
-                    echo $cognitiveservices | jq -r '.[] | "\(.rg)/\(.name)"' | awk '{$1=++b")" FS $1}1'
-                    read -p "Select a cognitive services: " -r; echo
+                    stop_progress_animation                    
+                    echo "Select a Cognitive Service:"
+                    echo $cognitiveservices | jq -r '.[] | "\(.rg)/\(.name)"' | awk '{$1="  \033[0;33m" ++b")\033[0m" FS $1}1'
+                    read -p "Your choice: " -r; echo
                     case $REPLY in
                     [0-9]* )
                         selected_custom_vision_index=`expr $REPLY - 1`
@@ -280,7 +339,7 @@ while [ $current_step -lt 9 ]; do
                         selected_custom_vision_rg=$(echo $cognitiveservices | jq -r ".[$selected_custom_vision_index].rg")
                         break
                     ;;
-                    *) echo "Please enter a number"
+                    *) display_error_message "Please enter a number"
                     esac
                 done
                 current_step=`expr $current_step + 1`
@@ -295,20 +354,20 @@ while [ $current_step -lt 9 ]; do
                 break
             ;;
             * )
-                echo "Please enter a number"
+                display_error_message "Please enter a number"
             esac
         done
 
     ;;
     4 ) # --- service principal ---
         while true; do
-            echo "Would you like to create a new service principal, or use an existing one?"
-            echo "1) create a new one"
-            echo "2) use an existing one"
-            echo "3) use an existing one by entering name"
-            echo "4) skip"
-			echo "5) back to previous step"
-            read -p "Your answer: " -r; echo
+            echo "Would you like to create a new service principal or use an existing one?"
+            echo  -e "  \033[0;33m1)\033[0m Create a new one"
+            echo  -e "  \033[0;33m2)\033[0m Use an existing one"
+            echo  -e "  \033[0;33m3)\033[0m Use an existing one by entering name"
+            echo  -e "  \033[0;33m4)\033[0m Skip"
+			echo  -e "  \033[0;33m5)\033[0m Back to previous step"
+            read -p "Your choice: " -r; echo
             create_sp_selection=$REPLY
             case $create_sp_selection in
             1 )
@@ -336,20 +395,20 @@ while [ $current_step -lt 9 ]; do
                         selected_sp_name=$(echo $service_principal | jq -r ".[$selected_sp_index].name")
                         break
                     ;;
-                    *) echo "Please enter a number"
+                    *) display_error_message "Please enter a number"
                     esac
                 done
                 current_step=`expr $current_step + 1`
                 break
             ;;
             3 )
-                read -p "please type your service principal name: "
+                read -p "Please type your service principal name: "
                 selected_sp_name=$REPLY
                 if [ $(az ad app list --filter "displayname eq '$selected_sp_name'" | jq -r "length") -gt 0 ]; then
                     current_step=`expr $current_step + 1`
 				    break
                 else
-                    echo "Service principal $selected_sp_name not exists"
+                    display_error_message "Service principal $selected_sp_name not exists"
                 fi
             ;;
             4 )
@@ -361,13 +420,13 @@ while [ $current_step -lt 9 ]; do
                 break
             ;;
             * )
-                echo "please enter a number"
+                display_error_message "please enter a number"
             esac
         done
 
     ;;
     5 ) while true; do
-            read -p "Use custom role? (y/n): " -r; echo
+            read -p "Use a custom role? (y/n): " -r; echo
             case $REPLY in
                 [Yy]* )
                     role_assignment=1
@@ -384,17 +443,18 @@ while [ $current_step -lt 9 ]; do
     ;;
     6 )
         while true; do
-            echo "We need to use a SYMPHONY agent to capture camera thumbnails, which requires the use of ffmpeg. However, the default SYMPHONY agent Docker image does not include ffmpeg. Please choose:"
-            echo "1) Use the default agent without camera thumbnail feature."
-            echo "2) Use a community-contributed image from hbai/symphony-agent:$agent_version that supports the thumbnail feature."
-            read -p "Your Answer:" -r; echo
+            echo "Choose Symphony agent image:"
+            echo -e "\033[0;94mWe need to use a Symphony agent to capture camera thumbnails, which requires the use of ffmpeg. However, the default Symphony agent Docker image does not include ffmpeg.\033[0m"            
+            echo -e "  \033[0;33m1)\033[0m Use the default agent without camera thumbnail feature."
+            echo -e "  \033[0;33m2)\033[0m Use a community-contributed image from hbai/symphony-agent:$agent_version that supports the thumbnail feature."
+            read -p "Your choice:" -r; echo
             case $REPLY in
                 1 )
                     agent_image=ghcr.io/eclipse-symphony/symphony-agent
                     break
                 ;;
                 2 )
-                    agent_image=ghcr.io/eclipse-symphony/symphony-agent
+                    agent_image=hbai/symphony-agent
                     break
                 ;;
                 *)                
@@ -416,37 +476,37 @@ while [ $current_step -lt 9 ]; do
     ;;
     8 )
         # # --- confirm ---
-        echo "your selections:"
+        echo "Your selections:"
         if [ $create_aks_selection == "1" ]; then
-            echo -e "aks:\t\t\t$(echo $selected_aks | jq -r '. | "\(.rg)/\(.name)"')"
+            echo -e "  \033[0;94mAKS:\033[0m\t\t\t$(echo $selected_aks | jq -r '. | "\(.rg)/\(.name)"')"
         else
-            echo -e "aks:\t\t\t\tUse current kubeconfig"
+            echo -e "  \033[0;94mAKS:\033[0m\t\t\t\tUse current kubeconfig"
         fi
 
         if [ $create_sp_selection == 4 ]; then
-            echo -e "service_principal:\t\tskip"
+            echo -e "  \033[0;94mService principal:\033[0m\t\tskip"
         else
-            echo -e "service_principal:\t\t$selected_sp_name"
+            echo -e "  \033[0;94mService principal:\033[0m\t\t$selected_sp_name"
         fi
 
         if [ $create_storage_account_selection == 3 ]; then
-            echo -e "storage account:\t\tskip"
-            echo -e "storage account location:\tskip"
-            echo -e "blob container:\t\t\tskip"
+            echo -e "  \033[0;94mStorage account:\033[0m\t\tskip"
+            echo -e "  \033[0;94mStorage account location:\033[0m\tskip"
+            echo -e "  \033[0;94mBlob container:\033[0m\t\t\tskip"
         else
-            echo -e "storage account:\t\t"$selected_storage_account_rg/$selected_storage_account_name
-            echo -e "storage account location:\t"$selected_storage_account_location
-            echo -e "blob container:\t\t\t"$selected_blob_container_name
+            echo -e "  \033[0;94mStorage account:\033[0m\t\t"$selected_storage_account_rg/$selected_storage_account_name
+            echo -e "  \033[0;94mStorage account location:\033[0m\t"$selected_storage_account_location
+            echo -e "  \033[0;94mBlob container:\033[0m\t\t"$selected_blob_container_name
         fi
 
         if [ $create_custom_vision_selection == 3 ]; then
-            echo -e "cognitive services:\t\tskip"
-            echo -e "cognitive services location:\tskip"
+            echo -e "  \033[0;94mCognitive services:\033[0m\t\tskip"
+            echo -e "  \033[0;94mCognitive services location:\033[0m\tskip"
         else
-            echo -e "cognitive services:\t\t"$selected_custom_vision_rg/$selected_custom_vision_name
-            echo -e "cognitive services location:\t"$selected_custom_vision_location
+            echo -e "  \033[0;94mCognitive services:\033[0m\t\t"$selected_custom_vision_rg/$selected_custom_vision_name
+            echo -e "  \033[0;94mCognitive services location:\033[0m\t"$selected_custom_vision_location
         fi
-        echo -e "enable collect telemetry:\t$enable_app_insight"
+        echo -e "  \033[0;94mEnable collect telemetry:\033[0m\t$enable_app_insight"
         read -p "Are you sure (y or n)? " -r; echo
         case $REPLY in
             [Yy]* )
@@ -455,7 +515,7 @@ while [ $current_step -lt 9 ]; do
                     az account set --subscription=$subscription
                     az aks get-credentials --resource-group $selected_aks_rg --name $selected_aks_name
                 else
-                    echo "use current kubeconfig"
+                    echo -e "  \033[0;94mUsing current kubeconfig\033[0m"
                 fi
 
                 if [ $create_storage_account_selection == "1" ]; then
@@ -482,7 +542,7 @@ while [ $current_step -lt 9 ]; do
 
  
                 if [ $create_sp_selection == "1" ]; then
-                    echo "creating service principal"
+                    echo -e "  \033[0;94mCreating service principal\033[0m"
                     # az ad app create --display-name $selected_sp_name
                     # app_id=$(az ad app create --only-show-errors --display-name $selected_sp_name | jq -r ".appId")
                     while true; do
@@ -502,17 +562,17 @@ while [ $current_step -lt 9 ]; do
                 fi
  
                 if [ $create_sp_selection != "4" ]; then
-                    echo "creating credential"
+                    echo -e "  \033[0;94mRetrieving credential\033[0m"
                     new_cred=$(az ad sp credential reset --id $app_id --append --display-name symphony --only-show-errors)
-                    echo $new_cred
+                    # echo $new_cred
                     sp_password=$(echo $new_cred | jq -r ".password")
                     sp_tenant=$(echo $new_cred | jq -r ".tenant")
 
                    if [ -z "$sp_password" ] || [ -z "$sp_tenant" ]; then
-                        echo "Failed to retrieve secret. Please enter the secret manually."
+                        display_error_message "Failed to retrieve secret. Please enter the secret manually."
 
-                        read -p "Please enter password for $app_id: " sp_password
-                        read -p "Please enter tenant for $app_id: " sp_tenant
+                        read -p "Please enter password for $selected_sp_name: " sp_password
+                        read -p "Please enter tenant for $selected_sp_name: " sp_tenant
                     fi
 
                     subscriptionId=$(az account show --query "id" -o tsv)
@@ -545,37 +605,37 @@ while [ $current_step -lt 9 ]; do
 
                         sleep 5
 
-                        echo "assigning Kanportal contributor role to subscription"
+                        echo -e "  \033[0;94mAssigning Kanportal contributor role to subscription\033[0m"
                         az role assignment create --role "kan contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
                     else 
-                        echo "assigning reader role to subscription"
+                        echo -e "  \033[0;94mAssigning reader role to subscription\033[0m"                        
                         az role assignment create --role "Reader" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
 
-                        echo "assigning role Storage Account Contributor to storage account"
+                        echo -e "  \033[0;94mAssigning role Storage Account Contributor to storage account\033[0m"
                         az role assignment create --role "Storage Account Contributor" --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
 
-                        echo "assigning role Storage Blob Data Contributor to storage account"
+                        echo -e "  \033[0;94mAssigning role Storage Blob Data Contributor to storage account\033[0m"
                         az role assignment create --role "Storage Blob Data Contributor" --assignee $app_id --scope $(az storage account show -g $selected_storage_account_rg -n $selected_storage_account_name | jq -r ".id")
 
-                        echo "assigning role IoT Hub Data Contributor to subscription"
+                        echo -e "  \033[0;94mAssigning role IoT Hub Data Contributor to subscription\033[0m"
                         az role assignment create --role "IoT Hub Data Contributor" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
                     
-                        echo "assigning contributor role to subscription"
+                        echo -e "  \033[0;94mAssigning contributor role to subscription\033[0m"
                         az role assignment create --role "Contributor" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
                     fi
                 fi
 
-                echo -e "\e[32mInstalling ingress\e[0m"
+                echo -e "  \033[0;94mInstalling ingress\e[0m"
                 helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
 
-                echo -e "\e[32mInstalling cert-manager\e[0m"
+                echo -e "  \033[0;94mInstalling cert-manager\e[0m"
                 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
  
-                echo -e "\e[32mRemoving terminating CRDs\e[0m"
+                echo -e "  \033[0;94mRemoving terminating CRDs\e[0m"
                 kubectl get target --no-headers=true | awk '{print $1}' | xargs kubectl patch target.fabric.symphony -p '{"metadata":{"finalizers":null}}' --type=merge
                 kubectl get instance --no-headers=true | awk '{print $1}' | xargs kubectl patch instance.solution.symphony -p '{"metadata":{"finalizers":null}}' --type=merge
 
-                echo -e "\e[32mInstalling symphony\e[0m"
+                echo -e "  \033[0;94mInstalling Symphony\e[0m"
                 if [ $create_custom_vision_selection == 3 ]; then
                     helm upgrade --install symphony $symphony_cr --set ENABLE_APP_INSIGHT=$enable_app_insight --namespace $symphony_ns --version $symphony_version --create-namespace --wait
                 else
@@ -585,7 +645,7 @@ while [ $current_step -lt 9 ]; do
                 if [ $? != "0" ]; then
                     echo -e "\e[31mWe faced some issues while pull symphony from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
-                echo -e "\e[32mInstalling Portal\e[0m"
+                echo -e "  \033[0;94mInstalling Portal\e[0m"
 
  
                 values=""
@@ -623,7 +683,7 @@ while [ $current_step -lt 9 ]; do
                       symphonyIp="$symphonyIp.$symphony_ns"
                 fi
 
-                helm upgrade --install -n default kanportal3 oci://kanprod.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kanprod.azurecr.io/kanportal --set symphonyAgentImage=$agent_image --set symphonyAgentVersion=$agent_version --set kanaiVersion=$kanai_version --set kanportal.portalIp=$portalIp --set kanportal.symphonyIp=$symphonyIp
+                helm upgrade --install -n default kanportal oci://kanprod.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kanprod.azurecr.io/kanportal --set symphonyAgentImage=$agent_image --set symphonyAgentVersion=$agent_version --set kanaiVersion=$kanai_version --set kanportal.portalIp=$portalIp --set kanportal.symphonyIp=$symphonyIp
 
                 if [ $? != "0" ]; then
                     echo -e "\e[31mWe faced some issues while pull Kanportal from container registry. Please try the installer again a few minutes later\e[0m"
@@ -638,10 +698,10 @@ while [ $current_step -lt 9 ]; do
     ;;
     * )
         echo "over $current_step"
-        read -p "Your answer: " -r; echo
+        read -p "Your choice: " -r; echo
     esac
 done
-echo "Installation Completed"
+echo -e "  \033[0;32m🎉 Installation Completed!!\033[0m"
 url=$(kubectl get svc -A | grep ingress-nginx-controller | grep LoadBalancer | awk {'print $5'})
-echo "The platform will be ready in few minutes at http://$url"
+echo -e "  \033[0;94mThe platform will be ready in few minutes at http://$url\e[0m"
 

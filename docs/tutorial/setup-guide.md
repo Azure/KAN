@@ -106,24 +106,36 @@ KAN installer script will guide you through the steps of creating related Azure 
       1) Use the default agent without camera thumbnail feature.
       2) Use a community-contributed image from hbai/symphony-agent:0.48.4 that supports the thumbnail feature.
    ```
-10. Next, you can choose whether usage telemetries to Microsoft:
+9. Next, you can choose whether usage telemetries to Microsoft:
    ```bash
    May we collect anonymous usage data to help improve the app's performance and user experience (to turn it off, run this installer again)? (y/n)
    ```
   
-10. Once you've made all selections, answer ```y``` to confirm. And the script will setup all required Azure resources for you.
+9. Once you've made all selections, answer ```y``` to confirm. And the script will setup all required Azure resources for you.
    ```bash
-   your selections:
-   aks:                            Use current kubeconfig
-   service_principal:              kan-sp
-   storage account:                byom/byom
-   storage account location:
-   blob container:                 clips
-   cognitive services:             byom/vision
-   cognitive services location:
+   Your selections:
+      AKS:                          Use current kubeconfig
+      Service principal:            kansp2024
+      Storage account:              kan-demo/kanstore
+      Storage account location:
+      Blob container:               kanblob
+      Cognitive services:           kan-demo/kancv
+      Cognitive services location:
+      Enable collect telemetry:     false
    Are you sure (y or n)?
    ```
+9. If you've chosen to use an existing service principal, it's very likely you'll need to re-enter the service principal credential:
+   ```bash
+   ❗ ERROR: Failed to retrieve secret. Please enter the secret manually.
+   Please enter password for <sp name>:
+   Please enter tenant for <sp name>:
+   ```
+
 9. After all resources are configured and KAN installed, the script displays your portal URL. Open the URL with a browser and you are ready to go!
+   ```bash
+   🎉 Installation Completed!!
+   The platform will be ready in few minutes at http://<portal ip address>
+   ```
 ## Setup process - without Azure
 
 4. Scripts asks you to confirm to install KAN to the Kubernetes cluster configured as your current cluster. Answer `y` to continue.
@@ -155,7 +167,7 @@ You can uninstall KAN using Helm:
 
 ```bash
 helm uninstall kanportal
-helm uninstall kan
+helm uninstall symphony -n symphonhy-k8s-system
 ```
  
 ## Reporting Issues and Bugs

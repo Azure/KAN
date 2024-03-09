@@ -3,14 +3,14 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-symphony_version=0.48.6
-agent_version=0.48.4
-kanportal_version=0.47.4-dev.2-amd64
-kanai_version=0.45.2
-current_step=0
-symphony_cr=oci://ghcr.io/eclipse-symphony/helm/symphony
-symphony_ns=symphony-k8s-system
+symphony_version=0.48.6                 #Symphony Helm Chart version
+agent_version=0.48.4                    #Symphony Agent version
+kanportal_version=0.47.4-dev.2-amd64    #Kanportal Helm Chart version
+kanai_version=0.45.2                    #KanAI container version
+symphony_cr=oci://ghcr.io/eclipse-symphony/helm/symphony #Symphony Helm Chart
+symphony_ns=symphony-k8s-system         #Symphony namespace
 
+current_step=0 
 echo
 echo -e "*******************"
 echo -e "* Welcome to \033[0;36mKAN\033[0m! *"
@@ -69,7 +69,7 @@ while [ $current_step -lt 9 ]; do
                 fi
             ;;
             [Nn]* )
-                read -p "symphony will install on current kubeconfig: (y/n) " -r; echo
+                read -p "KAN will be installed on current kubeconfig context: (y/n) " -r; echo
                 case $REPLY in
                 [Yy]* )
                     create_aks_selection=2
@@ -492,7 +492,7 @@ while [ $current_step -lt 9 ]; do
         if [ $create_storage_account_selection == 3 ]; then
             echo -e "  \033[0;94mStorage account:\033[0m\t\tskip"
             echo -e "  \033[0;94mStorage account location:\033[0m\tskip"
-            echo -e "  \033[0;94mBlob container:\033[0m\t\t\tskip"
+            echo -e "  \033[0;94mBlob container:\033[0m\t\tskip"
         else
             echo -e "  \033[0;94mStorage account:\033[0m\t\t"$selected_storage_account_rg/$selected_storage_account_name
             echo -e "  \033[0;94mStorage account location:\033[0m\t"$selected_storage_account_location

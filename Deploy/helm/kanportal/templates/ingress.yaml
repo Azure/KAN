@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: kanportal
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{.Values.ingress}}
   rules:
     - http:
         paths:

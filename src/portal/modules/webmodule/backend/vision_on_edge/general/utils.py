@@ -32,12 +32,15 @@ class AzureBlobClient:
         self.storage_conn_str = self.get_storage_account_connection_string()
 
     def get_storage_account_connection_string(self):
-
         if self.storage_account:
-            res = subprocess.check_output(
-                ['az', 'storage', 'account', 'show-connection-string', '--name', self.storage_account, '--resource-group', self.storage_resource_group, '-o', 'tsv'])
-            storage_conn_str = res.decode('utf8').strip()
-            return storage_conn_str
+            try:
+                res = subprocess.check_output(
+                    ['az', 'storage', 'account', 'show-connection-string', '--name', self.storage_account, '--resource-group', self.storage_resource_group, '-o', 'tsv'])
+                storage_conn_str = res.decode('utf8').strip()
+                return storage_conn_str
+            except Exception as e:
+                logger.warning(e)
+                return ""
         else:
             return ""
 

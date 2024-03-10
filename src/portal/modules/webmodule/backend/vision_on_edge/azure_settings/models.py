@@ -152,9 +152,12 @@ class Setting(models.Model):
         # re-login
         if instance.tenant_id and instance.client_id and instance.client_secret:
             logger.warning("re-login")
-            res = subprocess.check_output(['az', 'login', '--service-principal', '-u',
-                                          instance.client_id, f'-p={instance.client_secret}', '--tenant', instance.tenant_id])
-            logger.warning(res.decode('utf8'))
+            try:
+                res = subprocess.check_output(['az', 'login', '--service-principal', '-u',
+                                            instance.client_id, f'-p={instance.client_secret}', '--tenant', instance.tenant_id])
+                logger.warning(res.decode('utf8'))
+            except Exception as e:
+                logger.warning(e)
 
         # update cognitive service credential
         if instance.training_key:

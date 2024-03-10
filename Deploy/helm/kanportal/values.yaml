@@ -24,3 +24,4 @@ servicePrincipal:
 symphonyAgentImage: "kanprod.azurecr.io/kan-agent"
 symphonyAgentVersion: "0.41.44"
 kanaiVersion: "0.45.2"
+ingress: nginx

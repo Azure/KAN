@@ -605,12 +605,10 @@ while [ $current_step -lt 10 ]; do
                         # sp_password=$(echo $new_cred | jq -r ".password")
                         # sp_tenant=$(echo $new_cred | jq -r ".tenant")
 
-                    #if [ -z "$sp_password" ] || [ -z "$sp_tenant" ]; then
-                        #    display_error_message "Failed to retrieve secret. Please enter the secret manually."
-
+                        if [ -z "$sp_password" ] || [ -z "$sp_tenant" ]; then                        
                             read -p "Please enter password for $selected_sp_name: " sp_password
                             read -p "Please enter tenant for $selected_sp_name: " sp_tenant
-                        # fi
+                        fi
 
                         subscriptionId=$(az account show --query "id" -o tsv)
                         if [ $role_assignment == 1 ]; then

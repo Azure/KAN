@@ -373,10 +373,10 @@ while [ $current_step -lt 10 ]; do
                 1 )
                     while true; do
                         read -p "name: " -r; echo
-                        if [ $(az ad app list --filter "displayname eq '$REPLY'" | jq length) -gt 0 ]; then
-                            echo "service principal with displayName '$REPLY' already exists"
-                            continue
-                        fi
+                        # if [ $(az ad app list --filter "displayname eq '$REPLY'" | jq length) -gt 0 ]; then
+                        #    echo "service principal with displayName '$REPLY' already exists"
+                        #    continue
+                        # fi
                         selected_sp_name=$REPLY
                         break
                     done

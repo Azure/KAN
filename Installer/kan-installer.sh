@@ -751,18 +751,26 @@ if [ $ingress == "LoadBalancer" ]; then
 elif [ $ingress == "traefik" ]; then
     # wait for ingress service ready
     while true; do
-        portalIp=$(kubectl get ingress -A | grep kanportal | grep traefik | awk {'print $5'})
-        if [[ $portalIp != "" ]]; then
-            break
+        line=$(kubectl get ingress -A | grep kanportal | grep traefik)
+        fieldCount=$(echo "$line" | awk '{print NF}')
+        if [[ $fieldCount -eq 7 ]]; then
+            portalIp=$(echo "$line" | awk '{print $5}')
+            if [[ $portalIp != "" && $portalIp != "pending" ]]; then
+                break
+            fi
         fi
-        sleep 3                
+        sleep 3                   
     done
 elif [ $ingress == "nginx" ]; then
     # wait for ingress service ready
     while true; do
-        portalIp=$(kubectl get ingress -A | grep kanportal | grep nginx | awk {'print $5'})
-        if [[ $portalIp != "" && $portalIp != "pending" ]]; then
-            break
+        line=$(kubectl get ingress -A | grep kanportal | grep nginx)
+        fieldCount=$(echo "$line" | awk '{print NF}')
+        if [[ $fieldCount -eq 7 ]]; then
+            portalIp=$(echo "$line" | awk '{print $5}')
+            if [[ $portalIp != "" && $portalIp != "pending" ]]; then
+                break
+            fi
         fi
         sleep 3                
     done

@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
                 ('openvino_model_name', models.CharField(blank=True, default='', max_length=1000, null=True)),
                 ('classification_type', models.CharField(blank=True, default='', max_length=1000, null=True)),
                 ('is_trained', models.BooleanField(default=False)),
-                ('kan_id', models.CharField(blank=True, default='', max_length=2000, null=True)),
+                ('symphony_id', models.CharField(blank=True, default='', max_length=2000, null=True)),
                 ('tag_list', models.CharField(blank=True, default='', max_length=1000, null=True)),
                 ('setting', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='azure_settings.Setting')),
             ],

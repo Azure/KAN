@@ -73,19 +73,19 @@ Lowering the confidence threshold or bypassing the filter node may allow for pre
 
 ### 2. Is your Kubernetes compute device working?
 
-To verify the functionality of the KAN agent, follow these steps:
+To verify the functionality of the SYMPHONY agent, follow these steps:
 
-1. Check the status of the KAN agent by running the following command:
+1. Check the status of the SYMPHONY agent by running the following command:
    ```bash
-   kubectl get pods | grep kan-agent
+   kubectl get pods | grep symphony-agent
    ```
 2. The command should return a pod in the ```Running``` state. If no pods are returned, your Kubernetes compute device has not been properly configured.
 3. If the pod is in a failed state, examine the pod log using this command:
    ```bash
-   kubectl logs <name of the kan-agent pod>
+   kubectl logs <name of the symphony-agent pod>
    ```
 
-These steps will help you determine if the KAN agent is running properly and provide insight into any potential issues.
+These steps will help you determine if the SYMPHONY agent is running properly and provide insight into any potential issues.
 
 > **NOTE**: It is important to ensure sufficient memory on your device when working with AI models. As a general guideline, your device should have a minimum of 4GB of memory to support the IoT Edge runtime and AI modules.
 

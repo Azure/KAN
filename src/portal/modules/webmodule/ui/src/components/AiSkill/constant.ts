@@ -27,7 +27,7 @@ export const MODOEL_NODE_LIST = [
     download_uri_openvino: '',
     classification_type: '',
     is_trained: false,
-    kan_id: '',
+    symphony_id: '',
     tag_list: [],
     accelerationList: [],
     displayName: 'Run ML model',

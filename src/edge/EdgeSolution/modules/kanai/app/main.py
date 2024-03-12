@@ -10,8 +10,8 @@ import os
 import time
 import json
 import logging
-from common.kan_objects import SkillSpec, ModelSpec, InstanceSpec
-from common.kan_agent_client import KanAgentClient
+from common.symphony_objects import SkillSpec, ModelSpec, InstanceSpec
+from common.symphony_agent_client import SymphonyAgentClient
 from common.voe_cascade_config import CascadeConfig, Node, Edge
 from common.voe_model_config import ModelConfig
 from common.voe_ipc import PredictModule, StreamingModule, is_iotedge
@@ -25,10 +25,10 @@ from streaming_module import streaming_module
 last_skills = {
 }
 
-client = KanAgentClient()
+client = SymphonyAgentClient()
 
 STATUS_RUNNING = '0'
-STATUS_WAITING_KAN_AGENT = '1'
+STATUS_WAITING_SYMPHONY_AGENT = '1'
 STATUS_INITIALIZING_PREDICTMODULE = '2'
 STATUS_INITIALIZING_STREAMINGMODULE = '3'
 
@@ -47,29 +47,29 @@ def process_skill(skill, skill_name, instance_name):
 
         if skill_node.type == 'model':
 
-            # skill_node.name is kan's model name
-            # we need to send a request to get more information from kan model
+            # skill_node.name is symphony's model name
+            # we need to send a request to get more information from symphony model
             # and then parse the model.type / subtype / project
 
-            # kan_model & kan_model_spec is the term from kan
+            # symphony_model & symphony_model_spec is the term from symphony
             # model_name, model_provider, model_executor, model_type is the term from ModelConfig
 
-            kan_model_name = skill_node.name
+            symphony_model_name = skill_node.name
             model_name = skill_node.name
             model = client.get_model(model_name)
 
-            kan_model_spec = ModelSpec(**model['spec'])
-            print('s -->', kan_model_spec)
+            symphony_model_spec = ModelSpec(**model['spec'])
+            print('s -->', symphony_model_spec)
 
-            model_executor, model_type = kan_model_spec.properties.model_subtype.split(
+            model_executor, model_type = symphony_model_spec.properties.model_subtype.split(
                 '.')
             # FIXME
             if model_executor == 'intel':
                 model_executor = 'openvino'
                 # FIXME
-                model_name = kan_model_spec.properties.model_project
+                model_name = symphony_model_spec.properties.model_project
 
-            model_provider = kan_model_spec.properties.model_type
+            model_provider = symphony_model_spec.properties.model_type
 
             #print('-->', model_executor, model_type)
             # exit()
@@ -122,7 +122,7 @@ def process_skill(skill, skill_name, instance_name):
             else:
                 configurations = {}
             configurations['model'] = model_name
-            configurations['kan_name'] = kan_model_name
+            configurations['symphony_name'] = symphony_model_name
             configurations['provider'] = model_provider
 
             node = Node(
@@ -200,7 +200,7 @@ if __name__ == '__main__':
 
     # update status
     client.post_instance_status(
-        instance_name, STATUS_WAITING_KAN_AGENT, "waiting kan agent")
+        instance_name, STATUS_WAITING_SYMPHONY_AGENT, "waiting symphony agent")
 
     print('ok', flush=True)
 

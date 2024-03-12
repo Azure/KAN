@@ -1,10 +1,17 @@
 # KubeAI Application Nucleus for edge (KAN)
 
-_(last edit: 4/24/2021)_
+_(last edit: 3/9/2024)_
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-KubeAI Application Nucleus for edge (KAN - 看 in Mandarin means “to watch”, “to see”) is a solution accelerator for creating, deploying, and operating environment-aware solutions at scale that use artificial intelligence (AI) at the edge with the control and flexibility natively on your environment. Many of the KAN elements are open-sourced and leverage the open-source software (OSS) community to deliver enhanced experiences. And, as a self-managed solution, you can host the experience on your own [Kubernetes](https://kubernetes.io/) clusters.
+---
+### Now powered by [Eclipse Symphony](https://github.com/eclipse-symphony/symphony)!
+---
+
+
+
+
+KubeAI Application Nucleus for edge (KAN - 看 in Mandarin means “to watch”, “to see”) is a solution accelerator for creating, deploying, and operating environment-aware solutions at scale that use artificial intelligence (AI) at the edge with the control and flexibility natively on your environment. All KAN elements are open-sourced and leverage the open-source software (OSS) community to deliver enhanced experiences. And, as a self-managed solution, you can host the experience on your own [Kubernetes](https://kubernetes.io/) clusters.
 
 With KAN, you have your own no- to low-code portal experience as well as APIs that you can use to develop custom AI applications in a matter of minutes. It supports running Edge AI apps by utilizing cameras, sensors, and Edge devices with different Edge runtimes and accelerators across multiple locations at scale. Since it is designed with machine learning operations (MLOps) in mind, it provides support for active learning, continuous training, and data gathering using your machine learning (ML) models running at the edge.
 
@@ -63,7 +70,7 @@ Please follow these links to:
 
 * [Build KAN Portal container](./src/portal/README.md)
 * [Build KAN AI containers](./src/edge/README.md)
-* [Build Kan Portal Helm chart](./Deploy/helm/README.md)
+* [Build KAN Portal Helm chart](./Deploy/helm/README.md)
 * [Update KAN installer](./Installer/README.md)
 
 # Contributing

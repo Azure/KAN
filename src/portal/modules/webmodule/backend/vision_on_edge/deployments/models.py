@@ -10,8 +10,8 @@ import yaml
 
 from django.db import models
 from django.db.models.signals import post_save, post_delete, pre_save
-from .kan_client import KanInstanceClient
-from ..compute_devices.kan_client import KanSolutionClient
+from .symphony_client import SymphonyInstanceClient
+from ..compute_devices.symphony_client import SymphonySolutionClient
 from ..azure_app_insight.utils import get_app_insight_logger
 from ..compute_devices.models import ComputeDevice
 from ..cameras.models import Camera
@@ -21,8 +21,8 @@ logger = logging.getLogger(__name__)
 
 # Create your models here.
 
-instance_client = KanInstanceClient()
-solution_client = KanSolutionClient()
+instance_client = SymphonyInstanceClient()
+solution_client = SymphonySolutionClient()
 
 
 class Deployment(models.Model):
@@ -31,7 +31,7 @@ class Deployment(models.Model):
         ComputeDevice, on_delete=models.SET_NULL, null=True)
     configure = models.CharField(max_length=2000, null=True, blank=True, default="")
     tag_list = models.CharField(max_length=1000, null=True, blank=True, default="")
-    kan_id = models.CharField(max_length=200, null=True, blank=True, default="")
+    symphony_id = models.CharField(max_length=200, null=True, blank=True, default="")
     status = models.CharField(max_length=1000, blank=True, default="")
     iothub_insights = models.CharField(max_length=100000, blank=True, default="[]")
 
@@ -42,14 +42,14 @@ class Deployment(models.Model):
         return self.name.__str__()
 
     def get_status(self):
-        status = instance_client.get_status(self.kan_id)
+        status = instance_client.get_status(self.symphony_id)
         if status:
             return json.dumps(status)
         else:
             return ""
 
     def get_properties(self):
-        prop = instance_client.get_config_from_kan(self.kan_id)
+        prop = instance_client.get_config_from_symphony(self.symphony_id)
         if prop:
             return yaml.dump(prop)
         else:
@@ -59,10 +59,10 @@ class Deployment(models.Model):
     def pre_save(**kwargs):
         instance = kwargs["instance"]
 
-        if not instance.kan_id:
-            instance.kan_id = 'instance-' + str(uuid.uuid4())
+        if not instance.symphony_id:
+            instance.symphony_id = 'instance-' + str(uuid.uuid4())
 
-        logger.warning(f"instance kan id: {instance.kan_id}")
+        logger.warning(f"instance symphony id: {instance.symphony_id}")
 
     @staticmethod
     def post_save(**kwargs):
@@ -81,7 +81,7 @@ class Deployment(models.Model):
         configure = json.loads(instance.configure)
         skill_env = []
         skill_params = {}
-        # for recovering data from kan -> {"camera_name": [skill_names]}
+        # for recovering data from symphony -> {"camera_name": [skill_names]}
         configure_data = {}
         module_routes = []
         for cam in configure:
@@ -90,11 +90,11 @@ class Deployment(models.Model):
             for skill in cam['skills']:
                 skill_obj = Cascade.objects.get(pk=int(skill['id']))
                 skill_alias = str(uuid.uuid4())[-4:]
-                skill_env.append(f"{skill_obj.kan_id} as skill-{skill_alias}")
+                skill_env.append(f"{skill_obj.symphony_id} as skill-{skill_alias}")
                 skill_params[
                     f"skill-{skill_alias}.rtsp"] = f"rtsp://{device_obj.username}:{device_obj.password}@{device_obj.rtsp.split('rtsp://')[1]}"
                 skill_params[f"skill-{skill_alias}.fps"] = skill_obj.fps
-                skill_params[f"skill-{skill_alias}.device_id"] = device_obj.kan_id
+                skill_params[f"skill-{skill_alias}.device_id"] = device_obj.symphony_id
                 skill_params[f"skill-{skill_alias}.instance_displayname"] = instance.name
                 skill_params[f"skill-{skill_alias}.device_displayname"] = device_obj.name
                 skill_params[f"skill-{skill_alias}.skill_displayname"] = skill_obj.name
@@ -118,7 +118,7 @@ class Deployment(models.Model):
                 "skills": json.dumps(skill_env),
                 "acceleration": instance.compute_device.acceleration,
                 "architecture": instance.compute_device.architecture,
-                "instance": instance.kan_id,
+                "instance": instance.symphony_id,
                 "iothub": instance.compute_device.iothub,
                 "iotedge_device": instance.compute_device.iotedge_device,
                 "module_routes": module_routes,
@@ -128,9 +128,9 @@ class Deployment(models.Model):
 
         # create/update instance
         instance_client.set_attr({
-            "name": instance.kan_id,
+            "name": instance.symphony_id,
             "display_name": instance.name,
-            "target": instance.compute_device.kan_id,
+            "target": instance.compute_device.symphony_id,
             "solution": instance.compute_device.solution_id,
             "params": skill_params,
             "tag_list": instance.tag_list,
@@ -143,7 +143,7 @@ class Deployment(models.Model):
         else:
             # update
             solution_client.update_config(name=instance.compute_device.solution_id)
-            instance_client.patch_config(name=instance.kan_id)
+            instance_client.patch_config(name=instance.symphony_id)
 
         # monitor iothub messages
         iothub = instance.compute_device.iothub
@@ -177,7 +177,7 @@ class Deployment(models.Model):
     @staticmethod
     def post_delete(**kwargs):
         instance = kwargs["instance"]
-        instance_client.remove_config(name=instance.kan_id)
+        instance_client.remove_config(name=instance.symphony_id)
 
 
 post_save.connect(Deployment.post_save, Deployment, dispatch_uid="Deployment_post")

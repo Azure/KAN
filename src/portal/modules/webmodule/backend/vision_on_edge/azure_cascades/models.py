@@ -9,8 +9,8 @@ import yaml
 
 from django.db import models
 from django.db.models.signals import post_save, post_delete, pre_save
-from .kan_client import KanSkillClient
-from ..compute_devices.kan_client import KanSolutionClient
+from .symphony_client import SymphonySkillClient
+from ..compute_devices.symphony_client import SymphonySolutionClient
 from ..azure_iot.utils import model_manager_module_url
 from ..azure_app_insight.utils import get_app_insight_logger
 
@@ -18,8 +18,8 @@ logger = logging.getLogger(__name__)
 
 # Create your models here.
 
-skill_client = KanSkillClient()
-solution_client = KanSolutionClient()
+skill_client = SymphonySkillClient()
+solution_client = SymphonySolutionClient()
 
 
 class Cascade(models.Model):
@@ -29,7 +29,7 @@ class Cascade(models.Model):
 
     screenshot = models.CharField(max_length=1000000, null=True, blank=True, default="")
     tag_list = models.CharField(max_length=1000, null=True, blank=True, default="")
-    kan_id = models.CharField(max_length=200, null=True, blank=True, default="")
+    symphony_id = models.CharField(max_length=200, null=True, blank=True, default="")
     fps = models.CharField(max_length=200, null=True, blank=True, default="")
     acceleration = models.CharField(max_length=200, null=True, blank=True, default="")
 
@@ -42,7 +42,7 @@ class Cascade(models.Model):
     # automatically modify single model cascade
 
     def get_properties(self):
-        prop = skill_client.get_config_from_kan(self.kan_id)
+        prop = skill_client.get_config_from_symphony(self.symphony_id)
         if prop:
             return yaml.dump(prop)
         else:
@@ -52,10 +52,10 @@ class Cascade(models.Model):
     def pre_save(**kwargs):
         instance = kwargs["instance"]
 
-        if not instance.kan_id:
-            instance.kan_id = 'skill-' + str(uuid.uuid4())
+        if not instance.symphony_id:
+            instance.symphony_id = 'skill-' + str(uuid.uuid4())
 
-        logger.warning(f"cascade kan id: {instance.kan_id}")
+        logger.warning(f"cascade symphony id: {instance.symphony_id}")
 
     @staticmethod
     def post_create(**kwargs):
@@ -73,7 +73,7 @@ class Cascade(models.Model):
         flow["parameters"]["fpsRetrieve"] = instance.fps
         flow["parameters"]["accelerationRetrieve"] = instance.acceleration
         skill_client.set_attr({
-            "name": instance.kan_id,
+            "name": instance.symphony_id,
             "spec": flow,
             "tag_list": instance.tag_list,
         })
@@ -93,7 +93,7 @@ class Cascade(models.Model):
                             affected_solutions.append(
                                 instance_obj.compute_device.solution_id)
 
-            skill_client.patch_config(name=instance.kan_id)
+            skill_client.patch_config(name=instance.symphony_id)
 
             logger.warning(f"Updating affected solutions: {affected_solutions}")
             for solution_id in affected_solutions:
@@ -116,7 +116,7 @@ class Cascade(models.Model):
     @staticmethod
     def post_delete(**kwargs):
         instance = kwargs["instance"]
-        skill_client.remove_config(name=instance.kan_id)
+        skill_client.remove_config(name=instance.symphony_id)
 
 
 post_save.connect(Cascade.post_create, Cascade, dispatch_uid="Cascade_post")

@@ -1,6 +1,6 @@
 # Targets
 
-```targets.fabric.kan``` represents an endpoint to which a payload (solution [Instance](./instance.md)) can be deployed. An Target can be a physical device, a server, a cluster of servers, a Kubernetes cluster, or any endpoint that is represented by a target provider.
+```targets.fabric.symphony``` represents an endpoint to which a payload (solution [Instance](./instance.md)) can be deployed. An Target can be a physical device, a server, a cluster of servers, a Kubernetes cluster, or any endpoint that is represented by a target provider.
 
 ## Schema
 | Field | Type | Description |

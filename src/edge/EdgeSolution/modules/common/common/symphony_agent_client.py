@@ -5,20 +5,20 @@ from urllib.parse import urlencode
 
 import httpx
 
-from common.kan_params import crd_params
-from common.voe_ipc import KanAgent
+from common.symphony_params import crd_params
+from common.voe_ipc import SymphonyAgent
 
 #host = 'localhost'
-#host = 'kan-agent'
+#host = 'symphony-agent'
 #port = '8088'
 
 
-class KanAgentClient:
+class SymphonyAgentClient:
     #def __init__(self, host=host, port=port, scope='default', version='v1', ref='v1alpha2.ReferenceK8sCRD'):
     def __init__(self, scope='default', version='v1', ref='v1alpha2.ReferenceK8sCRD'):   
         #self.url = f'http://{host}:{port}/v1alpha2/agent/references'
         
-        self.url = f'{KanAgent.Url}/v1alpha2/agent/references'
+        self.url = f'{SymphonyAgent.Url}/v1alpha2/agent/references'
 
         self.scope = scope
         self.version = version
@@ -45,7 +45,7 @@ class KanAgentClient:
         try:
             r = httpx.get(self.url, params=params)
         except:
-            raise Exception('Cannot access Kan Agent')
+            raise Exception('Cannot access Symphony Agent')
 
         return r.json()
 
@@ -81,7 +81,7 @@ class KanAgentClient:
         try:
             r = httpx.get(self.url, params=params)
         except:
-            raise Exception('Cannot access Kan Agent')
+            raise Exception('Cannot access Symphony Agent')
 
         return r.json()
 
@@ -99,7 +99,7 @@ class KanAgentClient:
         try:
             r = httpx.get(self.url, params=params)
         except:
-            raise Exception('Cannot access Kan Agent')
+            raise Exception('Cannot access Symphony Agent')
 
         return r.json()
 
@@ -115,7 +115,7 @@ class KanAgentClient:
         try:
             r = httpx.post(self.url, params=params, json=data)
         except:
-            raise Exception('Cannot access Kan Agent')
+            raise Exception('Cannot access Symphony Agent')
         
     def post_instance_status(self, name, status_code, status_description):
         self._post('Instance', name, data={"status_code": status_code, "status_description": status_description})
@@ -125,5 +125,5 @@ class KanAgentClient:
 
 if __name__ == '__main__':
 
-   sac = KanAgentClient() 
+   sac = SymphonyAgentClient() 
    print(sac.get_target('sdsdsd'))

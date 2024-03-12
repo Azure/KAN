@@ -1,5 +1,5 @@
 # Instance
-```instance.solution.kan``` maps a [```solution.solution.kan```](./solution.md) object to one or more [```target.fabric.kan```](./target.md) objects. Creating an instance object triggers deployments to targets.
+```instance.solution.symphony``` maps a [```solution.solution.symphony```](./solution.md) object to one or more [```target.fabric.symphony```](./target.md) objects. Creating an instance object triggers deployments to targets.
 
 ## Schema
 | Field | Type | Description |

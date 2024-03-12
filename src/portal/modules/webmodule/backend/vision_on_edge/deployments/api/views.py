@@ -24,11 +24,11 @@ from rest_framework.response import Response
 from drf_yasg2.utils import swagger_auto_schema
 
 from ..models import Deployment
-from ..kan_client import KanInstanceClient
-from ...cameras.kan_client import KanDeviceClient
-from ...azure_cascades.kan_client import KanSkillClient
-from ...compute_devices.kan_client import KanTargetClient
-from ...compute_devices.kan_client import KanSolutionClient
+from ..symphony_client import SymphonyInstanceClient
+from ...cameras.symphony_client import SymphonyDeviceClient
+from ...azure_cascades.symphony_client import SymphonySkillClient
+from ...compute_devices.symphony_client import SymphonyTargetClient
+from ...compute_devices.symphony_client import SymphonySolutionClient
 from ..iothub_receive import iothub_insights
 from ...general.utils import AzureBlobClient
 from ...general.shortcuts import drf_get_object_or_404
@@ -53,11 +53,11 @@ from ..exceptions import (
 logger = logging.getLogger(__name__)
 
 blob_client = AzureBlobClient()
-instance_client = KanInstanceClient()
-device_client = KanDeviceClient()
-target_client = KanTargetClient()
-solution_client = KanSolutionClient()
-skill_client = KanSkillClient()
+instance_client = SymphonyInstanceClient()
+device_client = SymphonyDeviceClient()
+target_client = SymphonyTargetClient()
+solution_client = SymphonySolutionClient()
+skill_client = SymphonySkillClient()
 
 
 class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
@@ -74,7 +74,7 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
         queryset = Deployment.objects.all()
         for deployment_obj in queryset:
             deployment_obj.status = deployment_obj.get_status()
-            deployment_obj.skip_signals = True  # only update column, skip kan api
+            deployment_obj.skip_signals = True  # only update column, skip symphony api
             deployment_obj.save()
         return queryset
 
@@ -94,7 +94,7 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
 
         project_obj = Project.objects.filter(
-            kan_id=serializer.validated_data["project_kan_id"]).first()
+            symphony_id=serializer.validated_data["project_symphony_id"]).first()
         if project_obj is None:
             raise PdRelabelWithoutProject
         if project_obj.is_demo:
@@ -214,49 +214,49 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
     def list_deployment_insights(self, request, pk=None):
         # queryset = self.get_queryset()
         # instance = drf_get_object_or_404(queryset, pk=pk)
-        # instance_id = instance.kan_id
+        # instance_id = instance.symphony_id
 
-        instance_kan_id = request.query_params.get("instance_kan_id")
-        skill_kan_id = request.query_params.get("skill_kan_id")
-        device_kan_id = request.query_params.get("device_kan_id")
+        instance_symphony_id = request.query_params.get("instance_symphony_id")
+        skill_symphony_id = request.query_params.get("skill_symphony_id")
+        device_symphony_id = request.query_params.get("device_symphony_id")
 
         logger.warning(
-            f'Retrieving iothub insight parameters:{instance_kan_id}/{skill_kan_id}/{device_kan_id}')
+            f'Retrieving iothub insight parameters:{instance_symphony_id}/{skill_symphony_id}/{device_symphony_id}')
 
-        return Response(iothub_insights.get(instance_kan_id, {}).get(skill_kan_id, {}).get(device_kan_id, []))
+        return Response(iothub_insights.get(instance_symphony_id, {}).get(skill_symphony_id, {}).get(device_symphony_id, []))
 
     @action(detail=False, methods=["get"], url_path="get_properties")
     def get_properties(self, request, pk=None):
 
-        kan_id = request.query_params.get("kan_id")
+        symphony_id = request.query_params.get("symphony_id")
 
-        logger.warning(f"Retrieving instance [{kan_id}] config.")
+        logger.warning(f"Retrieving instance [{symphony_id}] config.")
 
-        return Response(yaml.dump(instance_client.get_config_from_kan(kan_id)))
+        return Response(yaml.dump(instance_client.get_config_from_symphony(symphony_id)))
 
-    @action(detail=False, methods=["get"], url_path="get_kan_objects")
-    def get_kan_objects(self, request):
+    @action(detail=False, methods=["get"], url_path="get_symphony_objects")
+    def get_symphony_objects(self, request):
 
-        kan_id = request.query_params.get("kan_id")
+        symphony_id = request.query_params.get("symphony_id")
         logger.warning(f"Retrieving all instance configs.")
         return Response(instance_client.get_objects())
 
-    @action(detail=False, methods=["get"], url_path="get_kan_object")
-    def get_kan_object(self, request):
+    @action(detail=False, methods=["get"], url_path="get_symphony_object")
+    def get_symphony_object(self, request):
 
-        kan_id = request.query_params.get("kan_id")
+        symphony_id = request.query_params.get("symphony_id")
 
-        if kan_id:
-            logger.warning(f"Retrieving instance [{kan_id}] config.")
+        if symphony_id:
+            logger.warning(f"Retrieving instance [{symphony_id}] config.")
 
-            return Response(instance_client.get_object(kan_id))
+            return Response(instance_client.get_object(symphony_id))
         else:
-            raise ValidationError("Not providing kan_id")
+            raise ValidationError("Not providing symphony_id")
 
-    @action(detail=False, methods=["post"], url_path="create_kan_object")
-    def create_kan_object(self, request):
+    @action(detail=False, methods=["post"], url_path="create_symphony_object")
+    def create_symphony_object(self, request):
 
-        kan_id = 'instance-' + str(uuid.uuid4())
+        symphony_id = 'instance-' + str(uuid.uuid4())
 
         from ...azure_cascades.models import Cascade
         from ...azure_settings.models import Setting
@@ -278,7 +278,7 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
                 # "skills": json.dumps(skill_env),
                 "acceleration": target_obj["acceleration"],
                 "architecture": target_obj["architecture"],
-                "instance": kan_id,
+                "instance": symphony_id,
                 "iothub": target_obj["iothub"],
                 "iotedge_device": target_obj["iotedge_device"],
                 "module_routes": module_routes,
@@ -290,9 +290,9 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
 
         # create/update instance
         instance_client.set_attr({
-            "name": kan_id,
+            "name": symphony_id,
             "display_name": request.data.get("name"),
-            "target": target_obj["kan_id"],
+            "target": target_obj["symphony_id"],
             "solution": target_obj["solution_id"],
             "pipelines": pipelines,
             "params": params,
@@ -317,13 +317,13 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
             logger.warning(f"Start monitoring iothub: {iothub}")
         else:
             logger.warning(f"Iothub: {iothub} already being monitored")
-        return Response(instance_client.get_object(kan_id))
+        return Response(instance_client.get_object(symphony_id))
 
-    @action(detail=False, methods=["patch"], url_path="update_kan_object")
-    def update_kan_object(self, request):
+    @action(detail=False, methods=["patch"], url_path="update_symphony_object")
+    def update_symphony_object(self, request):
 
-        kan_id = request.query_params.get("kan_id")
-        instance_obj = instance_client.get_object(kan_id)
+        symphony_id = request.query_params.get("symphony_id")
+        instance_obj = instance_client.get_object(symphony_id)
         target_obj = target_client.get_object(instance_obj["compute_device"])
 
         configure = json.loads(request.data.get("configure"))
@@ -341,7 +341,7 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
                 # "skills": json.dumps(skill_env),
                 "acceleration": target_obj["acceleration"],
                 "architecture": target_obj["architecture"],
-                "instance": kan_id,
+                "instance": symphony_id,
                 "iothub": target_obj["iothub"],
                 "iotedge_device": target_obj["iotedge_device"],
                 "module_routes": module_routes,
@@ -360,24 +360,24 @@ class DeploymentViewSet(FiltersMixin, viewsets.ModelViewSet):
 
         # update
         solution_client.update_config(name=target_obj["solution_id"])
-        instance_client.patch_config(name=kan_id)
+        instance_client.patch_config(name=symphony_id)
 
-        instance_client.patch_config(name=kan_id)
-        return Response(instance_client.get_object(kan_id))
+        instance_client.patch_config(name=symphony_id)
+        return Response(instance_client.get_object(symphony_id))
 
-    @action(detail=False, methods=["delete"], url_path="delete_kan_object")
-    def delete_kan_object(self, request):
+    @action(detail=False, methods=["delete"], url_path="delete_symphony_object")
+    def delete_symphony_object(self, request):
 
-        kan_id = request.query_params.get("kan_id")
+        symphony_id = request.query_params.get("symphony_id")
 
-        instance_client.remove_config(name=kan_id)
+        instance_client.remove_config(name=symphony_id)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 def process_configure(configure, displayname):
     skill_env = []
     skill_params = {}
-    # for recovering data from kan -> {"camera_name": [skill_names]}
+    # for recovering data from symphony -> {"camera_name": [skill_names]}
     configure_data = {}
     module_routes = []
     pipelines = []
@@ -386,19 +386,19 @@ def process_configure(configure, displayname):
     grpc_components = []
     for cam in configure:
         device_obj = device_client.get_object(cam['camera'])
-        configure_data[device_obj["kan_id"]] = []
+        configure_data[device_obj["symphony_id"]] = []
         for skill in cam['skills']:
             skill_obj = skill_client.get_object(skill['id'])
             # skill_alias = str(uuid.uuid4())[-4:]
-            # skill_env.append(f"{skill_obj['kan_id']} as skill-{skill_alias}")
+            # skill_env.append(f"{skill_obj['symphony_id']} as skill-{skill_alias}")
             # skill_params[
             #     f"skill-{skill_alias}.rtsp"] = f"rtsp://{device_obj['username']}:{device_obj['password']}@{device_obj['rtsp'].split('rtsp://')[1]}"
             # skill_params[f"skill-{skill_alias}.fps"] = skill_obj["fps"]
-            # skill_params[f"skill-{skill_alias}.device_id"] = device_obj["kan_id"]
+            # skill_params[f"skill-{skill_alias}.device_id"] = device_obj["symphony_id"]
             # skill_params[f"skill-{skill_alias}.instance_displayname"] = displayname
             # skill_params[f"skill-{skill_alias}.device_displayname"] = device_obj["name"]
             # skill_params[f"skill-{skill_alias}.skill_displayname"] = skill_obj["name"]
-            configure_data[device_obj["kan_id"]].append(skill_obj["kan_id"])
+            configure_data[device_obj["symphony_id"]].append(skill_obj["symphony_id"])
 
             pipelines.append({
                 "name": f"pipeline{pipeline_index}",
@@ -406,7 +406,7 @@ def process_configure(configure, displayname):
                 "parameters": {
                     "rtsp": f"rtsp://{device_obj['username']}:{device_obj['password']}@{device_obj['rtsp'].split('rtsp://')[1]}",
                     "fps": skill_obj["fps"],
-                    "device_id": device_obj["kan_id"],
+                    "device_id": device_obj["symphony_id"],
                     "instance_displayname": displayname,
                     "device_displayname": device_obj["name"],
                     "skill_displayname": skill_obj["name"]

@@ -1,4 +1,4 @@
-apiVersion: ai.kan/v1
+apiVersion: ai.symphony/v1
 kind: Model
 metadata:
   name: "vehicle-attributes-recognition"
@@ -10,11 +10,11 @@ spec:
     model.project: "vehicle-attributes-recognition-barrier-0039"
     model.endpoint: ""
     model.version.1: ""
-    model.kan.id: "vehicle-attributes-recognition"
+    model.symphony.id: "vehicle-attributes-recognition"
     tags: "['white', 'gray', 'yellow', 'red', 'green', 'blue', 'black']"
     state: trained
 ---
-apiVersion: ai.kan/v1
+apiVersion: ai.symphony/v1
 kind: Model
 metadata:
   name: "pedestrian-and-vehicle-detector"
@@ -26,11 +26,11 @@ spec:
     model.project: "pedestrian-and-vehicle-detector-adas-0001"
     model.endpoint: ""
     model.version.1: ""
-    model.kan.id: "pedestrian-and-vehicle-detector"
+    model.symphony.id: "pedestrian-and-vehicle-detector"
     tags: "['vehicle', 'pedestrian']"
     state: trained
 ---
-apiVersion: ai.kan/v1
+apiVersion: ai.symphony/v1
 kind: Model
 metadata:
   name: "person-detection"
@@ -42,6 +42,6 @@ spec:
     model.project: "person-detection-retail-0013"
     model.endpoint: ""
     model.version.1: ""
-    model.kan.id: "person-detection"
+    model.symphony.id: "person-detection"
     tags: "['person']"
     state: trained

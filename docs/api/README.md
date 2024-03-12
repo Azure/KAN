@@ -4,12 +4,12 @@ KubeAI Application Nucleus for edge (KAN) API defines a common object model that
 
 ## KAN API object models
 
-* [AI model](./object-model/ai-model.md) (```model.ai.kan```)
-* [AI skill](./object-model/ai-skill.md) (```skill.ai.kan```)
-* [Device](./object-model/device.md) (```device.fabric.kan```)
-* [Target](./object-model/target.md) (```target.fabric.kan```)
-* [Solution](./object-model/solution.md) (```solution.solution.kan```)
-* [Instance](./object-model/instance.md) (```instance.solution.kan```)
+* [AI model](./object-model/ai-model.md) (```model.ai.symphony```)
+* [AI skill](./object-model/ai-skill.md) (```skill.ai.symphony```)
+* [Device](./object-model/device.md) (```device.fabric.symphony```)
+* [Target](./object-model/target.md) (```target.fabric.symphony```)
+* [Solution](./object-model/solution.md) (```solution.solution.symphony```)
+* [Instance](./object-model/instance.md) (```instance.solution.symphony```)
 
 ## Mapping between KAN API object models and KAN portal concepts
 
@@ -17,12 +17,12 @@ The KAN portal experience aims to provide a streamlined experience of creating a
 
 | API Object | Portal Concept |
 |--------|--------|
-| ```device.fabric.kan``` | Camera |
-| ```instance.solution.kan``` | Deployment |
-| ```model.ai.kan``` | AI Model |
-| ```skill.ai.kan``` | AI Skill |
-| ```solution.solution.kan``` | There are no solutions surfaced on portal. Essentially, a portal operates on a single, system-maintained solution object on behalf of the user. |
-| ```target.fabric.kan``` | Compute device | 
+| ```device.fabric.symphony``` | Camera |
+| ```instance.solution.symphony``` | Deployment |
+| ```model.ai.symphony``` | AI Model |
+| ```skill.ai.symphony``` | AI Skill |
+| ```solution.solution.symphony``` | There are no solutions surfaced on portal. Essentially, a portal operates on a single, system-maintained solution object on behalf of the user. |
+| ```target.fabric.symphony``` | Compute device | 
 
 ## Typical workflows
 

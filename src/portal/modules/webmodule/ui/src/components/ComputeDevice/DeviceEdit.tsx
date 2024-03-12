@@ -180,7 +180,7 @@ const DeviceEdit = () => {
       </Stack>
       <EditFooter
         id={device.id}
-        kan_id={device.kan_id}
+        symphony_id={device.symphony_id}
         currentStep={localPivotKey}
         onLinkClick={onLinkClick}
         localFormData={localFormData}

@@ -6,15 +6,15 @@ To create your deployments, begin by declaring the desired state of your AI Appl
 
 ## Prerequisites 
 
-Before proceeding, we recommend completing the setup tutorial to successfully set up your KAN experience onto your Kubernetes environment. See the following resources: 
+Before proceeding, we recommend completing the setup tutorial to successfully set up your SYMPHONY experience onto your Kubernetes environment. See the following resources: 
 
-* [KAN: Setup guide](https://github.com/Azure/KAN/blob/KAN/docs/tutorial/setup-guide.md) to set up your portal experience 
+* [SYMPHONY: Setup guide](https://github.com/Azure/SYMPHONY/blob/SYMPHONY/docs/tutorial/setup-guide.md) to set up your portal experience 
 * [Quickstart: Connect an existing Kubernetes cluster to Azure Arc - Azure Arc](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/quickstart-connect-cluster?tabs=azure-cli%2Cazure-cloud) for guidance on how to Arc-enable your cluster 
 * [Azure Kubernetes Service (AKS)](https://learn.microsoft.com/en-us/azure/aks/) documentation for more information on AKS 
 
 ## Step 1: Create a GitHub environment for your configuration files 
 
-Create YAML definition files for your AI Skill(s), Solution(s), and Solution Instance(s). To see KAN object models, visit: [KAN/docs/api at main · Azure/KAN](https://github.com/Azure/KAN/tree/main/docs/api). 
+Create YAML definition files for your AI Skill(s), Solution(s), and Solution Instance(s). To see SYMPHONY object models, visit: [SYMPHONY/docs/api at main · Azure/SYMPHONY](https://github.com/Azure/SYMPHONY/tree/main/docs/api). 
 
 
 Here are samples of definition files.  
@@ -22,7 +22,7 @@ Here are samples of definition files.
 
 Sample #1 
 ```azurecli-interactive
-apiVersion: ai.kan/v1 
+apiVersion: ai.symphony/v1 
 
 kind: Skill 
 
@@ -150,7 +150,7 @@ Sample #2
 
 ```azurecli-interactive
 
-apiVersion: solution.kan/v1 
+apiVersion: solution.symphony/v1 
 
 kind: Solution 
 
@@ -184,11 +184,11 @@ spec:
 
       env.BLOB_STORAGE_CONTAINER:<Storage name> 
 
-      env.INSTANCE: $instance() 
+      env.INSTANCE: ${{$instance()}} 
 
       env.IOTEDGE_CONNECTION_STRING:<Connection String> 
 
-      env.KAN_AGENT_ADDRESS: target-runtime-kan-agent 
+      env.SYMPHONY_AGENT_ADDRESS: target-runtime-symphony-agent 
 
       env.WEBMODULE_URL: <url> 
 
@@ -199,7 +199,7 @@ Sample #3
 
  
 ```azurecli-interactive
-apiVersion: solution.kan/v1 
+apiVersion: solution.symphony/v1 
 
 kind: Instance 
 
@@ -207,7 +207,7 @@ metadata:
 
   finalizers: 
 
-  - instance.solution.kan/finalizer 
+  - instance.solution.symphony/finalizer 
 
   name: <Instance name> 
 
@@ -273,7 +273,7 @@ Use the kubectl commands from __Step 3: View your objects__ to view the changes 
 
 ## Next Steps
  
-Now that you learned more about how to interact with KAN API through Gitops, we recommend reviewing the following documents:
+Now that you learned more about how to interact with SYMPHONY API through Gitops, we recommend reviewing the following documents:
 
-- [KAN: API overview](/docs/api/README.md)
+- [SYMPHONY: API overview](/docs/api/README.md)
 - [How-to guide: Bring your own ML model and processing logic for your AI Skill using gRPC Custom Processing (BYOM)](/docs/tutorial/How-to-BYOM.md)

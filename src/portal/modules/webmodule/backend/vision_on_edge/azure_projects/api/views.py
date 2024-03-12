@@ -32,7 +32,7 @@ from ...general.api.serializers import (
 from ...general.shortcuts import drf_get_object_or_404
 from ..exceptions import ProjectWithoutSettingError
 from ..models import Project, Task
-from ..kan_client import KanModelClient
+from ..symphony_client import SymphonyModelClient
 from ..utils import TRAINING_MANAGER, pull_cv_project_helper, create_cv_project_helper, update_tags_helper
 from .serializers import (
     IterationPerformanceSerializer,
@@ -48,7 +48,7 @@ logger = logging.getLogger(__name__)
 
 PROJECT_RELABEL_TIME_THRESHOLD = 30  # Seconds
 
-model_client = KanModelClient()
+model_client = SymphonyModelClient()
 
 
 class ProjectViewSet(FiltersMixin, viewsets.ModelViewSet):
@@ -66,7 +66,7 @@ class ProjectViewSet(FiltersMixin, viewsets.ModelViewSet):
     def get_queryset(self):
 
         queryset = super().get_queryset()
-        model_client.load_kan_objects()
+        model_client.load_symphony_objects()
 
         return queryset
 
@@ -361,7 +361,7 @@ class ProjectViewSet(FiltersMixin, viewsets.ModelViewSet):
         queryset = self.get_queryset()
         instance = drf_get_object_or_404(queryset, pk=pk)
 
-        logger.warning(f"Retrieving model [{instance.kan_id}] config.")
+        logger.warning(f"Retrieving model [{instance.symphony_id}] config.")
 
         return Response(instance.get_properties())
 

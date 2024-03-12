@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('username', models.CharField(blank=True, default='', max_length=200)),
                 ('password', models.CharField(blank=True, default='', max_length=200)),
                 ('allowed_devices', models.CharField(blank=True, default='[]', max_length=1000)),
-                ('kan_id', models.CharField(blank=True, default='', max_length=200)),
+                ('symphony_id', models.CharField(blank=True, default='', max_length=200)),
                 ('snapshot', models.CharField(blank=True, default='', max_length=1000, null=True)),
                 ('status', models.CharField(blank=True, default='', max_length=1000)),
                 ('location', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='locations.Location')),

@@ -27,7 +27,7 @@ from ..azure_settings.exceptions import SettingCustomVisionAccessFailed
 from ..azure_settings.models import Setting
 from ..azure_app_insight.utils import get_app_insight_logger
 
-from .kan_client import KanModelClient
+from .symphony_client import SymphonyModelClient
 from .exceptions import (
     ProjectAlreadyTraining,
     ProjectCannotChangeDemoError,
@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 ROOT = '/workspace'
 
-model_client = KanModelClient()
+model_client = SymphonyModelClient()
 
 
 class Project(models.Model):
@@ -91,7 +91,7 @@ class Project(models.Model):
     classification_type = models.CharField(
         max_length=1000, null=True, blank=True, default="")
     is_trained = models.BooleanField(default=False)
-    kan_id = models.CharField(max_length=2000, null=True, blank=True, default="")
+    symphony_id = models.CharField(max_length=2000, null=True, blank=True, default="")
     tag_list = models.CharField(max_length=1000, null=True, blank=True, default="")
 
     def __repr__(self):
@@ -161,7 +161,7 @@ class Project(models.Model):
             return False
 
     def get_properties(self):
-        prop = model_client.get_config_from_kan(self.kan_id)
+        prop = model_client.get_config_from_symphony(self.symphony_id)
         if prop:
             return yaml.dump(prop)
         else:
@@ -178,8 +178,8 @@ class Project(models.Model):
         instance = kwargs["instance"]
         update_fields = kwargs["update_fields"]
 
-        if not instance.kan_id:
-            instance.kan_id = 'model-' + str(uuid.uuid4())
+        if not instance.symphony_id:
+            instance.symphony_id = 'model-' + str(uuid.uuid4())
 
         # Pass if update relabel_only
         if update_fields == frozenset({"relabel_expired_time"}):
@@ -475,7 +475,7 @@ class Project(models.Model):
                 iteration_id = ""
                 tag_list = []
             model_client.set_attr({
-                "name": instance.kan_id,
+                "name": instance.symphony_id,
                 "endpoint": endpoint,
                 "display_name": instance.name,
                 "project_id": instance.customvision_id,
@@ -491,12 +491,12 @@ class Project(models.Model):
                 model_client.deploy_config()
             else:
                 # update
-                model_client.patch_config(name=instance.kan_id)
+                model_client.patch_config(name=instance.symphony_id)
 
     @staticmethod
     def post_delete(**kwargs):
         instance = kwargs["instance"]
-        model_client.remove_config(name=instance.kan_id)
+        model_client.remove_config(name=instance.symphony_id)
 
 
 class Task(models.Model):

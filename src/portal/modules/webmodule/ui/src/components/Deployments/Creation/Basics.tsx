@@ -32,7 +32,7 @@ const Basics = (props: Props) => {
   const deviceOptions: IDropdownOption[] = useMemo(
     () =>
       deviceList.map((device) => ({
-        key: device.kan_id,
+        key: device.symphony_id,
         text: device.name,
       })),
     [deviceList],
@@ -41,7 +41,7 @@ const Basics = (props: Props) => {
   const cameraOptions: IDropdownOption[] = useMemo(
     () =>
       belongCameraList.map((camera) => ({
-        key: camera.kan_id,
+        key: camera.symphony_id,
         text: camera.name,
       })),
     [belongCameraList],

@@ -1,5 +1,5 @@
 #!/bin/bash
-kan_version=0.41.44
+symphony_version=0.41.44
 agent_version=0.41.44
 kanportal_version=0.41.47-amd64
 kanai_version=0.41.47
@@ -21,7 +21,7 @@ while [ $current_step -lt 8 ]; do
                 fi
             ;;
             [Nn]* )
-                read -p "kan will install on current kubeconfig: (y/n) " -r; echo
+                read -p "symphony will install on current kubeconfig: (y/n) " -r; echo
                 case $REPLY in
                 [Yy]* )
                     create_aks_selection=2
@@ -366,17 +366,17 @@ while [ $current_step -lt 8 ]; do
     ;;
     5 )
         while true; do
-            echo "We need to use a KAN agent to capture camera thumbnails, which requires the use of ffmpeg. However, the default KAN agent Docker image does not include ffmpeg. Please choose:"
+            echo "We need to use a SYMPHONY agent to capture camera thumbnails, which requires the use of ffmpeg. However, the default SYMPHONY agent Docker image does not include ffmpeg. Please choose:"
             echo "1) Use the default agent without camera thumbnail feature."
-            echo "2) Use a community-contributed image from hbai/kan-agent:$agent_version that supports the thumbnail feature."
+            echo "2) Use a community-contributed image from hbai/symphony-agent:$agent_version that supports the thumbnail feature."
             read -p "Your Answer:" -r; echo
             case $REPLY in
                 1 )
-                    agent_image=kantest.azurecr.io/kan-agent
+                    agent_image=symphonytest.azurecr.io/symphony-agent
                     break
                 ;;
                 2 )
-                    agent_image=hbai/kan-agent
+                    agent_image=hbai/symphony-agent
                     break
                 ;;
                 *)                
@@ -485,7 +485,7 @@ while [ $current_step -lt 8 ]; do
  
                 if [ $create_sp_selection != "4" ]; then
                     echo "creating credential"
-                    new_cred=$(az ad sp credential reset --id $app_id --append --display-name kan --only-show-errors)
+                    new_cred=$(az ad sp credential reset --id $app_id --append --display-name symphony --only-show-errors)
                     echo $new_cred
                     sp_password=$(echo $new_cred | jq -r ".password")
                     sp_tenant=$(echo $new_cred | jq -r ".tenant")
@@ -523,7 +523,7 @@ while [ $current_step -lt 8 ]; do
 
                     sleep 5
 
-                    echo "assigning KANportal contributor role to subscription"
+                    echo "assigning Kanportal contributor role to subscription"
                     az role assignment create --role "kan contributor $subscriptionId" --assignee $app_id --scope /subscriptions/$(az account show --query "id" -o tsv)
 
                     echo "assigning reader role to subscription"
@@ -546,18 +546,18 @@ while [ $current_step -lt 8 ]; do
                 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
  
                 echo -e "\e[32mRemoving terminating CRDs\e[0m"
-                kubectl get target --no-headers=true | awk '{print $1}' | xargs kubectl patch target.fabric.kan -p '{"metadata":{"finalizers":null}}' --type=merge
-                kubectl get instance --no-headers=true | awk '{print $1}' | xargs kubectl patch instance.solution.kan -p '{"metadata":{"finalizers":null}}' --type=merge
+                kubectl get target --no-headers=true | awk '{print $1}' | xargs kubectl patch target.fabric.symphony -p '{"metadata":{"finalizers":null}}' --type=merge
+                kubectl get instance --no-headers=true | awk '{print $1}' | xargs kubectl patch instance.solution.symphony -p '{"metadata":{"finalizers":null}}' --type=merge
 
-                echo -e "\e[32mInstalling kan\e[0m"
+                echo -e "\e[32mInstalling symphony\e[0m"
                 if [ $create_custom_vision_selection == 3 ]; then
-                    helm upgrade -n default --install kan oci://kantest.azurecr.io/helm/kan --set ENABLE_APP_INSIGHT=$enable_app_insight --version $kan_version --wait
+                    helm upgrade -n default --install symphony oci://symphonytest.azurecr.io/helm/symphony --set ENABLE_APP_INSIGHT=$enable_app_insight --version $symphony_version --wait
                 else
-                    helm upgrade -n default --install kan oci://kantest.azurecr.io/helm/kan --set ENABLE_APP_INSIGHT=$enable_app_insight --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version $kan_version --wait
+                    helm upgrade -n default --install symphony oci://symphonytest.azurecr.io/helm/symphony --set ENABLE_APP_INSIGHT=$enable_app_insight --set CUSTOM_VISION_KEY=$(az cognitiveservices account keys list -n $selected_custom_vision_name -g $selected_custom_vision_rg | jq -r ".key1") --version $symphony_version --wait
                 fi
  
                 if [ $? != "0" ]; then
-                    echo -e "\e[31mWe faced some issues while pull kan from container registry. Please try the installer again a few minutes later\e[0m"
+                    echo -e "\e[31mWe faced some issues while pull symphony from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
                 echo -e "\e[32mInstalling Portal\e[0m"
 
@@ -582,19 +582,19 @@ while [ $current_step -lt 8 ]; do
                     sleep 3                
                 done
 
-                # wait for KAN service ready
+                # wait for SYMPHONY service ready
                 while true; do
-                    kanIp=$(kubectl get svc -n kan-k8s-system kan-service-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-                    if [[ $kanIp != "" ]]; then
+                    symphonyIp=$(kubectl get svc -n symphony-k8s-system symphony-service-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+                    if [[ $symphonyIp != "" ]]; then
                         break
                     fi
                     sleep 3                
                 done
 
-                helm upgrade -n default --install kanportal oci://kantest.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kantest.azurecr.io/kanportal --set kanAgentImage=$agent_image --set kanAgentVersion=$agent_version --set kanaiVersion=$kanai_version --set kanportal.portalIp=$portalIp --set kanportal.kanIp=$kanIp
+                helm upgrade -n default --install kanportal oci://kantest.azurecr.io/helm/kanportal --version $kanportal_version $values --set image.image=kantest.azurecr.io/kanportal --set symphonyAgentImage=$agent_image --set symphonyAgentVersion=$agent_version --set kanaiVersion=$kanai_version --set kanportal.portalIp=$portalIp --set kanportal.symphonyIp=$symphonyIp
 
                 if [ $? != "0" ]; then
-                    echo -e "\e[31mWe faced some issues while pull KANportal from container registry. Please try the installer again a few minutes later\e[0m"
+                    echo -e "\e[31mWe faced some issues while pull Kanportal from container registry. Please try the installer again a few minutes later\e[0m"
                 fi
 
                 current_step=`expr $current_step + 1`

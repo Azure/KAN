@@ -30,11 +30,11 @@ from .exceptions import (
     SettingCustomVisionCannotCreateProject,
 )
 
-from ..general.kan_client import KanClient
+from ..general.symphony_client import SymphonyClient
 
 logger = logging.getLogger(__name__)
 
-kan_client = KanClient()
+symphony_client = SymphonyClient()
 
 
 class Setting(models.Model):
@@ -152,25 +152,28 @@ class Setting(models.Model):
         # re-login
         if instance.tenant_id and instance.client_id and instance.client_secret:
             logger.warning("re-login")
-            res = subprocess.check_output(['az', 'login', '--service-principal', '-u',
-                                          instance.client_id, f'-p={instance.client_secret}', '--tenant', instance.tenant_id])
-            logger.warning(res.decode('utf8'))
+            try:
+                res = subprocess.check_output(['az', 'login', '--service-principal', '-u',
+                                            instance.client_id, f'-p={instance.client_secret}', '--tenant', instance.tenant_id])
+                logger.warning(res.decode('utf8'))
+            except Exception as e:
+                logger.warning(e)
 
         # update cognitive service credential
         if instance.training_key:
 
-            service_api = kan_client.get_service_client()
+            service_api = symphony_client.get_service_client()
             res = service_api.read_namespaced_service(
-                name='kan-service-ext', namespace='kan-k8s-system')
-            kan_ip = res.status.load_balancer.ingress[0].ip
-            conifg_url = "http://" + kan_ip + ":8080/v1alpha2/agent/config"
+                name='symphony-service-ext', namespace='symphony-k8s-system')
+            symphony_ip = res.status.load_balancer.ingress[0].ip
+            conifg_url = "http://" + symphony_ip + ":8080/v1alpha2/agent/config"
             payload = {
                 "type": "providers.reference.customvision",
                 "config": {
                     "key": instance.training_key
                 }
             }
-            logger.warning(f"Post training_key to kan url: {conifg_url}")
+            logger.warning(f"Post training_key to symphony url: {conifg_url}")
             res = requests.post(conifg_url, json=payload)
             if res.status_code == 200:
                 logger.warning("Update taining key successfully")

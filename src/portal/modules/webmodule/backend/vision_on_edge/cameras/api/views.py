@@ -19,13 +19,13 @@ from rest_framework.exceptions import ValidationError
 from ..models import Camera
 from ..utils import verify_rtsp
 from ...locations.models import Location
-from ..kan_client import KanDeviceClient
+from ..symphony_client import SymphonyDeviceClient
 from .serializers import CameraSerializer
 from ...general.shortcuts import drf_get_object_or_404
 
 logger = logging.getLogger(__name__)
 
-device_client = KanDeviceClient()
+device_client = SymphonyDeviceClient()
 
 
 # pylint: disable=too-many-ancestors
@@ -48,7 +48,7 @@ class CameraViewSet(FiltersMixin, viewsets.ModelViewSet):
     #     queryset = Camera.objects.all()
     #     for camera_obj in queryset:
     #         camera_obj.snapshot = camera_obj.get_snapshot_url()
-    #         camera_obj.skip_signals = True  # only update column, skip kan api
+    #         camera_obj.skip_signals = True  # only update column, skip symphony api
     #         camera_obj.save()
     #     return queryset
 
@@ -61,8 +61,8 @@ class CameraViewSet(FiltersMixin, viewsets.ModelViewSet):
             raise ValidationError("Not providing ids data")
         # this would not trigger pre/post delete, get instance and delete if needed
         # Camera.objects.filter(id__in=ids).all().delete()
-        for kan_id in ids:
-            device_client.remove_config(name=kan_id)
+        for symphony_id in ids:
+            device_client.remove_config(name=symphony_id)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=True, methods=["get"], url_path="update_status")
@@ -70,7 +70,7 @@ class CameraViewSet(FiltersMixin, viewsets.ModelViewSet):
         queryset = self.get_queryset()
         camera_obj = drf_get_object_or_404(queryset, pk=pk)
         camera_obj.status = camera_obj.get_status()
-        camera_obj.skip_signals = True  # only update column, skip kan api
+        camera_obj.skip_signals = True  # only update column, skip symphony api
         camera_obj.save()
 
         serializer = CameraSerializer(camera_obj)
@@ -82,41 +82,41 @@ class CameraViewSet(FiltersMixin, viewsets.ModelViewSet):
     @action(detail=False, methods=["get"], url_path="get_properties")
     def get_properties(self, request, pk=None):
 
-        kan_id = request.query_params.get("kan_id")
+        symphony_id = request.query_params.get("symphony_id")
 
-        logger.warning(f"Retrieving device [{kan_id}] config.")
+        logger.warning(f"Retrieving device [{symphony_id}] config.")
 
-        return Response(yaml.dump(device_client.get_config_from_kan(kan_id)))
+        return Response(yaml.dump(device_client.get_config_from_symphony(symphony_id)))
 
-    @action(detail=False, methods=["get"], url_path="get_kan_objects")
-    def get_kan_objects(self, request):
+    @action(detail=False, methods=["get"], url_path="get_symphony_objects")
+    def get_symphony_objects(self, request):
 
-        kan_id = request.query_params.get("kan_id")
+        symphony_id = request.query_params.get("symphony_id")
         logger.warning(f"Retrieving all devices config.")
         return Response(device_client.get_objects())
 
-    @action(detail=False, methods=["get"], url_path="get_kan_object")
-    def get_kan_object(self, request):
+    @action(detail=False, methods=["get"], url_path="get_symphony_object")
+    def get_symphony_object(self, request):
 
-        kan_id = request.query_params.get("kan_id")
+        symphony_id = request.query_params.get("symphony_id")
 
-        if kan_id:
-            logger.warning(f"Retrieving device [{kan_id}] config.")
-            device = device_client.get_object(kan_id)
+        if symphony_id:
+            logger.warning(f"Retrieving device [{symphony_id}] config.")
+            device = device_client.get_object(symphony_id)
             if device:
                 device["is_live"] = verify_rtsp(rtsp=device["rtsp"])
 
             return Response(device)
         else:
-            raise ValidationError("Not providing kan_id")
+            raise ValidationError("Not providing symphony_id")
 
-    @action(detail=False, methods=["post"], url_path="create_kan_object")
-    def create_kan_object(self, request):
+    @action(detail=False, methods=["post"], url_path="create_symphony_object")
+    def create_symphony_object(self, request):
 
-        kan_id = 'device-' + str(uuid.uuid4())
+        symphony_id = 'device-' + str(uuid.uuid4())
 
         device_client.set_attr({
-            "name": kan_id,
+            "name": symphony_id,
             "rtsp": request.data.get("rtsp", ""),
             "username": request.data.get("username", ""),
             "password": request.data.get("password", ""),
@@ -127,12 +127,12 @@ class CameraViewSet(FiltersMixin, viewsets.ModelViewSet):
         })
 
         device_client.deploy_config()
-        return Response(device_client.get_object(kan_id))
+        return Response(device_client.get_object(symphony_id))
 
-    @action(detail=False, methods=["patch"], url_path="update_kan_object")
-    def update_kan_object(self, request):
+    @action(detail=False, methods=["patch"], url_path="update_symphony_object")
+    def update_symphony_object(self, request):
 
-        kan_id = request.query_params.get("kan_id")
+        symphony_id = request.query_params.get("symphony_id")
         # location_obj = Location.objects.get(name=request.data.get("location"))
         device_client.set_attr({
             "username": request.data.get("username", ""),
@@ -142,13 +142,13 @@ class CameraViewSet(FiltersMixin, viewsets.ModelViewSet):
             "tag_list": request.data.get("tag_list", "[]"),
         })
 
-        device_client.patch_config(name=kan_id)
-        return Response(device_client.get_object(kan_id))
+        device_client.patch_config(name=symphony_id)
+        return Response(device_client.get_object(symphony_id))
 
-    @action(detail=False, methods=["delete"], url_path="delete_kan_object")
-    def delete_kan_object(self, request):
+    @action(detail=False, methods=["delete"], url_path="delete_symphony_object")
+    def delete_symphony_object(self, request):
 
-        kan_id = request.query_params.get("kan_id")
+        symphony_id = request.query_params.get("symphony_id")
 
-        device_client.remove_config(name=kan_id)
+        device_client.remove_config(name=symphony_id)
         return Response(status=status.HTTP_204_NO_CONTENT)

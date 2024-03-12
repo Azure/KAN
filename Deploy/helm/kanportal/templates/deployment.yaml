@@ -38,8 +38,8 @@ spec:
             value: "true"
           - name: PORTAL_IP
             value: {{.Values.kanportal.portalIp}}
-          - name: KAN_IP
-            value: {{.Values.kanportal.kanIp}}
+          - name: SYMPHONY_IP
+            value: {{.Values.kanportal.symphonyIp}}
 ---
 apiVersion: apps/v1
 kind: Deployment

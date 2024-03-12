@@ -1,6 +1,6 @@
 # AI models
 
-```model.ai.kan``` represents an AI model. It has a simple and open schema to accomodate AI model descriptions from different platforms and AI frameworks.
+```model.ai.symphony``` represents an AI model. It has a simple and open schema to accomodate AI model descriptions from different platforms and AI frameworks.
 
 ## Schema
 

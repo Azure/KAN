@@ -40,7 +40,7 @@ class CameraSerializer(serializers.ModelSerializer):
             "tag_list",
             "snapshot",
             "is_live",
-            "kan_id",
+            "symphony_id",
             "status",
         ]
         extra_kwargs = {"media_source": {"write_only": True, "required": False}}

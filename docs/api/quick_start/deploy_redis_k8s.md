@@ -1,26 +1,26 @@
-# KAN API Quick Start: Deploying a Redis server to a Kubernetes cluster
+# SYMPHONY API Quick Start: Deploying a Redis server to a Kubernetes cluster
 
-Ready to jump into actions right away? This quick start walks you through the steps of setting up a new KAN API control plane on your Kubernetes cluster and deploying a new KAN API solution instance to the cluster.
+Ready to jump into actions right away? This quick start walks you through the steps of setting up a new SYMPHONY API control plane on your Kubernetes cluster and deploying a new SYMPHONY API solution instance to the cluster.
 
 > **NOTE**: The following steps are tested under a Ubuntu 20.04.4 TLS WSL system on Windows 11. However, they should work for Linux, Windows, and MacOS systems as well.
 
 ## 0. Prerequisites
 
-* [Helm 3](https://helm.sh/): Required to deploy KAN API.
+* [Helm 3](https://helm.sh/): Required to deploy SYMPHONY API.
 * [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/): Configured with the Kubernetes cluster you want to use as the default context. Note that if you use cloud shell, kubectl is already configured.
 * [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/)
 
-## 1. Deploy KAN API using Helm
+## 1. Deploy SYMPHONY API using Helm
 
-The easiest way to install KAN API is to use Helm:
+The easiest way to install SYMPHONY API is to use Helm:
 
   ```bash
-  helm install kan oci://kanprod.azurecr.io/helm/kan --version 0.41.40
+  helm install symphony oci://kanprod.azurecr.io/helm/symphony --version 0.41.40
   ```
 
-## 2. Register the current cluster as a KAN API Target
+## 2. Register the current cluster as a SYMPHONY API Target
 
-To create a new YAML file that describes a KAN API Target, use the following to submit the file:
+To create a new YAML file that describes a SYMPHONY API Target, use the following to submit the file:
 
   ```kubectl create -f <filename>```
 
@@ -30,7 +30,7 @@ Use the following to apply any changes:
 
 
 ```yaml
-apiVersion: fabric.kan/v1
+apiVersion: fabric.symphony/v1
 kind: Target
 metadata:
   name: basic-k8s-target
@@ -44,11 +44,11 @@ spec:
         inCluster: "true"    
 ```
 
-> **NOTE**: The above sample doesn't deploy a **KAN Agent**, which is optional. 
+> **NOTE**: The above sample doesn't deploy a **SYMPHONY Agent**, which is optional. 
 
-## 3. Create the KAN API Solution
+## 3. Create the SYMPHONY API Solution
 
-The following YAMl file describes a KAN API Solution with a single Redis server component. Use the following to submit the file:
+The following YAMl file describes a SYMPHONY API Solution with a single Redis server component. Use the following to submit the file:
 
   ```kubectl create -f <filename>```
 
@@ -57,7 +57,7 @@ Use the following to apply any changes:
   ```kubectl apply -f <filename> ```
 
 ```yaml
-apiVersion: solution.kan/v1
+apiVersion: solution.symphony/v1
 kind: Solution
 metadata: 
   name: redis-server
@@ -79,9 +79,9 @@ spec:
 > [!NOTE]
 > This solution uses the default deployment strategy, which is to deploy all component containers in the solution into a same pod. 
 
-## 4. Create the KAN API Solution Instance
+## 4. Create the SYMPHONY API Solution Instance
 
-A KAN API Solution Instance maps a KAN API Solution to one or multiple Targets. Use the following to submit the file:
+A SYMPHONY API Solution Instance maps a SYMPHONY API Solution to one or multiple Targets. Use the following to submit the file:
 
   ```kubectl create -f <filename>```
 
@@ -92,7 +92,7 @@ Use the following to apply any changes:
 The following artifacts maps the ```redis-server``` soltuion to the ```k8s-target``` target above:
 
 ```yaml
-apiVersion: solution.kan/v1
+apiVersion: solution.symphony/v1
 kind: Instance
 metadata:
   name: redis-instance
@@ -105,7 +105,7 @@ spec:
 
 ## 5. Verification
 
-To examine all the KAN API objects you've created, use:
+To examine all the SYMPHONY API objects you've created, use:
 
 ```bash
 kubectl get targets
@@ -127,25 +127,25 @@ kubectl get all -n basic-k8s
 ```
 Notice that a ```redis-instance``` pod and a ```redis-instance``` service have been created. By default, the service is created as a ClusterIP service, which is accessible only by pods on the same cluster. You can change the service type by modifying the ```service.type``` metadata. 
 
-## 6. Clean up KAN API objects
+## 6. Clean up SYMPHONY API objects
 
-To delete all KAN API objects, use:
+To delete all SYMPHONY API objects, use:
 
 ```bash
 kubectl delete instance redis-instance
 kubectl delete solution redis-server
 kubectl delete target basic-k8s-target
-kubectl delete ns basic-k8s #KAN API doesn't remove namespaces
+kubectl delete ns basic-k8s #SYMPHONY API doesn't remove namespaces
 ```
 
-## 7. To remove KAN API control plane (optional)
+## 7. To remove SYMPHONY API control plane (optional)
 
-To remove KAN API control plane, use:
+To remove SYMPHONY API control plane, use:
 
   ```bash
-  helm delete kan
+  helm delete symphony
   ```
 
 # Next step
 
-* [KAN API Quickstart: Deploying a simulated temperature sensor solution to an Azure IoT Edge device](./deploy_solution_to_azure_iot_edge.md)
+* [SYMPHONY API Quickstart: Deploying a simulated temperature sensor solution to an Azure IoT Edge device](./deploy_solution_to_azure_iot_edge.md)

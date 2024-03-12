@@ -4,21 +4,22 @@
 import logging
 import json
 
-from ..general.kan_client import KanClient
+from ..general.symphony_client import SymphonyClient
 from ..general.utils import AzureBlobClient
 
 
 logger = logging.getLogger(__name__)
 
 
-class KanDeviceClient(KanClient):
+class SymphonyDeviceClient(SymphonyClient):
     blob_client = None
 
     def __init__(self):
         super().__init__()
         self.blob_client = AzureBlobClient()
-        self.group = "fabric.kan"
+        self.group = "fabric.symphony"
         self.plural = "devices"
+        self.symphony_api_url = "http://" + self.symphony_ip + ":8080/v1alpha2/devices"
 
     def get_config(self):
 
@@ -37,20 +38,20 @@ class KanDeviceClient(KanClient):
         if tag_list:
             for tag in json.loads(tag_list):
                 labels[tag["name"]] = tag["value"]
-
+        
         config_json = {
-            "apiVersion": "fabric.kan/v1",
+            "apiVersion": "fabric.symphony/v1",
             "kind": "Device",
             "metadata": {
                 "name": name,
-                "labels": labels
+                "labels": labels                
             },
             "spec": {
                 "properties": {
                     "ip": rtsp,
                     "user": username,
                     "password": password,
-                    "location": location
+                    "location": location                    
                 },
                 "displayName": display_name
             },
@@ -70,7 +71,7 @@ class KanDeviceClient(KanClient):
         logger.warning(f"setting camera tags: {tag_list}")
         if tag_list:
             for tag in json.loads(tag_list):
-                labels[tag["name"]] = tag["value"]
+                labels[tag["name"]] = tag["value"]        
 
         patch_config = [
             {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
@@ -86,7 +87,7 @@ class KanDeviceClient(KanClient):
 
         if api:
             device = api.get_namespaced_custom_object(
-                group="fabric.kan",
+                group="fabric.symphony",
                 version="v1",
                 namespace="default",
                 plural="devices",
@@ -108,7 +109,7 @@ class KanDeviceClient(KanClient):
 
         if api:
             device = api.get_namespaced_custom_object(
-                group="fabric.kan",
+                group="fabric.symphony",
                 version="v1",
                 namespace="default",
                 plural="devices",
@@ -122,7 +123,7 @@ class KanDeviceClient(KanClient):
         else:
             return ""
 
-    def load_kan_objects(self):
+    def load_symphony_objects(self):
         from .models import Camera
         from ..azure_settings.models import Setting
         from ..locations.models import Location
@@ -130,7 +131,7 @@ class KanDeviceClient(KanClient):
         api = self.get_client()
         if api:
             res = api.list_namespaced_custom_object(
-                group="fabric.kan",
+                group="fabric.symphony",
                 version="v1",
                 namespace="default",
                 plural="devices"
@@ -139,7 +140,7 @@ class KanDeviceClient(KanClient):
 
             for device in devices:
                 name = device['spec']['displayName']
-                kan_id = device['metadata']['name']
+                symphony_id = device['metadata']['name']
                 rtsp = device['spec']['properties'].get('ip', "")
                 username = device['spec']['properties'].get('user', "")
                 password = device['spec']['properties'].get('password', "")
@@ -170,21 +171,21 @@ class KanDeviceClient(KanClient):
                         "lines": "",
                         "location": location_obj,
                         "allowed_devices": allowed_devices,
-                        "kan_id": kan_id,
+                        "symphony_id": symphony_id,
                         "tag_list": tag_list,
                     },
                 )
                 logger.info("Camera: %s %s.", cam_obj,
                             "created" if created else "updated")
         else:
-            logger.warning("Not loading kan devices")
+            logger.warning("Not loading symphony devices")
 
     def process_data(self, device, multi):
 
         from ..locations.models import Location
 
         name = device['spec']['displayName']
-        kan_id = device['metadata']['name']
+        symphony_id = device['metadata']['name']
         rtsp = device['spec']['properties'].get('ip', "")
         username = device['spec']['properties'].get('user', "")
         password = device['spec']['properties'].get('password', "")
@@ -209,7 +210,7 @@ class KanDeviceClient(KanClient):
         except KeyError:
             snapshot_url = ""
         if snapshot_url:
-            blob_sas = self.blob_client.generate_sas_token(kan_id+'-snapshot.jpg')
+            blob_sas = self.blob_client.generate_sas_token(symphony_id+'-snapshot.jpg')
             blob_url = f"{snapshot_url}?{blob_sas}"
         else:
             blob_url = ""
@@ -223,14 +224,14 @@ class KanDeviceClient(KanClient):
             "lines": "",
             "location": location_obj.name,
             "allowed_devices": allowed_devices,
-            "kan_id": kan_id,
+            "symphony_id": symphony_id,
             "tag_list": tag_list,
             "snapshot": blob_url
         }
 
         if not multi:
             status = device.get("status", "")
-            if status:
+            if status and 'properties' in status:
                 processed_status = self.process_status(status['properties'])
             else:
                 processed_status = ""
@@ -239,10 +240,10 @@ class KanDeviceClient(KanClient):
         return res
 
     def process_status(self, status):
-        from ..compute_devices.kan_client import KanTargetClient
-        target_client = KanTargetClient()
+        from ..compute_devices.symphony_client import SymphonyTargetClient
+        target_client = SymphonyTargetClient()
 
-        compute_device_table = {i["kan_id"]: i["name"]
+        compute_device_table = {i["symphony_id"]: i["name"]
                                 for i in target_client.get_objects()}
 
         status_table = {}
@@ -254,7 +255,6 @@ class KanDeviceClient(KanClient):
                     status_table[compute_device_table[compute_device]] = "connected"
                 else:
                     if compute_device not in status_table.keys():
-                        status_table[compute_device_table[compute_device]
-                                     ] = "disconnected"
+                        status_table[compute_device_table[compute_device]] = "disconnected"
 
         return json.dumps(status_table)

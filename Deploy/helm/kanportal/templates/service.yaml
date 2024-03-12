@@ -5,7 +5,7 @@ metadata:
   labels:
     app: kanportal
 spec:
-  type: ClusterIP
+  type: {{.Values.service.type}}
   ports:
     - port: 8000
       targetPort: 8000

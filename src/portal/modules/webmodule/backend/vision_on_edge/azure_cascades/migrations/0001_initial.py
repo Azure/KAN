@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('raw_data', models.CharField(blank=True, default='', max_length=1000000, null=True)),
                 ('screenshot', models.CharField(blank=True, default='', max_length=1000000, null=True)),
                 ('tag_list', models.CharField(blank=True, default='', max_length=1000, null=True)),
-                ('kan_id', models.CharField(blank=True, default='', max_length=200, null=True)),
+                ('symphony_id', models.CharField(blank=True, default='', max_length=200, null=True)),
                 ('fps', models.CharField(blank=True, default='', max_length=200, null=True)),
                 ('acceleration', models.CharField(blank=True, default='', max_length=200, null=True)),
             ],

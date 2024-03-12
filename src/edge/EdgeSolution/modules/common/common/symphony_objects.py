@@ -3,15 +3,15 @@
 
 from platform import node
 from pydantic import BaseModel, Field, Extra
-from typing import List
+from typing import List, Optional, Dict
 try:
     from typing import Literal
 except:
     from typing_extensions import Literal
 
-from common.kan_params import crd_params
+from common.symphony_params import crd_params
 
-from common.kan_skill import Node, Edge
+from common.symphony_skill import Node, Edge
 
 ############
 # Skilli   #
@@ -20,14 +20,16 @@ from common.kan_skill import Node, Edge
 class SkillSpec(BaseModel):
     #models: List['SkillModel']
     displayName: str
+    parameters: dict
     nodes: List[Node]
     edges: List[Edge]
+    properties: Optional[Dict] = None
 
 #class SkillModel(BaseModel):
 #    properties: 'SkillModelProperties'
 
 #class SkillModelProperties(BaseModel):
-#    cascade: str #FIXME should be CascadeConfig, need kan change crd def
+#    cascade: str #FIXME should be CascadeConfig, need symphony change crd def
 
 #SkillModel.update_forward_refs()
 #SkillSpec.update_forward_refs()
@@ -54,7 +56,7 @@ class SolutionComponentProperties(BaseModel):
     container_create_options: str = Field('',      alias='container.createOptions')
     container_restart_policy: str = Field('always', alias='container.restartPolicy')
     env_ai_skills           : str = Field(...,  alias='env.AISKILLS')
-    env_instance            : str = Field('$instance()', alias='env.INSTANCE')
+    env_instance            : str = Field('${{$instance()}}', alias='env.INSTANCE')    
 
 
 
@@ -70,11 +72,18 @@ SolutionSpec.update_forward_refs()
 # Instance #
 ############
 
+class Pipeline(BaseModel):
+    name: str
+    skill: str
+    parameters: dict
 
 class InstanceSpec(BaseModel):
     parameters: dict
+    scope: str
+    displayName: str
     solution: str
     target: 'InstanceTarget'
+    pipelines: List['Pipeline']
 
 class InstanceTarget(BaseModel):
     name: str
@@ -101,7 +110,7 @@ class ModelProperties(BaseModel):
     # ...
     # extra: model.version.n
     tags: str
-    state: str #FIXME trained?
+    state: str #FIXME trained?    
 
 class CustomVisionModelPropeties(ModelProperties):
     model_type    : Literal['customvision'] = Field('customvision', alias='model.type')
@@ -127,5 +136,5 @@ class ModelExport(BaseModel):
 
 
 class ModelExports(BaseModel):
-    __root__: List[ModelExport]
+    root: List[ModelExport]
 

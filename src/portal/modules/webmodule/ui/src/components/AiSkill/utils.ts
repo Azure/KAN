@@ -199,7 +199,7 @@ const parseNodePayload = (node: Node<SkillNodeData>) => {
     return {
       id: node.id,
       type: node.type,
-      name: model.kan_id ? model.kan_id : model.name,
+      name: model.symphony_id ? model.symphony_id : model.name,
       configurations: {
         confidence_upper: configurations.confidence_upper.toString(),
         confidence_lower: configurations.confidence_lower.toString(),
@@ -367,7 +367,7 @@ export const recoverRawElements = (
 
   const originalNodeList = flowData.nodes.reduce((accNodes, node) => {
     const matchedModel = modelList.find((model) =>
-      node.type === 'model' ? model.kan_id === node.name : model.name === node.name,
+      node.type === 'model' ? model.symphony_id === node.name : model.name === node.name,
     );
 
     const data: SkillNodeData = {
@@ -377,7 +377,7 @@ export const recoverRawElements = (
       ),
       isEditDone: true,
       nodeType: node.type,
-      model: pick(['id', 'name', 'inputs', 'outputs', 'kan_id'] as (keyof TrainingProject)[], matchedModel),
+      model: pick(['id', 'name', 'inputs', 'outputs', 'symphony_id'] as (keyof TrainingProject)[], matchedModel),
     };
 
     if (node.type === 'source') {

@@ -1,6 +1,6 @@
-# KAN API Quickstart
+# SYMPHONY API Quickstart
 
-KAN API is designed with flexibility in mind. Depending on your hosting needs, there are numerous ways to get started with KAN API. Regardless of which route you take, you can always fully customize your environment as your project requirements change.
+SYMPHONY API is designed with flexibility in mind. Depending on your hosting needs, there are numerous ways to get started with SYMPHONY API. Regardless of which route you take, you can always fully customize your environment as your project requirements change.
 
 This article offers quickstarts you can choose from. Select the appropriate link that is closest to your projects needs from the table below.  
 

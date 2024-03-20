@@ -50,5 +50,5 @@ export const clusterOptions: IChoiceGroupOption[] = [
 ];
 
 export const k8sAccelerationOptions = accelerationOptions.filter((option) =>
-  ['-', 'Nvidia dGPU', 'CPU'].includes(option.key as string),
+  ['-', 'Nvidia dGPU', 'CPU', 'Cloud'].includes(option.key as string),
 );

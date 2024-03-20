@@ -124,9 +124,6 @@ class ObjectDetectionModel(Model):
                             self.last_relabel = time.time()
                             upload_relabel_image(self.symphony_name, img, [obj], self.max_images)
                        
-
-
-
 #class Classification(BaseModel):
 #    name: str
 #    label: str
@@ -135,7 +132,6 @@ class ObjectDetectionModel(Model):
 
 #class ClassificationModelResult(BaseModel):
 #    classifications: List[Classification]
-
 
 class ClassificationModel(Model):
 
@@ -180,3 +176,51 @@ class ClassificationModel(Model):
                         confidence=classification.confidence
                     )
                 )   
+
+class GPT4Model(Model):
+
+    def __init__(self, model, symphony_name, provider, confidence_lower=None, confidence_upper=None, max_images=None):
+        super().__init__()
+        self.model = model
+
+        self.confidence_lower = confidence_lower
+        self.confidence_upper = confidence_upper
+        self.max_images = max_images
+        self.symphony_name = symphony_name
+        self.provider = provider
+
+        self.is_relabel = False
+        if (self.confidence_lower is not None) and \
+            (self.confidence_upper is not None) and \
+            (self.max_images is not None):
+            self.is_relabel = True
+            self.confidence_lower = float(self.confidence_lower) / 100
+            self.confidence_upper = float(self.confidence_upper) / 100
+            self.max_images = int(self.max_images)
+        
+        self.last_relabel = -1
+        self.relabel_count = 0
+    def process(self, frame):
+        img = frame.image.image_pointer
+        width = frame.image.properties.width
+        height = frame.image.properties.height
+
+
+        x1 = max(0, 0.1)
+        y1 = max(0, 0.1)
+        x2 = min(1, 0.1 + 0.2)
+        y2 = min(1, 0.1 + 0.3)
+
+        n_bbox = Bbox(
+            l=x1,
+            t=y1,
+            w=x2-x1,
+            h=y2-y1,
+        )
+            
+        object_meta = ObjectMeta(timestamp=0, inference_id='0', label='aggressive', bbox=n_bbox, confidence=0.5, attributes=[])
+        frame.insights_meta.objects_meta.append(object_meta)
+
+      
+    
+       

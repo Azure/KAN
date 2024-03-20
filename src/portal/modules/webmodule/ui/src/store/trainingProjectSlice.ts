@@ -22,7 +22,8 @@ import {
 } from './types';
 import { getModleZooDisplayName } from './utils';
 import {
-  customViisionModelAcceleration,
+  customVisionModelAcceleration,
+  openAiModelAcceleration,
   openVinoModelAcceleration,
   Acceleration,
 } from '../components/constant';
@@ -30,10 +31,10 @@ import rootRquest from './rootRquest';
 
 export type Params = { confidence_threshold: string; filter_label_id: string };
 
-export type NodeType = 'source' | 'openvino_model' | 'openvino_library' | 'sink' | 'customvision_model';
+export type NodeType = 'source' | 'openvino_model' | 'openvino_library' | 'sink' | 'customvision_model' | 'openai';
 // type TrainingProjectCategory = 'customvision' | 'openvino';
 export type MetadataType = 'image' | 'bounding_box' | 'classification' | 'regression';
-export type ProjectType = 'ObjectDetection' | 'Classification';
+export type ProjectType = 'ObjectDetection' | 'Classification' | 'GPT4';
 export type ClassificationType = '' | 'Multiclass' | 'Multilabel';
 
 export type Metadata = {
@@ -101,13 +102,17 @@ const normalize = (e): TrainingProject => ({
   is_trained: e.is_trained,
   symphony_id: e.symphony_id,
   accelerationList: (e.category === 'customvision'
-    ? customViisionModelAcceleration
-    : openVinoModelAcceleration) as Acceleration[],
+    ? customVisionModelAcceleration
+    : e.project_type === 'GPT4'
+      ? openAiModelAcceleration 
+      : openVinoModelAcceleration) as Acceleration[],
   tag_list: getArrayObject(e.tag_list),
 
   // Display
   displayName: getModelDisplayName(e.name, e.node_type as ModelNodeType),
-  displayType: e.project_type === 'ObjectDetection' ? 'Object Detection' : 'Classification',
+  displayType: e.project_type === 'ObjectDetection' ? 'Object Detection' : 
+             (e.project_type === 'Classification' ? 'Classification' :
+             (e.project_type === 'GPT4' ? 'GPT-4' : 'Unknown')),
   trainStatus: e.is_trained ? 'Trained' : 'Untrained',
 });
 

@@ -7,7 +7,7 @@ from common.voe_cascade_config import CascadeConfig
 from sources import RtspSource
 from transforms import FilterTransform, GrpcTransform
 from exports import VideoSnippetExport, IothubExport, MqttExport, IotedgeExport, Cv2ImshowExport, HttpExport
-from models import FakeModel, ObjectDetectionModel, ClassificationModel
+from models import FakeModel, ObjectDetectionModel, ClassificationModel, GPT4Model
 
 
 supported_sources = {
@@ -31,8 +31,8 @@ supported_exports = {
 supported_models = {
     'fake_model': FakeModel,
     'object_detection_model': ObjectDetectionModel,
-    'classification_model': ClassificationModel
-    
+    'classification_model': ClassificationModel,
+    'gpt4_model': GPT4Model
 }
 
 class Stream:

@@ -116,6 +116,8 @@ def process_skill(skill, skill_name, instance_name):
                 node_name = 'object_detection_model'
             elif model_type == 'Classification':
                 node_name = 'classification_model'
+            elif model_type == 'GPT4':
+                node_name = 'gpt4_model'
 
             if skill_node.configurations is not None:
                 configurations = skill_node.configurations.copy()

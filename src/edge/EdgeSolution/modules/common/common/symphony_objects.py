@@ -121,7 +121,7 @@ class CustomVisionModelPropeties(ModelProperties):
 
 class ModelZooModelProperties(ModelProperties):
     model_type : str = Field('modelzoo', alias='model.type')
-    model_subtype : Literal['intel.ObjectDetection', 'intel.Classification']
+    model_subtype : Literal['intel.ObjectDetection', 'intel.Classification', 'openai.GPT4']
 
 
 

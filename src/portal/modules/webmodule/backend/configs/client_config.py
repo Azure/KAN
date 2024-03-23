@@ -18,7 +18,8 @@ from config import (
     CLIENT_ID,
     CLIENT_SECRET,
     ENDPOINT,
-    TRAINING_KEY
+    TRAINING_KEY,
+    OPENAI_API_KEY
 )
 
 
@@ -36,3 +37,6 @@ CLIENT_ID = os.environ.get("CLIENT_ID", CLIENT_ID)
 CLIENT_SECRET = os.environ.get("CLIENT_SECRET", CLIENT_SECRET)
 TRAINING_KEY = os.environ.get("TRAINING_KEY", TRAINING_KEY)
 ENDPOINT = os.environ.get("ENDPOINT", ENDPOINT)
+
+# Open AI
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", OPENAI_API_KEY)

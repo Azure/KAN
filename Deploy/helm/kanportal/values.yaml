@@ -27,3 +27,5 @@ kanaiVersion: "0.45.2"
 service:
   type: ClusterIP
   ingress: "nginx"
+openai:
+  apiKey: ""

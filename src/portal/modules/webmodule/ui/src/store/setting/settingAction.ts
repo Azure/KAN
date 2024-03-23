@@ -109,6 +109,7 @@ export const thunkGetSetting =
               client_id: data[0].client_id,
               client_secret: data[0].client_secret,
               storage_resource_group: data[0].storage_resource_group,
+              openai_api_key: data[0].openai_api_key
             }),
           );
         }
@@ -158,6 +159,7 @@ export const thunkGetSettingAndAppInsightKey =
                 client_id: settingsData[0].client_id,
                 client_secret: settingsData[0].client_secret,
                 storage_resource_group: settingsData[0].storage_resource_group,
+                openai_api_key: settingsData[0].openai_api_key
               }),
             );
           } else {
@@ -264,6 +266,7 @@ export const thunkPostSetting =
             client_id: data[0].client_id,
             client_secret: data[0].client_secret,
             storage_resource_group: data[0].storage_resource_group,
+            openai_api_key: data[0].openai_api_key
           }),
         );
         dispatch(thunkGetAllCvProjects());

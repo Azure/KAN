@@ -41,9 +41,11 @@ class SettingSerializer(serializers.ModelSerializer):
                 "subscription_id": validated_data["subscription_id"],
                 "storage_account": validated_data["storage_account"],
                 "storage_container": validated_data["storage_container"],
+                "storage_resource_group": validated_data["storage_resource_group"],
                 "tenant_id": validated_data["tenant_id"],
                 "client_id": validated_data["client_id"],
                 "client_secret": validated_data["client_secret"],
+                "openai_api_key": validated_data["openai_api_key"]
             },
         )
         return obj

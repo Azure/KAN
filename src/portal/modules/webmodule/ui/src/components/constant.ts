@@ -13,11 +13,10 @@ const dGPU = 'Nvidia dGPU';
 const CPU = 'CPU';
 const NvidiaJetson = 'Nvidia Jetson (Jetpack 5)';
 const iGPU = 'Intel iGPU';
-const Cloud = 'Cloud';
 
 export const customVisionModelAcceleration = [dGPU, CPU, NvidiaJetson, iGPU];
 export const openVinoModelAcceleration = [CPU, iGPU];
-export const openAiModelAcceleration = [Cloud];
+export const openAiModelAcceleration = [CPU];
 
 const readonlyCustomVisionModelAcceleration = [dGPU, CPU, NvidiaJetson, iGPU] as const;
 export type Acceleration = typeof readonlyCustomVisionModelAcceleration[number];
@@ -27,8 +26,7 @@ export const accelerationOptions: IDropdownOption[] = [
   { key: dGPU, text: dGPU },
   { key: CPU, text: CPU },
   { key: NvidiaJetson, text: NvidiaJetson },
-  { key: iGPU, text: 'Intel iGPU (EFLOW only)' },
-  { key: Cloud, text: 'Cloud (GPT-4 only)'}
+  { key: iGPU, text: 'Intel iGPU (EFLOW only)' }
 ];
 
 export const FEEDBACK_URL = 'https://go.microsoft.com/fwlink/?linkid=2205447';

@@ -25,6 +25,7 @@ class Migration(migrations.Migration):
                 ('storage_account', models.CharField(blank=True, max_length=1000)),
                 ('storage_container', models.CharField(blank=True, max_length=1000)),
                 ('storage_resource_group', models.CharField(blank=True, max_length=1000)),
+                ('openai_api_key', models.CharField(blank=True, max_length=1000)),
                 ('tenant_id', models.CharField(blank=True, max_length=1000)),
                 ('client_id', models.CharField(blank=True, max_length=1000)),
                 ('client_secret', models.CharField(blank=True, max_length=1000)),

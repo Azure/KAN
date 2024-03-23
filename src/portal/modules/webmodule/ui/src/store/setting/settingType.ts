@@ -24,6 +24,7 @@ export type Setting = {
   client_id: string;
   client_secret: string;
   storage_resource_group: string;
+  openai_api_key: string
 };
 
 // export type UpdateKeyAction = {

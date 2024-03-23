@@ -70,6 +70,7 @@ type FormData = {
   tenant_id: string;
   client_id: string;
   client_secret: string;
+  openai_api_key: string;
 };
 
 const SettingModal = (props: Props) => {
@@ -93,6 +94,7 @@ const SettingModal = (props: Props) => {
       storage_resource_group: settingData.storage_resource_group,
       training_key: settingData.training_key,
       endpoint: settingData.endpoint,
+      openai_api_key: settingData.openai_api_key
     },
     resolver: yupResolver(
       yup.object().shape({
@@ -105,6 +107,7 @@ const SettingModal = (props: Props) => {
         storage_resource_group: yup.string().optional(),
         training_key: yup.string().optional(),
         endpoint: yup.string().optional(),
+        openai_api_key: yup.string().optional()
       }),
     ),
   });
@@ -275,6 +278,25 @@ const SettingModal = (props: Props) => {
             <Controller
               control={control}
               name="training_key"
+              render={({ field, fieldState }) => (
+                <HorizontalTextField
+                  label="Key"
+                  type="password"
+                  canRevealPassword
+                  value={field.value}
+                  onChange={(_, newValue): void => field.onChange(newValue)}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
+            />
+          </Stack>
+
+          <Stack tokens={{ childrenGap: 12 }}>
+            <h4 className={classes.sbutTitle}>Open AI Settings</h4>
+
+            <Controller
+              control={control}
+              name="openai_api_key"
               render={({ field, fieldState }) => (
                 <HorizontalTextField
                   label="Key"

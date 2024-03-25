@@ -2,7 +2,7 @@ include .env
 
 WEBMODULE_PATH = ./modules/webmodule
 FILE := $(WEBMODULE_PATH)/version.txt
-MODULE_VERSION := $(shell cat ${FILE})
+MODULE_VERSION := $(cat ${FILE})
 
 .PHONY: help
 help: ## show help message

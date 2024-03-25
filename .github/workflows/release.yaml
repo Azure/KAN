@@ -25,11 +25,10 @@ jobs:
           echo "MODULE_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: Build portal        
-        env:          
-          WEBMODULE_PATH: src/portal/modules/webmodule
         run: |
           version=$(cat .github/version/versions.txt)
           echo $version > src/portal/modules/webmodule/version.txt
+          echo "WEBMODULE_PATH=${GITHUB_WORKSPACE}/src/portal/modules/webmodule" >> $GITHUB_ENV
           cd src/portal
           echo CONTAINER_REGISTRY_NAME=${{ secrets.CONTAINER_REGISTRY_NAME }} > .env
           echo APPLICATIONINSIGHTS_INSTRUMENTATION_KEY=${{ secrets.APPLICATIONINSIGHTS_INSTRUMENTATION_KEY }} >> .env

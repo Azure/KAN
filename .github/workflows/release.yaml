@@ -49,3 +49,8 @@ jobs:
           echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
           make build     
           make push
+          
+      - name: Build portal Helm chart
+        run: |
+          cd Deploy/helm
+          release kanprod

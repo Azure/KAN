@@ -68,7 +68,7 @@ jobs:
         run: |
           version=$(cat .github/version/versions.txt)
           cd src/edge
-          json_file=${GITHUB_WORKSPACE}/src/edge/EdgeSolution/modules/kanai/module.json
+          json_file=src/edge/EdgeSolution/modules/kanai/module.json
           jq --arg v "$version" '.image.tag.version = $v' "$json_file" > temp.json
           mv temp.json "$json_file"
           pip install -r requirements.txt
@@ -78,7 +78,7 @@ jobs:
       - name: Update version number in installer
         run: |
           version=$(cat .github/version/versions.txt)
-          file_path="${GITHUB_WORKSPACE}/Installer/kan-installer.sh"
+          file_path="Installer/kan-installer.sh"
           NEW_SYMPHONY_VERSION=$version          
           NEW_KANPORTAL_VERSION="$version-amd64"
           NEW_KANAI_VERSION=$version

@@ -256,8 +256,6 @@ class GPT4Model(Model):
             "max_tokens": 300
         }
 
-        print("-----------------------------------calling GPT-4-----------------------------------", flush=True)
-
         response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
    
         try:
@@ -276,13 +274,10 @@ class GPT4Model(Model):
                                 w = bbox['w']
                                 h = bbox['h']
                                 if 0.0 <= l <= 1.0 and 0.0 <= t <= 1.0 and 0.0 <= w <= 1.0 and 0.0 <= h <= 1.0:
-                                    print("--------------------------------Aggressive action detected------------------------------", flush=True)
                                     detected = True
                                     n_bbox = Bbox(l=l, t=t, w=w, h=h)
                                     object_meta = ObjectMeta(timestamp=0, inference_id='0', label='aggressive', bbox=n_bbox, confidence=content['confidence'], attributes=[])
                                     frame.insights_meta.objects_meta.append(object_meta)
-                if not detected:
-                    print("--------------------------------No aggressive action detected------------------------------", flush=True)
             except json.JSONDecodeError:
                 print('Error: JSONDecodeError', flush=True)
         except KeyError as e:

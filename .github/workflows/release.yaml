@@ -25,11 +25,10 @@ jobs:
           echo "version=$new_version" >> $GITHUB_OUTPUT
 
       - name: Build portal        
+        env:
+          MODULE_VERSION: $new_version
+          WEBMODULE_PATH: ./src/portal/modules/webmodule
         run: |
-          echo "Current directory: $(pwd)"
-          echo "Contents of GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
-          ls -alh "${GITHUB_WORKSPACE}"
-          cat "${GITHUB_WORKSPACE}/modules/webmodule/version.txt"
           echo $new_version > ./src/portal/modules/webmodule/version.txt
           cd ./src/portal
           echo CONTAINER_REGISTRY_NAME=${{ secrets.CONTAINER_REGISTRY_NAME }} > .env

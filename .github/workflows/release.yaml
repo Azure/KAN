@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  workflow_dispatch:
+permissions: write-all
+env:
+  ContainerRegistry: "kanprod.azurecr.io"
+
+jobs:
+  build:
+    if: github.repository == 'azure/kan' && github.actor == 'Haishi2016'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: increment version
+        id: increment_version
+        run: |
+          version=$(cat .github/version/versions.txt)
+          IFS='.' read -ra VERSION_PARTS <<< "$version"
+          VERSION_PARTS[2]=$((VERSION_PARTS[2] + 1))
+          new_version="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.${VERSION_PARTS[2]}"
+          echo $new_version > .github/version/versions.txt
+          echo "version=$new_version" >> $GITHUB_OUTPUT
+
+      - name: Build portal
+        run: |
+          echo $new_version > ./src/portal/modules/webmodule/version.txt
+          cd ./src/portal
+          make build          

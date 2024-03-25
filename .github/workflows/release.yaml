@@ -25,6 +25,8 @@ jobs:
           echo "version=$new_version" >> $GITHUB_OUTPUT
 
       - name: Build portal
+        env:
+          CONTAINER_REGISTRY_NAME: ${{ env.ContainerRegistry }}
         run: |
           echo $new_version > ./src/portal/modules/webmodule/version.txt
           cd ./src/portal

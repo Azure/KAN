@@ -22,11 +22,10 @@ jobs:
           VERSION_PARTS[2]=$((VERSION_PARTS[2] + 1))
           new_version="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.${VERSION_PARTS[2]}"
           echo $new_version > .github/version/versions.txt
-          echo "version=$new_version" >> $GITHUB_OUTPUT
+          echo "MODULE_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: Build portal        
-        env:
-          MODULE_VERSION: $new_version
+        env:          
           WEBMODULE_PATH: ./src/portal/modules/webmodule
         run: |
           echo $new_version > ./src/portal/modules/webmodule/version.txt

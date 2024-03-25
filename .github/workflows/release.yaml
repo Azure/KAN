@@ -23,7 +23,12 @@ jobs:
 
       - name: Login to Helm Registry
         run: helm registry login ${{ env.CONTAINER_REGISTRY_NAME }} -u kanprod --password ${{ secrets.REGISTRY_PASSWORD }}
-        
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+          
       - name: increment version
         id: increment_version
         run: |
@@ -53,4 +58,10 @@ jobs:
       - name: Build portal Helm chart
         run: |
           cd Deploy/helm
-          release kanprod
+          ./release.sh kanprod
+
+      - name: Build kan ai container
+        run: |
+          cd src/edge
+          python devops.py build-all
+          python devops.py push-all

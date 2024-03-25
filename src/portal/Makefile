@@ -1,7 +1,6 @@
 include .env
 
-PWD = $(shell pwd)
-WEBMODULE_PATH = $(PWD)/modules/webmodule
+WEBMODULE_PATH = ./modules/webmodule
 FILE := $(WEBMODULE_PATH)/version.txt
 MODULE_VERSION := $(shell cat ${FILE})
 

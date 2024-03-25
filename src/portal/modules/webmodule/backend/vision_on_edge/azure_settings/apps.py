@@ -18,7 +18,8 @@ from configs.client_config import (
     CLIENT_ID,
     CLIENT_SECRET,
     ENDPOINT,
-    TRAINING_KEY
+    TRAINING_KEY,
+    OPENAI_API_KEY
 )
 from configs.iot_config import DEVICE_ID, IOT_HUB_CONNECTION_STRING, MODULE_ID
 
@@ -95,6 +96,7 @@ class AzureSettingsConfig(AppConfig):
                     tenant_id=TENANT_ID,
                     client_id=CLIENT_ID,
                     client_secret=CLIENT_SECRET,
+                    openai_api_key=OPENAI_API_KEY
                 )
                 if not created:
                     logger.error(

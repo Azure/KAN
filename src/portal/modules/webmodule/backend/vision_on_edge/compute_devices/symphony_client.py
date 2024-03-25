@@ -38,6 +38,7 @@ class SymphonyTargetClient(SymphonyClient):
         client_secret = os.getenv('CLIENT_SECRET')
         storage_account = os.getenv('STORAGE_ACCOUNT')
         storage_container = os.getenv('STORAGE_CONTAINER')
+        storage_resource_group = os.getenv('STORAGE_RESOURCE_GROUP')
         # symphony_url = os.getenv('SYMPHONY_URL')
         symphony_agent_version = os.getenv('SYMPHONY_AGENT_VERSION')
         symphony_agent_image = os.getenv('SYMPHONY_AGENT_IMAGE', 'kanprod.azurecr.io/symphony-agent')
@@ -122,6 +123,7 @@ class SymphonyTargetClient(SymphonyClient):
                             "env.AZURE_CLIENT_SECRET": client_secret,
                             "env.STORAGE_ACCOUNT": storage_account,
                             "env.STORAGE_CONTAINER": storage_container,
+                            "env.STORAGE_RESOURCE_GROUP": storage_resource_group,
                             "env.SYMPHONY_URL": symphony_url,
                             "env.TARGET_NAME": name,
                             "env.SNAPSHOT_ROOT": "/snapshots"
@@ -385,6 +387,7 @@ class SymphonySolutionClient(SymphonyClient):
         storage_resource_group = os.getenv('STORAGE_RESOURCE_GROUP')
         storage_container = os.getenv('STORAGE_CONTAINER')
         storage_account = os.getenv('STORAGE_ACCOUNT')
+        openai_api_key = os.getenv('OPENAI_API_KEY')
         if storage_resource_group and storage_account:
             try:
                 res = subprocess.check_output(
@@ -500,7 +503,9 @@ class SymphonySolutionClient(SymphonyClient):
                             "env.INSTANCE": "${{$instance()}}",
                             # "env.AISKILLS": skills,
                             "env.BLOB_STORAGE_CONNECTION_STRING": storage_conn_str,
+                            "env.OPENAI_API_KEY": openai_api_key,
                             "env.BLOB_STORAGE_CONTAINER": storage_container,
+                            "env.STORAGE_RESOURCE_GROUP": storage_resource_group,
                             "env.WEBMODULE_URL": webmodule_url,
                             "env.IOTEDGE_CONNECTION_STRING": iotedge_connection_str,
                             # "env.SYMPHONY_AGENT_ADDRESS": symphony_agent_address

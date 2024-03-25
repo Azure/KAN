@@ -154,6 +154,8 @@ const getModelZooTag = (modelName: string) => {
       return ['person'];
     case 'vehicle-attributes-recognition':
       return ['white', 'gray', 'yellow', 'red', 'green', 'blue', 'black'];
+    case 'aggressive-behavior':
+      return ['aggressive'];
     default:
       return [];
   }

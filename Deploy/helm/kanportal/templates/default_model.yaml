@@ -45,3 +45,19 @@ spec:
     model.symphony.id: "person-detection"
     tags: "['person']"
     state: trained
+---
+apiVersion: ai.symphony/v1
+kind: Model
+metadata:
+  name: "aggressive-behavior"
+spec:
+  properties:
+    displayName: "aggressive-behavior-detection-0002"
+    model.type: "modelzoo"
+    model.subtype: "openai.GPT4"
+    model.project: ""
+    model.endpoint: ""
+    model.version.1: ""
+    model.symphony.id: "aggressive-behavior"
+    tags: "['aggressive']"
+    state: trained

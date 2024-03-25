@@ -54,7 +54,7 @@ class Setting(models.Model):
     tenant_id = models.CharField(max_length=1000, blank=True)
     client_id = models.CharField(max_length=1000, blank=True)
     client_secret = models.CharField(max_length=1000, blank=True)
-
+    openai_api_key = models.CharField(max_length=1000, blank=True)
     is_collect_data = models.BooleanField(default=False)
 
     is_trainer_valid = models.BooleanField(default=False)
@@ -148,7 +148,7 @@ class Setting(models.Model):
         os.environ["CLIENT_SECRET"] = instance.client_secret
         os.environ["ENDPOINT"] = instance.endpoint
         os.environ["TRAINING_KEY"] = instance.training_key
-
+        os.environ["OPENAI_API_KEY"] = instance.openai_api_key
         # re-login
         if instance.tenant_id and instance.client_id and instance.client_secret:
             logger.warning("re-login")

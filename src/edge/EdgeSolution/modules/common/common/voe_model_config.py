@@ -13,8 +13,8 @@ class ModelConfig(BaseModel):
     #symphony_name: str
     name: str 
     provider: Literal['customvision', 'modelzoo']
-    executor: Literal['customvision', 'openvino', 'onnxruntime']
-    type: Literal['ObjectDetection', 'Classification']
+    executor: Literal['customvision', 'openvino', 'onnxruntime', 'openai']
+    type: Literal['ObjectDetection', 'Classification', 'GPT4']
     download_uri: Optional[str] = None
 
     

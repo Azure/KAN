@@ -220,7 +220,9 @@ const ModelPanel = (props: Props) => {
       isOpen={true}
       onDismiss={onDismiss}
       hasCloseButton
-      headerText={data.projectType === 'ObjectDetection' ? 'Object Detection Model' : 'Classification Model'}
+      headerText={data.projectType === 'ObjectDetection' ? 'Object Detection Model' : 
+            (data.projectType === 'Classification' ? 'Classification Model' :
+            (data.projectType === 'GPT4' ? 'GPT-4 Model' : 'Unknown Model'))}
       onRenderFooterContent={onRenderFooterContent}
       isFooterAtBottom={true}
     >
@@ -252,7 +254,9 @@ const ModelPanel = (props: Props) => {
               label={
                 localForm.projectType === 'ObjectDetection'
                   ? 'Select object detection model'
-                  : 'Select classification model'
+                  : (localForm.projectType === 'GPT4'
+                    ? 'Select GPT-4 model'
+                    : 'Select classification model')
               }
               onRenderLabel={(props: IDropdownProps) => <SelectModelToolTip {...props} />}
               selectedKey={localForm.model.id}

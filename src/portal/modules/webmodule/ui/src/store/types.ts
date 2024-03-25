@@ -85,7 +85,7 @@ export type Deployment = {
 };
 
 export type ModelCategory = 'customvision' | 'modelzoo' | 'byom';
-export type ModelProjectType = 'ObjectDetection' | 'Classification';
+export type ModelProjectType = 'ObjectDetection' | 'Classification' | 'GPT4';
 export type ClassificationType = '' | 'Multiclass' | 'Multilabel';
 export type ModelNodeType = 'export' | 'source' | 'transform' | 'model' | 'analyze';
 export type ModelHandler = {

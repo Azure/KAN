@@ -4,6 +4,7 @@ import { FEEDBACK_URL, TROUBLE_SHOOTING_URL } from './constant';
 
 export const convertProjectType = (type: any) => {
   if (type === 'ObjectDetection') return 'Object Detection';
+  if (type == 'GPT4') return 'GPT-4';
   return 'Classification';
 };
 

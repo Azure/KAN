@@ -29,6 +29,7 @@ export const initialState: Setting = {
   client_id: '',
   client_secret: '',
   storage_resource_group: '',
+  openai_api_key: ''
 };
 
 const settingReducer = (state = initialState, action: SettingActionType): Setting => {
@@ -67,6 +68,7 @@ const settingReducer = (state = initialState, action: SettingActionType): Settin
         client_id: action.payload.client_id,
         client_secret: action.payload.client_secret,
         storage_resource_group: action.payload.storage_resource_group,
+        openai_api_key: action.payload.openai_api_key,
         loading: false,
       };
     case 'setting/update_rejected':

@@ -82,6 +82,7 @@ export const getCascadePayload = (
 
 export const getNodeImage = (type: NodeType) => {
   if (['customvision_model', 'openvino_model'].includes(type)) return '/icons/modelCard.png';
+  if (type == 'openai') return '/icons/openaiCard.png';
   if (type === 'openvino_library') return '/icons/transformCard.png';
   if (type === 'sink') return '/icons/exportCard.png';
 };

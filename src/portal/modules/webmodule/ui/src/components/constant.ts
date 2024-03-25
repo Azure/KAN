@@ -14,18 +14,19 @@ const CPU = 'CPU';
 const NvidiaJetson = 'Nvidia Jetson (Jetpack 5)';
 const iGPU = 'Intel iGPU';
 
-export const customViisionModelAcceleration = [dGPU, CPU, NvidiaJetson, iGPU];
+export const customVisionModelAcceleration = [dGPU, CPU, NvidiaJetson, iGPU];
 export const openVinoModelAcceleration = [CPU, iGPU];
+export const openAiModelAcceleration = [CPU];
 
-const readonlyCustomViisionModelAcceleration = [dGPU, CPU, NvidiaJetson, iGPU] as const;
-export type Acceleration = typeof readonlyCustomViisionModelAcceleration[number];
+const readonlyCustomVisionModelAcceleration = [dGPU, CPU, NvidiaJetson, iGPU] as const;
+export type Acceleration = typeof readonlyCustomVisionModelAcceleration[number];
 
 export const accelerationOptions: IDropdownOption[] = [
   { key: '-', text: '-' },
   { key: dGPU, text: dGPU },
   { key: CPU, text: CPU },
   { key: NvidiaJetson, text: NvidiaJetson },
-  { key: iGPU, text: 'Intel iGPU (EFLOW only)' },
+  { key: iGPU, text: 'Intel iGPU (EFLOW only)' }
 ];
 
 export const FEEDBACK_URL = 'https://go.microsoft.com/fwlink/?linkid=2205447';
@@ -36,6 +37,7 @@ export type PageType = 'deivce' | 'camera' | 'model' | 'skill' | 'deployment';
 export const modelTypeOptions: IDropdownOption[] = [
   { key: 'ObjectDetection', text: 'Object Detection' },
   { key: 'Classification', text: 'Classification' },
+  { key: 'GPT4', text:'GPT-4'}
 ];
 
 export const classificationOptions: IDropdownOption[] = [

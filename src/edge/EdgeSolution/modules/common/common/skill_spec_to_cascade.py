@@ -13,6 +13,8 @@ def skill_spec_to_cascade(skill):
             name = 'ObjectDetection'
         elif skill_node.sub_type.contains('Classification'):
             name = 'Classification'
+        elif skill_node.sub_type.contains('GPT4'):
+            name = 'GPT4'
         else:
             raise Exception('Unknown subtype {skill_node.sub_type}')
             

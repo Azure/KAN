@@ -86,11 +86,13 @@ const ModelCard = (props: Props) => {
       },
     ],
   };
-
+  
   return (
     <Stack className={classes.root} onClick={() => onModelSelect(model)}>
       <Stack horizontal>
-        <img style={{ height: '60px', width: '60px' }} src="/icons/models/modelCard.png" alt="model" />
+        <img  style={{ height: '60px', width: '60px' }} 
+              src={model.projectType === "GPT4" ? "/icons/models/modelOpenAICard.png" : "/icons/models/modelCard.png"} 
+              alt="model" />
         <Stack horizontal horizontalAlign="space-between" styles={{ root: classes.titleContainer }}>
           <Stack styles={{ root: classes.titleWrapper }}>
             <Label>{getLimitText(model.name, 20)}</Label>
@@ -106,7 +108,11 @@ const ModelCard = (props: Props) => {
         </Stack>
       </Stack>
       <Stack className={classes.contentWrapper} tokens={{ childrenGap: 10 }}>
-        {!isCustomVisionModel && <Text className={classes.contentTitle}>By Intel</Text>}
+        {!isCustomVisionModel && (
+          model.projectType === "GPT4" 
+              ? <Text className={classes.contentTitle}>By OpenAI</Text> 
+              : <Text className={classes.contentTitle}>By Intel</Text>
+        )}
 
         {model.displayTagList.length > 0 && (
           <Stack horizontal tokens={{ childrenGap: 8 }}>

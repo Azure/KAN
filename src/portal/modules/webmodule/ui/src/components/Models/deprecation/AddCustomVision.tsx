@@ -63,6 +63,7 @@ const initialForm: CreateCustomVisionForm = {
 const typeOptions: IDropdownOption[] = [
   { key: 'ObjectDetection', text: 'Object Detection' },
   { key: 'Classification', text: 'Classification' },
+  { key: 'GPT4', text: 'GPT-4' } 
 ];
 
 const classificationTypeOptions: IDropdownOption[] = [

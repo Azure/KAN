@@ -5,7 +5,7 @@
 
 symphony_version=0.48.6                 #Symphony Helm Chart version
 agent_version=0.48.4                    #Symphony Agent version
-kanportal_version=0.48.5-amd64          #Kanportal Helm Chart version
+kanportal_version=0.48.6-dev-amd64          #Kanportal Helm Chart version
 kanai_version=0.45.2                    #KanAI container version
 symphony_cr=oci://ghcr.io/eclipse-symphony/helm/symphony #Symphony Helm Chart
 symphony_ns=symphony-k8s-system         #Symphony namespace
@@ -52,7 +52,7 @@ display_error_message() {
     echo -e "${red}${exclamation} ERROR: ${message}${no_color}"
 }
 
-while [ $current_step -lt 10 ]; do
+while [ $current_step -lt 11 ]; do
     case $current_step in
         0 ) # azure user
             while true; do
@@ -503,6 +503,11 @@ while [ $current_step -lt 10 ]; do
             current_step=`expr $current_step + 1`
         ;;
         9 )
+            read -p "If you plan to use Open AI models, please enter your Open AI key:  " -r; echo
+            openai_key=$REPLY
+            current_step=`expr $current_step + 1`
+        ;;
+        10 )
             # # --- confirm ---
             echo "Your selections:"
             if [ $create_aks_selection == "1" ]; then
@@ -705,6 +710,10 @@ while [ $current_step -lt 10 ]; do
                         values="$values --set service.ingress=traefik"
                     elif [ $ingress == "nginx" ]; then
                         values="$values --set service.ingress=nginx"
+                    fi
+
+                    if [ $openai_key != "" ]; then
+                        values="$values --set openai.apiKey=$openai_key"
                     fi
 
                     symphonyIp="symphony-service"

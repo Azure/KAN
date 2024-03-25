@@ -28,4 +28,11 @@ jobs:
         run: |
           echo $new_version > ./src/portal/modules/webmodule/version.txt
           cd ./src/portal
+          echo CONTAINER_REGISTRY_NAME=${{ secrets.CONTAINER_REGISTRY_NAME }} > .env
+          echo APPLICATIONINSIGHTS_INSTRUMENTATION_KEY=${{ secrets.APPLICATIONINSIGHTS_INSTRUMENTATION_KEY }} >> .env
+          echo APPLICATIONINSIGHTS_INGESTION_ENDPOINT=${{ secrets.APPLICATIONINSIGHTS_INGESTION_ENDPOINT }} >> .env
+          echo APPLICATIONINSIGHTS_TENANT_ID=${{ secrets.APPLICATIONINSIGHTS_TENANT_ID }} >> .env
+          echo APPLICATIONINSIGHTS_CLIENT_ID=${{ secrets.APPLICATIONINSIGHTS_CLIENT_ID }} >> .env
+          echo APPLICATIONINSIGHTS_CLIENT_SECRET=${{ secrets.APPLICATIONINSIGHTS_CLIENT_SECRET }} >> .env
+          echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
           make build          

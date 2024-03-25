@@ -63,5 +63,6 @@ jobs:
       - name: Build kan ai container
         run: |
           cd src/edge
+          pip install -r requirements.txt
           python devops.py build-all
           python devops.py push-all

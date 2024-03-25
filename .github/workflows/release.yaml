@@ -93,3 +93,9 @@ jobs:
           git add .github/version/versions.txt
           git add Installer/kan-installer.sh          
           git commit -m "Bump version to $version"  
+          
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main

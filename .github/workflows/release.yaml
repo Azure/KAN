@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 permissions: write-all
 env:
-  ContainerRegistry: "kanprod.azurecr.io"
+  CONTAINER_REGISTRY_NAME: "kanprod.azurecr.io"
 
 jobs:
   build:
@@ -24,9 +24,7 @@ jobs:
           echo $new_version > .github/version/versions.txt
           echo "version=$new_version" >> $GITHUB_OUTPUT
 
-      - name: Build portal
-        env:
-          CONTAINER_REGISTRY_NAME: ${{ env.ContainerRegistry }}
+      - name: Build portal        
         run: |
           echo $new_version > ./src/portal/modules/webmodule/version.txt
           cd ./src/portal

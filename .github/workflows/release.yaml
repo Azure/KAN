@@ -26,10 +26,11 @@ jobs:
 
       - name: Build portal        
         env:          
-          WEBMODULE_PATH: ./src/portal/modules/webmodule
+          WEBMODULE_PATH: src/portal/modules/webmodule
         run: |
-          echo $new_version > ./src/portal/modules/webmodule/version.txt
-          cd ./src/portal
+          version=$(cat .github/version/versions.txt)
+          echo $version > src/portal/modules/webmodule/version.txt
+          cd src/portal
           echo CONTAINER_REGISTRY_NAME=${{ secrets.CONTAINER_REGISTRY_NAME }} > .env
           echo APPLICATIONINSIGHTS_INSTRUMENTATION_KEY=${{ secrets.APPLICATIONINSIGHTS_INSTRUMENTATION_KEY }} >> .env
           echo APPLICATIONINSIGHTS_INGESTION_ENDPOINT=${{ secrets.APPLICATIONINSIGHTS_INGESTION_ENDPOINT }} >> .env

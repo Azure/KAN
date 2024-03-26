@@ -13,6 +13,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Create branch
+        uses: peterjgrainger/action-create-branch@v3.0.0
+        with:
+          branch: release-branch
       - name: Install jq
         run: |
           sudo apt-get update
@@ -96,9 +101,7 @@ jobs:
           git add Installer/kan-installer.sh          
           git commit -m "Bump version to $version"  
            
-      - name: pull-request
-        uses: repo-sync/pull-request@v2
-        with:
-          destination_branch: "main"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_title: "Build pipeline"
+      - name: create pull request
+        run: gh pr create -B main -H release-branch --title 'Merge release-branch into main' --body 'Created by Github action'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

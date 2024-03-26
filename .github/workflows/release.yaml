@@ -20,6 +20,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
         with:
           branch: release-branch
+          
+      - uses: actions/checkout@v4
+        with:
+          ref: release-branch
+          
       - name: Install jq
         run: |
           sudo apt-get update
@@ -102,8 +107,4 @@ jobs:
           git add .github/version/versions.txt
           git add Installer/kan-installer.sh          
           git commit -m "Bump version to $version"  
-           
-      - name: create pull request
-        run: gh pr create -B main -H release-branch --title 'Merge release-branch into main' --body 'Created by Github action'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git push

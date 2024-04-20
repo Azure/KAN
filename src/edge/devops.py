@@ -141,7 +141,7 @@ def push_module(module_name):
     platforms = [PLATFORM]
     if PLATFORM == 'amd64':
         platforms.append('gpuamd64')
-        platforms.append('openvinoamd64')
+        # platforms.append('openvinoamd64')
         pass
     for platform in platforms:
         module = IoTEdgeModule(module_name)

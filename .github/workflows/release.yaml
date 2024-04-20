@@ -12,18 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Create branch
-        uses: peterjgrainger/action-create-branch@v3.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
-        with:
-          branch: release-branch
-          
-      - uses: actions/checkout@v4
-        with:
-          ref: release-branch
+        uses: actions/checkout@v3      
           
       - name: Install jq
         run: |

@@ -117,10 +117,12 @@ jobs:
           git push
 
       - name: Create Pull Request
-        uses: repo-sync/pull-request@v3
+        uses: peter-evans/create-pull-request@v4
         with:
-          source_branch: "release-branch"
-          destination_branch: "main"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_title: "Update release branch"
-          pr_body: "Pull request to merge changes from main to release-branch"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: release-branch  # The branch to create the pull request from
+          delete-branch: true  # Optional: delete the branch after the pull request is merged
+          title: 'Update release branch with latest from main'
+          body: 'This pull request merges the latest changes from main into the release branch.'
+          base: 'main'  # The base branch to merge into
+          draft: false  # Set to true if you want the pull request to be created as a draft

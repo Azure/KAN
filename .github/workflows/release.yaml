@@ -12,7 +12,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3      
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Delete old release-branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+        run: git push origin --delete release-branch || echo "release-branch does not exist"
+
+      - name: Create branch
+        uses: peterjgrainger/action-create-branch@v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+        with:
+          branch: release-branch
+          
+      - uses: actions/checkout@v4
+        with:
+          ref: release-branch
           
       - name: Install jq
         run: |
@@ -97,3 +115,12 @@ jobs:
           git add Installer/kan-installer.sh          
           git commit -m "Bump version to $version"  
           git push
+
+      - name: Create Pull Request
+        uses: repo-sync/pull-request@v3
+        with:
+          source_branch: "release-branch"
+          destination_branch: "main"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_title: "Update release branch"
+          pr_body: "Pull request to merge changes from main to release-branch"

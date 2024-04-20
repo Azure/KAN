@@ -7,7 +7,9 @@
       "version": "0.45.2",
       "platforms": {
         "amd64": "./dockerfiles/Dockerfile.amd64",
-        "gpuamd64": "./dockerfiles/Dockerfile.gpuamd64"
+        "gpuamd64": "./dockerfiles/Dockerfile.gpuamd64",
+        "openvinoamd64": "./dockerfiles/Dockerfile.openvinoamd64",
+        "jetson": "./dockerfiles/Dockerfile.jetson"
       }
     },
     "buildOptions": [],

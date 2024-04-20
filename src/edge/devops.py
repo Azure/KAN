@@ -111,7 +111,7 @@ def build_module(module_name):
     platforms = [PLATFORM]
     if PLATFORM == 'amd64':
         platforms.append('gpuamd64')
-        platforms.append('openvinoamd64')
+        # platforms.append('openvinoamd64')
         pass
     for platform in platforms:
         dockerfile = module.get_dockerfile_by_platform(platform)

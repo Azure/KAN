@@ -15,6 +15,8 @@ On the other hand, you can get started with KAN without an Azure account.
 
   If you don't have an existing Kubernetes cluster, you can easily create one using the Azure Kubernetes Service (AKS). For more information, visit [Quickstart: Deploy an Azure Kubernetes Service (AKS) cluster using the Azure Portal](https://docs.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli). Make sure to choose Standard DS3 v2 for the node size.
 
+  > **NOTE:** If you are using [MicroK8s](https://microk8s.io/), you should create a alias for `kubectl`, such as `sudo snap alias microk8s.kubectl kubectl`
+
 * A **Bash Shell**, such as WSL, Azure Cloud CLI, or a Terminal on Mac.
 * **Helm** v3.8 or higher.
 

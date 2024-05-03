@@ -35,16 +35,20 @@ const getArrayObject = (object: string) => {
 
 const getStatusObject = (status: string) => {
   try {
-    const parseContent = JSON.parse(status) as { status_code: string; status_description: string };
+    const parseContent = JSON.parse(status);
+    var status_code = parseContent.status || '';
+    const status_description = parseContent['status-details'] || '';
+    if (status_code === 'Succeeded') {
+      status_code = '0';
+    } else {
+      status_code = '500';
+    }
 
     const fps: DeploymentFPS = Object.entries(parseContent)
       .filter(([key]) => key.match(/fps_skill-/))
       .reduce((acc, [key, value]) => ({ ...acc, [key.replace('fps_', '')]: value }), {});
 
-    return {
-      ...pick(['status_code', 'status_description'], parseContent),
-      fps,
-    };
+    return {status_code, status_description, fps};
   } catch (e) {
     return { status_code: '400', status_description: '', fps: {} };
   }

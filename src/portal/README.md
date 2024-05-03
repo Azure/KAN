@@ -19,25 +19,28 @@ KAN Portal is packaged as a Docker container. We provide a ```Makefile``` for bu
 Maintain a ```.env``` file under the **portal** folder with the following environment variables:
 
 - Container registry:
-```bash
+    ```bash
     CONTAINER_REGISTRY_NAME="kanprod.azurecr.io" # replace with your own container registry name
-``` 
+    ``` 
 - Azure application insights:
-```bash
+    ```bash
     APPLICATIONINSIGHTS_INSTRUMENTATION_KEY="testinstkey"
     APPLICATIONINSIGHTS_INGESTION_ENDPOINT="https://testinsight.in.applicationinsights.azure.com/"
     APPLICATIONINSIGHTS_TENANT_ID="app-insight-tenant-id"
     APPLICATIONINSIGHTS_CLIENT_ID="app-insight-client-id"
     APPLICATIONINSIGHTS_CLIENT_SECRET="app-insight-client-secret"
-``` 
+    ``` 
 - Django secret: 
-```bash
+    ```bash
     SECRET_KEY="django-secret-key"
-```
+    ```
 > **NOTE**: Django [SECRET_KEY](https://docs.djangoproject.com/en/dev/ref/settings/#secret-key) is a random string needed when starting django apps, which requires 50 characters in length with a minimum 5 unique characters.
 
-## 2. Update version number
-Update ```portal/modules/webmodule/version.txt``` to set the container image version. The built container will be tagged as ```<CONTAINER_REGISTRY_NAME>/kanportal:<version>-<CPU architecture>```, such as ```kanprod.azurecr.io/kanportal:0.41.46-amd64```.
+## 2. Set version number
+```bash
+export MODULE_VERSION=<version>
+```
+The built container will be tagged as ```<CONTAINER_REGISTRY_NAME>/kanportal:<version>-<CPU architecture>```, such as ```kanprod.azurecr.io/kanportal:0.41.46-amd64```.
 > **NOTE**: The current ```Makefile``` builds for ```amd64``` only.
 
 ## 3. Build KAN Portal container
@@ -46,6 +49,7 @@ Build webmodule image
 ```bash
     # under src/portal folder
     . .env # apply environment variables
+    export WEBMODULE_PATH=./modules/webmodule
     make build
 ```
 

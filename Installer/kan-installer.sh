@@ -3,10 +3,10 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-symphony_version=0.48.22                 #Symphony Helm Chart version
+symphony_version=0.48.20                 #Symphony Helm Chart version
 agent_version=0.48.4                     #Symphony Agent version
-kanportal_version=0.48.18-amd64          #Kanportal Helm Chart version
-kanai_version=0.48.18                    #KanAI container version
+kanportal_version=0.48.20-amd64          #Kanportal Helm Chart version
+kanai_version=0.48.20                    #KanAI container version
 symphony_cr=oci://ghcr.io/eclipse-symphony/helm/symphony #Symphony Helm Chart
 symphony_ns=symphony-k8s-system         #Symphony namespace
 

@@ -232,6 +232,10 @@ class GPT4Model(Model):
 
         _, buffer = cv2.imencode('.jpg', img)
         base64_image = base64.b64encode(buffer).decode('utf-8') 
+        if (self.model == 'careless-worker'):
+            prompt = 'Analyze the image to assess how a worker is handling a box. Define \'careless\' as the worker throwing the box with one hand, where the box is clearly flying through the air, and the worker does not maintain visual or physical control. Define \'careful\' as the worker moving the box quickly but with both hands, and maintaining control at all times, even if the box is momentarily in the air.  Output should be a JSON object with a \'label\' field set to \'careless\' or \'careful\', and a \'confidence\' field with a value between 0.0 and 1.0. Including a bounding box named bbox that indicates where the aggression is in the picture, with "l", "t", "w", "h" fields normalized to 0.0 and 1.0. Return an empty JSON object if no clear careless or careful action can be detected. Ensure the JSON output contains no extra text, spaces, or empty lines before or after the JSON data.'
+        else: 
+            prompt = 'Please provide analysis if an aggressive action is detected, with a confidence value between 0.0 and 1.0. The result should be a JSON with a label field set to "aggressive", "sports" or "performance" and a confidence field set to the confidence value only. THe crowd on picture need to appear to be excited before they are detected as aggressive. Including a bounding box named bbox that indicates where the aggression is in the picture, with "l", "t", "w", "h" fields normalized to 0.0 and 1.0. Empty JSON should be returned if no aggressive action is detected. Return JSON only. Don\'t return any additioanl texts, empty lines or spaces before or after JSON.'
 
         payload = {
             "model": "gpt-4-vision-preview",
@@ -242,7 +246,7 @@ class GPT4Model(Model):
                     "content": [
                         {
                             "type": "text",
-                            "text": 'Please provide analysis if an aggressive action is detected, with a confidence value between 0.0 and 1.0. The result should be a JSON with a label field set to "aggressive", "sports" or "performance" and a confidence field set to the confidence value only. THe crowd on picture need to appear to be excited before they are detected as aggressive. Including a bounding box named bbox that indicates where the aggression is in the picture, with "l", "t", "w", "h" fields normalized to 0.0 and 1.0. Empty JSON should be returned if no aggressive action is detected. Return JSON only. Don\'t return any additioanl texts, empty lines or spaces before or after JSON.'
+                            "text": prompt
                         },
                         {
                             "type": "image_url",
@@ -265,7 +269,7 @@ class GPT4Model(Model):
                 content = json.loads(content_str)
                 detected = False
                 if 'label' in content and 'confidence' in content:
-                    if content['label'] == 'aggressive' and 0.0 <= content['confidence'] <= 1.0:
+                    if (content['label'] == 'aggressive' or content['label'] == 'careless') and 0.0 <= content['confidence'] <= 1.0:
                        if 'bbox' in content:
                             bbox = content['bbox']
                             if 'l' in bbox and 't' in bbox and 'w' in bbox and 'h' in bbox:
@@ -276,7 +280,7 @@ class GPT4Model(Model):
                                 if 0.0 <= l <= 1.0 and 0.0 <= t <= 1.0 and 0.0 <= w <= 1.0 and 0.0 <= h <= 1.0:
                                     detected = True
                                     n_bbox = Bbox(l=l, t=t, w=w, h=h)
-                                    object_meta = ObjectMeta(timestamp=0, inference_id='0', label='aggressive', bbox=n_bbox, confidence=content['confidence'], attributes=[])
+                                    object_meta = ObjectMeta(timestamp=0, inference_id='0', label=content['label'] , bbox=n_bbox, confidence=content['confidence'], attributes=[])
                                     frame.insights_meta.objects_meta.append(object_meta)
             except json.JSONDecodeError:
                 print('Error: JSONDecodeError', flush=True)

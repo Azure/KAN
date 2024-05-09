@@ -156,6 +156,8 @@ const getModelZooTag = (modelName: string) => {
       return ['white', 'gray', 'yellow', 'red', 'green', 'blue', 'black'];
     case 'aggressive-behavior':
       return ['aggressive'];
+    case 'careless-worker':
+      return ['careless', 'careful'];
     default:
       return [];
   }

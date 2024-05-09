@@ -61,3 +61,19 @@ spec:
     model.symphony.id: "aggressive-behavior"
     tags: "['aggressive']"
     state: trained
+---
+apiVersion: ai.symphony/v1
+kind: Model
+metadata:
+  name: "careless-worker"
+spec:
+  properties:
+    displayName: "careless-worker-detection-0002"
+    model.type: "modelzoo"
+    model.subtype: "openai.GPT4"
+    model.project: ""
+    model.endpoint: ""
+    model.version.1: ""
+    model.symphony.id: "careless-worker"
+    tags: "['careless', 'careful']"
+    state: trained

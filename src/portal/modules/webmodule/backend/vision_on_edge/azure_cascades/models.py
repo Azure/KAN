@@ -50,7 +50,8 @@ class Cascade(models.Model):
 
     @staticmethod
     def pre_save(**kwargs):
-        instance = kwargs["instance"]
+       
+        instance = kwargs["instance"]       
 
         if not instance.symphony_id:
             instance.symphony_id = 'skill-' + str(uuid.uuid4())
@@ -82,7 +83,7 @@ class Cascade(models.Model):
             # create
             skill_client.deploy_config()
         else:
-            # update
+            # update            
             # get affected solution: deployment -> target -> solution
             affected_solutions = []
             for instance_obj in Deployment.objects.all():

@@ -152,7 +152,6 @@ class SymphonyTargetClient(SymphonyClient):
         return config_json
 
     def get_patch_config(self):
-
         tag_list = self.args.get("tag_list", "[]")
 
         labels = {}
@@ -248,9 +247,8 @@ class SymphonyTargetClient(SymphonyClient):
         else:
             cluster_type = "current"
         
-        labels_json_string = target['metadata'].get('labels', '{}')
-        labels = json.loads(labels_json_string)
-
+        labels = target['metadata'].get('labels', {})
+        
         if labels:
             tags = [{"name": k, "value": v} for k, v in labels.items()]
         else:
@@ -346,7 +344,6 @@ class SymphonySolutionClient(SymphonyClient):
         self.symphony_api_url = "http://" + self.symphony_ip + ":8080/v1alpha2/solutions"
 
     def get_config(self):
-
         name = self.args.get("name", "")
         display_name = self.args.get("display_name", "")
         acceleration = self.args.get("acceleration", "")

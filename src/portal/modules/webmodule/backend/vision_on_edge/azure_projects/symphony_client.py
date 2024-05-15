@@ -18,8 +18,7 @@ class SymphonyModelClient(SymphonyClient):
         self.plural = "models"
         self.symphony_api_url = "http://" + self.symphony_ip + ":8080/v1alpha2/models"
 
-    def get_config(self):
-
+    def get_config(self):        
         name = self.args.get("name", "")
         endpoint = self.args.get("endpoint", "")
         display_name = self.args.get("display_name", "")

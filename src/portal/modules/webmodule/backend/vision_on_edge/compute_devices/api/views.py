@@ -172,11 +172,11 @@ class ComputeDeviceViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=["patch"], url_path="update_symphony_object")
-    def update_symphony_object(self, request):
-
+    def update_symphony_object(self, request):        
         symphony_id = request.query_params.get("symphony_id")
         target_client.set_attr({
-            "tag_list": request.data.get("tag_list", "[]"),
+            "is_k8s": request.data.get("is_k8s", False),
+            "tag_list": request.data.get("tag_list", "[]")
         })
 
         target_client.patch_config(name=symphony_id)

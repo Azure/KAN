@@ -51,8 +51,10 @@ const EditFooter = (props: Props) => {
       id,
       symphony_id,
       body: {
-        flow: localFormData.cascade.flow,
-        screenshot: localFormData.screenshot,
+        flow: localFormData.cascade.flow,        
+        screenshot: localFormData.screenshot,      
+        display_name: localFormData.name,  
+        fps: localFormData.fps,
         tag_list:
           getFilteredTagList(localFormData.tag_list).length !== 0
             ? JSON.stringify(

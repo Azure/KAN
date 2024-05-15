@@ -227,6 +227,8 @@ export type UpdateAiSkillPayload = {
   id: number;
   symphony_id: string;
   body: {
+    fps: number;
+    display_name: string;
     flow: string;
     screenshot: string;
     tag_list: string;

@@ -19,11 +19,10 @@ class SymphonySkillClient(SymphonyClient):
         self.symphony_api_url = "http://" + self.symphony_ip + ":8080/v1alpha2/skills"
 
     def get_config(self):
-
         name = self.args.get("name", "")
         tag_list = self.args.get("tag_list", "[]")
         spec = self.args.get("spec", "{}")
-
+        
         labels = {}
         if tag_list:
             for tag in json.loads(tag_list):
@@ -43,7 +42,9 @@ class SymphonySkillClient(SymphonyClient):
     def get_patch_config(self):
 
         tag_list = self.args.get("tag_list", "[]")
-        spec = self.args.get("spec", "{}")
+        spec = self.args.get("spec", "{}")        
+
+        logging.debug("Received arguments: %s", json.dumps(self.args, indent=4))
 
         labels = {}
         if tag_list:
@@ -51,7 +52,7 @@ class SymphonySkillClient(SymphonyClient):
                 labels[tag["name"]] = tag["value"]
         
         patch_config = [
-             {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
+            {'op': 'replace', 'path': '/metadata/labels', 'value': labels},
             # separate the columns to preserve the parameters
             {'op': 'replace', 'path': '/spec/edges', 'value': spec.get("edges", "[]")},
             {'op': 'replace', 'path': '/spec/nodes', 'value': spec.get("nodes", "[]")},

@@ -19,7 +19,6 @@ class SymphonyInstanceClient(SymphonyClient):
         self.symphony_api_url = "http://" + self.symphony_ip + ":8080/v1alpha2/instances"
 
     def get_config(self):
-
         name = self.args.get("name", "")
         params = self.args.get("params", {})
         pipelines = self.args.get("pipelines", {})

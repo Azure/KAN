@@ -94,17 +94,16 @@ class CascadeViewSet(FiltersMixin, viewsets.ModelViewSet):
 
     @action(detail=False, methods=["patch"], url_path="update_symphony_object")
     def update_symphony_object(self, request):
-
-        symphony_id = request.query_params.get("symphony_id")
+        symphony_id = request.query_params.get("symphony_id")        
 
         flow = json.loads(request.data.get("flow", "{}"))
+        flow["displayName"] = request.data.get("display_name", "")
+        flow["parameters"]["fpsRetrieve"] = request.data.get("fps", "")
         skill_client.set_attr({
             "spec": flow,
             "tag_list": request.data.get("tag_list", "[]")
         })
-
         skill_client.patch_config(name=symphony_id)
-
         # maintain grpc components
         is_grpc = False
         grpc_components = []

@@ -224,7 +224,7 @@ class SymphonyClient:
 
     def update_config(self, name):
         if self.plural in ["targets", "solutions", "instances", "devices", "skills", "models"]:
-            resource_json = self.get_config()
+            resource_json = self.get_config()       
             # get object from symphony
             try:
                 auth_token = self.get_token_from_symphony()
@@ -259,13 +259,27 @@ class SymphonyClient:
     def patch_config(self, name):
         '''patch k8s object using api_call directly to set the patch strategy 
         '''
-        if self.plural in ["targets", "solutions", "instances", "devices", "skills", "models"]:
+        if self.plural in ["targets", "solutions", "instances", "devices", "skills", "models"]:            
+            
             resource_json = self.get_config()
             # get object from symphony
             try:
                 auth_token = self.get_token_from_symphony()
                 headers = {"Authorization": f"Bearer {auth_token}"}      
                 
+                # if "flow" in self.args and "displayName" in self.args.flow and self.args.flow["displayName"] != "":
+                #    resource_json["spec"]["displayName"] = self.args.flow["displayName"]
+
+
+                if "tag_list" in self.args:
+                    tags = json.loads(self.args["tag_list"])
+                    tag_dict = {}
+                    for item in tags:
+                        tag_dict[item['name']] = item['value']
+                    resource_json["metadata"]["labels"] = tag_dict
+
+                resource_json["metadata"]["name"] = name
+
                 logger.info(f"Sending patched resource_json to Symphony: {resource_json}")
 
                 res = requests.post(self.symphony_api_url + f'/{name}', headers=headers, json=resource_json) 

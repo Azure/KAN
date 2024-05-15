@@ -21,8 +21,7 @@ class SymphonyDeviceClient(SymphonyClient):
         self.plural = "devices"
         self.symphony_api_url = "http://" + self.symphony_ip + ":8080/v1alpha2/devices"
 
-    def get_config(self):
-
+    def get_config(self):        
         name = self.args.get("name", "")
         allowed_devices = self.args.get("allowed_devices", "[]")
         rtsp = self.args.get("rtsp", "")
